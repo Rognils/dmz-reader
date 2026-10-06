@@ -9,6 +9,10 @@ Steg 2: tolka varje filnamn enligt namnreglerna nedan och koppla det
 till ett nummer (issueId). Det som inte matchar en regel gissas aldrig,
 utan listas som specialfall.
 
+Steg 3: skriv data/archive_inventory.json. Läs-PDF och omslag pekar på
+webbplatsen (ADR 0008); uppgifterna om dem kommer från
+data/https_probe.json, som tools/https_probe.py tar fram.
+
 Servern belastas försiktigt: en anslutning, passivt läge och en paus
 på minst 0,5 sekunder mellan varje kataloganrop.
 """
@@ -23,6 +27,7 @@ import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 
 VERSION = "0.1.0"
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -477,6 +482,182 @@ def scan_page_count(issue: dict) -> int:
 
 
 # --------------------------------------------------------------------------
+# Inventory
+# --------------------------------------------------------------------------
+
+WEB_BASE_URL = "https://dmzarkivet.se"
+FTP_BASE_URL = "ftp://dmzarkivet.se"
+SCHEMA_VERSION = 1
+
+# Webbplatsens sidbilder ligger under olika prefix per publikation.
+WEB_PAGE_PREFIX = {"datormagazin": "magazines", "highscore": "highscore"}
+
+
+def pdf_url_path(identity: dict) -> str:
+    """Läs-PDF:en på webbplatsen (den kanoniska OCR-PDF:en)."""
+    return f"/pdf/{make_source_key(identity)}.pdf"
+
+
+def page_url_path(issue: dict, page: int) -> str:
+    """Sidbild på webbplatsen för sida `page` i numrets huvuddel.
+
+    Webbplatsen använder samma filnamn som Original Scans (även när de har
+    tvåsiffriga sidnummer eller bara dubbelnumrets första nummer), men alltid
+    med ändelsen .jpg.
+    """
+    identity = issue["identity"]
+    key = make_source_key(identity).removeprefix("HighScore-")
+    scan = issue["scanPages"][(MAIN_PART, page)]
+    name = scan["path"].rsplit("/", 1)[1].rsplit(".", 1)[0] + ".jpg"
+    return f"/{WEB_PAGE_PREFIX[identity['publicationId']]}/{key}/{name}"
+
+
+def ftp_url(path: str) -> str:
+    return f"{FTP_BASE_URL}/{quote(path)}"
+
+
+def scan_page_pattern(issue: dict) -> str | None:
+    """Mönster för huvuddelens skanningar, med {page:0Nd} för sidnumret."""
+    first = issue["scanPages"].get((MAIN_PART, 1))
+    if first is None:
+        return None
+    directory, name = first["path"].rsplit("/", 1)
+    stem, ext = name.rsplit(".", 1)
+    digits = first["pageDigits"]
+    pattern = f"{stem[:-digits]}{{page:0{digits}d}}.{ext}"
+    return f"{FTP_BASE_URL}/{quote(directory)}/{pattern}"
+
+
+def related_issue_id(identity: dict) -> str | None:
+    """HighScore hör till Datormagazin-numret med samma år och nummer."""
+    if identity["publicationId"] != "highscore":
+        return None
+    return make_issue_id({**identity, "publicationId": "datormagazin"})
+
+
+def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: dict) -> dict:
+    """Bygg inventory enligt planens D1. Utdatan beror bara på indatafilerna."""
+    results = probe["results"]
+    issues_out = []
+    problems = []
+
+    for issue_id, issue in analysis["issues"].items():
+        identity = issue["identity"]
+        files = issue["files"]
+        pages = issue["scanPages"]
+        flags = set()
+
+        pdf = results.get(pdf_url_path(identity))
+        if pdf is None:
+            raise SystemExit(f"{issue_id}: saknas i https_probe.json. Kör tools/https_probe.py.")
+        ocr_url = ocr_size = ocr_version = ftp_generation = None
+        if pdf["status"] == 200:
+            ocr_url = WEB_BASE_URL + pdf_url_path(identity)
+            ocr_size = int(pdf["content-length"])
+            ocr_version = {"etag": pdf.get("etag"), "lastModified": pdf.get("last-modified")}
+            # Vilken FTP-generation webbfilen motsvarar avgörs av storleken.
+            for kind, name in (("ocr_pdf_v2", "OCR PDF v2"), ("ocr_pdf", "OCR PDF")):
+                if kind in files and files[kind]["size"] == ocr_size:
+                    ftp_generation = name
+            if ftp_generation is None:
+                flags.add("ocr_pdf_differs_from_ftp")
+                problems.append(f"{issue_id}: webbens PDF ({ocr_size} byte) motsvarar ingen FTP-fil")
+        else:
+            flags.add("missing_ocr_pdf")
+            problems.append(f"{issue_id}: ingen PDF på webbplatsen (status {pdf['status']})")
+
+        cover_url = None
+        if (MAIN_PART, 1) in pages:
+            cover = results.get(page_url_path(issue, 1))
+            if cover is not None and cover["status"] == 200:
+                cover_url = WEB_BASE_URL + page_url_path(issue, 1)
+        if cover_url is None:
+            flags.add("missing_cover")
+
+        if identity["numberEnd"] is not None:
+            flags.add("double_issue")
+        if identity["suffix"] == "b":
+            flags.add("variant_b")
+        if identity["publicationId"] == "highscore":
+            flags.add("supplement")
+        if "cover" not in files:
+            flags.add("no_ftp_cover")
+        if pages:
+            if {p["pageDigits"] for p in pages.values()} == {2}:
+                flags.add("scan_two_digit_pages")
+            if {p["ext"] for p in pages.values()} != {"jpg"}:
+                flags.add("scan_png")
+            if {part for part, _ in pages} != {MAIN_PART}:
+                flags.add("scan_parts")
+            if any(p["namedAfterFirstNumber"] for p in pages.values()):
+                flags.add("scan_named_after_first_number")
+
+        source_names = [files[kind]["path"]
+                        for kind in ("ocr_pdf", "ocr_pdf_v2", "large_pdf", "cover") if kind in files]
+        if pages:
+            source_names.append(next(iter(pages.values()))["path"].rsplit("/", 1)[0] + "/")
+
+        page_count = checksum = None
+        measured = measurements.get(issue_id)
+        if measured is not None:
+            if measured["ocrPdfSize"] == ocr_size:
+                page_count = measured["pageCount"]
+                checksum = measured["ocrPdfChecksum"]
+                flags |= set(measured.get("flags", []))
+            else:
+                problems.append(f"{issue_id}: stickprovets mätvärden gäller en annan fil och används inte")
+
+        large = files.get("large_pdf")
+        issues_out.append({
+            "issueId": issue_id,
+            "publicationId": identity["publicationId"],
+            "year": identity["year"],
+            "issueLabel": make_issue_label(identity),
+            "sortKey": make_sort_key(identity),
+            "sourceKey": make_source_key(identity),
+            "sourceNames": sorted(source_names),
+            "relatedIssueId": related_issue_id(identity),
+            "coverUrl": cover_url,
+            "ocrPdfUrl": ocr_url,
+            "ocrPdfSize": ocr_size,
+            "ocrPdfVersion": ocr_version,
+            "ocrPdfChecksum": checksum,
+            "ocrPdfFtpSource": ftp_generation,
+            "largePdfUrl": ftp_url(large["path"]) if large else None,
+            "largePdfSize": large["size"] if large else None,
+            "hqSource": "scans" if pages else ("large_pdf" if large else None),
+            "scanPagePattern": scan_page_pattern(issue),
+            "pageCount": page_count,
+            "spreadOffset": None,
+            "flags": sorted(flags),
+        })
+
+    used = sorted({issue["publicationId"] for issue in issues_out})
+    listed_at = listing["listedAt"]
+    return {
+        "inventory": {
+            "schemaVersion": SCHEMA_VERSION,
+            "datasetVersion": f"{listed_at[:10]}-001",
+            "generatedAt": listed_at,
+            "generator": f"archive_inventory.py {VERSION}",
+            "publications": [{"publicationId": p, "publicationTitle": PUBLICATIONS[p]} for p in used],
+            "issues": issues_out,
+        },
+        "problems": problems,
+    }
+
+
+def write_inventory(path: Path, inventory: dict) -> None:
+    """Stabil utdata: fast nyckelordning, så att samma indata ger samma byte."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    with open(tmp, "w", encoding="utf-8") as fh:
+        json.dump(inventory, fh, ensure_ascii=False, indent=1)
+        fh.write("\n")
+    tmp.replace(path)
+
+
+# --------------------------------------------------------------------------
 # Kommandorad
 # --------------------------------------------------------------------------
 
@@ -518,6 +699,25 @@ def main(argv=None) -> int:
     for rule, count in sorted(_count(c["rule"] for c in analysis["resolved"]).items()):
         print(f"    {count:3d} × {rule}")
     print(f"Filer utanför de listade katalogerna (arkivets rot): {len(analysis['outsideRoots'])}")
+
+    probe_path = REPO_ROOT / config["httpsProbePath"]
+    if not probe_path.exists():
+        raise SystemExit(f"{probe_path} saknas. Kör tools/https_probe.py först.")
+    probe = load_listing(probe_path)
+    measurements_path = REPO_ROOT / config["sampleMeasurementsPath"]
+    measurements = load_listing(measurements_path)["measurements"] if measurements_path.exists() else {}
+
+    built = build_inventory(listing, analysis, probe, measurements)
+    inventory = built["inventory"]
+    ids = [issue["issueId"] for issue in inventory["issues"]]
+    if len(ids) != len(set(ids)):
+        raise SystemExit("Dubbletter bland issueId – inventory skrivs inte.")
+    inventory_path = REPO_ROOT / config["inventoryPath"]
+    write_inventory(inventory_path, inventory)
+    print(f"Inventory: {len(ids)} nummer, datasetVersion {inventory['datasetVersion']} "
+          f"→ {inventory_path.relative_to(REPO_ROOT)}")
+    for problem in built["problems"]:
+        print(f"  OBS {problem}")
     return 0
 
 

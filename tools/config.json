@@ -9,5 +9,7 @@
   "roots": ["Covers", "OCR PDF", "Large PDF", "Original Scans"],
   "extraRoots": ["OCR PDF v2"],
   "rawListingPath": "data/raw_listing.json",
-  "inventoryPath": "data/archive_inventory.json"
+  "inventoryPath": "data/archive_inventory.json",
+  "httpsProbePath": "data/https_probe.json",
+  "sampleMeasurementsPath": "data/sample_measurements.json"
 }

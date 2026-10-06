@@ -19,32 +19,10 @@ from datetime import datetime, timezone
 
 import archive_inventory as ai
 
-BASE_URL = "https://dmzarkivet.se"
+BASE_URL = ai.WEB_BASE_URL
 PAUSE_SECONDS = 0.6
 PROBE_PATH = ai.REPO_ROOT / "data" / "https_probe.json"
 KEEP_HEADERS = ("content-length", "content-type", "last-modified", "etag", "accept-ranges")
-
-# Webbplatsens sidbilder ligger under olika prefix per publikation.
-PAGE_PREFIX = {"datormagazin": "magazines", "highscore": "highscore"}
-
-
-def pdf_url_path(identity: dict) -> str:
-    return f"/pdf/{ai.make_source_key(identity)}.pdf"
-
-
-def page_url_path(issue: dict, page: int) -> str:
-    """Sidbild på webbplatsen för sida `page` i numrets huvuddel.
-
-    Webbplatsen använder samma filnamn som Original Scans (även när de har
-    tvåsiffriga sidnummer eller bara dubbelnumrets första nummer), men alltid
-    med ändelsen .jpg.
-    """
-    identity = issue["identity"]
-    key = ai.make_source_key(identity).removeprefix("HighScore-")
-    scan = issue["scanPages"][(ai.MAIN_PART, page)]
-    name = scan["path"].rsplit("/", 1)[1].rsplit(".", 1)[0] + ".jpg"
-    return f"/{PAGE_PREFIX[identity['publicationId']]}/{key}/{name}"
-
 
 def head(url_path: str) -> dict:
     time.sleep(PAUSE_SECONDS)
@@ -72,9 +50,9 @@ def probe(analysis: dict, extra_paths: list[str], known: dict) -> dict:
     for index, (issue_id, issue) in enumerate(issues.items(), 1):
         identity = issue["identity"]
         last_page = len([1 for part, _ in issue["scanPages"] if part == ai.MAIN_PART])
-        paths = [pdf_url_path(identity), page_url_path(issue, 1)]
+        paths = [ai.pdf_url_path(identity), ai.page_url_path(issue, 1)]
         if last_page > 1:
-            paths.append(page_url_path(issue, last_page))
+            paths.append(ai.page_url_path(issue, last_page))
         for path in paths:
             results[path] = cached_head(path)
         print(f"  [{index:3d}/{len(issues)}] {issue_id}: "
