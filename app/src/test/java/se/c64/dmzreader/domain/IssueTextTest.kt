@@ -44,7 +44,7 @@ class IssueTextTest {
 
     @Test
     fun `read action depends on the pdf`() {
-        assertEquals(ReadAction.COMING_SOON, issueEntity("datormagazin-1989-06").readAction())
+        assertEquals(ReadAction.READ, issueEntity("datormagazin-1989-06").readAction())
         assertEquals(
             ReadAction.PDF_MISSING,
             issueEntity("datormagazin-1989-06", ocrPdfUrl = null, flags = listOf("missing_ocr_pdf")).readAction(),
