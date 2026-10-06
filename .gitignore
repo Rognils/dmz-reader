@@ -11,3 +11,6 @@ __pycache__/
 
 # Stickprov (PDF:er och renderingar)
 samples/
+
+# Jämförelse mellan två inventory (arbetsfil)
+data/inventory_diff.json

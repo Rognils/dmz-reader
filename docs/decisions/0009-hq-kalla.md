@@ -43,3 +43,8 @@ Kända avvikelser som FAS 11 måste hantera:
 - Skanningarnas upplösning i pixlar är inte uppmätt, eftersom inga skanningar laddades ned i FAS 0. De största filerna (upp till 36,6 MB) kräver nedskalad avkodning.
 - Om läs-PDF:en för ett nummer har ett annat sidantal än skanningarna ska HQ stängas av för det numret, hellre än att visa fel sida.
 - Webbens sidbilder är inte en HQ-källa (lägre upplösning än läs-PDF:en), men kan bli källa för miniatyrer. Det beslutas senare.
+
+## Uppdatering 2026-10-06 (FAS 0B)
+- Flaggan `scan_parts` heter nu `scan_supplement`.
+- `scanPageCount` finns för alla 185 nummer och räknar bara huvuddelen. För 1986 nr 4 är det 33; spelbilagans 16 sidor räknas inte.
+- Planen säger nu att mappningen mellan PDF-sida och skanningsfil **inte får konstrueras matematiskt för nummer med avvikelser**. Regeln "PDF-sidindex n motsvarar skanning n" ovan gäller därför bara som utgångspunkt för nummer utan avvikelseflaggor. Den exakta mappningen beslutas i FAS 11.

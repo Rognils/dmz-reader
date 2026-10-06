@@ -2,6 +2,8 @@
 
 Fakta om DMZArkivet så som det såg ut 2026-10-06. Underlaget är versionshanterat:
 
+> **Not efter FAS 0B:** fälten i inventory har bytt form sedan detta skrevs. `ocrPdfVersion` är nu `ocrPdfEtag` och `ocrPdfLastModified`, `ocrPdfChecksum` är borttaget, flaggan `scan_parts` heter `scan_supplement`, omslagets rotation står i `coverFlags`, och `ocrPdfFtpSource`, `no_ftp_cover` och `ocr_pdf_differs_from_ftp` ligger i `data/inventory_diagnostics.json`. Se planens C2 och `tools/README.md`. Fakta om arkivet nedan gäller oförändrat.
+
 | Fil | Innehåll |
 |---|---|
 | `data/raw_listing.json` | FTP-listning (MLSD) av `Covers`, `OCR PDF`, `Large PDF`, `Original Scans` och `OCR PDF v2`, plus arkivets rot |

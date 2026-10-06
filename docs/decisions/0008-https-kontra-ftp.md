@@ -48,3 +48,12 @@ Stickproven visade att v2 (150 dpi) har ett användbart textlager och är läsba
 - Omslaget är en obearbetad skanning av sida 1. För 1986 nr 1 är den liggande (flagga `cover_page_rotated`). De tillsnyggade omslagen i `Covers` används inte.
 - `ocrPdfFtpSource` bygger på storleksjämförelse, inte på kontrollsumma. Två olika filer med exakt samma storlek skulle inte upptäckas.
 - Webbservern skickar `Cache-Control: no-cache`, så omslagens cachning får styras av appen.
+
+## Uppdatering 2026-10-06 (FAS 0B)
+Fälten i inventory har fått sin slutliga form (planens C2):
+
+- `ocrPdfVersion` är ersatt av de två fälten `ocrPdfEtag` och `ocrPdfLastModified`.
+- `ocrPdfChecksum` är borttaget. Utbytta filer upptäcks med `ocrPdfSize`, `ocrPdfEtag` och `ocrPdfLastModified`.
+- `ocrPdfFtpSource` och jämförelsen mot FTP har flyttat till `data/inventory_diagnostics.json`, som bara toolchainen använder. Flaggorna `ocr_pdf_differs_from_ftp` och `no_ftp_cover` finns inte längre i inventory.
+- `coverFlags` beskriver omslagsbilden. 1986 nr 1 har `["rotated"]`, satt i `tools/overrides.json`.
+- `coverUrl` och `ocrPdfUrl` är obligatoriska. Ett nummer utan läs-PDF eller sidbild 1 på webbplatsen kan inte exporteras.

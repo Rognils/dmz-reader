@@ -156,13 +156,12 @@ Arkivägarens egen beskrivning, med appens användning:
 | `Raw Images` | Obehandlade bilder direkt från skannern, osorterat | Ignoreras |
 | `Uploads` | För bidrag | Ignoreras |
 
-## B3. Omslag – tre nivåer
+## B3. Omslag – två nivåer
 
-1. riktigt omslag från `Covers`
-2. sida 1 ur OCR-PDF:en, renderad en gång och cachad lokalt
-3. neutral platshållare med publikation, år och nummer i text
+1. webbplatsens sidbild 1 (`coverUrl`)
+2. neutral platshållare med publikation, år och nummer i text
 
-Nivå 2 kräver att PDF:en finns lokalt. Den skapas därför när numret laddas ned eller öppnas första gången. Appen ska aldrig ladda ned en PDF bara för att få ett omslag.
+FTP-katalogen `Covers` används inte i v1. Appen laddar aldrig ned en PDF för att få ett omslag.
 
 ## B4. Kvalitetsläge
 
@@ -214,30 +213,35 @@ Speglar `archive_inventory.json`. Ersätts helt vid import av ett nytt inventory
 
 ```text
 Issue
-├── issueId            String, primärnyckel
-├── publicationId      String, t.ex. "datormagazin"
-├── publicationTitle   String, t.ex. "Datormagazin"
-├── year               Int
-├── issueLabel         String, visningstext, t.ex. "Nr 6–7"
-├── sortKey            String eller Long, för ordning inom år
-├── sourceKey          String, rå identitet från arkivet
-├── sourceNames        List<String>, originalsökvägar
-├── coverUrl           String?, null om omslag saknas
-├── ocrPdfUrl          String?
-├── ocrPdfSize         Long?
-├── ocrPdfChecksum     String?, om toolchainen kan ta fram en
-├── largePdfUrl        String?
-├── largePdfSize       Long?
-├── hqSource           String?, "scans" | "large_pdf" | null
-├── scanPagePattern    String?, mönster för originalskanning per sida
-├── pageCount          Int?, nullable
-├── spreadOffset       Int?, nullable
-└── flags              List<String>, t.ex. "missing_cover", "special_issue"
+├── issueId             String, primärnyckel
+├── publicationId       String, t.ex. "datormagazin"
+├── publicationTitle    String, t.ex. "Datormagazin"
+├── year                Int
+├── issueLabel          String, visningstext, t.ex. "Nr 6–7"
+├── sortKey             String, för ordning inom år
+├── sourceKey           String, rå identitet från arkivet
+├── sourceNames         List<String>, originalsökvägar
+├── relatedIssueId      String?, t.ex. HighScore → motsvarande Datormagazin-nummer
+├── coverUrl            String, webbens sidbild 1
+├── coverFlags          List<String>, t.ex. "rotated"
+├── ocrPdfUrl           String, kanonisk läs-PDF (webbplatsen)
+├── ocrPdfSize          Long?, serverns Content-Length
+├── ocrPdfEtag          String?
+├── ocrPdfLastModified  String?
+├── largePdfUrl         String?
+├── largePdfSize        Long?
+├── hqSource            String?, "scans" | "large_pdf" | null
+├── scanPagePattern     String?, mönster för originalskanning per sida
+├── scanPageCount       Int?, antal skanningar i numrets huvuddel
+├── pageCount           Int?, nullable
+├── spreadOffset        Int?, nullable
+└── flags               List<String>, t.ex. "double_issue", "scan_supplement"
 ```
 
 **Regler:**
 
 - `pageCount` och `spreadOffset` är nullable. Ingen kod får anta att de finns.
+- `scanPageCount` är inte samma sak som `pageCount` och får inte användas i dess ställe.
 - `Issue` innehåller aldrig personlig eller lokal data.
 
 ## C3. IssueLocalState – telefonens egen kunskap
@@ -332,7 +336,7 @@ Det gäller `lastPage`, `maxPageReached`, `Bookmark.pageNumber`, sökträffar i 
 
 Tidningens tryckta sidnummer är något annat. De kan visas som extra information senare, men lagras aldrig som referens.
 
-**Om en PDF byts i arkivet** (ny storlek eller kontrollsumma) kan sidindex förskjutas. Då ska appen:
+**Om en PDF byts i arkivet** kan sidindex förskjutas. Bytet upptäcks med `ocrPdfSize`, `ocrPdfEtag` och `ocrPdfLastModified`: om någon av dem har ändrats kan filen ha bytts. Då ska appen:
 
 - behålla alla bokmärken
 - visa en diskret markering på numret: "Arkivfilen har uppdaterats – bokmärken kan peka fel"
@@ -404,22 +408,35 @@ Genereras av toolchainen. Följer med APK:n som baseline och kan ersättas genom
   ],
   "issues": [
     {
-      "issueId": "…",
+      "issueId": "datormagazin-1989-12",
       "publicationId": "datormagazin",
+      "publicationTitle": "Datormagazin",
       "year": 1989,
       "issueLabel": "Nr 12",
       "sortKey": "1989-12",
-      "sourceKey": "…",
+      "sourceKey": "198912",
       "sourceNames": ["OCR PDF/…", "Covers/…"],
+      "relatedIssueId": null,
       "coverUrl": "…",
+      "coverFlags": [],
       "ocrPdfUrl": "…",
       "ocrPdfSize": 39845120,
+      "ocrPdfEtag": "…",
+      "ocrPdfLastModified": "…",
+      "largePdfUrl": "…",
+      "largePdfSize": 310000000,
+      "hqSource": "scans",
+      "scanPagePattern": "…",
+      "scanPageCount": 48,
       "pageCount": null,
+      "spreadOffset": null,
       "flags": []
     }
   ]
 }
 ```
+
+Fälten är de som står i C2. Formatet beskrivs formellt i `docs/inventory.schema.json`.
 
 ## D2. search.db
 
@@ -475,6 +492,7 @@ kopiera till temporär fil i privat lagring
 (öppna aldrig stora databaser direkt från en content-URI)
 ↓
 validera: format, schemaVersion, obligatoriska fält,
+          för inventory mot docs/inventory.schema.json,
           för search.db även PRAGMA integrity_check
           och att FTS-tabellen går att fråga
 ↓
@@ -911,8 +929,7 @@ Varje fas har samma struktur:
 - biblioteksvy enligt E4 (Fortsätt läsa, Senast lästa och Favoriter kan vara tomma och dolda)
 - årgångsvy enligt E5
 - nummervy enligt E6, utan läs- och nedladdningsfunktion
-- omslag via Coil med diskcache, och egen FTP-fetcher om ADR 0008 kräver det
-- omslag i nivå 1 och 3 (nivå 2 kommer i FAS 3)
+- omslag från `coverUrl` via Coil med diskcache, annars platshållare (B3)
 - stöd för flera publikationer om FAS 0 visade att det finns fler
 
 **Inte i denna fas:** PDF, läsning, nedladdning.
@@ -940,7 +957,8 @@ Varje fas har samma struktur:
 - läsare enligt E7 (helskärm, svep, tryckzoner, zoom, panorering, miniatyrer, progressbar, snabbhopp)
 - uppslagsläge i liggande läge, med manuell förskjutning av parningen
 - uppmät sidantal och PDF-storlek sparas i `IssueLocalState`
-- omslag nivå 2: rendera sida 1 och spara i `filesDir/covers/`
+- belastningstest med arkivets största OCR-PDF, 1995 nr 15 (563 MB)
+- miniatyrer: webbplatsens sidbilder är ett alternativ till att rendera dem ur PDF:en. Alternativen utvärderas här.
 - läsposition sparas tillfälligt i minnet (riktig lagring kommer i FAS 4)
 
 **Inte i denna fas:** permanent lagring av läsposition, nedladdning, bokmärken, HQ.
@@ -951,7 +969,7 @@ Varje fas har samma struktur:
 - [ ] zoom och panorering är mjuka
 - [ ] rotation tappar inte sidan
 - [ ] uppslagsläget visar rätt par för stickprovsnumren
-- [ ] den största OCR-PDF:en i arkivet går att läsa utan krasch eller minnesbrist
+- [ ] den största OCR-PDF:en i arkivet, 1995 nr 15 (563 MB), går att läsa utan krasch eller minnesbrist
 - [ ] avbruten nedladdning lämnar ingen trasig fil
 
 **ADR:** 0011 (PDF-rendering).
@@ -1046,7 +1064,7 @@ Varje fas har samma struktur:
 **Bygg:**
 
 - import av `archive_inventory.json` enligt D5
-- validering av `schemaVersion` och tydliga felmeddelanden
+- validering av `schemaVersion` och mot `docs/inventory.schema.json`, med tydliga felmeddelanden
 - atomiskt byte och ersättning av `Issue` i en transaktion
 - återgång till baseline
 - visning av nummer som saknas (D6)
@@ -1075,7 +1093,9 @@ Varje fas har samma struktur:
 - `tools/build_search_index.py` med:
   - nedladdning av OCR-PDF:er till en lokal cache på datorn, försiktigt (paus och en anslutning) och återupptagbart
   - `pdftotext` på hela filen, uppdelad på `\f` till text per sida
-  - normalisering: radbrytningar, avstavning, mellanslag
+  - två texter per sida i search.db: `rawText` (som den kom ur PDF:en) och `searchText` (normaliserad)
+  - normalisering till `searchText`: radbrytningar, avstavning, mellanslag, **ihopsättning av utspärrade ord** och **borttagning av mjuka bindestreck** (U+00AD)
+  - FTS-indexet och textutdragen använder `searchText`. `rawText` sparas för spårbarhet och får tas bort om storleksmätningen motiverar det.
   - SQLite med FTS-version enligt ADR 0006 och format enligt D2
   - tokenizer-test på verklig svensk text
 - uppmätt `pageCount` för alla nummer skrivs tillbaka till inventory, med ny `datasetVersion`
@@ -1090,6 +1110,7 @@ Varje fas har samma struktur:
 
 - [ ] search.db byggs reproducerbart från den lokala PDF-cachen
 - [ ] testsökningar på kända ord ger rätt nummer och sida
+- [ ] test mot 1995 nr 14: sökningen hittar "Amiga" och "högtalare" på de sidor där texten är utspärrad
 - [ ] storleken är uppmätt och dokumenterad
 - [ ] om storleken är problematisk finns ett förslag (uppdelning per publikation eller årsspann, eller FTS utan lagrad text). Ingen uppdelning görs utan mätdata.
 
@@ -1148,7 +1169,7 @@ Varje fas har samma struktur:
 
 - HQ-knappen i läsaren
 - hämtning av HQ-källa per sida (originalskanning) eller Large PDF enligt ADR 0009
-- mappning mellan PDF-sidindex och skanningsfil, verifierad mot stickproven
+- mappning mellan PDF-sidindex och skanningsfil, verifierad mot stickproven. För nummer med avvikelser (se flaggorna i inventory) får mappningen inte konstrueras matematiskt. Den exakta mappningen beslutas i denna fas.
 - cache av HQ-sidor i `cacheDir`, med storleksgräns
 - tillbaka till Standard utan att sidan tappas
 
@@ -1410,3 +1431,10 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-06 | FAS 0: HighScore är en egen publikation (`publicationId` "highscore", `publicationTitle` "HighScore"). `relatedIssueId` pekar på motsvarande Datormagazin-nummer. | 0007 |
 | 2026-10-06 | FAS 0: formatet för `issueId` fastställt som `<publicationId>-<ÅÅÅÅ>-<NN>[-<MM>][b]`. Formatet är nu permanent. | 0007 |
 | 2026-10-06 | FAS 0: `Other Magazines`, `PDFs V3`, `Löp`, `amigadiskar`, `test` och lösa filer i arkivets rot ingår inte i projektet | — |
+| 2026-10-06 | FAS 0B: C2 och D1 har nya Issue-fält: `relatedIssueId`, `coverFlags`, `ocrPdfEtag`, `ocrPdfLastModified`, `scanPageCount`. `ocrPdfChecksum` är borttaget. `coverUrl` och `ocrPdfUrl` är obligatoriska. | 0008 |
+| 2026-10-06 | FAS 0B: C7: utbytta filer upptäcks med `ocrPdfSize`, `ocrPdfEtag` och `ocrPdfLastModified` i stället för kontrollsumma | 0008 |
+| 2026-10-06 | FAS 0B: B3: omslag är webbens sidbild 1, annars platshållare. Nivån "renderad sida 1 ur PDF" är struken. FTP `Covers` används inte i v1. | 0008 |
+| 2026-10-06 | FAS 0B: FAS 2: FTP-fetchern för Coil och PDF-genererade omslag strukna. FAS 3: omslag nivå 2 struket; belastningstest med 1995 nr 15 (563 MB) tillagt; webbens sidbilder utvärderas som källa för miniatyrer. | 0008 |
+| 2026-10-06 | FAS 0B: FAS 8: search.db sparar `rawText` och `searchText` per sida. Normaliseringen sätter ihop utspärrade ord och tar bort mjuka bindestreck. Test mot 1995 nr 14 tillagt. | — |
+| 2026-10-06 | FAS 0B: FAS 11: sidmappningen får inte konstrueras matematiskt för nummer med avvikelser. Den beslutas i FAS 11. | 0009 |
+| 2026-10-06 | FAS 0B: D5 och FAS 7: import av inventory valideras mot `docs/inventory.schema.json` | — |
