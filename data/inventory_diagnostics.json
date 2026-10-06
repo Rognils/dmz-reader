@@ -1,0 +1,3187 @@
+{
+ "datasetVersion": "2026-10-06-002",
+ "generator": "archive_inventory.py 0.2.0",
+ "httpsProbedAt": "2026-10-06T11:30:53Z",
+ "issues": {
+  "datormagazin-1986-01": {
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "ftpCoverPath": "Covers/DMZ_1986-01-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 8069426,
+   "ftpOcrPdfSize": 89016973,
+   "ftpOcrPdfV2Size": 15105472,
+   "measurement": {
+    "ocrPdfSize": 15105472,
+    "pageCount": 28,
+    "sha256": "01305ec8e90b5fffcbbb9f082eef26f7d1fb2bcbcce96eaf5f2879dca0a03c46",
+    "used": true
+   },
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 28
+   },
+   "scanTotalBytes": 95080548,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 15105472
+  },
+  "datormagazin-1986-02": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1986-02-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 5461737,
+   "ftpOcrPdfSize": 101964831,
+   "ftpOcrPdfV2Size": 18024807,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 112783820,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 18024807
+  },
+  "datormagazin-1986-03": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1986-03-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 8787200,
+   "ftpOcrPdfSize": 105949528,
+   "ftpOcrPdfV2Size": 18478586,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 96243042,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 18478586
+  },
+  "datormagazin-1986-04": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 99954855,
+   "ftpOcrPdfV2Size": 23329624,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "Spelbilaga": 16,
+    "main": 33
+   },
+   "scanTotalBytes": 1495610952,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23329624
+  },
+  "datormagazin-1987-01": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1987-01-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 7673880,
+   "ftpOcrPdfSize": 111431661,
+   "ftpOcrPdfV2Size": 19032390,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 36
+   },
+   "scanTotalBytes": 88906659,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 19032390
+  },
+  "datormagazin-1987-02": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1987-02-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6947421,
+   "ftpOcrPdfSize": 123457371,
+   "ftpOcrPdfV2Size": 21422879,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 40
+   },
+   "scanTotalBytes": 99165555,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 21422879
+  },
+  "datormagazin-1987-03": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1987-03-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 18281159,
+   "ftpOcrPdfSize": 202386922,
+   "ftpOcrPdfV2Size": 19358555,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 40
+   },
+   "scanTotalBytes": 540124139,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 19358555
+  },
+  "datormagazin-1987-04-05": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1987-04-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1834477,
+   "ftpOcrPdfSize": 58456351,
+   "ftpOcrPdfV2Size": 33327407,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 46378003,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 33327407
+  },
+  "datormagazin-1987-06": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1987-06-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 10020435,
+   "ftpOcrPdfSize": 154173941,
+   "ftpOcrPdfV2Size": 27882487,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 123867867,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 27882487
+  },
+  "datormagazin-1987-07": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 211205512,
+   "ftpOcrPdfV2Size": 21906862,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 596624158,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 21906862
+  },
+  "datormagazin-1987-08": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 213051410,
+   "ftpOcrPdfV2Size": 22711805,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 605149301,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 22711805
+  },
+  "datormagazin-1987-09": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": null,
+   "ftpOcrPdfV2Size": 28193113,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 503408363,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 28193113
+  },
+  "datormagazin-1987-10": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": null,
+   "ftpOcrPdfV2Size": 23573588,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 44
+   },
+   "scanTotalBytes": 442344471,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23573588
+  },
+  "datormagazin-1987-10b": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": null,
+   "ftpOcrPdfV2Size": 22519348,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 44
+   },
+   "scanTotalBytes": 455776372,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 22519348
+  },
+  "datormagazin-1988-01": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-01-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 8964577,
+   "ftpOcrPdfSize": 142655340,
+   "ftpOcrPdfV2Size": 24474598,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 44
+   },
+   "scanTotalBytes": 117250829,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24474598
+  },
+  "datormagazin-1988-02": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-02-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9411488,
+   "ftpOcrPdfSize": 79240324,
+   "ftpOcrPdfV2Size": 20562016,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 543326043,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 20562016
+  },
+  "datormagazin-1988-03": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-03-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6638568,
+   "ftpOcrPdfSize": 97089456,
+   "ftpOcrPdfV2Size": 23928187,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 581654449,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23928187
+  },
+  "datormagazin-1988-04": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-04-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 5396228,
+   "ftpOcrPdfSize": 95674823,
+   "ftpOcrPdfV2Size": 24943062,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 556228977,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24943062
+  },
+  "datormagazin-1988-05": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-05-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 13707461,
+   "ftpOcrPdfSize": 95625004,
+   "ftpOcrPdfV2Size": 24362335,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 557620407,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24362335
+  },
+  "datormagazin-1988-06": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-06-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 5895198,
+   "ftpOcrPdfSize": 97092781,
+   "ftpOcrPdfV2Size": 24970770,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 559342085,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24970770
+  },
+  "datormagazin-1988-07": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-07-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6218042,
+   "ftpOcrPdfSize": 83047881,
+   "ftpOcrPdfV2Size": 22069886,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 44
+   },
+   "scanTotalBytes": 488755386,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 22069886
+  },
+  "datormagazin-1988-08": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-08-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6119681,
+   "ftpOcrPdfSize": 78303315,
+   "ftpOcrPdfV2Size": 20261222,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 40
+   },
+   "scanTotalBytes": 454749885,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 20261222
+  },
+  "datormagazin-1988-09": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": null,
+   "ftpOcrPdfV2Size": 21732720,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 40
+   },
+   "scanTotalBytes": 403643071,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 21732720
+  },
+  "datormagazin-1988-10": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": null,
+   "ftpOcrPdfV2Size": 22987208,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 40
+   },
+   "scanTotalBytes": 409542914,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 22987208
+  },
+  "datormagazin-1988-11": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-11-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6146417,
+   "ftpOcrPdfSize": 108502201,
+   "ftpOcrPdfV2Size": 26011862,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 612621914,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26011862
+  },
+  "datormagazin-1988-12": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-12-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 5262111,
+   "ftpOcrPdfSize": 99784069,
+   "ftpOcrPdfV2Size": 25647525,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 559535188,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25647525
+  },
+  "datormagazin-1988-13": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": null,
+   "ftpOcrPdfV2Size": 26061502,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 478506628,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26061502
+  },
+  "datormagazin-1988-14": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-14-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6014900,
+   "ftpOcrPdfSize": 98876343,
+   "ftpOcrPdfV2Size": 25274281,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 552164383,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25274281
+  },
+  "datormagazin-1988-15": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": null,
+   "ftpOcrPdfV2Size": 24838919,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 471531630,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24838919
+  },
+  "datormagazin-1988-16-17": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1988-1617-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6045578,
+   "ftpOcrPdfSize": 98334577,
+   "ftpOcrPdfV2Size": 25641314,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 559886094,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25641314
+  },
+  "datormagazin-1989-01": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-01-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6061586,
+   "ftpOcrPdfSize": 98945860,
+   "ftpOcrPdfV2Size": 24108625,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 582218507,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24108625
+  },
+  "datormagazin-1989-02": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": null,
+   "ftpOcrPdfV2Size": 26026118,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 477493705,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26026118
+  },
+  "datormagazin-1989-03": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-03-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6006489,
+   "ftpOcrPdfSize": 94591576,
+   "ftpOcrPdfV2Size": 23488554,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 560911679,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23488554
+  },
+  "datormagazin-1989-04": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": null,
+   "ftpOcrPdfV2Size": 26283467,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 470864375,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26283467
+  },
+  "datormagazin-1989-05": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": null,
+   "ftpOcrPdfV2Size": 26335898,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 470127717,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26335898
+  },
+  "datormagazin-1989-06": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-06-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6136649,
+   "ftpOcrPdfSize": 55338224,
+   "ftpOcrPdfV2Size": 25672804,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 544274618,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25672804
+  },
+  "datormagazin-1989-07": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-07-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 5422056,
+   "ftpOcrPdfSize": 54962567,
+   "ftpOcrPdfV2Size": 23914949,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 533942941,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23914949
+  },
+  "datormagazin-1989-08": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-08-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1644629,
+   "ftpOcrPdfSize": 55458682,
+   "ftpOcrPdfV2Size": 27021492,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 493856704,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 27021492
+  },
+  "datormagazin-1989-09": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-09-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6008376,
+   "ftpOcrPdfSize": 82920453,
+   "ftpOcrPdfV2Size": 20461113,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 40
+   },
+   "scanTotalBytes": 476392103,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 20461113
+  },
+  "datormagazin-1989-10": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-10-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1694288,
+   "ftpOcrPdfSize": 49035920,
+   "ftpOcrPdfV2Size": 23352350,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 40
+   },
+   "scanTotalBytes": 419783115,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23352350
+  },
+  "datormagazin-1989-11": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-11-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1988276,
+   "ftpOcrPdfSize": 54923303,
+   "ftpOcrPdfV2Size": 26189195,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 44
+   },
+   "scanTotalBytes": 64292314,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26189195
+  },
+  "datormagazin-1989-12": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-12-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6227678,
+   "ftpOcrPdfSize": 99738796,
+   "ftpOcrPdfV2Size": 25595148,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 562255687,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25595148
+  },
+  "datormagazin-1989-13": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-13-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1673947,
+   "ftpOcrPdfSize": 57077902,
+   "ftpOcrPdfV2Size": 27678270,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 499621084,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 27678270
+  },
+  "datormagazin-1989-14": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-14-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1755512,
+   "ftpOcrPdfSize": 56466965,
+   "ftpOcrPdfV2Size": 26828063,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 487588158,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26828063
+  },
+  "datormagazin-1989-15": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-15-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 4964909,
+   "ftpOcrPdfSize": 89234009,
+   "ftpOcrPdfV2Size": 24183820,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 525987404,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24183820
+  },
+  "datormagazin-1989-16": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-16-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1580269,
+   "ftpOcrPdfSize": 54266892,
+   "ftpOcrPdfV2Size": 26082713,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 478506490,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26082713
+  },
+  "datormagazin-1989-16b": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": null,
+   "ftpOcrPdfV2Size": 23239532,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 36
+   },
+   "scanTotalBytes": 34228386,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23239532
+  },
+  "datormagazin-1989-17": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-17-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1761746,
+   "ftpOcrPdfSize": 58117931,
+   "ftpOcrPdfV2Size": 26816123,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 490062351,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26816123
+  },
+  "datormagazin-1989-18": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1989-18-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 4580893,
+   "ftpOcrPdfSize": 78142743,
+   "ftpOcrPdfV2Size": 20209390,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 40
+   },
+   "scanTotalBytes": 450442204,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 20209390
+  },
+  "datormagazin-1990-01": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-01-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6389386,
+   "ftpOcrPdfSize": 76923295,
+   "ftpOcrPdfV2Size": 19005747,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 36
+   },
+   "scanTotalBytes": 432221775,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 19005747
+  },
+  "datormagazin-1990-02": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-02-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 4767042,
+   "ftpOcrPdfSize": 78560006,
+   "ftpOcrPdfV2Size": 19974407,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 36
+   },
+   "scanTotalBytes": 429891417,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 19974407
+  },
+  "datormagazin-1990-03": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-03-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1708473,
+   "ftpOcrPdfSize": 57289275,
+   "ftpOcrPdfV2Size": 25241837,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 44
+   },
+   "scanTotalBytes": 450025754,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25241837
+  },
+  "datormagazin-1990-04": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-04-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1577800,
+   "ftpOcrPdfSize": 55701642,
+   "ftpOcrPdfV2Size": 25756518,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 44
+   },
+   "scanTotalBytes": 462818305,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25756518
+  },
+  "datormagazin-1990-05": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-05-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6210310,
+   "ftpOcrPdfSize": 98286900,
+   "ftpOcrPdfV2Size": 24945142,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 44
+   },
+   "scanTotalBytes": 528389980,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24945142
+  },
+  "datormagazin-1990-06": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-06-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6388029,
+   "ftpOcrPdfSize": 97661101,
+   "ftpOcrPdfV2Size": 23739268,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 44
+   },
+   "scanTotalBytes": 541441954,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23739268
+  },
+  "datormagazin-1990-07": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-07-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6161549,
+   "ftpOcrPdfSize": 97378296,
+   "ftpOcrPdfV2Size": 24135495,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 44
+   },
+   "scanTotalBytes": 529317057,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24135495
+  },
+  "datormagazin-1990-08": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-08-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1881660,
+   "ftpOcrPdfSize": 60259095,
+   "ftpOcrPdfV2Size": 31313861,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 46052466,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 31313861
+  },
+  "datormagazin-1990-09": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-09-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 6039641,
+   "ftpOcrPdfSize": 106950065,
+   "ftpOcrPdfV2Size": 26039674,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 579118624,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26039674
+  },
+  "datormagazin-1990-10": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-10-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": false,
+   "ftpCoverSize": 1677866,
+   "ftpOcrPdfSize": 57790015,
+   "ftpOcrPdfV2Size": 29627724,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 44
+   },
+   "scanTotalBytes": 43360132,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 29627724
+  },
+  "datormagazin-1990-11": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-11-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 3970146,
+   "ftpOcrPdfSize": 91061768,
+   "ftpOcrPdfV2Size": 23870791,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 273221316,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23870791
+  },
+  "datormagazin-1990-12": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-12-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 7327415,
+   "ftpOcrPdfSize": 87429617,
+   "ftpOcrPdfV2Size": 23398996,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 277898530,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23398996
+  },
+  "datormagazin-1990-13": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-13-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6268017,
+   "ftpOcrPdfSize": 102067979,
+   "ftpOcrPdfV2Size": 26565442,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 98
+   },
+   "scanTotalBytes": 315862365,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26565442
+  },
+  "datormagazin-1990-14": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-14-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 5995876,
+   "ftpOcrPdfSize": 87893201,
+   "ftpOcrPdfV2Size": 23617008,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 280754042,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23617008
+  },
+  "datormagazin-1990-15": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-15-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 5507876,
+   "ftpOcrPdfSize": 95384812,
+   "ftpOcrPdfV2Size": 23785392,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 305131739,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23785392
+  },
+  "datormagazin-1990-16": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-16-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6567992,
+   "ftpOcrPdfSize": 90065424,
+   "ftpOcrPdfV2Size": 22945902,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 288421745,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 22945902
+  },
+  "datormagazin-1990-17": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-17-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6383867,
+   "ftpOcrPdfSize": 96967419,
+   "ftpOcrPdfV2Size": 25146449,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 96
+   },
+   "scanTotalBytes": 326391231,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25146449
+  },
+  "datormagazin-1990-18": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-18-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 22816761,
+   "ftpOcrPdfSize": 107181612,
+   "ftpOcrPdfV2Size": 24610286,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 104
+   },
+   "scanTotalBytes": 1956040295,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24610286
+  },
+  "datormagazin-1990-19": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-19-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6038545,
+   "ftpOcrPdfSize": 101255080,
+   "ftpOcrPdfV2Size": 26853787,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 104
+   },
+   "scanTotalBytes": 345799510,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 26853787
+  },
+  "datormagazin-1990-20": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1990-20-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 5778784,
+   "ftpOcrPdfSize": 90911862,
+   "ftpOcrPdfV2Size": 23131052,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 294058537,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23131052
+  },
+  "datormagazin-1991-01": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-01-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6519507,
+   "ftpOcrPdfSize": 88460536,
+   "ftpOcrPdfV2Size": 23667957,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 268836561,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23667957
+  },
+  "datormagazin-1991-02": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-02-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 2681501,
+   "ftpOcrPdfSize": 93116085,
+   "ftpOcrPdfV2Size": 23212399,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 300499189,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23212399
+  },
+  "datormagazin-1991-03": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-03-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 3178001,
+   "ftpOcrPdfSize": 51390484,
+   "ftpOcrPdfV2Size": 23372125,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 280412308,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23372125
+  },
+  "datormagazin-1991-04": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-04-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 1594771,
+   "ftpOcrPdfSize": 96640229,
+   "ftpOcrPdfV2Size": 24090439,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 137695188,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24090439
+  },
+  "datormagazin-1991-05": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 55382410,
+   "ftpOcrPdfV2Size": 22410233,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 542332900,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 22410233
+  },
+  "datormagazin-1991-06": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-06-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6715994,
+   "ftpOcrPdfSize": 100843895,
+   "ftpOcrPdfV2Size": 25772685,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 318018105,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25772685
+  },
+  "datormagazin-1991-07": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-07-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8458129,
+   "ftpOcrPdfSize": 99167510,
+   "ftpOcrPdfV2Size": 25886898,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 312223517,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25886898
+  },
+  "datormagazin-1991-08": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-08-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 7860186,
+   "ftpOcrPdfSize": 93162477,
+   "ftpOcrPdfV2Size": 24823297,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 288642903,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24823297
+  },
+  "datormagazin-1991-09": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-09-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 7808924,
+   "ftpOcrPdfSize": 94615952,
+   "ftpOcrPdfV2Size": 24528234,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 300583609,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24528234
+  },
+  "datormagazin-1991-10": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-10-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 7845432,
+   "ftpOcrPdfSize": 98190270,
+   "ftpOcrPdfV2Size": 25133496,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 307469985,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25133496
+  },
+  "datormagazin-1991-11": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-11-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 4523988,
+   "ftpOcrPdfSize": 81643853,
+   "ftpOcrPdfV2Size": 21907664,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 144347343,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 21907664
+  },
+  "datormagazin-1991-12": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-12-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 4172921,
+   "ftpOcrPdfSize": 81819473,
+   "ftpOcrPdfV2Size": 22439593,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 293631362,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 22439593
+  },
+  "datormagazin-1991-13": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-13-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 5240508,
+   "ftpOcrPdfSize": 100585259,
+   "ftpOcrPdfV2Size": 24071175,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 315937432,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24071175
+  },
+  "datormagazin-1991-14": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-14-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 4138149,
+   "ftpOcrPdfSize": 84698119,
+   "ftpOcrPdfV2Size": 22286147,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 299442689,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 22286147
+  },
+  "datormagazin-1991-15": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-15-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8073249,
+   "ftpOcrPdfSize": 105599770,
+   "ftpOcrPdfV2Size": 25481916,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 318242228,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25481916
+  },
+  "datormagazin-1991-16": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-16-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 5310501,
+   "ftpOcrPdfSize": 111358519,
+   "ftpOcrPdfV2Size": 25777191,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 330893414,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25777191
+  },
+  "datormagazin-1991-17": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-17-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 5237420,
+   "ftpOcrPdfSize": 108040332,
+   "ftpOcrPdfV2Size": 25618186,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 331194334,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25618186
+  },
+  "datormagazin-1991-18": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-18-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 5051847,
+   "ftpOcrPdfSize": 107553551,
+   "ftpOcrPdfV2Size": 25382609,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 321379559,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 25382609
+  },
+  "datormagazin-1991-19": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-19-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 3958883,
+   "ftpOcrPdfSize": 90368041,
+   "ftpOcrPdfV2Size": 23234304,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 311572307,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23234304
+  },
+  "datormagazin-1991-20": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-20-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 4335924,
+   "ftpOcrPdfSize": 92329465,
+   "ftpOcrPdfV2Size": 24372645,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 317807106,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 24372645
+  },
+  "datormagazin-1991-21": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-21-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 3987421,
+   "ftpOcrPdfSize": 90777160,
+   "ftpOcrPdfV2Size": 23808786,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF v2",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 319298578,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 23808786
+  },
+  "datormagazin-1991-22": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1991-22-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8556594,
+   "ftpOcrPdfSize": 122724692,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 383577349,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 122724692
+  },
+  "datormagazin-1992-01": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-01-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8352412,
+   "ftpOcrPdfSize": 123750468,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 372032347,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 123750468
+  },
+  "datormagazin-1992-02": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-02-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 2236313,
+   "ftpOcrPdfSize": 121084901,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 148460272,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 121084901
+  },
+  "datormagazin-1992-03": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-03-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9164787,
+   "ftpOcrPdfSize": 114989465,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 358868969,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 114989465
+  },
+  "datormagazin-1992-04": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-04-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6264476,
+   "ftpOcrPdfSize": 115677047,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 345649951,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 115677047
+  },
+  "datormagazin-1992-05": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-05-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9038494,
+   "ftpOcrPdfSize": 110705870,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 344785343,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 110705870
+  },
+  "datormagazin-1992-06": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 114110422,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 325365351,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 114110422
+  },
+  "datormagazin-1992-07": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-07-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8957567,
+   "ftpOcrPdfSize": 107926004,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 335788058,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 107926004
+  },
+  "datormagazin-1992-08": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-08-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9220326,
+   "ftpOcrPdfSize": 115469106,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 360935423,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 115469106
+  },
+  "datormagazin-1992-09": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 108723437,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 315563496,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 108723437
+  },
+  "datormagazin-1992-10": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-10-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8362792,
+   "ftpOcrPdfSize": 102238421,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 319503091,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 102238421
+  },
+  "datormagazin-1992-11": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-11-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9474422,
+   "ftpOcrPdfSize": 107147673,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 332383761,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 107147673
+  },
+  "datormagazin-1992-12": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-12-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6203642,
+   "ftpOcrPdfSize": 101721728,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 320426543,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 101721728
+  },
+  "datormagazin-1992-13": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 121613674,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 366151861,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 121613674
+  },
+  "datormagazin-1992-14": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 112753460,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 333667095,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 112753460
+  },
+  "datormagazin-1992-15": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 113598543,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 331861939,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 113598543
+  },
+  "datormagazin-1992-16": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-16-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6251777,
+   "ftpOcrPdfSize": 109552123,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 343649967,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 109552123
+  },
+  "datormagazin-1992-17": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 115197958,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 334008150,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 115197958
+  },
+  "datormagazin-1992-18": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-18-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 19875466,
+   "ftpOcrPdfSize": 292206183,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 81
+   },
+   "scanTotalBytes": 1058697344,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 292206183
+  },
+  "datormagazin-1992-19": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1992-19-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9341860,
+   "ftpOcrPdfSize": 112163025,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 362229845,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 112163025
+  },
+  "datormagazin-1992-20": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 108670892,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 330693152,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 108670892
+  },
+  "datormagazin-1992-21": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 119790591,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 88
+   },
+   "scanTotalBytes": 357062204,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 119790591
+  },
+  "datormagazin-1992-22": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 113911764,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 80
+   },
+   "scanTotalBytes": 339167051,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 113911764
+  },
+  "datormagazin-1993-01": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 68380884,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 246473343,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 68380884
+  },
+  "datormagazin-1993-02": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-02-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8652423,
+   "ftpOcrPdfSize": 88429881,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 296577513,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 88429881
+  },
+  "datormagazin-1993-03": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 78922903,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": null,
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 280622517,
+   "webPdfMatchesFtp": false,
+   "webPdfSize": 89792864
+  },
+  "datormagazin-1993-04": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 79737756,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 283824827,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 79737756
+  },
+  "datormagazin-1993-05": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-05-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 15534452,
+   "ftpOcrPdfSize": 81310369,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 290929582,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 81310369
+  },
+  "datormagazin-1993-06": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-06-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 5331925,
+   "ftpOcrPdfSize": 104341762,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 299797235,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 104341762
+  },
+  "datormagazin-1993-07": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-07-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8568143,
+   "ftpOcrPdfSize": 102033030,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 310598433,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 102033030
+  },
+  "datormagazin-1993-08": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-08-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8561134,
+   "ftpOcrPdfSize": 98849696,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 306574956,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 98849696
+  },
+  "datormagazin-1993-09": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-09-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 7750877,
+   "ftpOcrPdfSize": 95283629,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 300904027,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 95283629
+  },
+  "datormagazin-1993-10": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 82470703,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 293750815,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 82470703
+  },
+  "datormagazin-1993-11": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 83668248,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 297667723,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 83668248
+  },
+  "datormagazin-1993-12": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-12-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8596395,
+   "ftpOcrPdfSize": 101735935,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 305297556,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 101735935
+  },
+  "datormagazin-1993-13": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 80835643,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 292962794,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 80835643
+  },
+  "datormagazin-1993-14": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-14-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8684142,
+   "ftpOcrPdfSize": 102023382,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 331410811,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 102023382
+  },
+  "datormagazin-1993-15": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-15-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9644342,
+   "ftpOcrPdfSize": 107328425,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 346930433,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 107328425
+  },
+  "datormagazin-1993-16": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-16-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9842928,
+   "ftpOcrPdfSize": 107988451,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 72
+   },
+   "scanTotalBytes": 346386455,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 107988451
+  },
+  "datormagazin-1993-17": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 51740140,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 190092871,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 51740140
+  },
+  "datormagazin-1993-18": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 53050322,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 190901869,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 53050322
+  },
+  "datormagazin-1993-19": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 52335848,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 189002331,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 52335848
+  },
+  "datormagazin-1993-20": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-20-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9320386,
+   "ftpOcrPdfSize": 58137127,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 183781213,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 58137127
+  },
+  "datormagazin-1993-21": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1993-21-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 14131735,
+   "ftpOcrPdfSize": 180233678,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 79
+   },
+   "scanTotalBytes": 849529261,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 180233678
+  },
+  "datormagazin-1993-22": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 50917163,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 186567423,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 50917163
+  },
+  "datormagazin-1994-01": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-01-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 7069990,
+   "ftpOcrPdfSize": 54898146,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 170415300,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 54898146
+  },
+  "datormagazin-1994-02": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-02-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8727986,
+   "ftpOcrPdfSize": 55260556,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 177427865,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 55260556
+  },
+  "datormagazin-1994-03": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-03-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 5895349,
+   "ftpOcrPdfSize": 54979978,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 166320747,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 54979978
+  },
+  "datormagazin-1994-04": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-04-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 7910212,
+   "ftpOcrPdfSize": 50452127,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 46
+   },
+   "scanTotalBytes": 163531781,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 50452127
+  },
+  "datormagazin-1994-05": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-05-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8805087,
+   "ftpOcrPdfSize": 54875439,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 169551667,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 54875439
+  },
+  "datormagazin-1994-06": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-06-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8451651,
+   "ftpOcrPdfSize": 56443068,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 182797460,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 56443068
+  },
+  "datormagazin-1994-07": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-07-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8172258,
+   "ftpOcrPdfSize": 53504202,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 46
+   },
+   "scanTotalBytes": 172977535,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 53504202
+  },
+  "datormagazin-1994-08": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-08-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8765792,
+   "ftpOcrPdfSize": 57310882,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 48
+   },
+   "scanTotalBytes": 182652509,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 57310882
+  },
+  "datormagazin-1994-09": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 65198576,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 225158984,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 65198576
+  },
+  "datormagazin-1994-10": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 65812205,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 227685771,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 65812205
+  },
+  "datormagazin-1994-11": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-11-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9229275,
+   "ftpOcrPdfSize": 85038182,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 247224732,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 85038182
+  },
+  "datormagazin-1994-12": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-12-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 5629781,
+   "ftpOcrPdfSize": 81621160,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 228394991,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 81621160
+  },
+  "datormagazin-1994-13": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-13-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9249976,
+   "ftpOcrPdfSize": 88181264,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 257527956,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 88181264
+  },
+  "datormagazin-1994-14": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-14-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8268891,
+   "ftpOcrPdfSize": 86026610,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 254387222,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 86026610
+  },
+  "datormagazin-1994-15": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 66839823,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 232472724,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 66839823
+  },
+  "datormagazin-1994-16": {
+   "appliedOverrides": [],
+   "ftpCoverPath": null,
+   "ftpCoverSameSizeAsScanPage1": null,
+   "ftpCoverSize": null,
+   "ftpOcrPdfSize": 66632030,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 231502397,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 66632030
+  },
+  "datormagazin-1994-17": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-17-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8119551,
+   "ftpOcrPdfSize": 81736975,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 239971628,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 81736975
+  },
+  "datormagazin-1994-18": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-18-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9135441,
+   "ftpOcrPdfSize": 82308034,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 241123747,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 82308034
+  },
+  "datormagazin-1994-19": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-19-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6576634,
+   "ftpOcrPdfSize": 85952045,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 252563941,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 85952045
+  },
+  "datormagazin-1994-20": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-20-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8286586,
+   "ftpOcrPdfSize": 80849285,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 237340630,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 80849285
+  },
+  "datormagazin-1994-21": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-21-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8892778,
+   "ftpOcrPdfSize": 85538044,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 249353846,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 85538044
+  },
+  "datormagazin-1994-22": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1994-22-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8012539,
+   "ftpOcrPdfSize": 86854326,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 62
+   },
+   "scanTotalBytes": 273891483,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 86854326
+  },
+  "datormagazin-1995-01": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-01-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8225479,
+   "ftpOcrPdfSize": 80845990,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 246143183,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 80845990
+  },
+  "datormagazin-1995-02": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-02-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 4560382,
+   "ftpOcrPdfSize": 82874350,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 243682074,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 82874350
+  },
+  "datormagazin-1995-03": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-03-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9443221,
+   "ftpOcrPdfSize": 91881003,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 268930914,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 91881003
+  },
+  "datormagazin-1995-04": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-04-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9506382,
+   "ftpOcrPdfSize": 81978871,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 241702621,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 81978871
+  },
+  "datormagazin-1995-05-06": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-0506-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8485468,
+   "ftpOcrPdfSize": 84041639,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 64
+   },
+   "scanTotalBytes": 247346182,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 84041639
+  },
+  "datormagazin-1995-07": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-07-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8235737,
+   "ftpOcrPdfSize": 120787819,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 84
+   },
+   "scanTotalBytes": 334023939,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 120787819
+  },
+  "datormagazin-1995-08": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-08-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 18033317,
+   "ftpOcrPdfSize": 358882364,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 84
+   },
+   "scanTotalBytes": 1186800426,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 358882364
+  },
+  "datormagazin-1995-09": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-09-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 8872257,
+   "ftpOcrPdfSize": 122693287,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 84
+   },
+   "scanTotalBytes": 355831680,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 122693287
+  },
+  "datormagazin-1995-10": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-10-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6251040,
+   "ftpOcrPdfSize": 117261799,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 84
+   },
+   "scanTotalBytes": 326498864,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 117261799
+  },
+  "datormagazin-1995-11": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-11-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 6014476,
+   "ftpOcrPdfSize": 120044394,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 84
+   },
+   "scanTotalBytes": 334085623,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 120044394
+  },
+  "datormagazin-1995-12": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-12-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 2440099,
+   "ftpOcrPdfSize": 114445559,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 84
+   },
+   "scanTotalBytes": 147260765,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 114445559
+  },
+  "datormagazin-1995-13": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-13-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 4133857,
+   "ftpOcrPdfSize": 110885579,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 84
+   },
+   "scanTotalBytes": 323303692,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 110885579
+  },
+  "datormagazin-1995-14": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-14-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 5223249,
+   "ftpOcrPdfSize": 115605773,
+   "ftpOcrPdfV2Size": null,
+   "measurement": {
+    "ocrPdfSize": 115605773,
+    "pageCount": 84,
+    "sha256": "45caae2020586325a2390065c72defe91f10f12ca113272e705759c98fdedaa4",
+    "used": true
+   },
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 84
+   },
+   "scanTotalBytes": 320087896,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 115605773
+  },
+  "datormagazin-1995-15": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/DMZ_1995-15-001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 23604389,
+   "ftpOcrPdfSize": 563123977,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 92
+   },
+   "scanTotalBytes": 2079387417,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 563123977
+  },
+  "highscore-1993-17": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1993-17_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 12090064,
+   "ftpOcrPdfSize": 90700078,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 588619977,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 90700078
+  },
+  "highscore-1993-18": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1993-18_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 19650058,
+   "ftpOcrPdfSize": 85506354,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 538685385,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 85506354
+  },
+  "highscore-1993-19": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1993-19_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 21147471,
+   "ftpOcrPdfSize": 86812684,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 553855539,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 86812684
+  },
+  "highscore-1993-20": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1993-20_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 20379289,
+   "ftpOcrPdfSize": 136874488,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 425993626,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 136874488
+  },
+  "highscore-1993-21": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1993-21_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 9201613,
+   "ftpOcrPdfSize": 84892950,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 556974960,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 84892950
+  },
+  "highscore-1993-22": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1993-22_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 22159808,
+   "ftpOcrPdfSize": 86371089,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 541971052,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 86371089
+  },
+  "highscore-1994-01": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1994-01_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 22344103,
+   "ftpOcrPdfSize": 142195791,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 434248151,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 142195791
+  },
+  "highscore-1994-02": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1994-02_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 20342377,
+   "ftpOcrPdfSize": 141150412,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 422857655,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 141150412
+  },
+  "highscore-1994-03": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1994-03_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 23431184,
+   "ftpOcrPdfSize": 144171492,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 439805142,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 144171492
+  },
+  "highscore-1994-04": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1994-04_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 18093971,
+   "ftpOcrPdfSize": 140048778,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 427537848,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 140048778
+  },
+  "highscore-1994-05": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1994-05_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 32962814,
+   "ftpOcrPdfSize": 122786233,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 721611871,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 122786233
+  },
+  "highscore-1994-06": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1994-06_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 22062974,
+   "ftpOcrPdfSize": 139795323,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 425640686,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 139795323
+  },
+  "highscore-1994-07": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1994-07_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 20419532,
+   "ftpOcrPdfSize": 132723355,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 412780406,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 132723355
+  },
+  "highscore-1994-08": {
+   "appliedOverrides": [],
+   "ftpCoverPath": "Covers/HighScore_1994-08_001.jpg",
+   "ftpCoverSameSizeAsScanPage1": true,
+   "ftpCoverSize": 21336238,
+   "ftpOcrPdfSize": 140407039,
+   "ftpOcrPdfV2Size": null,
+   "measurement": null,
+   "ocrPdfFtpSource": "OCR PDF",
+   "scanParts": {
+    "main": 32
+   },
+   "scanTotalBytes": 428342323,
+   "webPdfMatchesFtp": true,
+   "webPdfSize": 140407039
+  }
+ },
+ "outsideRoots": [
+  {
+   "path": "199501-Original.pdf",
+   "size": 229537105
+  },
+  {
+   "path": "199502-Original.pdf",
+   "size": 227056970
+  },
+  {
+   "path": "DMZ_1994-10-15.jpg",
+   "size": 6132241
+  },
+  {
+   "path": "DSC_3314.NEF",
+   "size": 17032918
+  },
+  {
+   "path": "index.txt",
+   "size": 591
+  },
+  {
+   "path": "programbibliotek-198907.jpg",
+   "size": 2929713
+  },
+  {
+   "path": "programbibliotek-198910.jpg",
+   "size": 812972
+  },
+  {
+   "path": "tshirt1989.jpg",
+   "size": 843602
+  }
+ ],
+ "problems": [
+  "datormagazin-1993-03: webbens PDF (89792864 byte) motsvarar ingen FTP-fil"
+ ],
+ "rawListingListedAt": "2026-10-06T11:20:56Z",
+ "resolvedByRule": [
+  {
+   "issueId": "datormagazin-1987-04-05",
+   "path": "Covers/DMZ_1987-04-001.jpg",
+   "rule": "omslaget bär bara dubbelnumrets första nummer"
+  },
+  {
+   "issueId": "datormagazin-1986-04",
+   "path": "Original Scans/198604-Original",
+   "rule": "skanningar i annat format än jpg: png"
+  },
+  {
+   "issueId": "datormagazin-1986-04",
+   "path": "Original Scans/198604-Original",
+   "rule": "skanningarna är uppdelade i delar med egen sidräkning: huvuddel, Spelbilaga"
+  },
+  {
+   "issueId": "datormagazin-1987-04-05",
+   "path": "Original Scans/19870405-Original",
+   "rule": "skanningarna bär bara dubbelnumrets första nummer"
+  },
+  {
+   "issueId": "datormagazin-1987-07",
+   "path": "Original Scans/198707-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1987-08",
+   "path": "Original Scans/198708-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1991-05",
+   "path": "Original Scans/199105-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1992-06",
+   "path": "Original Scans/199206-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1992-09",
+   "path": "Original Scans/199209-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1992-13",
+   "path": "Original Scans/199213-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1992-14",
+   "path": "Original Scans/199214-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1992-15",
+   "path": "Original Scans/199215-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1992-17",
+   "path": "Original Scans/199217-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1992-20",
+   "path": "Original Scans/199220-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1992-21",
+   "path": "Original Scans/199221-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1992-22",
+   "path": "Original Scans/199222-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1993-01",
+   "path": "Original Scans/199301-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1993-03",
+   "path": "Original Scans/199303-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1993-04",
+   "path": "Original Scans/199304-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1993-10",
+   "path": "Original Scans/199310-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1993-11",
+   "path": "Original Scans/199311-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1993-13",
+   "path": "Original Scans/199313-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1993-17",
+   "path": "Original Scans/199317-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1993-18",
+   "path": "Original Scans/199318-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1993-19",
+   "path": "Original Scans/199319-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1993-22",
+   "path": "Original Scans/199322-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1994-09",
+   "path": "Original Scans/199409-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1994-10",
+   "path": "Original Scans/199410-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1994-15",
+   "path": "Original Scans/199415-Original",
+   "rule": "sidnummer med två siffror"
+  },
+  {
+   "issueId": "datormagazin-1994-16",
+   "path": "Original Scans/199416-Original",
+   "rule": "sidnummer med två siffror"
+  }
+ ],
+ "specialCases": [
+  {
+   "path": "Covers/DMZ_1986-01.png",
+   "reason": "filnamnet följer inte mönstret DMZ_ÅÅÅÅ-NN[MM][b]-001.jpg eller HighScore_ÅÅÅÅ-NN_001.jpg",
+   "size": 26212866
+  },
+  {
+   "path": "Covers/DMZ_1986-01.psd",
+   "reason": "filnamnet följer inte mönstret DMZ_ÅÅÅÅ-NN[MM][b]-001.jpg eller HighScore_ÅÅÅÅ-NN_001.jpg",
+   "size": 40851780
+  },
+  {
+   "path": "Original Scans/198601-Original/test.jpg",
+   "reason": "filnamnet följer inte mönstret DMZ_ÅÅÅÅ-NN[MM][b][-Spelbilaga]-SS[S].jpg|png eller HighScore_ÅÅÅÅ-NN_SSS.jpg",
+   "size": 3628312
+  }
+ ]
+}

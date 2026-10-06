@@ -8,8 +8,13 @@
   },
   "roots": ["Covers", "OCR PDF", "Large PDF", "Original Scans"],
   "extraRoots": ["OCR PDF v2"],
+  "datasetSequence": 2,
   "rawListingPath": "data/raw_listing.json",
-  "inventoryPath": "data/archive_inventory.json",
   "httpsProbePath": "data/https_probe.json",
-  "sampleMeasurementsPath": "data/sample_measurements.json"
+  "sampleMeasurementsPath": "data/sample_measurements.json",
+  "overridesPath": "tools/overrides.json",
+  "schemaPath": "docs/inventory.schema.json",
+  "inventoryPath": "data/archive_inventory.json",
+  "diagnosticsPath": "data/inventory_diagnostics.json",
+  "diffPath": "data/inventory_diff.json"
 }
