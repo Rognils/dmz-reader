@@ -62,7 +62,7 @@ class DatabaseSchemaTest {
         assertEquals(
             setOf(
                 "issueId", "publicationId", "publicationTitle", "year", "issueLabel", "sortKey",
-                "sourceKey", "relatedIssueId", "coverUrl", "coverFlags", "ocrPdfUrl", "ocrPdfSize",
+                "sourceKey", "relatedIssueId", "coverUrl", "coverFlags", "coverAsset", "ocrPdfUrl", "ocrPdfSize",
                 "ocrPdfEtag", "ocrPdfLastModified", "largePdfUrl", "largePdfSize", "hqSource",
                 "scanPagePattern", "scanPageCount", "pageCount", "spreadOffset", "flags",
             ),

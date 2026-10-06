@@ -43,6 +43,17 @@ abstract class IssueDao {
     )
     abstract fun observePublicationCounts(): Flow<List<PublicationCount>>
 
+    /** Numren i en årgång, i tidningens ordning. sortKey sorterar rätt som text. */
+    @Query("SELECT * FROM Issue WHERE publicationId = :publicationId AND year = :year ORDER BY sortKey")
+    abstract fun observeIssues(publicationId: String, year: Int): Flow<List<IssueEntity>>
+
+    @Query("SELECT * FROM Issue WHERE issueId = :issueId")
+    abstract fun observeIssue(issueId: String): Flow<IssueEntity?>
+
+    /** Nummer som pekar på [issueId] med relatedIssueId, t.ex. en bilaga till numret. */
+    @Query("SELECT * FROM Issue WHERE relatedIssueId = :issueId ORDER BY publicationId, sortKey")
+    abstract fun observeIssuesRelatedTo(issueId: String): Flow<List<IssueEntity>>
+
     @Query("DELETE FROM Issue")
     protected abstract suspend fun deleteAll()
 

@@ -23,6 +23,8 @@ data class IssueEntity(
     val relatedIssueId: String?,
     val coverUrl: String?,
     val coverFlags: List<String>,
+    /** Sökväg under assets till en färdig miniatyr, t.ex. "covers/datormagazin-1989-06.webp". */
+    val coverAsset: String? = null,
     val ocrPdfUrl: String?,
     val ocrPdfSize: Long?,
     val ocrPdfEtag: String?,

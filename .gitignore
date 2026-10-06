@@ -30,3 +30,8 @@ captures/
 # Testindexet för FTS5-verifieringen är litet, påhittat och byggs deterministiskt
 # av tools/build_fts_testdb.py. Det versionshanteras, till skillnad från search.db.
 !/app/src/debug/assets/fts_test.db
+
+# Nedladdade omslag i original (hämtas av tools/fetch_covers.py)
+cache/
+# Kopieras från data/covers/ av byggsteget syncInventory
+/app/src/main/assets/covers/

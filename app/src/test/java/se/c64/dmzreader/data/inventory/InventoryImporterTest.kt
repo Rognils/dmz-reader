@@ -91,7 +91,7 @@ class InventoryImporterTest {
         assertEquals((result as InventoryLoadResult.Replaced).datasetVersion, store.get()!!.datasetVersion)
 
         val issue = db.issueDao().get("datormagazin-1986-01")!!
-        assertEquals(listOf("rotated"), issue.coverFlags)
+        assertEquals(listOf("crop_right_half", "rotate_cw"), issue.coverFlags)
         assertEquals(28, issue.pageCount)
         assertEquals(listOf("double_issue"), db.issueDao().get("datormagazin-1988-16-17")!!.flags)
     }

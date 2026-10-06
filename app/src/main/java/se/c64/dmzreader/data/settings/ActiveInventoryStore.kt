@@ -20,7 +20,15 @@ interface ActiveInventoryStore {
     suspend fun set(value: ActiveInventory)
 }
 
-private val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+/** Användarens val i biblioteket. */
+interface LibraryPreferences {
+    /** Senast valda publikation, eller null om inget val har gjorts. */
+    fun observeSelectedPublication(): Flow<String?>
+    suspend fun setSelectedPublication(publicationId: String)
+}
+
+/** En enda DataStore-fil för appens inställningar. */
+internal val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class DataStoreActiveInventoryStore(context: Context) : ActiveInventoryStore {
     private val dataStore = context.applicationContext.settingsDataStore
@@ -47,5 +55,20 @@ class DataStoreActiveInventoryStore(context: Context) : ActiveInventoryStore {
     private companion object {
         val DATASET_VERSION = stringPreferencesKey("active_dataset_version")
         val SCHEMA_VERSION = intPreferencesKey("active_schema_version")
+    }
+}
+
+class DataStoreLibraryPreferences(context: Context) : LibraryPreferences {
+    private val dataStore = context.applicationContext.settingsDataStore
+
+    override fun observeSelectedPublication(): Flow<String?> =
+        dataStore.data.map { preferences -> preferences[SELECTED_PUBLICATION] }
+
+    override suspend fun setSelectedPublication(publicationId: String) {
+        dataStore.edit { preferences -> preferences[SELECTED_PUBLICATION] = publicationId }
+    }
+
+    private companion object {
+        val SELECTED_PUBLICATION = stringPreferencesKey("library_selected_publication")
     }
 }

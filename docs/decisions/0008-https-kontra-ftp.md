@@ -57,3 +57,6 @@ Fälten i inventory har fått sin slutliga form (planens C2):
 - `ocrPdfFtpSource` och jämförelsen mot FTP har flyttat till `data/inventory_diagnostics.json`, som bara toolchainen använder. Flaggorna `ocr_pdf_differs_from_ftp` och `no_ftp_cover` finns inte längre i inventory.
 - `coverFlags` beskriver omslagsbilden. 1986 nr 1 har `["rotated"]`, satt i `tools/overrides.json`.
 - `coverUrl` och `ocrPdfUrl` är obligatoriska. Ett nummer utan läs-PDF eller sidbild 1 på webbplatsen kan inte exporteras.
+
+## Uppdatering 2026-10-06 (FAS 2)
+Omslagsdelen är ersatt av ADR 0016: omslagen tas fram av toolchainen, delvis från FTP-katalogen `Covers`, och följer med appen som miniatyrer (`coverAsset`). `coverUrl` är kvar som reserv. Appen använder fortfarande aldrig FTP för omslag.

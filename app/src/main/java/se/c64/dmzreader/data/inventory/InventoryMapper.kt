@@ -14,6 +14,7 @@ fun InventoryIssueDto.toEntity(): IssueEntity = IssueEntity(
     relatedIssueId = relatedIssueId,
     coverUrl = coverUrl,
     coverFlags = coverFlags,
+    coverAsset = coverAsset,
     ocrPdfUrl = ocrPdfUrl,
     ocrPdfSize = ocrPdfSize,
     ocrPdfEtag = ocrPdfEtag,

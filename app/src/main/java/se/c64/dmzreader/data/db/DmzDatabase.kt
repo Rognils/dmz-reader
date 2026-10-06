@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room3.Database
 import androidx.room3.Room
 import androidx.room3.RoomDatabase
+import androidx.room3.AutoMigration
 import androidx.room3.ColumnTypeConverters
 import androidx.room3.useReaderConnection
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
@@ -21,8 +22,10 @@ import kotlinx.coroutines.Dispatchers
         Bookmark::class,
         ReadingSession::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
+    // Version 2 lägger till Issue.coverAsset. Användardata rörs inte av migreringen.
+    autoMigrations = [AutoMigration(from = 1, to = 2)],
 )
 @ColumnTypeConverters(Converters::class)
 abstract class DmzDatabase : RoomDatabase() {

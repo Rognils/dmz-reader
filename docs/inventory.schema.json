@@ -98,8 +98,21 @@
           "anyOf": [{ "$ref": "#/$defs/httpsUrl" }, { "type": "null" }]
         },
         "coverFlags": {
-          "description": "Egenskaper hos omslagsbilden. Känt värde: \"rotated\" (liggande, vriden 90 grader).",
-          "$ref": "#/$defs/flagList"
+          "description": "Rättningar av bilden på coverUrl. Transformordningen är alltid: först vridning, sedan beskärning, sist skalning. rotate_cw, rotate_ccw och rotate_180 vrider 90 grader medurs, 90 grader moturs respektive 180 grader. crop_left_half och crop_right_half behåller vänstra respektive högra halvan av den vridna bilden. Högst en vridning och högst en beskärning. Gäller inte coverAsset, som redan är rättad.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["rotate_cw", "rotate_ccw", "rotate_180", "crop_left_half", "crop_right_half"] },
+          "not": {
+            "anyOf": [
+              { "contains": { "pattern": "^rotate_" }, "minContains": 2 },
+              { "contains": { "pattern": "^crop_" }, "minContains": 2 }
+            ]
+          }
+        },
+        "coverAsset": {
+          "description": "Färdig omslagsminiatyr som följer med appen, som sökväg under assets. Används i första hand. null eller utelämnat om ingen finns; då används coverUrl.",
+          "type": ["string", "null"],
+          "pattern": "^covers/[a-z0-9-]+\\.webp$"
         },
         "ocrPdfUrl": {
           "description": "Kanonisk läs-PDF på webbplatsen. null om den saknas; då har numret flaggan missing_ocr_pdf.",

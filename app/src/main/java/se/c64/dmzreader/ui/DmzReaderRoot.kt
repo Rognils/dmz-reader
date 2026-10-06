@@ -1,5 +1,6 @@
 package se.c64.dmzreader.ui
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -21,12 +22,17 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import se.c64.dmzreader.AppContainer
 import se.c64.dmzreader.ui.favorites.FavoritesScreen
+import se.c64.dmzreader.ui.issue.IssueScreen
+import se.c64.dmzreader.ui.issue.IssueViewModel
 import se.c64.dmzreader.ui.library.LibraryScreen
 import se.c64.dmzreader.ui.library.LibraryViewModel
 import se.c64.dmzreader.ui.search.SearchScreen
@@ -35,21 +41,39 @@ import se.c64.dmzreader.ui.settings.DiagnosticsViewModel
 import se.c64.dmzreader.ui.settings.SettingsScreen
 import se.c64.dmzreader.ui.statistics.StatisticsScreen
 import se.c64.dmzreader.ui.theme.DmzColors
+import se.c64.dmzreader.ui.year.YearScreen
+import se.c64.dmzreader.ui.year.YearViewModel
 
+/**
+ * Navigationens uppbyggnad:
+ *
+ * - Fyra flikar med bottenfält. Fliken Bibliotek är ett eget delträd:
+ *   Bibliotek → Årgång → Nummer.
+ * - Inställningar och Diagnostik är undersidor utan bottenfält.
+ */
 private object Routes {
+    const val LIBRARY_TAB = "library_tab"
     const val LIBRARY = "library"
+    const val YEAR = "year/{publicationId}/{year}"
+    const val ISSUE = "issue/{issueId}"
     const val SEARCH = "search"
     const val FAVORITES = "favorites"
     const val STATISTICS = "statistics"
     const val SETTINGS = "settings"
     const val DIAGNOSTICS = "settings/diagnostics"
+
+    fun year(publicationId: String, year: Int) = "year/$publicationId/$year"
+    fun issue(issueId: String) = "issue/$issueId"
+
+    /** Vyer som visas utan bottenfält. */
+    val withoutBottomBar = setOf(SETTINGS, DIAGNOSTICS)
 }
 
 private data class Tab(val route: String, val label: String, val icon: ImageVector)
 
 /** De fyra flikarna i planens E1. */
 private val tabs = listOf(
-    Tab(Routes.LIBRARY, "Bibliotek", Icons.AutoMirrored.Filled.List),
+    Tab(Routes.LIBRARY_TAB, "Bibliotek", Icons.AutoMirrored.Filled.List),
     Tab(Routes.SEARCH, "Sök", Icons.Filled.Search),
     Tab(Routes.FAVORITES, "Favoriter", Icons.Filled.Favorite),
     Tab(Routes.STATISTICS, "Statistik", Icons.Filled.Info),
@@ -60,50 +84,102 @@ fun DmzReaderRoot(container: AppContainer) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val destination = backStackEntry?.destination
+    val showBottomBar = destination?.route !in Routes.withoutBottomBar
 
     Scaffold(
         containerColor = DmzColors.Background,
         bottomBar = {
-            NavigationBar(containerColor = DmzColors.Surface) {
-                tabs.forEach { tab ->
-                    // Inställningar nås från Bibliotek och räknas dit.
-                    val selected = destination?.hierarchy?.any { it.route == tab.route } == true ||
-                        (tab.route == Routes.LIBRARY && destination?.route?.startsWith(Routes.SETTINGS) == true)
-                    NavigationBarItem(
-                        selected = selected,
-                        onClick = {
-                            navController.navigate(tab.route) {
-                                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = { Icon(tab.icon, contentDescription = null) },
-                        label = { Text(tab.label) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = DmzColors.Background,
-                            selectedTextColor = DmzColors.Accent,
-                            indicatorColor = DmzColors.Accent,
-                            unselectedIconColor = DmzColors.TextSecondary,
-                            unselectedTextColor = DmzColors.TextSecondary,
-                        ),
-                    )
+            if (showBottomBar) {
+                NavigationBar(containerColor = DmzColors.Surface) {
+                    tabs.forEach { tab ->
+                        NavigationBarItem(
+                            selected = destination?.hierarchy?.any { it.route == tab.route } == true,
+                            onClick = {
+                                navController.navigate(tab.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            },
+                            icon = { Icon(tab.icon, contentDescription = null) },
+                            label = { Text(tab.label) },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = DmzColors.Background,
+                                selectedTextColor = DmzColors.Accent,
+                                indicatorColor = DmzColors.Accent,
+                                unselectedIconColor = DmzColors.TextSecondary,
+                                unselectedTextColor = DmzColors.TextSecondary,
+                            ),
+                        )
+                    }
                 }
             }
         },
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Routes.LIBRARY,
-            modifier = Modifier.padding(padding),
+            startDestination = Routes.LIBRARY_TAB,
+            modifier = Modifier.fillMaxSize().padding(padding),
         ) {
-            composable(Routes.LIBRARY) {
-                val viewModel: LibraryViewModel = viewModel(
-                    factory = viewModelFactory {
-                        initializer { LibraryViewModel(container.libraryRepository, container.inventoryStatus) }
-                    },
-                )
-                LibraryScreen(viewModel, onOpenSettings = { navController.navigate(Routes.SETTINGS) })
+            navigation(startDestination = Routes.LIBRARY, route = Routes.LIBRARY_TAB) {
+                composable(Routes.LIBRARY) {
+                    val viewModel: LibraryViewModel = viewModel(
+                        factory = viewModelFactory {
+                            initializer {
+                                LibraryViewModel(
+                                    container.libraryRepository,
+                                    container.libraryPreferences,
+                                    container.inventoryStatus,
+                                )
+                            }
+                        },
+                    )
+                    LibraryScreen(
+                        viewModel = viewModel,
+                        imageLoader = container.imageLoader,
+                        onOpenYear = { publicationId, year -> navController.navigate(Routes.year(publicationId, year)) },
+                        onOpenIssue = { navController.navigate(Routes.issue(it)) },
+                        onOpenSettings = { navController.navigate(Routes.SETTINGS) },
+                    )
+                }
+                composable(
+                    route = Routes.YEAR,
+                    arguments = listOf(
+                        navArgument("publicationId") { type = NavType.StringType },
+                        navArgument("year") { type = NavType.IntType },
+                    ),
+                ) { entry ->
+                    val publicationId = requireNotNull(entry.arguments?.getString("publicationId"))
+                    val year = requireNotNull(entry.arguments).getInt("year")
+                    val viewModel: YearViewModel = viewModel(
+                        factory = viewModelFactory {
+                            initializer { YearViewModel(container.libraryRepository, publicationId, year) }
+                        },
+                    )
+                    YearScreen(
+                        viewModel = viewModel,
+                        imageLoader = container.imageLoader,
+                        onOpenIssue = { navController.navigate(Routes.issue(it)) },
+                        onBack = { navController.popBackStack() },
+                    )
+                }
+                composable(
+                    route = Routes.ISSUE,
+                    arguments = listOf(navArgument("issueId") { type = NavType.StringType }),
+                ) { entry ->
+                    val issueId = requireNotNull(entry.arguments?.getString("issueId"))
+                    val viewModel: IssueViewModel = viewModel(
+                        factory = viewModelFactory {
+                            initializer { IssueViewModel(container.libraryRepository, issueId) }
+                        },
+                    )
+                    IssueScreen(
+                        viewModel = viewModel,
+                        imageLoader = container.imageLoader,
+                        onOpenIssue = { navController.navigate(Routes.issue(it)) },
+                        onBack = { navController.popBackStack() },
+                    )
+                }
             }
             composable(Routes.SEARCH) { SearchScreen() }
             composable(Routes.FAVORITES) { FavoritesScreen() }
@@ -132,4 +208,3 @@ fun DmzReaderRoot(container: AppContainer) {
         }
     }
 }
-

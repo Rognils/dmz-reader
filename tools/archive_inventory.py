@@ -35,7 +35,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
 
-VERSION = "0.2.1"
+VERSION = "0.3.0"
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
 MIN_PAUSE_SECONDS = 0.5
@@ -548,7 +548,8 @@ def make_dataset_version(listing: dict, sequence: int) -> str:
 
 
 def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: dict,
-                    dataset_version: str, generated_at: str | None = None) -> tuple[dict, dict]:
+                    dataset_version: str, generated_at: str | None = None,
+                    covers: dict | None = None) -> tuple[dict, dict]:
     """Bygg inventory (för appen) och diagnostik (bara för toolchainen).
 
     Utdatan beror bara på indata: ingen klocka, ingen ordning från filsystemet.
@@ -556,6 +557,7 @@ def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: di
     if not RE_DATASET_VERSION.match(dataset_version):
         raise SystemExit(f"datasetVersion ska ha formatet ÅÅÅÅ-MM-DD-NNN, inte {dataset_version!r}")
     results = probe["results"]
+    covers = covers or {}
     issues_out = []
     diagnostics_issues = {}
     problems = []
@@ -644,6 +646,8 @@ def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: di
             "relatedIssueId": related_issue_id(identity),
             "coverUrl": WEB_BASE_URL + page_url_path(issue, 1) if has_cover else None,
             "coverFlags": [],
+            # Färdig miniatyr som följer med appen (ADR 0016). null om ingen finns.
+            "coverAsset": covers.get(issue_id, {}).get("asset"),
             "ocrPdfUrl": WEB_BASE_URL + pdf_url_path(identity) if has_pdf else None,
             "ocrPdfSize": ocr_size,
             "ocrPdfEtag": pdf.get("etag") if has_pdf else None,
@@ -668,6 +672,8 @@ def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: di
             "webPdfMatchesFtp": ftp_generation is not None,
             "ftpCoverPath": files["cover"]["path"] if "cover" in files else None,
             "ftpCoverSize": files["cover"]["size"] if "cover" in files else None,
+            "coverSource": covers.get(issue_id, {}).get("source"),
+            "ftpCoverProcessed": covers.get(issue_id, {}).get("ftpCoverProcessed"),
             "ftpCoverSameSizeAsScanPage1": (
                 files["cover"]["size"] == scan_page_one["size"]
                 if "cover" in files and scan_page_one else None),
@@ -716,9 +722,14 @@ OVERRIDE_FIELDS = {
     "flags": _is_string_list,
     "spreadOffset": lambda v: v is None or (isinstance(v, int) and not isinstance(v, bool)),
     "issueLabel": lambda v: isinstance(v, str) and bool(v.strip()),
-    # Fritext som förklarar rättelsen. Följer inte med till inventory.
+    # Tvingar valet av källa för miniatyren. Läses av build_covers.py.
+    "coverSource": lambda v: v in ("covers_ftp", "web_page1"),
+    # Fritext som förklarar rättelsen.
     "reason": lambda v: isinstance(v, str),
 }
+
+# Rättelser som styr toolchainen men inte är fält i inventory.
+OVERRIDE_FIELDS_NOT_IN_INVENTORY = {"coverSource", "reason"}
 
 
 class OverrideError(ValueError):
@@ -741,7 +752,8 @@ def apply_overrides(inventory: dict, overrides: dict, diagnostics: dict | None =
     """Slå ihop manuella rättelser med inventory, på plats.
 
     coverFlags, spreadOffset och issueLabel ersätter det genererade värdet.
-    flags läggs till de genererade flaggorna. Okänt issueId, okänt fält eller
+    flags läggs till de genererade flaggorna. coverSource och reason styr bara
+    toolchainen och skrivs inte till inventory. Okänt issueId, okänt fält eller
     fel typ ger OverrideError.
     """
     by_id = {issue["issueId"]: issue for issue in inventory["issues"]}
@@ -767,7 +779,9 @@ def apply_overrides(inventory: dict, overrides: dict, diagnostics: dict | None =
         applied = []
         for field in sorted(overrides[issue_id]):
             value = overrides[issue_id][field]
-            if field == "reason":
+            if field in OVERRIDE_FIELDS_NOT_IN_INVENTORY:
+                if field != "reason":
+                    applied.append(field)
                 continue
             if field == "flags":
                 issue["flags"] = sorted(set(issue["flags"]) | set(value))
@@ -953,6 +967,17 @@ def _read_json(path: Path):
         return json.load(fh)
 
 
+def load_covers_manifest(config: dict) -> dict:
+    """Miniatyrerna från tools/build_covers.py. Bara de som faktiskt finns på disk räknas."""
+    manifest_path = REPO_ROOT / config["coversManifestPath"]
+    if not manifest_path.exists():
+        return {}
+    covers = _read_json(manifest_path)["covers"]
+    data_dir = manifest_path.parent
+    return {issue_id: entry for issue_id, entry in covers.items()
+            if entry["asset"] is None or (data_dir / entry["asset"]).is_file()}
+
+
 def generate(config: dict, listing: dict, dataset_version: str | None = None,
              generated_at: str | None = None, overrides: dict | None = None) -> dict:
     """Hela kedjan från rålistning till validerat inventory, utan att skriva filer."""
@@ -969,7 +994,8 @@ def generate(config: dict, listing: dict, dataset_version: str | None = None,
         dataset_version = make_dataset_version(listing, config["datasetSequence"])
 
     inventory, diagnostics = build_inventory(
-        listing, analysis, probe, measurements, dataset_version, generated_at)
+        listing, analysis, probe, measurements, dataset_version, generated_at,
+        covers=load_covers_manifest(config))
     apply_overrides(inventory, overrides, diagnostics)
     errors = validate_inventory(inventory, load_schema(REPO_ROOT / config["schemaPath"]))
     return {"analysis": analysis, "inventory": inventory, "diagnostics": diagnostics, "errors": errors}

@@ -1,0 +1,3791 @@
+{
+ "covers": {
+  "datormagazin-1986-01": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1986-01.webp",
+   "bytes": 73052,
+   "comparison": {
+    "aspectChange": 0.0186,
+    "difference": 26.94,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1986-01-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 862,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Webbens sidbild 1 är ett vridet uppslag. Miniatyren kommer från det bearbetade omslaget i Covers."
+   },
+   "sha256": "ceed7b6e89b6ede8e3b656d0e33584067840a0dded82dcc0fc7ebaa739d7e030",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1986-01-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1986-02": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1986-02.webp",
+   "bytes": 86172,
+   "comparison": {
+    "aspectChange": 0.0173,
+    "difference": 26.05,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1986-02-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 846,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "da8c3bf942565ac09c2a0040b7c0d640fcab41a5aa3df99b946b4420af56cd6a",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1986-02-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1986-03": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1986-03.webp",
+   "bytes": 77994,
+   "comparison": {
+    "aspectChange": 0.0033,
+    "difference": 32.13,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1986-03-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 852,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "a5582f243086b931327bbcabc197326f5bdd88bd7ba5e7902ba9a5b7dc2a6872",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1986-03-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1986-04": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1986-04.webp",
+   "bytes": 74350,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 816,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "611935f644e341bb20c07d029b10df47f7f07be62e61f89284dd8999fec409e0",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1986-04.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1987-01": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1987-01.webp",
+   "bytes": 81670,
+   "comparison": {
+    "aspectChange": 0.0389,
+    "difference": 38.1,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1987-01-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 826,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "194c5ae52ee5006813ea3b494a7f8f8c6c54562c0bcc6ca63f9710c2fb16227d",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1987-01-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1987-02": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1987-02.webp",
+   "bytes": 99136,
+   "comparison": {
+    "aspectChange": 0.073,
+    "difference": 34.33,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1987-02-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 823,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "6d2a64740305c534a0c2b23eb7f18ab36932a38897342e8a20a67e818f492f7b",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1987-02-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1987-03": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1987-03.webp",
+   "bytes": 95072,
+   "comparison": {
+    "aspectChange": 0.0314,
+    "difference": 35.71,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1987-03-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 836,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "65372641392afdda86ba5c9dfbf9c021a48d854db20cbbcb1f54f94704363276",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1987-03-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1987-04-05": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1987-04-05.webp",
+   "bytes": 153112,
+   "comparison": {
+    "aspectChange": 0.0486,
+    "difference": 48.3,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1987-04-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 840,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "6d4e6ed7d29ecb232f5c84a88db91732187a3f62ce0bedae4314c199e0dac4b5",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1987-04-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1987-06": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1987-06.webp",
+   "bytes": 100400,
+   "comparison": {
+    "aspectChange": 0.0086,
+    "difference": 27.5,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1987-06-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 846,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "c5428e9fb79ccb89b92d92f2628fb024a7df1e101c214d6ecccee45f230dbd7b",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1987-06-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1987-07": {
+   "appliedFlags": [
+    "crop_right_half",
+    "rotate_cw"
+   ],
+   "asset": "covers/datormagazin-1987-07.webp",
+   "bytes": 85160,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 844,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+   },
+   "sha256": "3da2c059993bf3e0093f500b5522a49cb91a8ba73d721d0616ca8daf725d8a4d",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1987-07.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1987-08": {
+   "appliedFlags": [
+    "crop_right_half",
+    "rotate_cw"
+   ],
+   "asset": "covers/datormagazin-1987-08.webp",
+   "bytes": 77240,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 838,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+   },
+   "sha256": "4a8fa0b9d53ed10bb57f957a93ba8de8d1f0a9d8035794c1c684f0203d9dff0d",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1987-08.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1987-09": {
+   "appliedFlags": [
+    "crop_right_half",
+    "rotate_cw"
+   ],
+   "asset": "covers/datormagazin-1987-09.webp",
+   "bytes": 67664,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 813,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+   },
+   "sha256": "a215cf2441a21613d35f3b5c5270f66b2e26ea370e5d25499cd5f9974ab71fdf",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1987-09.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1987-10": {
+   "appliedFlags": [
+    "crop_right_half",
+    "rotate_cw"
+   ],
+   "asset": "covers/datormagazin-1987-10.webp",
+   "bytes": 65532,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 813,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Vridet uppslag, rättat. Skanningen är dessutom trasig: revor med svarta fält över omslaget."
+   },
+   "sha256": "aec67eb8efafa0d6c84130c72e70e012f71d1d372eae58e6a85bd65e60ef7e25",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1987-10.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1987-10b": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1987-10b.webp",
+   "bytes": 82236,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 885,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "220af1a84395af639bbe165d8ce6811c72988805ef0f8f2a22e89633f0721928",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1987-10b.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-01": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-01.webp",
+   "bytes": 80930,
+   "comparison": {
+    "aspectChange": 0.0558,
+    "difference": 35.7,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1988-01-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 825,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "39ece3803dc801dc14310b028fbc244ea8b5ce34a10cc0ceb44686118c3c1d69",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1988-01-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-02": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-02.webp",
+   "bytes": 60896,
+   "comparison": {
+    "aspectChange": 0.0002,
+    "difference": 0.16,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1988-02-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 808,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "e99689dd62b8d2f9e44395ad36c7ee01fde493bf72a665235cfd3d73af8b5a77",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1988-02.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-03": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-03.webp",
+   "bytes": 90878,
+   "comparison": {
+    "aspectChange": 0.0575,
+    "difference": 33.87,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1988-03-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 819,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "7b9cd3dcf404fe94318498dcc848686c4fff6822461c1f2a08ea5a9254fc30f8",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1988-03-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-04": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-04.webp",
+   "bytes": 88224,
+   "comparison": {
+    "aspectChange": 0.0575,
+    "difference": 31.78,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1988-04-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 828,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "a786a70d5de58c37e2ca765d26e0bdb349fe5e198048d0df401e054f16565948",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1988-04-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-05": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-05.webp",
+   "bytes": 68616,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.1,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1988-05-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 834,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "61cbb7ad64b84c08498070da2efbd2d70d7fe38b1c57612d7019af4393845e69",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1988-05.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-06": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-06.webp",
+   "bytes": 79164,
+   "comparison": {
+    "aspectChange": 0.0649,
+    "difference": 30.14,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1988-06-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 818,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "2088b2d58c4dc7bb5841588c8d26b80fbd05dfec735ecab2915bee04a92aad22",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1988-06-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-07": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-07.webp",
+   "bytes": 105460,
+   "comparison": {
+    "aspectChange": 0.0484,
+    "difference": 42.15,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1988-07-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 828,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "6915c5149189e0402522921598aac907061add1bd3013ad872609b3e61a7dd55",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1988-07-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-08": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-08.webp",
+   "bytes": 69852,
+   "comparison": {
+    "aspectChange": 0.0665,
+    "difference": 32.7,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1988-08-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 820,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "cac34671a3ad9fefce4af1c54e54bd22c4eb5d0b58e1e381f300ee18969043b2",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1988-08-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-09": {
+   "appliedFlags": [
+    "crop_right_half",
+    "rotate_cw"
+   ],
+   "asset": "covers/datormagazin-1988-09.webp",
+   "bytes": 75608,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 813,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+   },
+   "sha256": "a1f9446f47eacdcb96c8362518fc40111d3c71f80d615acb9448a814ea20214d",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1988-09.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-10": {
+   "appliedFlags": [
+    "crop_right_half",
+    "rotate_cw"
+   ],
+   "asset": "covers/datormagazin-1988-10.webp",
+   "bytes": 76866,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 813,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+   },
+   "sha256": "b16ca4bfd6f2b93c5b18e6644477f7f44338db702f7888f28a2625d701c5bfcf",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1988-10.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-11": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-11.webp",
+   "bytes": 95168,
+   "comparison": {
+    "aspectChange": 0.0805,
+    "difference": 32.4,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1988-11-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 819,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "f78555f0851e32f0ab573eaece3080bb4802065ca2c356640f2bbd9246108c3e",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1988-11-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-12": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-12.webp",
+   "bytes": 81906,
+   "comparison": {
+    "aspectChange": 0.0451,
+    "difference": 33.67,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1988-12-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 838,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "81a18a9023c017386bdebdafbaa858aecda043bf6f2c9f2c45fdaf6db9738914",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1988-12-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-13": {
+   "appliedFlags": [
+    "crop_right_half",
+    "rotate_cw"
+   ],
+   "asset": "covers/datormagazin-1988-13.webp",
+   "bytes": 84014,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 813,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+   },
+   "sha256": "06acfecd009a1d2f3462132cf4bfcbf0cdfe0120d3ff14a73df8cbc5b8bc8731",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1988-13.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-14": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-14.webp",
+   "bytes": 81996,
+   "comparison": {
+    "aspectChange": 0.0501,
+    "difference": 27.4,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1988-14-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 825,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "849bdafe22ca11d6cee0490a77ecca9a3a0dcaeb9ef4089f50a91dbc90e4ee21",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1988-14-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-15": {
+   "appliedFlags": [
+    "crop_right_half",
+    "rotate_cw"
+   ],
+   "asset": "covers/datormagazin-1988-15.webp",
+   "bytes": 63428,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 813,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+   },
+   "sha256": "ca040112ccd02eba84358c228f1741702b9e0711601275f646a3f3daa8f4f5a6",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1988-15.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1988-16-17": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1988-16-17.webp",
+   "bytes": 86802,
+   "comparison": {
+    "aspectChange": 0.0482,
+    "difference": 29.3,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1988-1617-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 834,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "0233d7a29503e980019dda4bde774b1a7de256b3fccb3023ee161179251322ac",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1988-1617-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-01": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-01.webp",
+   "bytes": 88032,
+   "comparison": {
+    "aspectChange": 0.0483,
+    "difference": 35.31,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-01-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 831,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "cc01ae053e30f26fd2f54e5e49df003c496b7e76867243e76a16672fe38ad21c",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-01-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-02": {
+   "appliedFlags": [
+    "crop_right_half",
+    "rotate_cw"
+   ],
+   "asset": "covers/datormagazin-1989-02.webp",
+   "bytes": 83948,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 813,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Vridet uppslag, rättat. Skanningen är dessutom trasig: nedre högra delen av omslaget saknas."
+   },
+   "sha256": "31c86357c0cb4c670b8268d2f857e044a33f8eb97c37f7a01cc4406a8119ef99",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1989-02.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-03": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-03.webp",
+   "bytes": 92142,
+   "comparison": {
+    "aspectChange": 0.0745,
+    "difference": 32.31,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-03-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 816,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "98fb6624d4c19fcbf2d68332c7e94e09ed1efb70877009c89487addd81f67bfe",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-03-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-04": {
+   "appliedFlags": [
+    "crop_right_half",
+    "rotate_cw"
+   ],
+   "asset": "covers/datormagazin-1989-04.webp",
+   "bytes": 71370,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 813,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+   },
+   "sha256": "eebd65291601cab47fe60771aed93c511fca2b3caf4fe8fd539dc18ae1cf823b",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1989-04.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-05": {
+   "appliedFlags": [
+    "crop_right_half",
+    "rotate_cw"
+   ],
+   "asset": "covers/datormagazin-1989-05.webp",
+   "bytes": 70098,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 813,
+   "review": {
+    "class": "uppslag_vridet",
+    "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+   },
+   "sha256": "10be3080b4fdbbdad5d91847874c92131d9ed494b443bd114cf5a23e556e36fe",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1989-05.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-06": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-06.webp",
+   "bytes": 83486,
+   "comparison": {
+    "aspectChange": 0.0559,
+    "difference": 38.3,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-06-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 819,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "d3bcb9707cb5f71f013e817cf9c887dc027cb86140a870d984c41d3bfad013e0",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-06-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-07": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-07.webp",
+   "bytes": 87940,
+   "comparison": {
+    "aspectChange": 0.0543,
+    "difference": 48.1,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-07-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 825,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "dbad7fa4568792a2debb384ffc2d3fe803bd16295c9ab221eebd67ec8db76185",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-07-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-08": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-08.webp",
+   "bytes": 95278,
+   "comparison": {
+    "aspectChange": 0.0819,
+    "difference": 36.76,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-08-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 818,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "d7a3ad2fdefc8fdae2df62679b938549736676366bf0653216b306c94f13e0ee",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-08-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-09": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-09.webp",
+   "bytes": 90748,
+   "comparison": {
+    "aspectChange": 0.029,
+    "difference": 41.75,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-09-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 835,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "2f8e7f29faa0b3bfddcb3de3ce7613c1818f5347077440b30fc2aa1d28efac9b",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-09-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-10": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-10.webp",
+   "bytes": 98424,
+   "comparison": {
+    "aspectChange": 0.0713,
+    "difference": 38.41,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-10-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 827,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "6dabbc41ad49ba959c690c5b8a12b1ba54982ecd45018bd921aeb653a31353ca",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-10-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-11": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-11.webp",
+   "bytes": 93210,
+   "comparison": {
+    "aspectChange": 0.0515,
+    "difference": 41.92,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-11-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 828,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "fd376e00385cce8125b2f7e0f29c92186fa805772d8724b17e76ab1fc32bbe31",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-11-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-12": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-12.webp",
+   "bytes": 92924,
+   "comparison": {
+    "aspectChange": 0.0329,
+    "difference": 35.32,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-12-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 830,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "224d1d315f5e2929efe4832831c7433c025fd7ac20c6a37b40ce3611ff4eb43e",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-12-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-13": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-13.webp",
+   "bytes": 113186,
+   "comparison": {
+    "aspectChange": 0.0756,
+    "difference": 40.85,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-13-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 823,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "e4d71eaffebdc65e875d0f869c7c0fbc9c0e8a3f87687bba77759cb469c9509c",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-13-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-14": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-14.webp",
+   "bytes": 117464,
+   "comparison": {
+    "aspectChange": 0.0779,
+    "difference": 56.89,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-14-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 821,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "fb3464d050e42cd1da53f697afce28ff6da09ff88fdacc5ad5f68536245e1921",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-14-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-15": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-15.webp",
+   "bytes": 67626,
+   "comparison": {
+    "aspectChange": 0.0466,
+    "difference": 32.63,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-15-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 827,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "8e91cb2c8a843d88b18d140ccabbf481e812278d49d5926226caeaa2646ec4f0",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-15-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-16": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-16.webp",
+   "bytes": 89348,
+   "comparison": {
+    "aspectChange": 0.0953,
+    "difference": 36.33,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-16-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 808,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "caac59ff29428f230e75a187dd89ca11bd3718b356c1861f42f1109b3c1156a6",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-16-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-16b": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-16b.webp",
+   "bytes": 73044,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 864,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "f10c3730e0de5530837d8293f8fad73a541d46fcb091014f0f65625dee1fe9d6",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1989-16b.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-17": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-17.webp",
+   "bytes": 91760,
+   "comparison": {
+    "aspectChange": 0.1085,
+    "difference": 40.66,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-17-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 799,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "942a622082662f0a398f311a2ade64aed5be376f7e2a79474b73f3e6e007c17e",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-17-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1989-18": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1989-18.webp",
+   "bytes": 72798,
+   "comparison": {
+    "aspectChange": 0.0453,
+    "difference": 31.37,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1989-18-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 829,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "2ac0dcca330f2563b6e5e8339960658471777ffbde2eb0c516798eac655a86d1",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1989-18-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-01": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-01.webp",
+   "bytes": 89506,
+   "comparison": {
+    "aspectChange": 0.4991,
+    "difference": 29.0,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1990-01-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 832,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "a5c363a31aa235cd3f968db052a3ab8d2f399b52aba728858ff1635eb6c5dfe6",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1990-01-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-02": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-02.webp",
+   "bytes": 86996,
+   "comparison": {
+    "aspectChange": 0.4861,
+    "difference": 34.13,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1990-02-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 806,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "53931bd7d86abd536482d80d2f95d9a0a039110d7afadad33f921ef9ce0a526a",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1990-02-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-03": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-03.webp",
+   "bytes": 99690,
+   "comparison": {
+    "aspectChange": 0.0828,
+    "difference": 38.27,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1990-03-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 818,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "d4a5b1b7af4c8d174085f95f80f5ccee9bdf7389ddce65651890c7ea04bf6c94",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1990-03-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-04": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-04.webp",
+   "bytes": 91484,
+   "comparison": {
+    "aspectChange": 0.0893,
+    "difference": 36.73,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1990-04-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 813,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "c8c5f24819573cfbf10438d89f8af65fe144541f11cfb3214c3c5a80e7479987",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1990-04-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-05": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-05.webp",
+   "bytes": 85510,
+   "comparison": {
+    "aspectChange": 0.5028,
+    "difference": 24.6,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1990-05-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 828,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "79c2bdda8268711617609e5ec4aeadf9b00edf8868dcab1efec46157de724d56",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1990-05-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-06": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-06.webp",
+   "bytes": 87224,
+   "comparison": {
+    "aspectChange": 0.4921,
+    "difference": 36.65,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1990-06-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 802,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "785e4d9ad72f2221368e96b341c8c0d7383ef98ac6950c16dad5e8a13f3f6c97",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1990-06-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-07": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-07.webp",
+   "bytes": 82024,
+   "comparison": {
+    "aspectChange": 0.4859,
+    "difference": 35.3,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1990-07-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 807,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "1aa5353e531678a7a85ac787ba85c496e5a69c0e00978bd778cda9698a4e73b7",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1990-07-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-08": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-08.webp",
+   "bytes": 97000,
+   "comparison": {
+    "aspectChange": 0.1186,
+    "difference": 33.62,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1990-08-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 789,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "3fdeee24a6e2b732f020bb1cad67a6fd8dde37194f94a27c7fc25965e63feeca",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1990-08-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-09": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-09.webp",
+   "bytes": 66186,
+   "comparison": {
+    "aspectChange": 0.4853,
+    "difference": 49.71,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1990-09-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 793,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "be4af7ad6346c3eb877f0abec40af7b3faa9c54ad279357fd4ca1b640fde5a2c",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1990-09-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-10": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-10.webp",
+   "bytes": 78838,
+   "comparison": {
+    "aspectChange": 0.1025,
+    "difference": 31.1,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1990-10-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 797,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "a3e70b3aef2327d6a8bfea51a7f2e1aefcacc1089fc9f1ee38cb7652b18ee45e",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1990-10-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-11": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-11.webp",
+   "bytes": 78210,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.45,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1990-11-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 838,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "40fa372c833d2dbd19d094e0be7051ef54119dd33e70dfc0386596a7e2214f1c",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1990-11.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-12": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-12.webp",
+   "bytes": 104566,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.52,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1990-12-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 846,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "b857d23422fd2982d114e8dbd993598943944d7617178e94ee3ffcf9be55738e",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1990-12.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-13": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-13.webp",
+   "bytes": 92194,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.53,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1990-13-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 869,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "76538a0e4de56008e2e4871fade4ee190f1e25e7e9b55b8c553891755abffc43",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1990-13.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-14": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-14.webp",
+   "bytes": 82400,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.56,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1990-14-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 834,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "67705f5f84da942653b02716b9bc7978f111a3a7dcfdd5a1a7ddaa2dcce29de9",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1990-14.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-15": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-15.webp",
+   "bytes": 85848,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.52,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1990-15-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 851,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "8669ad73e611f5e8cab68699c2cc8b557645d9902371daa93d83b99be16dfac9",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1990-15.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-16": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-16.webp",
+   "bytes": 92298,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.48,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1990-16-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 827,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "856fa7870862fbcb0e75ddcfde79f972e44c80dd7c7808565486465e9ab1cd13",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1990-16.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-17": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-17.webp",
+   "bytes": 88954,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.52,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1990-17-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 837,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "501ce25b6cd5dc2468bfcd58758958b90f7911827366c8b876a7f1a7f4652a11",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1990-17.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-18": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-18.webp",
+   "bytes": 85074,
+   "comparison": {
+    "aspectChange": 0.0024,
+    "difference": 6.74,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1990-18-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 833,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "1f569fdbb72a55016214af0264bca942fca8309276eea516d1aca7c0db181d08",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1990-18-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-19": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-19.webp",
+   "bytes": 78182,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.54,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1990-19-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 824,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "6c23f4792084b5bc3e0ef8143bba9ff603058957c9f5816053a24ad8dc318b4e",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1990-19.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1990-20": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1990-20.webp",
+   "bytes": 101718,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.52,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1990-20-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 863,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "f8a79cbe30667dbba4abc4c7ef41aeb92fe0169bf6d7a260816c1ae65bdfa38d",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1990-20.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-01": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-01.webp",
+   "bytes": 99030,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.19,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-01-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 835,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "623889ce4a4da89d3e4c7687e1e5a2485d31cd1fda4945de91182fe37b9f6d22",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-01.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-02": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-02.webp",
+   "bytes": 85618,
+   "comparison": {
+    "aspectChange": 0.0203,
+    "difference": 26.46,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1991-02-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 857,
+   "review": {
+    "class": "annat",
+    "note": "Omslaget i Covers har en riven nederkant med vita fält. Rätt sida och rätt håll."
+   },
+   "sha256": "fab1d28b37f9cb7bb42045648319d974bd8ac19f179575896b7adf757e9e4f45",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1991-02-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-03": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-03.webp",
+   "bytes": 77536,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.16,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-03-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 825,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "dfa8f1b92d9c485751c64a3964c5fb1a9f90e18445c60543088ea024558e6fef",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-03.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-04": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-04.webp",
+   "bytes": 83026,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.19,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-04-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 841,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "f7b6d0db6a1a87161bfedbad43af0da982f0e2d539d76189b69faef639c48ba9",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-04.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-05": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-05.webp",
+   "bytes": 62612,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 831,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "f9f749a5c05575c0c522a18bf384b01cc49021586032c192c0785e9d2261d45a",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-05.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-06": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-06.webp",
+   "bytes": 110446,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.5,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-06-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 861,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "5c33d19d868a7d73e92fb5fc8a8003399a5a2cdf2f9a07486de28f2341b4c42c",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-06.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-07": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-07.webp",
+   "bytes": 120220,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.5,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-07-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 858,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "ffc25a899b44737cfae3e8ca739dc5c6690e6026238b565baf40b040c379af2c",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-07.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-08": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-08.webp",
+   "bytes": 97114,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.51,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-08-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 853,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "7cbd71f39e106ff9bdfcce0482ef7bfebd18fe0194faa35ce0c0b77e950d8b6c",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-08.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-09": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-09.webp",
+   "bytes": 75542,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.47,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-09-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 858,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "ded17a057fabd1eb00afaf3abe8654507d9d9fde31539a3a31c21ea7f76b567c",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-09.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-10": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-10.webp",
+   "bytes": 116116,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.49,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-10-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 847,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "41b34dac33f72cc27eb2145f07ea5af98a352de6f519ed730934f02f1daf5d8d",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-10.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-11": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-11.webp",
+   "bytes": 113244,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.16,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-11-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "29159b81ed0e7c8a902728c673aa77d527281ad9b2cbafdadfa6691159cb7494",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-11.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-12": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-12.webp",
+   "bytes": 92384,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.15,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-12-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "a9bc4272d9a65a852d68dc583c6e7110f60416afdf86ee630de26a02414d510b",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-12.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-13": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-13.webp",
+   "bytes": 95868,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.49,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-13-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 852,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "ba26248ce4fd27d690289644e9f9868404563181788a4b8624b45a460c981706",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-13.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-14": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-14.webp",
+   "bytes": 87214,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.17,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-14-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "91f145fbeda639ccfac81db0e52fb77a0294545be5ca0ae728e2f2e9d42bf0dd",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-14.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-15": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-15.webp",
+   "bytes": 106414,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.52,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-15-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 856,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "87576843e8a2d9f1c2b87a3566bb1f37925f080b707f4693c90fde6b7e2ba62c",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-15.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-16": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-16.webp",
+   "bytes": 110810,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.49,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-16-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 852,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "cb786e331eee6fc1626b0010f2c53708d05cdfb445ee5fc775e3a35cbbb4e123",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-16.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-17": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-17.webp",
+   "bytes": 87728,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.49,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-17-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 842,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "d414fb8895497c58edd346ae6cc4654fb4ba055920c6c6a067cf7a662222951b",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-17.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-18": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-18.webp",
+   "bytes": 106962,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.4,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-18-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 870,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "12838c875fd05d848f537bbc8fcb5ec193d91718109599d13c9e1598f6de1672",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-18.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-19": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-19.webp",
+   "bytes": 73260,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.15,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-19-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "c3b6d71512fb8ab3f3fdf6e9dfbb940e0a74b27cab879f19a9edd82e1df25f25",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-19.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-20": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-20.webp",
+   "bytes": 78174,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.14,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-20-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "9f93dce6239f5aac38389f935d068762e6de90ebec8ba51a83ca96e3b3292e87",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-20.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-21": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-21.webp",
+   "bytes": 70024,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.15,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-21-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "148f593255099ad9affddd4066f331e5bac7af4b8f66342eab15bbab7f6a4592",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-21.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1991-22": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1991-22.webp",
+   "bytes": 115616,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.45,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1991-22-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 864,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "493100b16e82d844c8f471f046c604ab0761d6a1d4293e6ab612309985f3d7b3",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1991-22.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-01": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-01.webp",
+   "bytes": 102862,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.15,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-01-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 865,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "34af169c24a7db7ca1fe497f28f126617ee181ec42880cf39ed44f7e4d636e3e",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-01.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-02": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-02.webp",
+   "bytes": 91826,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.17,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-02-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 847,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "d948a659bce6005bb105999efd09eab03f0532c2ce97941669fbd4a1521f95c5",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-02.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-03": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-03.webp",
+   "bytes": 99772,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.19,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-03-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 861,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "7b3e567123da18c64fa7e703c63d6da8e1ec2976c0264b2d638b063b761a0faf",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-03.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-04": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-04.webp",
+   "bytes": 97402,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.23,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-04-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 858,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "b164878ef9b256a4fdbbddd1c7e48912c232709e4fd26b88c1b1fbbf644b1725",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-04.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-05": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-05.webp",
+   "bytes": 102036,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.24,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-05-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 858,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "4d99a54902af67579d3d1d8de7094dbb38f96c6c1dc4badeea4927a674019d3f",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-05.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-06": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-06.webp",
+   "bytes": 104254,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 863,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "c08c588f0d5278237cb1e21a6b1eb1db9cd861043033dcf4ef250e0f5a1284bd",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-06.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-07": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-07.webp",
+   "bytes": 102604,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.06,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-07-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 864,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "8aaf762277f02c027e0d34fff108fdc6b88c5b800e323f1415b21eee326f0ddf",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-07.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-08": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-08.webp",
+   "bytes": 101908,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.1,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-08-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 856,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "58f184d22b84eb015663b6bc9a9d0ac0d0d2a89c14697307a6db97ec04c793df",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-08.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-09": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-09.webp",
+   "bytes": 96224,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 858,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "910ac0ebe65d6d636e878030da059779b9ef26cee38641283958be49fbe494a5",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-09.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-10": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-10.webp",
+   "bytes": 110520,
+   "comparison": {
+    "aspectChange": 0.0002,
+    "difference": 0.19,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-10-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 856,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "35907ce1c04cf45438262d7179481949672621cf754e2ee348d7ce68052b247c",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-10.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-11": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-11.webp",
+   "bytes": 103410,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.05,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-11-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 851,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "a24a1762800cdc7198e5615b5c783d1133b56cb06ba2aed72944f8d47be2c7b4",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-11.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-12": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-12.webp",
+   "bytes": 89244,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.17,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-12-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 856,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "d2b0936ad04cffcc98b784710ec492eac310b9593a21704aa1a4c3f1fdec89e1",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-12.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-13": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-13.webp",
+   "bytes": 111108,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 853,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "a0bfc5b3c458d8b7d5a176784b4ef10549dc737f6e61fa5976624753f40f583a",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-13.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-14": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-14.webp",
+   "bytes": 90082,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 855,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "309b444e701183aaff6c4dba96214e141289af9ebf5c9b89b3e01324f437af1d",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-14.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-15": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-15.webp",
+   "bytes": 103294,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 853,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "c2f06f94b061bae514800263e82569c0eefe6fe3d9acc9dd313e5a5dc5e8d81e",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-15.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-16": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-16.webp",
+   "bytes": 90534,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.08,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-16-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "05db59ae675ec40249094ca240d489fd871a0a2b9d9e3305a01dbbd8a760ebbf",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-16.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-17": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-17.webp",
+   "bytes": 90306,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 821,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "dbeba4bedc6c073be6d91a40ad4006f156f2662f645b40b9c969e2fa072be6f3",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-17.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-18": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-18.webp",
+   "bytes": 77290,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.5,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-18-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "45e3de4b86e0025553883ab2250fc5a0ce731c243581629d397e4fd7c75a4344",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-18.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-19": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-19.webp",
+   "bytes": 103556,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.23,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1992-19-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 853,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "f7738e36b01664b9109cb41404dfd6f09a00486768b8e6ad9e2c7a592352899b",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-19.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-20": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-20.webp",
+   "bytes": 97182,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 858,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "2d6d903c7f639fee9a25f4e59b51e96019b544ddc9c92b29701e6025d6b86ff4",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-20.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-21": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-21.webp",
+   "bytes": 96874,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 859,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "4165838137844438c7acbeb123c003563bc29f17eb9694cbd9de3f1c5ab2f5c7",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-21.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1992-22": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1992-22.webp",
+   "bytes": 113770,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 865,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "b7219ab86ace44f15a494696c4e8cde0bf6ab1ee69006d39fbff51262fc9ca8d",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1992-22.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-01": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-01.webp",
+   "bytes": 97876,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "dfad04b7f9519f7b68a0a79dd76c651855b014dd792abcda564b90d86f4e6639",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-01.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-02": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-02.webp",
+   "bytes": 98108,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.5,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-02-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 852,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "2e8e1dbadb8fc45a517e24458549bd16735e9afd8178b426edc089b568b18433",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-02.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-03": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-03.webp",
+   "bytes": 84802,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "a40a8f086bab11310ef07f63c596faf73bed9a3f7e1eb61be45dbc80c57e31e6",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-03.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-04": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-04.webp",
+   "bytes": 71442,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "40ddbbe5c666b877a71a0cd85664956c842dc8265c5213a71a8ccdf0078a2440",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-04.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-05": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-05.webp",
+   "bytes": 99580,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.61,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-05-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "01b9fabcb8f3fd5225b38a897e8dfa401ef7c94ff33f7b6036625d4c5d1bceee",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-05.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-06": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-06.webp",
+   "bytes": 117298,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.57,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-06-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 851,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "d9c16231427a190ebc0639a36cfe2377b0d912d578f4ae7b8b8d40fdf05066c6",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-06.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-07": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-07.webp",
+   "bytes": 85968,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.52,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-07-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 857,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "2d1ca37be5a9a481396b32a02ae7944baf0b18c6ed8cd7ffeaab9593c349d87b",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-07.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-08": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-08.webp",
+   "bytes": 92446,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.47,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-08-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 855,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "fa550a40ce64b19572493869a2660f4bb9c49345e704694a684c09447e2a0238",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-08.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-09": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-09.webp",
+   "bytes": 84658,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.48,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-09-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 856,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "133bc7c388d7439f366a1ad530d6c2e59cf1f405f235cec42555501d2f1752ea",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-09.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-10": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-10.webp",
+   "bytes": 90684,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "1bb50b5f2f51f71107c5492179d4e306eb70ca3e6d30f54937281bd66f8e85de",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-10.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-11": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-11.webp",
+   "bytes": 94710,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "8ccef3471a9cf02fb6ba457ab50b1a16c1115ebd826ca841401acf7f1f38b030",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-11.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-12": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-12.webp",
+   "bytes": 81242,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.14,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-12-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 860,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "99145bf2f7837b7a7ccc8386d484f1b81c0cb0f47a66740dec507a3aede5c21e",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-12.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-13": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-13.webp",
+   "bytes": 73744,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "6bcc0d5b41ccc6b24ad76ec2d8730ca3300a816fc5acacb7f6bd806529611e27",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-13.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-14": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-14.webp",
+   "bytes": 116384,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.08,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-14-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 860,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "8acdfca42223dcdabaf079eb6485d404dc814a8da64dc0065a6246294ba08900",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-14.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-15": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-15.webp",
+   "bytes": 92804,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.49,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-15-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 829,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "76747edf86d3a75b39126c96547d9b8180b9023e3ad2aef4f5132042ff09db8d",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-15.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-16": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-16.webp",
+   "bytes": 111020,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.48,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-16-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 846,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "304ec5fd0a882da13affd350d8642b1f39db7094034525582a15c9df67a427ee",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-16.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-17": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-17.webp",
+   "bytes": 78864,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "3acf07ec10b64e1719e8ff6c3ca6a0884cdb40ef46afae45a506dd2fcff999c8",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-17.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-18": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-18.webp",
+   "bytes": 112554,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "9a40ee61d3e6945723d8505bdf6e1d4dd70e02c054b67732b4b05887dda253c7",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-18.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-19": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-19.webp",
+   "bytes": 94660,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "ce32d5c7ab2c508e23d086527c256bc4281241c4fd9fe360447b15abd02a528d",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-19.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-20": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-20.webp",
+   "bytes": 106312,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.5,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-20-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 857,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "0b5da01f7b42e76f34af6ebc0317ad838c9b0e7d06b4a16d02f5ebee32fa4199",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-20.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-21": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-21.webp",
+   "bytes": 105700,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.14,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1993-21-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 841,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "124a29eed256bb061b45d2606f5999d0d665fe6a9904e40f8d72cafe1ccf1171",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-21.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1993-22": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1993-22.webp",
+   "bytes": 92186,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "057210331952dbfcf4e0ab8753acd5364e70f6e6cc63f5dfc221a0e3ee87c3b7",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1993-22.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-01": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-01.webp",
+   "bytes": 83106,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.49,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-01-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 864,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "38140f3c6c38bbcd664117cafbd4dd5108f9a54425fb2eec2016c20e3edafbe7",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-01.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-02": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-02.webp",
+   "bytes": 117688,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.47,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-02-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 855,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "4e67eeba0a490111b81e32bb89825a393b38bce565e75b1ecf62e9627d625184",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-02.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-03": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-03.webp",
+   "bytes": 101438,
+   "comparison": {
+    "aspectChange": 0.0033,
+    "difference": 5.47,
+    "differs": true
+   },
+   "ftpCover": "Covers/DMZ_1994-03-001.jpg",
+   "ftpCoverProcessed": true,
+   "height": 850,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "6caa7d01d366fa8b3b815cb3748b44179fc7ff2b8e649576bca4f96f7bde43b1",
+   "source": "covers_ftp",
+   "sourceFile": "cache/covers/ftp/DMZ_1994-03-001.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-04": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-04.webp",
+   "bytes": 93556,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.53,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-04-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 873,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "197a0b0ad27125f728780415cf1c2b06c3d700fa8d9e6695ff0336a1aa7b78a4",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-04.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-05": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-05.webp",
+   "bytes": 99596,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.51,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-05-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 840,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "d7d3f25606e213a1f228bef658ce7029b4c4b38f42f39b004131a27f20a39e70",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-05.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-06": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-06.webp",
+   "bytes": 135742,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.48,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-06-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 852,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "59d6a57f74b424354b75f555985b1d27a9c51aa5a4916cb51729138607021fea",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-06.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-07": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-07.webp",
+   "bytes": 110858,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.52,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-07-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 847,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "4d79147cf74817dec7f90dc9e5264afeb9127ec01c1ebacad855c6fabfd07431",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-07.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-08": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-08.webp",
+   "bytes": 100330,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.5,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-08-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 847,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "be9a30db744511dd51506c843cb4131da23b0c394b898173935dfcec8e2514e5",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-08.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-09": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-09.webp",
+   "bytes": 94240,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "2da4463be1f9b9ad1b0b2ec815452f60a18860735af935b3ea03d43d73c97ee5",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-09.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-10": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-10.webp",
+   "bytes": 89840,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "8a7a41f3e1463baa6ecb44514ccf7862f7452cb2f2b2d8096420702b20ae3149",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-10.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-11": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-11.webp",
+   "bytes": 90406,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.49,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-11-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "bc2a1aa53dd29bbdae8874ff5d539a2a384ae9825c8ac48dcb957ddb98976266",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-11.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-12": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-12.webp",
+   "bytes": 89930,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.49,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-12-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 854,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "91af1ed22d676ad576409bef5844c2211d34157c7bf0bf34a64500456418f742",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-12.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-13": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-13.webp",
+   "bytes": 108290,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.49,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-13-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 866,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "54da3a971f0500cd6cd101b86548a3ef64202bf6777a1ef26150e6b3ff2f7b83",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-13.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-14": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-14.webp",
+   "bytes": 89896,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.51,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-14-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 860,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "0a19c8ed387cdfee82bef599d3767e31be518b75cf89bbbabc1dabb6980b08fc",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-14.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-15": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-15.webp",
+   "bytes": 63188,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "6f840a797211f6f73f6417893bb5e2491be08068ff2c8913f86d79143e48cae8",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-15.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-16": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-16.webp",
+   "bytes": 59512,
+   "comparison": null,
+   "ftpCover": null,
+   "ftpCoverProcessed": null,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "55a64100c0366e17420197a0fb222999219519c01a1959c87746c02ff95b9a24",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-16.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-17": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-17.webp",
+   "bytes": 93720,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.5,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-17-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 843,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "b1499c7ed656e1e17e504e8c50739513821c89c3d0eb9afd958f1d1c306a57a9",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-17.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-18": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-18.webp",
+   "bytes": 95068,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.48,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-18-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 865,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "106ede03e753d01f34d349a0732afff89284f969f324ab04118523799974e0cf",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-18.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-19": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-19.webp",
+   "bytes": 63856,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.44,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-19-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 669,
+   "review": {
+    "class": "annat",
+    "note": "Skanningen har svarta fält upptill och nedtill och en riven vit del. Rätt sida och rätt håll."
+   },
+   "sha256": "2fc39b6960603fd089c930bd7cf97a288c77ee975d97c19d1471a3a6526c65ac",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-19.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-20": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-20.webp",
+   "bytes": 84434,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.08,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-20-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 860,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "c4199cdfc9aed0ea8b13c6930ed2e39662eb2359f80f28557e3ea34252c9d591",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-20.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-21": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-21.webp",
+   "bytes": 110008,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.46,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-21-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "90b00c4f63d3b8e511e30d9069e3bd840a0a5b2317516e08b729b1f4edc8a01f",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-21.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1994-22": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1994-22.webp",
+   "bytes": 94128,
+   "comparison": {
+    "aspectChange": 0.0004,
+    "difference": 0.49,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1994-22-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 860,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "14cb4c02c41ce3e09cf2bd579c8e890ac75df96cfe6ba436dd8d26676264cfd6",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1994-22.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-01": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-01.webp",
+   "bytes": 90426,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.41,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-01-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 847,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "b069419c3464e41d1ca00ef6e076c71d747a0ead3a78b469704b8a9dba666822",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-01.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-02": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-02.webp",
+   "bytes": 97302,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.51,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-02-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "cf4a5df7d44c44faa6c472078f26c8d92aeff7bc35894a0932c55c3467ccd2e4",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-02.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-03": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-03.webp",
+   "bytes": 87166,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.49,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-03-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "d93ed4422c1f03f2666a6e2e986d3dbf25d61db808387e48848193ed5f38bfc8",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-03.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-04": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-04.webp",
+   "bytes": 105118,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.47,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-04-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "69155bd7114ed994ad4be18d0e388f6f7fefa69bc022851e4a0f1c6a44493c88",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-04.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-05-06": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-05-06.webp",
+   "bytes": 96754,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.48,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-0506-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 852,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "128d115d3abd5fe0a69a1dae9c68f4b7dea1389015cc58aea2e154473a3ef659",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-05-06.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-07": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-07.webp",
+   "bytes": 135770,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.52,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-07-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "d79a68547024d1ed9241d71735d818885616b2d7bbcaecdcb1bb21a19ddf3a61",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-07.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-08": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-08.webp",
+   "bytes": 69156,
+   "comparison": {
+    "aspectChange": 0.0002,
+    "difference": 0.29,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-08-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 866,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "a26a558c70bdf9652d106b710a9ca0d30e242d90454e7a5cc5d2ebef61afdc85",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-08.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-09": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-09.webp",
+   "bytes": 82308,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.46,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-09-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 845,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "78486c45dbdb5c807dd863c2a7b0b8a537670bcc80afa9bae24557716e51a6c1",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-09.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-10": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-10.webp",
+   "bytes": 125870,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.51,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-10-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 847,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "e9f542a72096cd1c1f887f45795a493fffbeace6a7b6ad2b166c62a7cb4a2a66",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-10.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-11": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-11.webp",
+   "bytes": 91830,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.51,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-11-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 865,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "266ef09f78a67838c17933116699df252cfbec7e0ce556763354ab67ce934ff8",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-11.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-12": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-12.webp",
+   "bytes": 86258,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.29,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-12-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 851,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "a63e1ead6b08af6d03707ec3b9a0d8475de3dc02e188eaa1d6ce9b68ce56ffdb",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-12.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-13": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-13.webp",
+   "bytes": 84766,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.5,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-13-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 851,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "c8bd8f5793ae0883950a5c5ee7bf5fdd7fc8b5579e62f4ff20d80954e3964d77",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-13.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-14": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-14.webp",
+   "bytes": 116336,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.52,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-14-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 850,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "4b7162c01fe370ba219ccc21b80069148e9f9b79d5d92d30143504212ced21cd",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-14.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "datormagazin-1995-15": {
+   "appliedFlags": [],
+   "asset": "covers/datormagazin-1995-15.webp",
+   "bytes": 81382,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.74,
+    "differs": false
+   },
+   "ftpCover": "Covers/DMZ_1995-15-001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 859,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "0417629550af80e41a740f4752623219ff7ac4507db61b58f13dd56c9ba1d5eb",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/datormagazin-1995-15.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1993-17": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1993-17.webp",
+   "bytes": 53450,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.61,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1993-17_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 849,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "de393a3eec8833e5a3beabb5c197155a46ee18f1ffeb9b908309db67687e2a51",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1993-17.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1993-18": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1993-18.webp",
+   "bytes": 58798,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.16,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1993-18_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 842,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "d09f3afc6685ff3cdff2379989725d1e7d5e54824c858c718bd5219f0bf9c9cb",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1993-18.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1993-19": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1993-19.webp",
+   "bytes": 80262,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.52,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1993-19_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 820,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "1c234f1851b7b02d1ef88a8af876a83954a5c3329d1dd9d7a2742ce7aa4957f2",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1993-19.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1993-20": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1993-20.webp",
+   "bytes": 77020,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.12,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1993-20_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 853,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "9679c554e1b0fecb1d8c0c26964a13a3fba621aef15f2932c9e5eb7b1c9354c2",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1993-20.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1993-21": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1993-21.webp",
+   "bytes": 69548,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.48,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1993-21_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 847,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "35a05d00f9b59bba229297f12eab7d0592d1d865977b48a7c82c02b9f65cb962",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1993-21.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1993-22": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1993-22.webp",
+   "bytes": 89870,
+   "comparison": {
+    "aspectChange": 0.0002,
+    "difference": 0.22,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1993-22_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 834,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "6321ac0803cc742890a344c7d27839e9386299a8b852c460d1651516eb556ff8",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1993-22.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1994-01": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1994-01.webp",
+   "bytes": 101394,
+   "comparison": {
+    "aspectChange": 0.0002,
+    "difference": 0.3,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1994-01_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 844,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "0a6f7ece1f618073f573c9e4314b27bff3b8710025bc9cbf92ada2d7b3dbf5c3",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1994-01.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1994-02": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1994-02.webp",
+   "bytes": 71788,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.55,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1994-02_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 846,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "5f1708f2caba2b70b27bb13a868371e970335284ae8db1db443a117893b071b0",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1994-02.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1994-03": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1994-03.webp",
+   "bytes": 97912,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.41,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1994-03_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 836,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "35d62aeb17776882929e994e609344dbade0b403e970474a6198151ba120f8f4",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1994-03.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1994-04": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1994-04.webp",
+   "bytes": 78258,
+   "comparison": {
+    "aspectChange": 0.0002,
+    "difference": 0.43,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1994-04_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 842,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "e08001721e9c417d80d77f9bd640f9f7af5a41458127561271546fcb2e75c2a7",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1994-04.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1994-05": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1994-05.webp",
+   "bytes": 73880,
+   "comparison": {
+    "aspectChange": 0.0003,
+    "difference": 0.42,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1994-05_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 832,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "3115f1cd318d112c39c4283f30e66f8342f2fdba694e4fe65f81395945757851",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1994-05.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1994-06": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1994-06.webp",
+   "bytes": 72780,
+   "comparison": {
+    "aspectChange": 0.0002,
+    "difference": 0.32,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1994-06_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 844,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "2f86f9384cf32e9e258175dd2a7650875c075aec82ef0c98f9a112842816922f",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1994-06.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1994-07": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1994-07.webp",
+   "bytes": 54040,
+   "comparison": {
+    "aspectChange": 0.0,
+    "difference": 0.22,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1994-07_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 848,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "728ff87245aa358c241c3d56c968ed6413ba2361c55beb4af8eb935f4bf658e8",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1994-07.jpg",
+   "sourceForced": false,
+   "width": 600
+  },
+  "highscore-1994-08": {
+   "appliedFlags": [],
+   "asset": "covers/highscore-1994-08.webp",
+   "bytes": 70164,
+   "comparison": {
+    "aspectChange": 0.0001,
+    "difference": 0.2,
+    "differs": false
+   },
+   "ftpCover": "Covers/HighScore_1994-08_001.jpg",
+   "ftpCoverProcessed": false,
+   "height": 829,
+   "review": {
+    "class": "ok"
+   },
+   "sha256": "fe8b599f8341a6746e2c39a760f4a778bf871967e39a4c893be57eb968ebab2b",
+   "source": "web_page1",
+   "sourceFile": "cache/covers/web/highscore-1994-08.jpg",
+   "sourceForced": false,
+   "width": 600
+  }
+ },
+ "thumbnailWidth": 600,
+ "transformOrder": [
+  "rotation",
+  "crop",
+  "scale"
+ ],
+ "webpQuality": 80
+}

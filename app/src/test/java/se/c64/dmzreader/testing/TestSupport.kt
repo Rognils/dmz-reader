@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import se.c64.dmzreader.data.db.DmzDatabase
+import se.c64.dmzreader.data.db.IssueEntity
 import se.c64.dmzreader.data.settings.ActiveInventory
 import se.c64.dmzreader.data.settings.ActiveInventoryStore
 import java.io.File
@@ -97,4 +98,45 @@ fun issueJson(
           "flags": [${flags.joinToString(",") { "\"$it\"" }}]$extra
         }
     """.trimIndent()
+}
+
+/** En katalogpost för tester av visningslogik. issueId styr år och nummer. */
+fun issueEntity(
+    issueId: String,
+    publicationId: String = "datormagazin",
+    publicationTitle: String = "Datormagazin",
+    issueLabel: String = "Nr ${issueId.split("-")[2].trimStart('0')}",
+    relatedIssueId: String? = null,
+    coverUrl: String? = "https://dmzarkivet.se/magazines/x/001.jpg",
+    coverFlags: List<String> = emptyList(),
+    coverAsset: String? = null,
+    ocrPdfUrl: String? = "https://dmzarkivet.se/pdf/x.pdf",
+    flags: List<String> = emptyList(),
+): IssueEntity {
+    val parts = issueId.split("-")
+    return IssueEntity(
+        issueId = issueId,
+        publicationId = publicationId,
+        publicationTitle = publicationTitle,
+        year = parts[1].toInt(),
+        issueLabel = issueLabel,
+        sortKey = "${parts[1]}-${parts[2]}",
+        sourceKey = "${parts[1]}${parts[2]}",
+        relatedIssueId = relatedIssueId,
+        coverUrl = coverUrl,
+        coverFlags = coverFlags,
+        coverAsset = coverAsset,
+        ocrPdfUrl = ocrPdfUrl,
+        ocrPdfSize = if (ocrPdfUrl == null) null else 25_672_804,
+        ocrPdfEtag = null,
+        ocrPdfLastModified = null,
+        largePdfUrl = null,
+        largePdfSize = null,
+        hqSource = "scans",
+        scanPagePattern = null,
+        scanPageCount = 48,
+        pageCount = null,
+        spreadOffset = null,
+        flags = flags,
+    )
 }
