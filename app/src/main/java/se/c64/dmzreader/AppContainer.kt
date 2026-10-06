@@ -8,10 +8,14 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 import se.c64.dmzreader.data.db.DmzDatabase
 import se.c64.dmzreader.data.inventory.InventoryImporter
 import se.c64.dmzreader.data.inventory.InventoryLoadResult
 import se.c64.dmzreader.data.network.CoverImageLoader
+import se.c64.dmzreader.data.pdf.PdfCache
+import se.c64.dmzreader.data.pdf.PdfDownloader
+import se.c64.dmzreader.data.pdf.PdfRepository
 import se.c64.dmzreader.data.repository.DiagnosticsRepository
 import se.c64.dmzreader.data.repository.LibraryRepository
 import se.c64.dmzreader.data.settings.ActiveInventoryStore
@@ -32,6 +36,15 @@ class AppContainer(private val context: Context) {
     val database: DmzDatabase by lazy { DmzDatabase.create(context) }
     val activeInventory: ActiveInventoryStore by lazy { DataStoreActiveInventoryStore(context) }
     val libraryPreferences: LibraryPreferences by lazy { DataStoreLibraryPreferences(context) }
+
+    /** Läs-PDF:er: egen HTTP-klient, skild från bildladdarens (ADR 0017). */
+    val pdfRepository: PdfRepository by lazy {
+        val cache = PdfCache(File(context.cacheDir, "pdf"))
+        PdfRepository(cache, PdfDownloader(PdfDownloader.createHttpClient(), cache), database.issueLocalStateDao())
+    }
+
+    /** Miniatyrer av PDF-sidor för läsarens miniatyrremsa. */
+    val thumbnailRoot: File get() = File(context.cacheDir, "thumbs")
 
     /** En enda bildladdare för hela appen, så att cache och samtidighetsgräns delas. */
     val imageLoader: ImageLoader by lazy { CoverImageLoader.create(context) }

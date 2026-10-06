@@ -75,7 +75,8 @@ class DatabaseSchemaTest {
         val columns = query("PRAGMA table_info('IssueLocalState')") { it.getText(1) }
         assertEquals(
             listOf(
-                "issueId", "observedPageCount", "observedPdfSize", "downloadState", "downloadedPath",
+                "issueId", "observedPageCount", "observedPdfSize", "observedPdfEtag",
+                "observedPdfLastModified", "downloadState", "downloadedPath",
                 "downloadedBytes", "downloadedAt", "detectedSpreadOffset",
             ),
             columns,

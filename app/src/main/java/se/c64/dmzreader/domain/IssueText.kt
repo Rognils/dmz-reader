@@ -28,15 +28,15 @@ fun fileSizeText(bytes: Long?): String? {
 }
 
 enum class ReadAction {
-    /** Läsaren byggs i FAS 3. */
-    COMING_SOON,
+    /** Numret går att läsa. */
+    READ,
 
     /** Numret har ingen läs-PDF i arkivet. */
     PDF_MISSING,
 }
 
 fun IssueEntity.readAction(): ReadAction =
-    if (FLAG_MISSING_OCR_PDF in flags || ocrPdfUrl == null) ReadAction.PDF_MISSING else ReadAction.COMING_SOON
+    if (FLAG_MISSING_OCR_PDF in flags || ocrPdfUrl == null) ReadAction.PDF_MISSING else ReadAction.READ
 
 /** Ett nummer som hör ihop med ett annat, och texten på länken dit. */
 data class RelatedIssue(val issueId: String, val linkText: String)
