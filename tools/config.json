@@ -8,7 +8,7 @@
   },
   "roots": ["Covers", "OCR PDF", "Large PDF", "Original Scans"],
   "extraRoots": ["OCR PDF v2"],
-  "datasetSequence": 2,
+  "datasetSequence": 3,
   "rawListingPath": "data/raw_listing.json",
   "httpsProbePath": "data/https_probe.json",
   "sampleMeasurementsPath": "data/sample_measurements.json",

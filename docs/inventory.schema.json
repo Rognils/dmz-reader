@@ -98,8 +98,16 @@
           "anyOf": [{ "$ref": "#/$defs/httpsUrl" }, { "type": "null" }]
         },
         "coverFlags": {
-          "description": "Egenskaper hos omslagsbilden. Känt värde: \"rotated\" (liggande, vriden 90 grader).",
-          "$ref": "#/$defs/flagList"
+          "description": "Hur omslagsbilden ska visas. Vridning tillämpas först, därefter beskärning. rotate_cw, rotate_ccw och rotate_180 vrider bilden 90 grader medurs, 90 grader moturs respektive 180 grader. crop_left_half och crop_right_half behåller vänstra respektive högra halvan av den vridna bilden. Högst en vridning och högst en beskärning.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["rotate_cw", "rotate_ccw", "rotate_180", "crop_left_half", "crop_right_half"] },
+          "not": {
+            "anyOf": [
+              { "contains": { "pattern": "^rotate_" }, "minContains": 2 },
+              { "contains": { "pattern": "^crop_" }, "minContains": 2 }
+            ]
+          }
         },
         "ocrPdfUrl": {
           "description": "Kanonisk läs-PDF på webbplatsen. null om den saknas; då har numret flaggan missing_ocr_pdf.",

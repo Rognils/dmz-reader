@@ -242,8 +242,9 @@ class MissingMaterial(Generated):
 
 
 class Overrides(Generated):
-    def test_committed_override_sets_rotated_cover(self):
-        self.assertEqual(self.issues["datormagazin-1986-01"]["coverFlags"], ["rotated"])
+    def test_committed_override_sets_cover_transform(self):
+        self.assertEqual(self.issues["datormagazin-1986-01"]["coverFlags"],
+                         ["crop_right_half", "rotate_cw"])
         others = [i for i, issue in self.issues.items()
                   if issue["coverFlags"] and i != "datormagazin-1986-01"]
         self.assertEqual(others, [])
@@ -257,14 +258,14 @@ class Overrides(Generated):
     def test_all_supported_fields(self):
         inventory = self.fresh()
         ai.apply_overrides(inventory, {"datormagazin-1989-06": {
-            "coverFlags": ["rotated"],
+            "coverFlags": ["rotate_180"],
             "spreadOffset": 1,
             "issueLabel": "Nr 6 (sommarnummer)",
             "flags": ["special_issue"],
             "reason": "test",
         }})
         issue = next(i for i in inventory["issues"] if i["issueId"] == "datormagazin-1989-06")
-        self.assertEqual(issue["coverFlags"], ["rotated"])
+        self.assertEqual(issue["coverFlags"], ["rotate_180"])
         self.assertEqual(issue["spreadOffset"], 1)
         self.assertEqual(issue["issueLabel"], "Nr 6 (sommarnummer)")
         self.assertEqual(issue["flags"], ["special_issue"])
@@ -283,14 +284,14 @@ class Overrides(Generated):
 
     def test_unknown_issue_id_is_an_error(self):
         with self.assertRaisesRegex(ai.OverrideError, "okänt issueId: datormagazin-1999-01"):
-            ai.apply_overrides(self.fresh(), {"datormagazin-1999-01": {"coverFlags": ["rotated"]}})
+            ai.apply_overrides(self.fresh(), {"datormagazin-1999-01": {"coverFlags": ["rotate_cw"]}})
 
     def test_unknown_field_is_an_error(self):
         with self.assertRaisesRegex(ai.OverrideError, "okänt fält: pageCount"):
             ai.apply_overrides(self.fresh(), {"datormagazin-1989-06": {"pageCount": 48}})
 
     def test_wrong_type_is_an_error(self):
-        for fields in ({"coverFlags": "rotated"}, {"spreadOffset": "1"}, {"spreadOffset": True},
+        for fields in ({"coverFlags": "rotate_cw"}, {"spreadOffset": "1"}, {"spreadOffset": True},
                        {"issueLabel": ""}, {"flags": [1]}):
             with self.assertRaises(ai.OverrideError, msg=fields):
                 ai.apply_overrides(self.fresh(), {"datormagazin-1989-06": fields})
@@ -307,7 +308,7 @@ class Overrides(Generated):
     def test_order_of_overrides_does_not_matter(self):
         a, b = self.fresh(), self.fresh()
         one = {"datormagazin-1989-06": {"flags": ["x_flag"], "issueLabel": "A"},
-               "datormagazin-1989-07": {"coverFlags": ["rotated"]}}
+               "datormagazin-1989-07": {"coverFlags": ["rotate_cw"]}}
         two = dict(reversed(list(one.items())))
         ai.apply_overrides(a, one)
         ai.apply_overrides(b, two)
@@ -316,7 +317,7 @@ class Overrides(Generated):
     def test_malformed_overrides_file(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "overrides.json"
-            path.write_text('{"datormagazin-1989-06": {"coverFlags": ["rotated"]}}', encoding="utf-8")
+            path.write_text('{"datormagazin-1989-06": {"coverFlags": ["rotate_cw"]}}', encoding="utf-8")
             with self.assertRaises(ai.OverrideError):
                 ai.load_overrides(path)
             self.assertEqual(ai.load_overrides(Path(tmp) / "saknas.json"), {})
@@ -374,12 +375,26 @@ class SchemaValidation(Generated):
         cases = [("year", "1989"), ("ocrPdfSize", "39845120"), ("pageCount", 0),
                  ("issueId", "Datormagazin 1989/6"), ("sortKey", "1989-6"),
                  ("coverUrl", "ftp://dmzarkivet.se/x.jpg"), ("hqSource", "raw"),
-                 ("flags", "double_issue"), ("coverFlags", ["Rotated!"]),
+                 ("flags", "double_issue"), ("coverFlags", ["rotated"]),
+                 ("coverFlags", ["rotate_cw", "rotate_180"]),
+                 ("coverFlags", ["crop_left_half", "crop_right_half"]),
                  ("scanPagePattern", "ftp://dmzarkivet.se/x/DMZ_1989-06-001.jpg")]
         for field, value in cases:
             inventory = self.fresh()
             self.issue(inventory)[field] = value
             self.assertTrue(self.errors(inventory), (field, value))
+
+    def test_allowed_cover_flags(self):
+        for value in ([], ["rotate_cw"], ["rotate_ccw"], ["rotate_180"], ["crop_left_half"],
+                      ["crop_right_half", "rotate_cw"], ["crop_left_half", "rotate_180"]):
+            inventory = self.fresh()
+            self.issue(inventory)["coverFlags"] = value
+            self.assertEqual(self.errors(inventory), [], value)
+
+    def test_override_with_unknown_cover_flag_fails_validation(self):
+        result = ai.generate(self.config, self.listing,
+                             overrides={"datormagazin-1989-06": {"coverFlags": ["rotated"]}})
+        self.assertTrue(any("coverFlags" in e for e in result["errors"]))
 
     def test_wrong_schema_version_and_dataset_version(self):
         for field, value in (("schemaVersion", 2), ("datasetVersion", "2026-10-06"),

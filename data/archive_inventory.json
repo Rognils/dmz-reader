@@ -1,11 +1,12 @@
 {
- "datasetVersion": "2026-10-06-002",
+ "datasetVersion": "2026-10-06-003",
  "generatedAt": "2026-10-06T00:00:00Z",
  "generator": "archive_inventory.py 0.2.1",
  "issues": [
   {
    "coverFlags": [
-    "rotated"
+    "crop_right_half",
+    "rotate_cw"
    ],
    "coverUrl": "https://dmzarkivet.se/magazines/198601/DMZ_1986-01-001.jpg",
    "flags": [],

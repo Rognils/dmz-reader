@@ -67,7 +67,7 @@ class InventoryImportInstrumentedTest {
         assertTrue(result is InventoryLoadResult.Replaced)
         assertEquals(185, db.issueDao().count())
         assertEquals(1, store.get()!!.schemaVersion)
-        assertEquals(listOf("rotated"), db.issueDao().get("datormagazin-1986-01")!!.coverFlags)
+        assertEquals(listOf("crop_right_half", "rotate_cw"), db.issueDao().get("datormagazin-1986-01")!!.coverFlags)
     }
 
     @Test

@@ -2,8 +2,8 @@
   "comment": "Manuella rättelser som slås ihop med inventory efter normaliseringen. Se tools/README.md.",
   "overrides": {
     "datormagazin-1986-01": {
-      "coverFlags": ["rotated"],
-      "reason": "Omslaget är skannat liggande: bak- och framsida bredvid varandra, vridna 90 grader (FAS 0-stickprov)."
+      "coverFlags": ["rotate_cw", "crop_right_half"],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs. Vriden medurs ligger baksidan till vänster och framsidan till höger (granskat i FAS 2)."
     }
   }
 }

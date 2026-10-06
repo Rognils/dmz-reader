@@ -84,8 +84,8 @@ Det som inte går att härleda ur filnamnen rättas här, inte i koden.
 {
   "overrides": {
     "datormagazin-1986-01": {
-      "coverFlags": ["rotated"],
-      "reason": "Omslaget är skannat liggande."
+      "coverFlags": ["rotate_cw", "crop_right_half"],
+      "reason": "Sidbild 1 är ett liggande uppslag."
     }
   }
 }
@@ -93,7 +93,7 @@ Det som inte går att härleda ur filnamnen rättas här, inte i koden.
 
 | Fält | Verkan |
 |---|---|
-| `coverFlags` | ersätter listan (känt värde: `"rotated"`) |
+| `coverFlags` | ersätter listan. Tillåtna värden: `rotate_cw`, `rotate_ccw`, `rotate_180` (högst en) och `crop_left_half`, `crop_right_half` (högst en). Appen vrider först och beskär sedan. |
 | `spreadOffset` | ersätter värdet; heltal eller `null` |
 | `issueLabel` | ersätter visningstexten |
 | `flags` | **läggs till** de genererade flaggorna |
