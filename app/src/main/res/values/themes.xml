@@ -1,0 +1,8 @@
+<resources>
+    <!-- Fönstrets bakgrund innan Compose har ritat. Resten av temat ligger i ui/theme. -->
+    <style name="Theme.DmzReader" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:navigationBarColor">@color/background</item>
+    </style>
+</resources>

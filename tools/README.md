@@ -147,8 +147,19 @@ python3 -m unittest discover -s tools/tests -v
 
 - `test_normalize.py`: namnreglerna, med verkliga filnamn och alla specialfall
 - `test_inventory.py`: fälten i inventory, rättelser, schemavalidering, felfall, jämförelse och determinism
+- `test_fts_testdb.py`: testindexets format, innehåll och determinism
 
 Testerna kör mot cachefilerna i `data/` och gör inga nätanrop.
+
+## Testindex för FTS5 (`build_fts_testdb.py`)
+
+```bash
+python3 tools/build_fts_testdb.py
+```
+
+Bygger `app/src/debug/assets/fts_test.db`: ett litet sökindex i samma format som det riktiga ska få (planens D2), med 8 sidor påhittad svensk text och 11 sökfrågor med förväntade träffar i tabellen `selftest`. Skriptet kontrollerar förväntningarna mot datorns SQLite innan filen skrivs, och ger samma fil varje gång. Appen kör samma frågor på telefonen, i Inställningar → Diagnostik (ADR 0006).
+
+Kör om skriptet och committa filen om texten eller frågorna ändras.
 
 ## Namnregler och specialfall
 

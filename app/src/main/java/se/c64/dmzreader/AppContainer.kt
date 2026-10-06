@@ -1,0 +1,52 @@
+package se.c64.dmzreader
+
+import android.content.Context
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import se.c64.dmzreader.data.db.DmzDatabase
+import se.c64.dmzreader.data.inventory.InventoryImporter
+import se.c64.dmzreader.data.inventory.InventoryLoadResult
+import se.c64.dmzreader.data.repository.DiagnosticsRepository
+import se.c64.dmzreader.data.repository.LibraryRepository
+import se.c64.dmzreader.data.settings.ActiveInventoryStore
+import se.c64.dmzreader.data.settings.DataStoreActiveInventoryStore
+
+/** Läget för inläsningen av det inventory som följer med appen. */
+sealed interface InventoryStatus {
+    data object Loading : InventoryStatus
+    data class Done(val result: InventoryLoadResult) : InventoryStatus
+}
+
+/** Appens beroenden, skapade en gång. Ingen DI-ram behövs för en app av den här storleken. */
+class AppContainer(private val context: Context) {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    val database: DmzDatabase by lazy { DmzDatabase.create(context) }
+    val activeInventory: ActiveInventoryStore by lazy { DataStoreActiveInventoryStore(context) }
+    val libraryRepository by lazy { LibraryRepository(database.issueDao()) }
+    val diagnosticsRepository by lazy { DiagnosticsRepository(context, database) }
+
+    private val _inventoryStatus = MutableStateFlow<InventoryStatus>(InventoryStatus.Loading)
+    val inventoryStatus: StateFlow<InventoryStatus> = _inventoryStatus
+
+    /** Läser in assets/archive_inventory.json om dess version inte redan är aktiv. */
+    fun loadBundledInventory() {
+        scope.launch {
+            val result = try {
+                val text = context.assets.open(BUNDLED_INVENTORY).bufferedReader().use { it.readText() }
+                InventoryImporter(database.issueDao(), activeInventory).load(text)
+            } catch (e: Exception) {
+                InventoryLoadResult.Rejected("Arkivindexet gick inte att läsa in: ${e.message}")
+            }
+            _inventoryStatus.value = InventoryStatus.Done(result)
+        }
+    }
+
+    private companion object {
+        const val BUNDLED_INVENTORY = "archive_inventory.json"
+    }
+}

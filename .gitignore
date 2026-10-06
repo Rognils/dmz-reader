@@ -26,3 +26,7 @@ build/
 captures/
 # Kopieras från data/ av byggsteget syncInventory
 /app/src/main/assets/archive_inventory.json
+
+# Testindexet för FTS5-verifieringen är litet, påhittat och byggs deterministiskt
+# av tools/build_fts_testdb.py. Det versionshanteras, till skillnad från search.db.
+!/app/src/debug/assets/fts_test.db
