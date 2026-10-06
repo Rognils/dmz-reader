@@ -14,3 +14,15 @@ samples/
 
 # Jämförelse mellan två inventory (arbetsfil)
 data/inventory_diff.json
+
+# Android
+local.properties
+.gradle/
+build/
+/app/build/
+.idea/
+*.iml
+.kotlin/
+captures/
+# Kopieras från data/ av byggsteget syncInventory
+/app/src/main/assets/archive_inventory.json

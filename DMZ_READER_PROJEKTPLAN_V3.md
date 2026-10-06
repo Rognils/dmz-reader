@@ -640,7 +640,7 @@ Läsaren är projektets viktigaste funktion och prioriteras före allt utom bibl
 |---|---|---|
 | "Läs nu" (tillfällig PDF) | `cacheDir` | Ja |
 | Renderade sidor, miniatyrer, HQ-sidor | `cacheDir` | Ja |
-| Omslag från Covers | Coils diskcache | Ja |
+| Omslag (webbens sidbild 1) | Coils diskcache | Ja |
 | "Ladda ned" (permanent PDF) | `filesDir/issues/` eller `getExternalFilesDir()` – **beslutas i FAS 5** | Nej |
 | Importerat inventory och search.db | `filesDir/data/` | Nej |
 | Room-databasen | Standardplats | Nej |
@@ -1276,7 +1276,7 @@ dmz-reader/
 │       │   ├── db/               Room: entiteter, DAO:er
 │       │   ├── search/           searchDb (separat, skrivskyddad)
 │       │   ├── inventory/        inläsning och import av inventory
-│       │   ├── network/          HTTPS, FTP, Coil-fetcher
+│       │   ├── network/          HTTPS och FTP (FTP bara för HQ och Large PDF)
 │       │   └── repository/
 │       ├── domain/               logik för lässtatus, progress, effektivt sidantal
 │       ├── ui/
@@ -1448,3 +1448,4 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-06 | Efter FAS 0B: D2: `pages` har (issueId, pageNumber, rawText, searchText). FTS-indexet och textutdragen använder `searchText`. | — |
 | 2026-10-06 | Efter FAS 0B: C2: `coverUrl` och `ocrPdfUrl` är nullable, med flaggorna `missing_cover` och `missing_ocr_pdf`. Appens Room-entitet är en delmängd av inventory. | 0008 |
 | 2026-10-06 | Efter FAS 0B: E6: nummer med `missing_ocr_pdf` visar "PDF saknas" och ingen Läs-knapp | — |
+| 2026-10-06 | Före FAS 1: E8: raden "Omslag från Covers" ersatt med "Omslag (webbens sidbild 1)". G5: `network/` är HTTPS och FTP, där FTP bara används för HQ och Large PDF. | 0008 |
