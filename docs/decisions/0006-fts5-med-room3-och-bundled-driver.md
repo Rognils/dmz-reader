@@ -1,7 +1,7 @@
 # ADR 0006: FTS5 med Room 3 och BundledSQLiteDriver
 
 ## Status
-Proposed (blir Accepted när C64 har kört FTS5-testet i Diagnostik på sin telefon)
+Accepted (verifierat 2026-10-06 på C64:s telefon)
 
 ## Context
 Fulltextsökningen (FAS 8 och 9) bygger på ett SQLite-index som skapas på datorn och importeras till telefonen. Indexet ska ge rankade träffar (`bm25`) och textutdrag (`snippet`), vilket kräver FTS5.
@@ -24,7 +24,10 @@ Frågorna täcker: enkelt ord, rankning, ord med å, ä och ö, versalt Ä, ett 
 |---|---|---|
 | Datorn, Pythons `sqlite3` (bygger indexet) | 3.45.1 | 11 av 11 |
 | Datorn, JVM, `BundledSQLiteDriver` (`SearchDbTest`) | 3.50.1 | 11 av 11 |
-| Telefonen, `BundledSQLiteDriver` | – | **inte verifierat än** |
+| Telefonen, `BundledSQLiteDriver`, Diagnostik i appen | 3.50.1 | 11 av 11, GODKÄNT |
+| Telefonen, instrumenterade tester (`FtsInstrumentedTest`) | 3.50.1 | 2 av 2 |
+
+Telefonen är en OnePlus 7 Pro (GM1911, arm64-v8a) med Android 16 (API 36, bygge BP4A.251205.006). Testindexet öppnades skrivskyddat från `filesDir/data/`, och SQLite-versionen var densamma som i JVM-testerna. FTS4 behöver inte utvärderas.
 
 ## Reason
 - Samma SQLite på alla telefoner och i testerna. Indexet byggs en gång och beter sig likadant överallt.

@@ -1,6 +1,7 @@
 package se.c64.dmzreader
 
 import androidx.room3.Room
+import androidx.room3.useReaderConnection
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -123,19 +124,54 @@ class InventoryImportInstrumentedTest {
         assertEquals(185, db.issueDao().count())
     }
 
+    /** rowid för en rad i IssueUserState. Ändras om raden raderas och skapas på nytt. */
+    private suspend fun userStateRowIds(): Map<String, Long> = db.useReaderConnection { connection ->
+        connection.usePrepared("SELECT issueId, rowid FROM IssueUserState ORDER BY issueId") { statement ->
+            val rows = LinkedHashMap<String, Long>()
+            while (statement.step()) rows[statement.getText(0)] = statement.getLong(1)
+            rows
+        }
+    }
+
     @Test
     fun upsertUpdatesAnExistingRow() = runBlocking {
         val dao = db.issueUserStateDao()
-        dao.upsert(IssueUserState(issueId = "datormagazin-1989-06", maxPageReached = 40, updatedAt = 1))
-        dao.upsert(
-            IssueUserState(
-                issueId = "datormagazin-1989-06", maxPageReached = 40,
-                readStatusOverride = ReadStatusOverride.READ, updatedAt = 2,
-            ),
+        val original = IssueUserState(
+            issueId = "datormagazin-1989-06", isFavorite = true, lastPage = 12, maxPageReached = 40,
+            firstOpenedAt = 1_000, lastOpenedAt = 2_000, updatedAt = 2_000,
         )
-        val stored = dao.getAll().single()
+        val other = IssueUserState(issueId = "datormagazin-1989-07", lastPage = 3, updatedAt = 1_500)
+        dao.upsert(original)
+        dao.upsert(other)
+        val rowIdsBefore = userStateRowIds()
+        assertEquals(2, rowIdsBefore.size)
+
+        // Samma primärnyckel, ändrade värden: ska bli en UPDATE av den befintliga raden.
+        val changed = original.copy(
+            lastPage = 20, readStatusOverride = ReadStatusOverride.READ, completedAt = 3_000, updatedAt = 3_000,
+        )
+        dao.upsert(changed)
+
+        // Ingen ny rad, och raden är densamma (samma rowid), inte raderad och återskapad.
+        assertEquals(rowIdsBefore, userStateRowIds())
+        val stored = dao.get("datormagazin-1989-06")!!
+        assertEquals(changed, stored)
+        // Det som ändrades har ändrats ...
+        assertEquals(20, stored.lastPage)
         assertEquals(ReadStatusOverride.READ, stored.readStatusOverride)
+        assertEquals(3_000L, stored.completedAt)
+        // ... och det som inte ändrades finns kvar.
+        assertTrue(stored.isFavorite)
         assertEquals(40, stored.maxPageReached)
+        assertEquals(1_000L, stored.firstOpenedAt)
+        // Raden för det andra numret är orörd.
+        assertEquals(other, dao.get("datormagazin-1989-07"))
+        assertEquals(listOf(changed, other), dao.getAll())
+
+        // En upsert med identiskt innehåll ändrar ingenting.
+        dao.upsert(changed)
+        assertEquals(rowIdsBefore, userStateRowIds())
+        assertEquals(listOf(changed, other), dao.getAll())
     }
 
     @Test
