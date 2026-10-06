@@ -64,7 +64,15 @@ val syncInventory = tasks.register<Copy>("syncInventory") {
     from(inventorySource)
     into(layout.projectDirectory.dir("src/main/assets"))
 }
-tasks.named("preBuild") { dependsOn(syncInventory) }
+// Omslagsminiatyrerna från tools/build_covers.py följer med i appen (ADR 0016).
+// Sync tar också bort miniatyrer som inte längre finns i data/covers/.
+val syncCovers = tasks.register<Sync>("syncCovers") {
+    description = "Kopierar data/covers/ till appens assets."
+    group = "build"
+    from(rootProject.layout.projectDirectory.dir("data/covers")) { include("*.webp") }
+    into(layout.projectDirectory.dir("src/main/assets/covers"))
+}
+tasks.named("preBuild") { dependsOn(syncInventory, syncCovers) }
 
 // JVM-tester: Android-varianten av sqlite-bundled innehåller bara SQLite för
 // telefonens processorer. Datorns SQLite hämtas ur JVM-varianten av samma
@@ -101,6 +109,9 @@ tasks.withType<Test>().configureEach {
     }
     systemProperty("dmz.inventoryPath", inventory.absolutePath)
     systemProperty("dmz.ftsTestDb", ftsTestDb.absolutePath)
+    val schemaDir = layout.projectDirectory.dir("schemas/se.c64.dmzreader.data.db.DmzDatabase").asFile
+    inputs.dir(schemaDir)
+    systemProperty("dmz.schemaDir", schemaDir.absolutePath)
 }
 
 dependencies {

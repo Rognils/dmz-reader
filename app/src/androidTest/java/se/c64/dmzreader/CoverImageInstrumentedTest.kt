@@ -4,17 +4,21 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import coil3.request.ErrorResult
+import coil3.request.SuccessResult
 import coil3.size.Dimension
 import coil3.size.Size
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import se.c64.dmzreader.data.inventory.InventoryParser
 import se.c64.dmzreader.data.inventory.toEntity
+import se.c64.dmzreader.data.network.CoverImageLoader
+import se.c64.dmzreader.domain.CoverSource
 import se.c64.dmzreader.domain.CoverTransform
+import se.c64.dmzreader.domain.coverSources
 import se.c64.dmzreader.ui.components.CoverFlagsTransformation
 import se.c64.dmzreader.ui.components.coverImageRequest
 
@@ -26,12 +30,15 @@ class CoverImageInstrumentedTest {
         context.assets.open("archive_inventory.json").bufferedReader().use { it.readText() },
     ).issues
 
+    private fun remote(issue: se.c64.dmzreader.data.db.IssueEntity) =
+        coverSources(issue).filterIsInstance<CoverSource.Remote>().single()
+
     @Test
     fun requestUsesTheCoverUrlFromInventoryUnchanged() {
         val issues = bundledIssues()
         assertEquals(185, issues.size)
         for (dto in issues) {
-            val request = coverImageRequest(context, dto.toEntity(), 440, 611)
+            val request = coverImageRequest(context, remote(dto.toEntity()), 440, 611)
             assertEquals(dto.issueId, dto.coverUrl, request.data)
         }
     }
@@ -39,15 +46,46 @@ class CoverImageInstrumentedTest {
     @Test
     fun requestIsScaledToTheCardAndNeverFullResolution() {
         val ordinary = bundledIssues().first { it.issueId == "datormagazin-1989-06" }.toEntity()
-        val size = runBlocking { coverImageRequest(context, ordinary, 440, 611).sizeResolver.size() }
+        val size = runBlocking { coverImageRequest(context, remote(ordinary), 440, 611).sizeResolver.size() }
         assertEquals(Size(440, 611), size)
 
-        // Det liggande omslaget behöver en större källa för att bli skarpt efter beskärningen.
-        val rotated = bundledIssues().first { it.issueId == "datormagazin-1986-01" }.toEntity()
-        assertEquals(listOf("crop_right_half", "rotate_cw"), rotated.coverFlags)
-        val rotatedSize = runBlocking { coverImageRequest(context, rotated, 440, 611).sizeResolver.size() }
+        // En vriden och beskuren bild behöver en större källa för att bli skarp.
+        val rotated = ordinary.copy(coverFlags = listOf("crop_right_half", "rotate_cw"))
+        val rotatedSize = runBlocking { coverImageRequest(context, remote(rotated), 440, 611).sizeResolver.size() }
         assertEquals(Size(611, 880), rotatedSize)
         assertTrue((rotatedSize.width as Dimension.Pixels).px < 950)
+    }
+
+    @Test
+    fun everyIssueHasABundledThumbnailThatDecodes() {
+        val issues = bundledIssues()
+        val bundled = context.assets.list("covers")!!.toSet()
+        for (dto in issues) {
+            val asset = dto.coverAsset
+            assertTrue("${dto.issueId} saknar coverAsset", asset != null)
+            assertTrue("$asset saknas i assets", asset!!.removePrefix("covers/") in bundled)
+        }
+        assertEquals(issues.size, bundled.size)
+
+        // Miniatyren är första källan, och Coil kan läsa den ur assets.
+        val issue = issues.first { it.issueId == "datormagazin-1986-01" }.toEntity()
+        val source = coverSources(issue).first()
+        assertTrue(source is CoverSource.Asset)
+        val result = runBlocking {
+            CoverImageLoader.create(context).execute(coverImageRequest(context, source, 440, 611))
+        }
+        assertTrue("miniatyren gick inte att läsa: $result", result is SuccessResult)
+        // Stående bild: miniatyren är redan vriden och beskuren av toolchainen.
+        assertTrue(result.image!!.width < result.image!!.height)
+    }
+
+    @Test
+    fun missingThumbnailFailsSoThatTheFallbackIsTried() {
+        val result = runBlocking {
+            CoverImageLoader.create(context)
+                .execute(coverImageRequest(context, CoverSource.Asset("covers/finns-inte.webp"), 440, 611))
+        }
+        assertTrue(result is ErrorResult)
     }
 
     /**
@@ -104,8 +142,8 @@ class CoverImageInstrumentedTest {
     }
 
     @Test
-    fun issueWithoutCoverUrlHasNoImageData() {
-        val issue = bundledIssues().first().toEntity().copy(coverUrl = null)
-        assertNull(coverImageRequest(context, issue, 440, 611).data.takeIf { it is String })
+    fun issueWithoutThumbnailAndUrlHasNoSources() {
+        val issue = bundledIssues().first().toEntity().copy(coverAsset = null, coverUrl = null)
+        assertTrue(coverSources(issue).isEmpty())
     }
 }

@@ -37,6 +37,7 @@ data class InventoryIssueDto(
     // Måste finnas i filen, men får vara null (flaggan missing_cover).
     val coverUrl: String?,
     val coverFlags: List<String>,
+    val coverAsset: String? = null,
     // Måste finnas i filen, men får vara null (flaggan missing_ocr_pdf).
     val ocrPdfUrl: String?,
     val ocrPdfSize: Long? = null,

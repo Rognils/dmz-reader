@@ -14,7 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,7 +38,9 @@ import coil3.size.Scale
 import coil3.size.Size
 import coil3.transform.Transformation
 import se.c64.dmzreader.data.db.IssueEntity
+import se.c64.dmzreader.domain.CoverSource
 import se.c64.dmzreader.domain.CoverTransform
+import se.c64.dmzreader.domain.coverSources
 import se.c64.dmzreader.domain.fullTitle
 import se.c64.dmzreader.ui.theme.DmzColors
 import se.c64.dmzreader.ui.theme.MonoStyles
@@ -55,19 +60,30 @@ fun coverImageData(issue: IssueEntity): String? = issue.coverUrl
  */
 fun coverImageRequest(
     context: android.content.Context,
-    issue: IssueEntity,
+    source: CoverSource,
     widthPx: Int,
     heightPx: Int,
-): ImageRequest {
-    val transform = CoverTransform.fromFlags(issue.coverFlags)
-    val (sourceWidth, sourceHeight) = transform.sourceSizeFor(widthPx, heightPx)
-    return ImageRequest.Builder(context)
-        .data(coverImageData(issue))
-        .size(Size(sourceWidth, sourceHeight))
-        .scale(Scale.FILL)
-        .precision(Precision.INEXACT)
-        .apply { if (!transform.isIdentity) transformations(CoverFlagsTransformation(transform)) }
-        .build()
+): ImageRequest = when (source) {
+    is CoverSource.Asset ->
+        ImageRequest.Builder(context)
+            .data(source.uri)
+            .size(Size(widthPx, heightPx))
+            .scale(Scale.FILL)
+            .precision(Precision.INEXACT)
+            .build()
+
+    is CoverSource.Remote -> {
+        val (sourceWidth, sourceHeight) = source.transform.sourceSizeFor(widthPx, heightPx)
+        ImageRequest.Builder(context)
+            .data(source.url)
+            .size(Size(sourceWidth, sourceHeight))
+            .scale(Scale.FILL)
+            .precision(Precision.INEXACT)
+            .apply {
+                if (!source.transform.isIdentity) transformations(CoverFlagsTransformation(source.transform))
+            }
+            .build()
+    }
 }
 
 /** Vrider och beskär en avkodad omslagsbild enligt [transform]. */
@@ -92,9 +108,11 @@ class CoverFlagsTransformation(private val transform: CoverTransform) : Transfor
 }
 
 /**
- * Omslaget för ett nummer i formatet [COVER_ASPECT_RATIO]. Saknas coverUrl,
- * eller går bilden inte att hämta, visas en platshållare med publikation, år
- * och nummer (planens B3).
+ * Omslaget för ett nummer i formatet [COVER_ASPECT_RATIO].
+ *
+ * Källorna prövas i tur och ordning: den inbyggda miniatyren, sedan coverUrl.
+ * Finns ingen källa, eller misslyckas alla, visas en platshållare med
+ * publikation, år och nummer (planens B3).
  */
 @Composable
 fun IssueCover(
@@ -105,6 +123,10 @@ fun IssueCover(
 ) {
     val shape = RoundedCornerShape(cornerRadius)
     val description = issue.fullTitle()
+    val sources = remember(issue.coverAsset, issue.coverUrl, issue.coverFlags) { coverSources(issue) }
+    // Hur många källor som har misslyckats. Nästa i listan prövas.
+    var failed by remember(sources) { mutableIntStateOf(0) }
+
     BoxWithConstraints(
         modifier = modifier
             .aspectRatio(COVER_ASPECT_RATIO)
@@ -113,18 +135,18 @@ fun IssueCover(
     ) {
         // Platshållaren ligger underst och syns tills en bild har ritats ovanpå.
         CoverPlaceholder(issue, cornerRadius)
-        if (coverImageData(issue) != null) {
+        val source = sources.getOrNull(failed)
+        if (source != null) {
             val context = LocalContext.current
             val widthPx = constraints.maxWidth
             val heightPx = (widthPx / COVER_ASPECT_RATIO).toInt()
-            val request = remember(issue.issueId, issue.coverUrl, issue.coverFlags, widthPx) {
-                coverImageRequest(context, issue, widthPx, heightPx)
-            }
+            val request = remember(source, widthPx) { coverImageRequest(context, source, widthPx, heightPx) }
             AsyncImage(
                 model = request,
                 imageLoader = imageLoader,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
+                onError = { failed += 1 },
                 modifier = Modifier.fillMaxSize(),
             )
         }

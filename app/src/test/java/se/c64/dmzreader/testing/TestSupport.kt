@@ -109,6 +109,7 @@ fun issueEntity(
     relatedIssueId: String? = null,
     coverUrl: String? = "https://dmzarkivet.se/magazines/x/001.jpg",
     coverFlags: List<String> = emptyList(),
+    coverAsset: String? = null,
     ocrPdfUrl: String? = "https://dmzarkivet.se/pdf/x.pdf",
     flags: List<String> = emptyList(),
 ): IssueEntity {
@@ -124,6 +125,7 @@ fun issueEntity(
         relatedIssueId = relatedIssueId,
         coverUrl = coverUrl,
         coverFlags = coverFlags,
+        coverAsset = coverAsset,
         ocrPdfUrl = ocrPdfUrl,
         ocrPdfSize = if (ocrPdfUrl == null) null else 25_672_804,
         ocrPdfEtag = null,

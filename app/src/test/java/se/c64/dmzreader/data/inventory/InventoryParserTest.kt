@@ -26,6 +26,8 @@ class InventoryParserTest {
 
         val first = inventory.issues.first { it.issueId == "datormagazin-1986-01" }
         assertEquals(listOf("crop_right_half", "rotate_cw"), first.coverFlags)
+        assertEquals("covers/datormagazin-1986-01.webp", first.coverAsset)
+        assertTrue(inventory.issues.all { it.coverAsset == "covers/${it.issueId}.webp" })
         assertEquals(28, first.pageCount)
         assertEquals(28, first.scanPageCount)
         assertTrue(first.sourceNames.contains("OCR PDF v2/198601.pdf"))
