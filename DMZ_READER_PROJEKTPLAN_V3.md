@@ -121,7 +121,7 @@ Dessa regler gäller i alla faser och får aldrig brytas.
 | SQLite-drivrutin | `BundledSQLiteDriver` (paketerad SQLite med FTS5) – verifieras i FAS 1 (ADR 0006) |
 | Inställningar | DataStore |
 | Bakgrundsjobb | WorkManager |
-| Bildladdning | Coil (med egen fetcher om FTP krävs) |
+| Bildladdning | Coil, omslag via HTTPS |
 | PDF-rendering | Utvärderas i FAS 3; i första hand Androids `PdfRenderer` |
 | minSdk | 26 |
 | targetSdk | Aktuell standard när projektet skapas |
@@ -149,7 +149,7 @@ Arkivägarens egen beskrivning, med appens användning:
 
 | Katalog | Arkivets beskrivning | Användning i appen |
 |---|---|---|
-| `Covers` | Omslagen, utplockade och tillsnyggade. Arbetet pågår. | Omslag i hela UI:t. Alla nummer har dem inte. |
+| `Covers` | Omslagen, utplockade och tillsnyggade. Arbetet pågår. | Används inte av appen i v1. Omslag är webbens sidbild 1 (`coverUrl`). |
 | `OCR PDF` | Behandlade PDF:er, mindre och sökbara | **Primärt läsformat.** Källa för sökindex. |
 | `Large PDF` | PDF i samma kvalitet som skanningarna, kan bli mycket stora | Möjlig HQ-källa, i andra hand |
 | `Original Scans` | Skannade sidor, oftast i mycket högre upplösning | Möjlig HQ-källa, i första hand om sidorna ligger en och en |
@@ -222,9 +222,9 @@ Issue
 ├── sourceKey           String, rå identitet från arkivet
 ├── sourceNames         List<String>, originalsökvägar
 ├── relatedIssueId      String?, t.ex. HighScore → motsvarande Datormagazin-nummer
-├── coverUrl            String, webbens sidbild 1
+├── coverUrl            String?, webbens sidbild 1, null om den saknas
 ├── coverFlags          List<String>, t.ex. "rotated"
-├── ocrPdfUrl           String, kanonisk läs-PDF (webbplatsen)
+├── ocrPdfUrl           String?, kanonisk läs-PDF (webbplatsen), null om den saknas
 ├── ocrPdfSize          Long?, serverns Content-Length
 ├── ocrPdfEtag          String?
 ├── ocrPdfLastModified  String?
@@ -235,12 +235,15 @@ Issue
 ├── scanPageCount       Int?, antal skanningar i numrets huvuddel
 ├── pageCount           Int?, nullable
 ├── spreadOffset        Int?, nullable
-└── flags               List<String>, t.ex. "double_issue", "scan_supplement"
+└── flags               List<String>, t.ex. "double_issue", "scan_supplement",
+                        "missing_cover", "missing_ocr_pdf"
 ```
 
 **Regler:**
 
 - `pageCount` och `spreadOffset` är nullable. Ingen kod får anta att de finns.
+- `coverUrl` och `ocrPdfUrl` är nullable. Ett nummer utan omslag har flaggan `missing_cover`, och ett nummer utan läs-PDF har flaggan `missing_ocr_pdf`.
+- Appens Room-entitet är en delmängd av inventory: allt utom `sourceNames` (se FAS 1).
 - `scanPageCount` är inte samma sak som `pageCount` och får inte användas i dess ställe.
 - `Issue` innehåller aldrig personlig eller lokal data.
 
@@ -257,7 +260,6 @@ IssueLocalState
 ├── downloadedPath         String?, permanent kopia i filesDir
 ├── downloadedBytes        Long?
 ├── downloadedAt           Long?
-├── generatedCoverPath     String?, omslag renderat från sida 1
 └── detectedSpreadOffset   Int?, om appen själv upptäcker parningen
 ```
 
@@ -449,10 +451,12 @@ meta        (key, value)
             schemaVersion, datasetVersion, generatedAt,
             tokenizer, issueCount, pageCount
 
-pages       (issueId, pageNumber, text)
-pages_fts   FTS-tabell över pages.text
+pages       (issueId, pageNumber, rawText, searchText)
+pages_fts   FTS-tabell över pages.searchText
 issues      (issueId, pageCount)
 ```
+
+FTS-indexet och textutdragen använder `searchText`.
 
 Exakt FTS-version och tokenizer beslutas i ADR 0006 och ADR 0010.
 
@@ -593,6 +597,7 @@ Sektionerna visas uppifrån och ned. Sektioner utan innehåll döljs.
 - titel: publikation, år och nummer
 - metadata i mono: sidantal (om känt), filstorlek, lässtatus, nedladdningsstatus
 - primär åtgärd: **Läs** eller **Fortsätt på sida X**
+- nummer med flaggan `missing_ocr_pdf` visar "PDF saknas" och ingen Läs-knapp
 - sekundära åtgärder: Ladda ned/Ta bort, Favorit, Bokmärken, Sök i numret (från FAS 9), HQ (från FAS 11)
 - lista över bokmärken i numret
 - markeringar: "Arkivfilen har uppdaterats" (C7) och "Ingår inte i sökindexet" (D3)
@@ -637,7 +642,6 @@ Läsaren är projektets viktigaste funktion och prioriteras före allt utom bibl
 | Renderade sidor, miniatyrer, HQ-sidor | `cacheDir` | Ja |
 | Omslag från Covers | Coils diskcache | Ja |
 | "Ladda ned" (permanent PDF) | `filesDir/issues/` eller `getExternalFilesDir()` – **beslutas i FAS 5** | Nej |
-| Genererade omslag | `filesDir/covers/` | Nej |
 | Importerat inventory och search.db | `filesDir/data/` | Nej |
 | Room-databasen | Standardplats | Nej |
 
@@ -655,8 +659,8 @@ Observera: app-specifik lagring raderas när appen avinstalleras. Därför finns
 ## E9. Nätverk
 
 - HTTPS används där FAS 0 visar att det finns
-- FTP används bara för material som endast finns där, via en FTP-klient (t.ex. Apache Commons Net)
-- om omslag bara finns via FTP behövs en egen Coil-fetcher redan i FAS 2
+- omslag hämtas via HTTPS (`coverUrl`)
+- FTP används bara för HQ (Original Scans) och Large PDF, via en FTP-klient (t.ex. Apache Commons Net)
 - om filer bara finns via FTP betyder "Läs nu": ladda ned till cache och öppna lokalt
 - högst en FTP-anslutning åt gången, och nedladdningar köas
 - en egen HTTP-spegel i hemmalabbet är en dokumenterad reservlösning, inte ett beslut. Den byggs bara om FAS 0 eller verklig användning visar att den behövs.
@@ -1438,3 +1442,9 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-06 | FAS 0B: FAS 8: search.db sparar `rawText` och `searchText` per sida. Normaliseringen sätter ihop utspärrade ord och tar bort mjuka bindestreck. Test mot 1995 nr 14 tillagt. | — |
 | 2026-10-06 | FAS 0B: FAS 11: sidmappningen får inte konstrueras matematiskt för nummer med avvikelser. Den beslutas i FAS 11. | 0009 |
 | 2026-10-06 | FAS 0B: D5 och FAS 7: import av inventory valideras mot `docs/inventory.schema.json` | — |
+| 2026-10-06 | Efter FAS 0B: C3: `generatedCoverPath` borttaget ur `IssueLocalState`. E8: raden "Genererade omslag" borttagen. | 0008 |
+| 2026-10-06 | Efter FAS 0B: A5 och E9: ingen FTP-fetcher för Coil. Omslag hämtas via HTTPS. FTP används bara för HQ (Original Scans) och Large PDF. | 0008 |
+| 2026-10-06 | Efter FAS 0B: B2: `Covers` används inte av appen i v1. Omslag är webbens sidbild 1 (`coverUrl`). | 0008 |
+| 2026-10-06 | Efter FAS 0B: D2: `pages` har (issueId, pageNumber, rawText, searchText). FTS-indexet och textutdragen använder `searchText`. | — |
+| 2026-10-06 | Efter FAS 0B: C2: `coverUrl` och `ocrPdfUrl` är nullable, med flaggorna `missing_cover` och `missing_ocr_pdf`. Appens Room-entitet är en delmängd av inventory. | 0008 |
+| 2026-10-06 | Efter FAS 0B: E6: nummer med `missing_ocr_pdf` visar "PDF saknas" och ingen Läs-knapp | — |
