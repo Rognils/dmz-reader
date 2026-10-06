@@ -149,19 +149,24 @@ Arkivägarens egen beskrivning, med appens användning:
 
 | Katalog | Arkivets beskrivning | Användning i appen |
 |---|---|---|
-| `Covers` | Omslagen, utplockade och tillsnyggade. Arbetet pågår. | Används inte av appen i v1. Omslag är webbens sidbild 1 (`coverUrl`). |
+| `Covers` | Omslagen, utplockade och tillsnyggade. Arbetet pågår. | Källa för toolchainens omslagsminiatyrer där filen är bearbetad (ADR 0016). Appen hämtar aldrig härifrån. |
 | `OCR PDF` | Behandlade PDF:er, mindre och sökbara | **Primärt läsformat.** Källa för sökindex. |
 | `Large PDF` | PDF i samma kvalitet som skanningarna, kan bli mycket stora | Möjlig HQ-källa, i andra hand |
 | `Original Scans` | Skannade sidor, oftast i mycket högre upplösning | Möjlig HQ-källa, i första hand om sidorna ligger en och en |
 | `Raw Images` | Obehandlade bilder direkt från skannern, osorterat | Ignoreras |
 | `Uploads` | För bidrag | Ignoreras |
 
-## B3. Omslag – två nivåer
+## B3. Omslag – tre nivåer
 
-1. webbplatsens sidbild 1 (`coverUrl`)
-2. neutral platshållare med publikation, år och nummer i text
+Appen prövar källorna i den här ordningen:
 
-FTP-katalogen `Covers` används inte i v1. Appen laddar aldrig ned en PDF för att få ett omslag.
+1. `coverAsset`: en färdig miniatyr som följer med appen
+2. `coverUrl`: webbplatsens sidbild 1, hämtad via nätet och rättad enligt `coverFlags`
+3. neutral platshållare med publikation, år och nummer i text
+
+Toolchainen väljer källa för miniatyren (ADR 0016): ett bearbetat omslag från FTP-katalogen `Covers` om det finns, annars webbens sidbild 1 med rättningar i `coverFlags`. Transformordningen är alltid vridning, beskärning, skalning. Miniatyrerna är redan rättade, så appen tillämpar inga `coverFlags` på dem.
+
+Appen använder aldrig FTP för omslag och laddar aldrig ned en PDF för att få ett omslag.
 
 ## B4. Kvalitetsläge
 
@@ -222,8 +227,9 @@ Issue
 ├── sourceKey           String, rå identitet från arkivet
 ├── sourceNames         List<String>, originalsökvägar
 ├── relatedIssueId      String?, t.ex. HighScore → motsvarande Datormagazin-nummer
+├── coverAsset          String?, miniatyr som följer med appen, t.ex. "covers/datormagazin-1989-06.webp"
 ├── coverUrl            String?, webbens sidbild 1, null om den saknas
-├── coverFlags          List<String>, t.ex. "rotated"
+├── coverFlags          List<String>, rättningar av bilden på coverUrl, t.ex. "rotate_cw"
 ├── ocrPdfUrl           String?, kanonisk läs-PDF (webbplatsen), null om den saknas
 ├── ocrPdfSize          Long?, serverns Content-Length
 ├── ocrPdfEtag          String?
@@ -243,6 +249,7 @@ Issue
 
 - `pageCount` och `spreadOffset` är nullable. Ingen kod får anta att de finns.
 - `coverUrl` och `ocrPdfUrl` är nullable. Ett nummer utan omslag har flaggan `missing_cover`, och ett nummer utan läs-PDF har flaggan `missing_ocr_pdf`.
+- Omslaget tas i första hand från `coverAsset`, i andra hand från `coverUrl`, och sist visas en platshållare (B3).
 - Appens Room-entitet är en delmängd av inventory: allt utom `sourceNames` (se FAS 1).
 - `scanPageCount` är inte samma sak som `pageCount` och får inte användas i dess ställe.
 - `Issue` innehåller aldrig personlig eller lokal data.
@@ -619,6 +626,7 @@ Läsaren är projektets viktigaste funktion och prioriteras före allt utom bibl
 
 - topprad: stäng, titel, "Sida X av Y · Z %", bokmärke, HQ
 - nedre rad: miniatyrremsa med aktuell sida i accentram, progressbar och snabbhopp till sida
+- miniatyrremsan visar den faktiska PDF-sidan, renderad ur PDF:en. Omslagsrättningar (`coverFlags`) används aldrig i läsaren.
 
 **Uppslagsläge** (liggande):
 
@@ -1073,6 +1081,7 @@ Varje fas har samma struktur:
 - återgång till baseline
 - visning av nummer som saknas (D6)
 - metadata-sökning i Sök-fliken enligt E10 steg 1
+- ett importerat `coverAsset` är bara en ledtråd: appen kontrollerar att filen finns i assets. Finns den inte används `coverUrl`, och sist platshållaren.
 
 **Klart när:**
 
@@ -1450,3 +1459,6 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-06 | Efter FAS 0B: E6: nummer med `missing_ocr_pdf` visar "PDF saknas" och ingen Läs-knapp | — |
 | 2026-10-06 | Före FAS 1: E8: raden "Omslag från Covers" ersatt med "Omslag (webbens sidbild 1)". G5: `network/` är HTTPS och FTP, där FTP bara används för HQ och Large PDF. | 0008 |
 | 2026-10-06 | FAS 2: omslagen tas fram av toolchainen och följer med i appen som miniatyrer (`coverAsset`). Källprioritet per nummer: bearbetat omslag från FTP `Covers`, annars webbens sidbild 1 med rättningar i `coverFlags`, annars platshållare. Appen laddar `coverAsset` i första hand och `coverUrl` i andra hand, och använder fortfarande aldrig FTP. Transformordning: vridning, beskärning, skalning. Ersätter omslagsbesluten från FAS 0 och 0B (B2, B3, C2). | 0016 |
+| 2026-10-06 | Före FAS 3: B2, B3 och C2 enligt ADR 0016: omslag är `coverAsset` i första hand, `coverUrl` i andra hand och platshållare sist. Toolchainen väljer källa för miniatyren. | 0016 |
+| 2026-10-06 | Före FAS 3: FAS 7: ett importerat `coverAsset` är bara en ledtråd; appen kontrollerar att filen finns i assets | 0016 |
+| 2026-10-06 | Före FAS 3: E7: miniatyrremsan i läsaren visar den faktiska PDF-sidan. `coverFlags` används aldrig i läsaren. | 0016 |
