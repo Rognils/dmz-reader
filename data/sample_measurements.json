@@ -1,0 +1,17 @@
+{
+ "comment": "Mätvärden från FAS 0-stickproven. Används bara om ocrPdfSize fortfarande stämmer med arkivets fil.",
+ "measurements": {
+  "datormagazin-1986-01": {
+   "flags": ["cover_page_rotated"],
+   "ocrPdfChecksum": "sha256:01305ec8e90b5fffcbbb9f082eef26f7d1fb2bcbcce96eaf5f2879dca0a03c46",
+   "ocrPdfSize": 15105472,
+   "pageCount": 28
+  },
+  "datormagazin-1995-14": {
+   "flags": [],
+   "ocrPdfChecksum": "sha256:45caae2020586325a2390065c72defe91f10f12ca113272e705759c98fdedaa4",
+   "ocrPdfSize": 115605773,
+   "pageCount": 84
+  }
+ }
+}

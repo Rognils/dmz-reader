@@ -1404,3 +1404,9 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-06 | V3.1: `readStatusOverride` i `IssueUserState` för manuell läst/oläst | — |
 | 2026-10-06 | V3.1: lagringsplats för permanenta PDF:er beslutas i FAS 5 utifrån filstorlekar | 0013 |
 | 2026-10-06 | V3.1: planen märkt som BASELINE och fryst | — |
+| 2026-10-06 | FAS 0: kanonisk OCR-PDF är webbplatsens `https://dmzarkivet.se/pdf/<nyckel>.pdf` för alla nummer. Appen läser den filen och search.db byggs från exakt samma filer. FTP-katalogerna `OCR PDF` och `OCR PDF v2` bevaras bara i `sourceNames`. För 1993 nr 3 gäller webbversionen. | 0008 |
+| 2026-10-06 | FAS 0: nya fält i inventory: `ocrPdfVersion` (ETag och Last-Modified för den kanoniska PDF:en), `ocrPdfFtpSource` (vilken FTP-generation webbfilen motsvarar, utifrån storlek) och det valfria `relatedIssueId` | 0008 |
+| 2026-10-06 | FAS 0: `coverUrl` är webbplatsens sidbild 1 för alla nummer. FTP-katalogen `Covers` används inte av appen i v1. Omslag har två nivåer: webbens sidbild 1, annars platshållare (ersätter de tre nivåerna i B3). | 0008 |
+| 2026-10-06 | FAS 0: HighScore är en egen publikation (`publicationId` "highscore", `publicationTitle` "HighScore"). `relatedIssueId` pekar på motsvarande Datormagazin-nummer. | 0007 |
+| 2026-10-06 | FAS 0: formatet för `issueId` fastställt som `<publicationId>-<ÅÅÅÅ>-<NN>[-<MM>][b]`. Formatet är nu permanent. | 0007 |
+| 2026-10-06 | FAS 0: `Other Magazines`, `PDFs V3`, `Löp`, `amigadiskar`, `test` och lösa filer i arkivets rot ingår inte i projektet | — |

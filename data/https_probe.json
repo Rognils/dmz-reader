@@ -1,0 +1,3922 @@
+{
+ "baseUrl": "https://dmzarkivet.se",
+ "method": "HEAD",
+ "probedAt": "2026-10-06T11:30:53Z",
+ "results": {
+  "/Covers/DMZ_1986-01-001.jpg": {
+   "content-length": "207",
+   "content-type": "text/html; charset=utf-8",
+   "status": 404
+  },
+  "/Large PDF/198601-Original.pdf": {
+   "content-length": "207",
+   "content-type": "text/html; charset=utf-8",
+   "status": 404
+  },
+  "/OCR PDF/198601.pdf": {
+   "content-length": "207",
+   "content-type": "text/html; charset=utf-8",
+   "status": 404
+  },
+  "/Original Scans/198601-Original/DMZ_1986-01-001.jpg": {
+   "content-length": "207",
+   "content-type": "text/html; charset=utf-8",
+   "status": 404
+  },
+  "/covers/DMZ_1986-01-001.jpg": {
+   "content-length": "207",
+   "content-type": "text/html; charset=utf-8",
+   "status": 404
+  },
+  "/highscore/199317/HighScore_1993-17_001.jpg": {
+   "content-length": "1007024",
+   "content-type": "image/jpeg",
+   "etag": "\"1503234111.0-1007024-1901006503\"",
+   "last-modified": "Sun, 20 Aug 2017 13:01:51 GMT",
+   "status": 200
+  },
+  "/highscore/199317/HighScore_1993-17_032.jpg": {
+   "content-length": "1194014",
+   "content-type": "image/jpeg",
+   "etag": "\"1503234131.0-1194014-1902513835\"",
+   "last-modified": "Sun, 20 Aug 2017 13:02:11 GMT",
+   "status": 200
+  },
+  "/highscore/199318/HighScore_1993-18_001.jpg": {
+   "content-length": "1047207",
+   "content-type": "image/jpeg",
+   "etag": "\"1503234131.0-1047207-1903365801\"",
+   "last-modified": "Sun, 20 Aug 2017 13:02:11 GMT",
+   "status": 200
+  },
+  "/highscore/199318/HighScore_1993-18_032.jpg": {
+   "content-length": "1309982",
+   "content-type": "image/jpeg",
+   "etag": "\"1503234150.0-1309982-1904873133\"",
+   "last-modified": "Sun, 20 Aug 2017 13:02:30 GMT",
+   "status": 200
+  },
+  "/highscore/199319/HighScore_1993-19_001.jpg": {
+   "content-length": "1092149",
+   "content-type": "image/jpeg",
+   "etag": "\"1503234150.0-1092149-1905725099\"",
+   "last-modified": "Sun, 20 Aug 2017 13:02:30 GMT",
+   "status": 200
+  },
+  "/highscore/199319/HighScore_1993-19_032.jpg": {
+   "content-length": "791159",
+   "content-type": "image/jpeg",
+   "etag": "\"1503234171.0-791159-1907232431\"",
+   "last-modified": "Sun, 20 Aug 2017 13:02:51 GMT",
+   "status": 200
+  },
+  "/highscore/199320/HighScore_1993-20_001.jpg": {
+   "content-length": "1164319",
+   "content-type": "image/jpeg",
+   "etag": "\"1495721405.0-1164319-1886981787\"",
+   "last-modified": "Thu, 25 May 2017 14:10:05 GMT",
+   "status": 200
+  },
+  "/highscore/199320/HighScore_1993-20_032.jpg": {
+   "content-length": "843341",
+   "content-type": "image/jpeg",
+   "etag": "\"1495721408.0-843341-1888489119\"",
+   "last-modified": "Thu, 25 May 2017 14:10:08 GMT",
+   "status": 200
+  },
+  "/highscore/199321/HighScore_1993-21_001.jpg": {
+   "content-length": "1054116",
+   "content-type": "image/jpeg",
+   "etag": "\"1503234171.0-1054116-1889341085\"",
+   "last-modified": "Sun, 20 Aug 2017 13:02:51 GMT",
+   "status": 200
+  },
+  "/highscore/199321/HighScore_1993-21_032.jpg": {
+   "content-length": "1150987",
+   "content-type": "image/jpeg",
+   "etag": "\"1503234191.0-1150987-1890848417\"",
+   "last-modified": "Sun, 20 Aug 2017 13:03:11 GMT",
+   "status": 200
+  },
+  "/highscore/199322/HighScore_1993-22_001.jpg": {
+   "content-length": "1142839",
+   "content-type": "image/jpeg",
+   "etag": "\"1503234191.0-1142839-1891700383\"",
+   "last-modified": "Sun, 20 Aug 2017 13:03:11 GMT",
+   "status": 200
+  },
+  "/highscore/199322/HighScore_1993-22_032.jpg": {
+   "content-length": "1013892",
+   "content-type": "image/jpeg",
+   "etag": "\"1503234210.0-1013892-1893207715\"",
+   "last-modified": "Sun, 20 Aug 2017 13:03:30 GMT",
+   "status": 200
+  },
+  "/highscore/199401/HighScore_1994-01_001.jpg": {
+   "content-length": "1217922",
+   "content-type": "image/jpeg",
+   "etag": "\"1495721409.0-1217922-1887047323\"",
+   "last-modified": "Thu, 25 May 2017 14:10:09 GMT",
+   "status": 200
+  },
+  "/highscore/199401/HighScore_1994-01_032.jpg": {
+   "content-length": "1172125",
+   "content-type": "image/jpeg",
+   "etag": "\"1495721411.0-1172125-1888554655\"",
+   "last-modified": "Thu, 25 May 2017 14:10:11 GMT",
+   "status": 200
+  },
+  "/highscore/199402/HighScore_1994-02_001.jpg": {
+   "content-length": "1147558",
+   "content-type": "image/jpeg",
+   "etag": "\"1495721411.0-1147558-1889406621\"",
+   "last-modified": "Thu, 25 May 2017 14:10:11 GMT",
+   "status": 200
+  },
+  "/highscore/199402/HighScore_1994-02_032.jpg": {
+   "content-length": "1015176",
+   "content-type": "image/jpeg",
+   "etag": "\"1495721414.0-1015176-1890913953\"",
+   "last-modified": "Thu, 25 May 2017 14:10:14 GMT",
+   "status": 200
+  },
+  "/highscore/199403/HighScore_1994-03_001.jpg": {
+   "content-length": "1238020",
+   "content-type": "image/jpeg",
+   "etag": "\"1495619255.0-1238020-1891765919\"",
+   "last-modified": "Wed, 24 May 2017 09:47:35 GMT",
+   "status": 200
+  },
+  "/highscore/199403/HighScore_1994-03_032.jpg": {
+   "content-length": "984190",
+   "content-type": "image/jpeg",
+   "etag": "\"1495619257.0-984190-1893273251\"",
+   "last-modified": "Wed, 24 May 2017 09:47:37 GMT",
+   "status": 200
+  },
+  "/highscore/199404/HighScore_1994-04_001.jpg": {
+   "content-length": "1139706",
+   "content-type": "image/jpeg",
+   "etag": "\"1495619257.0-1139706-1894125217\"",
+   "last-modified": "Wed, 24 May 2017 09:47:37 GMT",
+   "status": 200
+  },
+  "/highscore/199404/HighScore_1994-04_032.jpg": {
+   "content-length": "1166121",
+   "content-type": "image/jpeg",
+   "etag": "\"1495619259.0-1166121-1895632549\"",
+   "last-modified": "Wed, 24 May 2017 09:47:39 GMT",
+   "status": 200
+  },
+  "/highscore/199405/HighScore_1994-05_001.jpg": {
+   "content-length": "1136207",
+   "content-type": "image/jpeg",
+   "etag": "\"1495619260.0-1136207-1896484515\"",
+   "last-modified": "Wed, 24 May 2017 09:47:40 GMT",
+   "status": 200
+  },
+  "/highscore/199405/HighScore_1994-05_032.jpg": {
+   "content-length": "883024",
+   "content-type": "image/jpeg",
+   "etag": "\"1495619262.0-883024-1897991847\"",
+   "last-modified": "Wed, 24 May 2017 09:47:42 GMT",
+   "status": 200
+  },
+  "/highscore/199406/HighScore_1994-06_001.jpg": {
+   "content-length": "1169336",
+   "content-type": "image/jpeg",
+   "etag": "\"1495619262.0-1169336-1898843813\"",
+   "last-modified": "Wed, 24 May 2017 09:47:42 GMT",
+   "status": 200
+  },
+  "/highscore/199406/HighScore_1994-06_032.jpg": {
+   "content-length": "1161156",
+   "content-type": "image/jpeg",
+   "etag": "\"1495619265.0-1161156-1900351145\"",
+   "last-modified": "Wed, 24 May 2017 09:47:45 GMT",
+   "status": 200
+  },
+  "/highscore/199407/HighScore_1994-07_001.jpg": {
+   "content-length": "1080281",
+   "content-type": "image/jpeg",
+   "etag": "\"1495619265.0-1080281-1901203111\"",
+   "last-modified": "Wed, 24 May 2017 09:47:45 GMT",
+   "status": 200
+  },
+  "/highscore/199407/HighScore_1994-07_032.jpg": {
+   "content-length": "1150309",
+   "content-type": "image/jpeg",
+   "etag": "\"1495619267.0-1150309-1902710443\"",
+   "last-modified": "Wed, 24 May 2017 09:47:47 GMT",
+   "status": 200
+  },
+  "/highscore/199408/HighScore_1994-08_001.jpg": {
+   "content-length": "1121415",
+   "content-type": "image/jpeg",
+   "etag": "\"1495721414.0-1121415-1903562409\"",
+   "last-modified": "Thu, 25 May 2017 14:10:14 GMT",
+   "status": 200
+  },
+  "/highscore/199408/HighScore_1994-08_032.jpg": {
+   "content-length": "1158970",
+   "content-type": "image/jpeg",
+   "etag": "\"1495721417.0-1158970-1905069741\"",
+   "last-modified": "Thu, 25 May 2017 14:10:17 GMT",
+   "status": 200
+  },
+  "/magazines/198601/DMZ_1986-01-001.jpg": {
+   "content-length": "1072646",
+   "content-type": "image/jpeg",
+   "etag": "\"1489655288.0-1072646-222366685\"",
+   "last-modified": "Thu, 16 Mar 2017 09:08:08 GMT",
+   "status": 200
+  },
+  "/magazines/198601/DMZ_1986-01-028.jpg": {
+   "content-length": "1130145",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492657.0-1130145-225446886\"",
+   "last-modified": "Tue, 14 Mar 2017 11:57:37 GMT",
+   "status": 200
+  },
+  "/magazines/198602/DMZ_1986-02-001.jpg": {
+   "content-length": "1067858",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492658.0-1067858-224332767\"",
+   "last-modified": "Tue, 14 Mar 2017 11:57:38 GMT",
+   "status": 200
+  },
+  "/magazines/198602/DMZ_1986-02-032.jpg": {
+   "content-length": "1018100",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492684.0-1018100-225840099\"",
+   "last-modified": "Tue, 14 Mar 2017 11:58:04 GMT",
+   "status": 200
+  },
+  "/magazines/198603/DMZ_1986-03-001.jpg": {
+   "content-length": "1018668",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492685.0-1018668-226298849\"",
+   "last-modified": "Tue, 14 Mar 2017 11:58:05 GMT",
+   "status": 200
+  },
+  "/magazines/198603/DMZ_1986-03-032.jpg": {
+   "content-length": "1075130",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492711.0-1075130-227806181\"",
+   "last-modified": "Tue, 14 Mar 2017 11:58:31 GMT",
+   "status": 200
+  },
+  "/magazines/198604/DMZ_1986-04-001.jpg": {
+   "content-length": "1031054",
+   "content-type": "image/jpeg",
+   "etag": "\"1489602088.0-1031054-228264931\"",
+   "last-modified": "Wed, 15 Mar 2017 18:21:28 GMT",
+   "status": 200
+  },
+  "/magazines/198604/DMZ_1986-04-033.jpg": {
+   "content-length": "1215242",
+   "content-type": "image/jpeg",
+   "etag": "\"1489602118.0-1215242-230099944\"",
+   "last-modified": "Wed, 15 Mar 2017 18:21:58 GMT",
+   "status": 200
+  },
+  "/magazines/198701/DMZ_1987-01-001.jpg": {
+   "content-length": "1055918",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492712.0-1055918-224660447\"",
+   "last-modified": "Tue, 14 Mar 2017 11:58:32 GMT",
+   "status": 200
+  },
+  "/magazines/198701/DMZ_1987-01-036.jpg": {
+   "content-length": "1015240",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492742.0-1015240-227478503\"",
+   "last-modified": "Tue, 14 Mar 2017 11:59:02 GMT",
+   "status": 200
+  },
+  "/magazines/198702/DMZ_1987-02-001.jpg": {
+   "content-length": "1154080",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492743.0-1154080-226626529\"",
+   "last-modified": "Tue, 14 Mar 2017 11:59:03 GMT",
+   "status": 200
+  },
+  "/magazines/198702/DMZ_1987-02-040.jpg": {
+   "content-length": "1167213",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492776.0-1167213-227871716\"",
+   "last-modified": "Tue, 14 Mar 2017 11:59:36 GMT",
+   "status": 200
+  },
+  "/magazines/198703/DMZ_1987-03-001.jpg": {
+   "content-length": "1103466",
+   "content-type": "image/jpeg",
+   "etag": "\"1490098123.0-1103466-228592611\"",
+   "last-modified": "Tue, 21 Mar 2017 12:08:43 GMT",
+   "status": 200
+  },
+  "/magazines/198703/DMZ_1987-03-040.jpg": {
+   "content-length": "1137266",
+   "content-type": "image/jpeg",
+   "etag": "\"1490098176.0-1137266-229837798\"",
+   "last-modified": "Tue, 21 Mar 2017 12:09:36 GMT",
+   "status": 200
+  },
+  "/magazines/19870405/DMZ_1987-04-001.jpg": {
+   "content-length": "1314899",
+   "content-type": "image/jpeg",
+   "etag": "\"1490182539.0-1314899-601951306\"",
+   "last-modified": "Wed, 22 Mar 2017 11:35:39 GMT",
+   "status": 200
+  },
+  "/magazines/19870405/DMZ_1987-04-048.jpg": {
+   "content-length": "1241354",
+   "content-type": "image/jpeg",
+   "etag": "\"1490182607.0-1241354-605817941\"",
+   "last-modified": "Wed, 22 Mar 2017 11:36:47 GMT",
+   "status": 200
+  },
+  "/magazines/198706/DMZ_1987-06-001.jpg": {
+   "content-length": "1119272",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492777.0-1119272-234490857\"",
+   "last-modified": "Tue, 14 Mar 2017 11:59:37 GMT",
+   "status": 200
+  },
+  "/magazines/198706/DMZ_1987-06-048.jpg": {
+   "content-length": "1190995",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492819.0-1190995-238357492\"",
+   "last-modified": "Tue, 14 Mar 2017 12:00:19 GMT",
+   "status": 200
+  },
+  "/magazines/198707/DMZ_1987-07-01.jpg": {
+   "content-length": "1085171",
+   "content-type": "image/jpeg",
+   "etag": "\"1501756693.0-1085171-48040891\"",
+   "last-modified": "Thu, 03 Aug 2017 10:38:13 GMT",
+   "status": 200
+  },
+  "/magazines/198707/DMZ_1987-07-48.jpg": {
+   "content-length": "1115706",
+   "content-type": "image/jpeg",
+   "etag": "\"1501756717.0-1115706-51907526\"",
+   "last-modified": "Thu, 03 Aug 2017 10:38:37 GMT",
+   "status": 200
+  },
+  "/magazines/198708/DMZ_1987-08-01.jpg": {
+   "content-length": "1136753",
+   "content-type": "image/jpeg",
+   "etag": "\"1501764411.0-1136753-49875901\"",
+   "last-modified": "Thu, 03 Aug 2017 12:46:51 GMT",
+   "status": 200
+  },
+  "/magazines/198708/DMZ_1987-08-48.jpg": {
+   "content-length": "1169439",
+   "content-type": "image/jpeg",
+   "etag": "\"1501764434.0-1169439-53742536\"",
+   "last-modified": "Thu, 03 Aug 2017 12:47:14 GMT",
+   "status": 200
+  },
+  "/magazines/198709/DMZ_1987-09-001.jpg": {
+   "content-length": "274419",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958815.0-274419-240389103\"",
+   "last-modified": "Sat, 09 Sep 2017 12:06:55 GMT",
+   "status": 200
+  },
+  "/magazines/198709/DMZ_1987-09-048.jpg": {
+   "content-length": "274987",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958816.0-274987-244255738\"",
+   "last-modified": "Sat, 09 Sep 2017 12:06:56 GMT",
+   "status": 200
+  },
+  "/magazines/198710/DMZ_1987-10-001.jpg": {
+   "content-length": "267624",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958816.0-267624-224791519\"",
+   "last-modified": "Sat, 09 Sep 2017 12:06:56 GMT",
+   "status": 200
+  },
+  "/magazines/198710/DMZ_1987-10-044.jpg": {
+   "content-length": "265028",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958816.0-265028-227347430\"",
+   "last-modified": "Sat, 09 Sep 2017 12:06:56 GMT",
+   "status": 200
+  },
+  "/magazines/198710b/DMZ_1987-10b-001.jpg": {
+   "content-length": "270125",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958816.0-270125-700976291\"",
+   "last-modified": "Sat, 09 Sep 2017 12:06:56 GMT",
+   "status": 200
+  },
+  "/magazines/198710b/DMZ_1987-10b-044.jpg": {
+   "content-length": "229423",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958817.0-229423-703532202\"",
+   "last-modified": "Sat, 09 Sep 2017 12:06:57 GMT",
+   "status": 200
+  },
+  "/magazines/198801/DMZ_1988-01-001.jpg": {
+   "content-length": "1106752",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492820.0-1106752-226954209\"",
+   "last-modified": "Tue, 14 Mar 2017 12:00:20 GMT",
+   "status": 200
+  },
+  "/magazines/198801/DMZ_1988-01-044.jpg": {
+   "content-length": "1089049",
+   "content-type": "image/jpeg",
+   "etag": "\"1489492857.0-1089049-229510120\"",
+   "last-modified": "Tue, 14 Mar 2017 12:00:57 GMT",
+   "status": 200
+  },
+  "/magazines/198802/DMZ_1988-02-001.jpg": {
+   "content-length": "956013",
+   "content-type": "image/jpeg",
+   "etag": "\"1496737746.0-956013-228920291\"",
+   "last-modified": "Tue, 06 Jun 2017 08:29:06 GMT",
+   "status": 200
+  },
+  "/magazines/198802/DMZ_1988-02-048.jpg": {
+   "content-length": "1098128",
+   "content-type": "image/jpeg",
+   "etag": "\"1496737752.0-1098128-232786926\"",
+   "last-modified": "Tue, 06 Jun 2017 08:29:12 GMT",
+   "status": 200
+  },
+  "/magazines/198803/DMZ_1988-03-001.jpg": {
+   "content-length": "1172168",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741087.0-1172168-230886373\"",
+   "last-modified": "Tue, 06 Jun 2017 09:24:47 GMT",
+   "status": 200
+  },
+  "/magazines/198803/DMZ_1988-03-048.jpg": {
+   "content-length": "1181090",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741093.0-1181090-234753008\"",
+   "last-modified": "Tue, 06 Jun 2017 09:24:53 GMT",
+   "status": 200
+  },
+  "/magazines/198804/DMZ_1988-04-001.jpg": {
+   "content-length": "1161131",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741093.0-1161131-232852455\"",
+   "last-modified": "Tue, 06 Jun 2017 09:24:53 GMT",
+   "status": 200
+  },
+  "/magazines/198804/DMZ_1988-04-048.jpg": {
+   "content-length": "1169371",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741099.0-1169371-236719090\"",
+   "last-modified": "Tue, 06 Jun 2017 09:24:59 GMT",
+   "status": 200
+  },
+  "/magazines/198805/DMZ_1988-05-001.jpg": {
+   "content-length": "1098471",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741100.0-1098471-234818537\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:00 GMT",
+   "status": 200
+  },
+  "/magazines/198805/DMZ_1988-05-048.jpg": {
+   "content-length": "1169848",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741106.0-1169848-238685172\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:06 GMT",
+   "status": 200
+  },
+  "/magazines/198806/DMZ_1988-06-001.jpg": {
+   "content-length": "1144401",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741106.0-1144401-236784619\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:06 GMT",
+   "status": 200
+  },
+  "/magazines/198806/DMZ_1988-06-048.jpg": {
+   "content-length": "1191159",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741113.0-1191159-240651254\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:13 GMT",
+   "status": 200
+  },
+  "/magazines/198807/DMZ_1988-07-001.jpg": {
+   "content-length": "1172952",
+   "content-type": "image/jpeg",
+   "etag": "\"1492345925.0-1172952-238750701\"",
+   "last-modified": "Sun, 16 Apr 2017 12:32:05 GMT",
+   "status": 200
+  },
+  "/magazines/198807/DMZ_1988-07-044.jpg": {
+   "content-length": "1193899",
+   "content-type": "image/jpeg",
+   "etag": "\"1492345927.0-1193899-241306612\"",
+   "last-modified": "Sun, 16 Apr 2017 12:32:07 GMT",
+   "status": 200
+  },
+  "/magazines/198808/DMZ_1988-08-001.jpg": {
+   "content-length": "1117779",
+   "content-type": "image/jpeg",
+   "etag": "\"1495957709.0-1117779-240716783\"",
+   "last-modified": "Sun, 28 May 2017 07:48:29 GMT",
+   "status": 200
+  },
+  "/magazines/198808/DMZ_1988-08-040.jpg": {
+   "content-length": "1096435",
+   "content-type": "image/jpeg",
+   "etag": "\"1495957713.0-1096435-241961970\"",
+   "last-modified": "Sun, 28 May 2017 07:48:33 GMT",
+   "status": 200
+  },
+  "/magazines/198809/DMZ_1988-09-001.jpg": {
+   "content-length": "282141",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958817.0-282141-242682865\"",
+   "last-modified": "Sat, 09 Sep 2017 12:06:57 GMT",
+   "status": 200
+  },
+  "/magazines/198809/DMZ_1988-09-040.jpg": {
+   "content-length": "278540",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958818.0-278540-243928052\"",
+   "last-modified": "Sat, 09 Sep 2017 12:06:58 GMT",
+   "status": 200
+  },
+  "/magazines/198810/DMZ_1988-10-001.jpg": {
+   "content-length": "300451",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958818.0-300451-227085281\"",
+   "last-modified": "Sat, 09 Sep 2017 12:06:58 GMT",
+   "status": 200
+  },
+  "/magazines/198810/DMZ_1988-10-040.jpg": {
+   "content-length": "288902",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958819.0-288902-228330468\"",
+   "last-modified": "Sat, 09 Sep 2017 12:06:59 GMT",
+   "status": 200
+  },
+  "/magazines/198811/DMZ_1988-11-001.jpg": {
+   "content-length": "1238119",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741113.0-1238119-229051363\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:13 GMT",
+   "status": 200
+  },
+  "/magazines/198811/DMZ_1988-11-048.jpg": {
+   "content-length": "1065155",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741119.0-1065155-232917998\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:19 GMT",
+   "status": 200
+  },
+  "/magazines/198812/DMZ_1988-12-001.jpg": {
+   "content-length": "1146370",
+   "content-type": "image/jpeg",
+   "etag": "\"1491131125.0-1146370-231017445\"",
+   "last-modified": "Sun, 02 Apr 2017 11:05:25 GMT",
+   "status": 200
+  },
+  "/magazines/198812/DMZ_1988-12-048.jpg": {
+   "content-length": "1208308",
+   "content-type": "image/jpeg",
+   "etag": "\"1491131222.0-1208308-234884080\"",
+   "last-modified": "Sun, 02 Apr 2017 11:07:02 GMT",
+   "status": 200
+  },
+  "/magazines/198813/DMZ_1988-13-001.jpg": {
+   "content-length": "246588",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958819.0-246588-232983527\"",
+   "last-modified": "Sat, 09 Sep 2017 12:06:59 GMT",
+   "status": 200
+  },
+  "/magazines/198813/DMZ_1988-13-048.jpg": {
+   "content-length": "273125",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958820.0-273125-236850162\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:00 GMT",
+   "status": 200
+  },
+  "/magazines/198814/DMZ_1988-14-001.jpg": {
+   "content-length": "1056914",
+   "content-type": "image/jpeg",
+   "etag": "\"1491058925.0-1056914-234949609\"",
+   "last-modified": "Sat, 01 Apr 2017 15:02:05 GMT",
+   "status": 200
+  },
+  "/magazines/198814/DMZ_1988-14-048.jpg": {
+   "content-length": "1145195",
+   "content-type": "image/jpeg",
+   "etag": "\"1491059016.0-1145195-238816244\"",
+   "last-modified": "Sat, 01 Apr 2017 15:03:36 GMT",
+   "status": 200
+  },
+  "/magazines/198815/DMZ_1988-15-001.jpg": {
+   "content-length": "227116",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958820.0-227116-236915691\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:00 GMT",
+   "status": 200
+  },
+  "/magazines/198815/DMZ_1988-15-048.jpg": {
+   "content-length": "298834",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958822.0-298834-240782326\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:02 GMT",
+   "status": 200
+  },
+  "/magazines/19881617/DMZ_1988-1617-001.jpg": {
+   "content-length": "1147119",
+   "content-type": "image/jpeg",
+   "etag": "\"1491060757.0-1147119-1020333245\"",
+   "last-modified": "Sat, 01 Apr 2017 15:32:37 GMT",
+   "status": 200
+  },
+  "/magazines/19881617/DMZ_1988-1617-048.jpg": {
+   "content-length": "1020371",
+   "content-type": "image/jpeg",
+   "etag": "\"1491060847.0-1020371-1024199880\"",
+   "last-modified": "Sat, 01 Apr 2017 15:34:07 GMT",
+   "status": 200
+  },
+  "/magazines/198901/DMZ_1989-01-001.jpg": {
+   "content-length": "1068445",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741120.0-1068445-229247971\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:20 GMT",
+   "status": 200
+  },
+  "/magazines/198901/DMZ_1989-01-048.jpg": {
+   "content-length": "1208064",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741128.0-1208064-233114606\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:28 GMT",
+   "status": 200
+  },
+  "/magazines/198902/DMZ_1989-02-001.jpg": {
+   "content-length": "247468",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958822.0-247468-231214053\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:02 GMT",
+   "status": 200
+  },
+  "/magazines/198902/DMZ_1989-02-048.jpg": {
+   "content-length": "267734",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958824.0-267734-235080688\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:04 GMT",
+   "status": 200
+  },
+  "/magazines/198903/DMZ_1989-03-001.jpg": {
+   "content-length": "1158670",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741128.0-1158670-233180135\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:28 GMT",
+   "status": 200
+  },
+  "/magazines/198903/DMZ_1989-03-048.jpg": {
+   "content-length": "1058384",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741135.0-1058384-237046770\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:35 GMT",
+   "status": 200
+  },
+  "/magazines/198904/DMZ_1989-04-001.jpg": {
+   "content-length": "283424",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958824.0-283424-235146217\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:04 GMT",
+   "status": 200
+  },
+  "/magazines/198904/DMZ_1989-04-048.jpg": {
+   "content-length": "299665",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958825.0-299665-239012852\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:05 GMT",
+   "status": 200
+  },
+  "/magazines/198905/DMZ_1989-05-001.jpg": {
+   "content-length": "263658",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958825.0-263658-237112299\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:05 GMT",
+   "status": 200
+  },
+  "/magazines/198905/DMZ_1989-05-048.jpg": {
+   "content-length": "263233",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958826.0-263233-240978934\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:06 GMT",
+   "status": 200
+  },
+  "/magazines/198906/DMZ_1989-06-001.jpg": {
+   "content-length": "1130641",
+   "content-type": "image/jpeg",
+   "etag": "\"1492278427.0-1130641-239078381\"",
+   "last-modified": "Sat, 15 Apr 2017 17:47:07 GMT",
+   "status": 200
+  },
+  "/magazines/198906/DMZ_1989-06-048.jpg": {
+   "content-length": "1184170",
+   "content-type": "image/jpeg",
+   "etag": "\"1492278429.0-1184170-242945016\"",
+   "last-modified": "Sat, 15 Apr 2017 17:47:09 GMT",
+   "status": 200
+  },
+  "/magazines/198907/DMZ_1989-07-001.jpg": {
+   "content-length": "1182630",
+   "content-type": "image/jpeg",
+   "etag": "\"1492278429.0-1182630-241044463\"",
+   "last-modified": "Sat, 15 Apr 2017 17:47:09 GMT",
+   "status": 200
+  },
+  "/magazines/198907/DMZ_1989-07-048.jpg": {
+   "content-length": "1109345",
+   "content-type": "image/jpeg",
+   "etag": "\"1492278431.0-1109345-244911098\"",
+   "last-modified": "Sat, 15 Apr 2017 17:47:11 GMT",
+   "status": 200
+  },
+  "/magazines/198908/DMZ_1989-08-001.jpg": {
+   "content-length": "253669",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958826.0-253669-243010545\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:06 GMT",
+   "status": 200
+  },
+  "/magazines/198908/DMZ_1989-08-048.jpg": {
+   "content-length": "230474",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958828.0-230474-246877180\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:08 GMT",
+   "status": 200
+  },
+  "/magazines/198909/DMZ_1989-09-001.jpg": {
+   "content-length": "1181331",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741136.0-1181331-244976627\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:36 GMT",
+   "status": 200
+  },
+  "/magazines/198909/DMZ_1989-09-040.jpg": {
+   "content-length": "1108680",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741141.0-1108680-246221814\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:41 GMT",
+   "status": 200
+  },
+  "/magazines/198910/DMZ_1989-10-001.jpg": {
+   "content-length": "263753",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958828.0-263753-229379043\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:08 GMT",
+   "status": 200
+  },
+  "/magazines/198910/DMZ_1989-10-040.jpg": {
+   "content-length": "286725",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958829.0-286725-230624230\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:09 GMT",
+   "status": 200
+  },
+  "/magazines/198911/DMZ_1989-11-001.jpg": {
+   "content-length": "1170869",
+   "content-type": "image/jpeg",
+   "etag": "\"1490182889.0-1170869-231345125\"",
+   "last-modified": "Wed, 22 Mar 2017 11:41:29 GMT",
+   "status": 200
+  },
+  "/magazines/198911/DMZ_1989-11-044.jpg": {
+   "content-length": "1251175",
+   "content-type": "image/jpeg",
+   "etag": "\"1490182954.0-1251175-233901036\"",
+   "last-modified": "Wed, 22 Mar 2017 11:42:34 GMT",
+   "status": 200
+  },
+  "/magazines/198912/DMZ_1989-12-001.jpg": {
+   "content-length": "1077124",
+   "content-type": "image/jpeg",
+   "etag": "\"1492345927.0-1077124-233311207\"",
+   "last-modified": "Sun, 16 Apr 2017 12:32:07 GMT",
+   "status": 200
+  },
+  "/magazines/198912/DMZ_1989-12-048.jpg": {
+   "content-length": "1139627",
+   "content-type": "image/jpeg",
+   "etag": "\"1492345929.0-1139627-237177842\"",
+   "last-modified": "Sun, 16 Apr 2017 12:32:09 GMT",
+   "status": 200
+  },
+  "/magazines/198913/DMZ_1989-13-001.jpg": {
+   "content-length": "236983",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958829.0-236983-235277289\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:09 GMT",
+   "status": 200
+  },
+  "/magazines/198913/DMZ_1989-13-048.jpg": {
+   "content-length": "283136",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958830.0-283136-239143924\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:10 GMT",
+   "status": 200
+  },
+  "/magazines/198914/DMZ_1989-14-001.jpg": {
+   "content-length": "252231",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958830.0-252231-237243371\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:10 GMT",
+   "status": 200
+  },
+  "/magazines/198914/DMZ_1989-14-048.jpg": {
+   "content-length": "265140",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958832.0-265140-241110006\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:12 GMT",
+   "status": 200
+  },
+  "/magazines/198915/DMZ_1989-15-001.jpg": {
+   "content-length": "1000335",
+   "content-type": "image/jpeg",
+   "etag": "\"1492345929.0-1000335-239209453\"",
+   "last-modified": "Sun, 16 Apr 2017 12:32:09 GMT",
+   "status": 200
+  },
+  "/magazines/198915/DMZ_1989-15-048.jpg": {
+   "content-length": "1188246",
+   "content-type": "image/jpeg",
+   "etag": "\"1492345931.0-1188246-243076088\"",
+   "last-modified": "Sun, 16 Apr 2017 12:32:11 GMT",
+   "status": 200
+  },
+  "/magazines/198916/DMZ_1989-16-001.jpg": {
+   "content-length": "233916",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958832.0-233916-241175535\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:12 GMT",
+   "status": 200
+  },
+  "/magazines/198916/DMZ_1989-16-048.jpg": {
+   "content-length": "267005",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958834.0-267005-245042170\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:14 GMT",
+   "status": 200
+  },
+  "/magazines/198916b/DMZ_1989-16b-001.jpg": {
+   "content-length": "248711",
+   "content-type": "image/jpeg",
+   "etag": "\"1507184037.0-248711-718933171\"",
+   "last-modified": "Thu, 05 Oct 2017 06:13:57 GMT",
+   "status": 200
+  },
+  "/magazines/198916b/DMZ_1989-16b-036.jpg": {
+   "content-length": "293988",
+   "content-type": "image/jpeg",
+   "etag": "\"1507184039.0-293988-721751227\"",
+   "last-modified": "Thu, 05 Oct 2017 06:13:59 GMT",
+   "status": 200
+  },
+  "/magazines/198917/DMZ_1989-17-001.jpg": {
+   "content-length": "239163",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958834.0-239163-243141617\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:14 GMT",
+   "status": 200
+  },
+  "/magazines/198917/DMZ_1989-17-048.jpg": {
+   "content-length": "291477",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958836.0-291477-247008252\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:16 GMT",
+   "status": 200
+  },
+  "/magazines/198918/DMZ_1989-18-001.jpg": {
+   "content-length": "1074515",
+   "content-type": "image/jpeg",
+   "etag": "\"1492345931.0-1074515-245107699\"",
+   "last-modified": "Sun, 16 Apr 2017 12:32:11 GMT",
+   "status": 200
+  },
+  "/magazines/198918/DMZ_1989-18-040.jpg": {
+   "content-length": "1094875",
+   "content-type": "image/jpeg",
+   "etag": "\"1492345933.0-1094875-246352886\"",
+   "last-modified": "Sun, 16 Apr 2017 12:32:13 GMT",
+   "status": 200
+  },
+  "/magazines/199001/DMZ_1990-01-001.jpg": {
+   "content-length": "575705",
+   "content-type": "image/jpeg",
+   "etag": "\"1489837877.0-575705-211028947\"",
+   "last-modified": "Sat, 18 Mar 2017 11:51:17 GMT",
+   "status": 200
+  },
+  "/magazines/199001/DMZ_1990-01-036.jpg": {
+   "content-length": "1103843",
+   "content-type": "image/jpeg",
+   "etag": "\"1489837923.0-1103843-213847003\"",
+   "last-modified": "Sat, 18 Mar 2017 11:52:03 GMT",
+   "status": 200
+  },
+  "/magazines/199002/DMZ_1990-02-001.jpg": {
+   "content-length": "587627",
+   "content-type": "image/jpeg",
+   "etag": "\"1489837924.0-587627-212995029\"",
+   "last-modified": "Sat, 18 Mar 2017 11:52:04 GMT",
+   "status": 200
+  },
+  "/magazines/199002/DMZ_1990-02-036.jpg": {
+   "content-length": "1110631",
+   "content-type": "image/jpeg",
+   "etag": "\"1489837969.0-1110631-215813085\"",
+   "last-modified": "Sat, 18 Mar 2017 11:52:49 GMT",
+   "status": 200
+  },
+  "/magazines/199003/DMZ_1990-03-001.jpg": {
+   "content-length": "317379",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958836.0-317379-214961111\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:16 GMT",
+   "status": 200
+  },
+  "/magazines/199003/DMZ_1990-03-044.jpg": {
+   "content-length": "301303",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958837.0-301303-217517022\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:17 GMT",
+   "status": 200
+  },
+  "/magazines/199004/DMZ_1990-04-001.jpg": {
+   "content-length": "297561",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958837.0-297561-216927193\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:17 GMT",
+   "status": 200
+  },
+  "/magazines/199004/DMZ_1990-04-044.jpg": {
+   "content-length": "304763",
+   "content-type": "image/jpeg",
+   "etag": "\"1504958839.0-304763-219483104\"",
+   "last-modified": "Sat, 09 Sep 2017 12:07:19 GMT",
+   "status": 200
+  },
+  "/magazines/199005/DMZ_1990-05-001.jpg": {
+   "content-length": "570535",
+   "content-type": "image/jpeg",
+   "etag": "\"1489837970.0-570535-218893275\"",
+   "last-modified": "Sat, 18 Mar 2017 11:52:50 GMT",
+   "status": 200
+  },
+  "/magazines/199005/DMZ_1990-05-044.jpg": {
+   "content-length": "1229388",
+   "content-type": "image/jpeg",
+   "etag": "\"1489838026.0-1229388-221449186\"",
+   "last-modified": "Sat, 18 Mar 2017 11:53:46 GMT",
+   "status": 200
+  },
+  "/magazines/199006/DMZ_1990-06-001.jpg": {
+   "content-length": "540808",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741142.0-540808-220859357\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:42 GMT",
+   "status": 200
+  },
+  "/magazines/199006/DMZ_1990-06-044.jpg": {
+   "content-length": "1180175",
+   "content-type": "image/jpeg",
+   "etag": "\"1496741148.0-1180175-223415268\"",
+   "last-modified": "Tue, 06 Jun 2017 09:25:48 GMT",
+   "status": 200
+  },
+  "/magazines/199007/DMZ_1990-07-001.jpg": {
+   "content-length": "567876",
+   "content-type": "image/jpeg",
+   "etag": "\"1489838085.0-567876-222825439\"",
+   "last-modified": "Sat, 18 Mar 2017 11:54:45 GMT",
+   "status": 200
+  },
+  "/magazines/199007/DMZ_1990-07-044.jpg": {
+   "content-length": "1164889",
+   "content-type": "image/jpeg",
+   "etag": "\"1489838142.0-1164889-225381350\"",
+   "last-modified": "Sat, 18 Mar 2017 11:55:42 GMT",
+   "status": 200
+  },
+  "/magazines/199008/DMZ_1990-08-001.jpg": {
+   "content-length": "936852",
+   "content-type": "image/jpeg",
+   "etag": "\"1490502219.0-936852-224791521\"",
+   "last-modified": "Sun, 26 Mar 2017 04:23:39 GMT",
+   "status": 200
+  },
+  "/magazines/199008/DMZ_1990-08-048.jpg": {
+   "content-length": "976725",
+   "content-type": "image/jpeg",
+   "etag": "\"1490502298.0-976725-228658156\"",
+   "last-modified": "Sun, 26 Mar 2017 04:24:58 GMT",
+   "status": 200
+  },
+  "/magazines/199009/DMZ_1990-09-001.jpg": {
+   "content-length": "542429",
+   "content-type": "image/jpeg",
+   "etag": "\"1489838144.0-542429-226757603\"",
+   "last-modified": "Sat, 18 Mar 2017 11:55:44 GMT",
+   "status": 200
+  },
+  "/magazines/199009/DMZ_1990-09-048.jpg": {
+   "content-length": "1207890",
+   "content-type": "image/jpeg",
+   "etag": "\"1489838207.0-1207890-230624238\"",
+   "last-modified": "Sat, 18 Mar 2017 11:56:47 GMT",
+   "status": 200
+  },
+  "/magazines/199010/DMZ_1990-10-001.jpg": {
+   "content-length": "895143",
+   "content-type": "image/jpeg",
+   "etag": "\"1490502300.0-895143-211160019\"",
+   "last-modified": "Sun, 26 Mar 2017 04:25:00 GMT",
+   "status": 200
+  },
+  "/magazines/199010/DMZ_1990-10-044.jpg": {
+   "content-length": "772081",
+   "content-type": "image/jpeg",
+   "etag": "\"1490502374.0-772081-213715930\"",
+   "last-modified": "Sun, 26 Mar 2017 04:26:14 GMT",
+   "status": 200
+  },
+  "/magazines/199011/DMZ_1990-11-001.jpg": {
+   "content-length": "1747937",
+   "content-type": "image/jpeg",
+   "etag": "\"1488906046.0-1747937-213126101\"",
+   "last-modified": "Tue, 07 Mar 2017 17:00:46 GMT",
+   "status": 200
+  },
+  "/magazines/199011/DMZ_1990-11-088.jpg": {
+   "content-length": "1707928",
+   "content-type": "image/jpeg",
+   "etag": "\"1488906057.0-1707928-218565604\"",
+   "last-modified": "Tue, 07 Mar 2017 17:00:57 GMT",
+   "status": 200
+  },
+  "/magazines/199012/DMZ_1990-12-001.jpg": {
+   "content-length": "1847654",
+   "content-type": "image/jpeg",
+   "etag": "\"1488910431.0-1847654-215092183\"",
+   "last-modified": "Tue, 07 Mar 2017 18:13:51 GMT",
+   "status": 200
+  },
+  "/magazines/199012/DMZ_1990-12-088.jpg": {
+   "content-length": "1386197",
+   "content-type": "image/jpeg",
+   "etag": "\"1488910445.0-1386197-220531686\"",
+   "last-modified": "Tue, 07 Mar 2017 18:14:05 GMT",
+   "status": 200
+  },
+  "/magazines/199013/DMZ_1990-13-001.jpg": {
+   "content-length": "1674527",
+   "content-type": "image/jpeg",
+   "etag": "\"1488911472.0-1674527-217058265\"",
+   "last-modified": "Tue, 07 Mar 2017 18:31:12 GMT",
+   "status": 200
+  },
+  "/magazines/199013/DMZ_1990-13-098.jpg": {
+   "content-length": "1737586",
+   "content-type": "image/jpeg",
+   "etag": "\"1488911490.0-1737586-222890985\"",
+   "last-modified": "Tue, 07 Mar 2017 18:31:30 GMT",
+   "status": 200
+  },
+  "/magazines/199014/DMZ_1990-14-001.jpg": {
+   "content-length": "1665474",
+   "content-type": "image/jpeg",
+   "etag": "\"1488990187.0-1665474-219024347\"",
+   "last-modified": "Wed, 08 Mar 2017 16:23:07 GMT",
+   "status": 200
+  },
+  "/magazines/199014/DMZ_1990-14-088.jpg": {
+   "content-length": "1752688",
+   "content-type": "image/jpeg",
+   "etag": "\"1488990206.0-1752688-224463850\"",
+   "last-modified": "Wed, 08 Mar 2017 16:23:26 GMT",
+   "status": 200
+  },
+  "/magazines/199015/DMZ_1990-15-001.jpg": {
+   "content-length": "1590367",
+   "content-type": "image/jpeg",
+   "etag": "\"1488910445.0-1590367-220990429\"",
+   "last-modified": "Tue, 07 Mar 2017 18:14:05 GMT",
+   "status": 200
+  },
+  "/magazines/199015/DMZ_1990-15-088.jpg": {
+   "content-length": "1613917",
+   "content-type": "image/jpeg",
+   "etag": "\"1488910460.0-1613917-226429932\"",
+   "last-modified": "Tue, 07 Mar 2017 18:14:20 GMT",
+   "status": 200
+  },
+  "/magazines/199016/DMZ_1990-16-001.jpg": {
+   "content-length": "1745828",
+   "content-type": "image/jpeg",
+   "etag": "\"1488906057.0-1745828-222956511\"",
+   "last-modified": "Tue, 07 Mar 2017 17:00:57 GMT",
+   "status": 200
+  },
+  "/magazines/199016/DMZ_1990-16-088.jpg": {
+   "content-length": "1587198",
+   "content-type": "image/jpeg",
+   "etag": "\"1488906069.0-1587198-228396014\"",
+   "last-modified": "Tue, 07 Mar 2017 17:01:09 GMT",
+   "status": 200
+  },
+  "/magazines/199017/DMZ_1990-17-001.jpg": {
+   "content-length": "1709440",
+   "content-type": "image/jpeg",
+   "etag": "\"1488906069.0-1709440-224922593\"",
+   "last-modified": "Tue, 07 Mar 2017 17:01:09 GMT",
+   "status": 200
+  },
+  "/magazines/199017/DMZ_1990-17-096.jpg": {
+   "content-length": "1524076",
+   "content-type": "image/jpeg",
+   "etag": "\"1488906082.0-1524076-230099951\"",
+   "last-modified": "Tue, 07 Mar 2017 17:01:22 GMT",
+   "status": 200
+  },
+  "/magazines/199018/DMZ_1990-18-001.jpg": {
+   "content-length": "1722738",
+   "content-type": "image/jpeg",
+   "etag": "\"1488990206.0-1722738-226888675\"",
+   "last-modified": "Wed, 08 Mar 2017 16:23:26 GMT",
+   "status": 200
+  },
+  "/magazines/199018/DMZ_1990-18-104.jpg": {
+   "content-length": "1554677",
+   "content-type": "image/jpeg",
+   "etag": "\"1488990230.0-1554677-228330471\"",
+   "last-modified": "Wed, 08 Mar 2017 16:23:50 GMT",
+   "status": 200
+  },
+  "/magazines/199019/DMZ_1990-19-001.jpg": {
+   "content-length": "1644951",
+   "content-type": "image/jpeg",
+   "etag": "\"1488987782.0-1644951-228854757\"",
+   "last-modified": "Wed, 08 Mar 2017 15:43:02 GMT",
+   "status": 200
+  },
+  "/magazines/199019/DMZ_1990-19-104.jpg": {
+   "content-length": "1576744",
+   "content-type": "image/jpeg",
+   "etag": "\"1488987804.0-1576744-230296553\"",
+   "last-modified": "Wed, 08 Mar 2017 15:43:24 GMT",
+   "status": 200
+  },
+  "/magazines/199020/DMZ_1990-20-001.jpg": {
+   "content-length": "1610462",
+   "content-type": "image/jpeg",
+   "etag": "\"1490546296.0-1610462-213257173\"",
+   "last-modified": "Sun, 26 Mar 2017 16:38:16 GMT",
+   "status": 200
+  },
+  "/magazines/199020/DMZ_1990-20-088.jpg": {
+   "content-length": "1732213",
+   "content-type": "image/jpeg",
+   "etag": "\"1490546458.0-1732213-218696676\"",
+   "last-modified": "Sun, 26 Mar 2017 16:40:58 GMT",
+   "status": 200
+  },
+  "/magazines/199101/DMZ_1991-01-001.jpg": {
+   "content-length": "1186250",
+   "content-type": "image/jpeg",
+   "etag": "\"1490098178.0-1186250-213322709\"",
+   "last-modified": "Tue, 21 Mar 2017 12:09:38 GMT",
+   "status": 200
+  },
+  "/magazines/199101/DMZ_1991-01-088.jpg": {
+   "content-length": "1158533",
+   "content-type": "image/jpeg",
+   "etag": "\"1490098298.0-1158533-218762212\"",
+   "last-modified": "Tue, 21 Mar 2017 12:11:38 GMT",
+   "status": 200
+  },
+  "/magazines/199102/DMZ_1991-02-001.jpg": {
+   "content-length": "1152762",
+   "content-type": "image/jpeg",
+   "etag": "\"1495805892.0-1152762-215288791\"",
+   "last-modified": "Fri, 26 May 2017 13:38:12 GMT",
+   "status": 200
+  },
+  "/magazines/199102/DMZ_1991-02-088.jpg": {
+   "content-length": "1127534",
+   "content-type": "image/jpeg",
+   "etag": "\"1495805901.0-1127534-220728294\"",
+   "last-modified": "Fri, 26 May 2017 13:38:21 GMT",
+   "status": 200
+  },
+  "/magazines/199103/DMZ_1991-03-001.jpg": {
+   "content-length": "1094177",
+   "content-type": "image/jpeg",
+   "etag": "\"1503389323.0-1094177-217254873\"",
+   "last-modified": "Tue, 22 Aug 2017 08:08:43 GMT",
+   "status": 200
+  },
+  "/magazines/199103/DMZ_1991-03-088.jpg": {
+   "content-length": "1155928",
+   "content-type": "image/jpeg",
+   "etag": "\"1503389377.0-1155928-222694376\"",
+   "last-modified": "Tue, 22 Aug 2017 08:09:37 GMT",
+   "status": 200
+  },
+  "/magazines/199104/DMZ_1991-04-001.jpg": {
+   "content-length": "1092375",
+   "content-type": "image/jpeg",
+   "etag": "\"1489914345.0-1092375-219220955\"",
+   "last-modified": "Sun, 19 Mar 2017 09:05:45 GMT",
+   "status": 200
+  },
+  "/magazines/199104/DMZ_1991-04-088.jpg": {
+   "content-length": "1056931",
+   "content-type": "image/jpeg",
+   "etag": "\"1489914464.0-1056931-224660458\"",
+   "last-modified": "Sun, 19 Mar 2017 09:07:44 GMT",
+   "status": 200
+  },
+  "/magazines/199105/DMZ_1991-05-01.jpg": {
+   "content-length": "1029425",
+   "content-type": "image/jpeg",
+   "etag": "\"1501264754.0-1029425-33688493\"",
+   "last-modified": "Fri, 28 Jul 2017 17:59:14 GMT",
+   "status": 200
+  },
+  "/magazines/199105/DMZ_1991-05-88.jpg": {
+   "content-length": "1000025",
+   "content-type": "image/jpeg",
+   "etag": "\"1501264786.0-1000025-39127996\"",
+   "last-modified": "Fri, 28 Jul 2017 17:59:46 GMT",
+   "status": 200
+  },
+  "/magazines/199106/DMZ_1991-06-001.jpg": {
+   "content-length": "2212818",
+   "content-type": "image/jpeg",
+   "etag": "\"1488998287.0-2212818-223153119\"",
+   "last-modified": "Wed, 08 Mar 2017 18:38:07 GMT",
+   "status": 200
+  },
+  "/magazines/199106/DMZ_1991-06-080.jpg": {
+   "content-length": "1997511",
+   "content-type": "image/jpeg",
+   "etag": "\"1488998307.0-1997511-225971174\"",
+   "last-modified": "Wed, 08 Mar 2017 18:38:27 GMT",
+   "status": 200
+  },
+  "/magazines/199107/DMZ_1991-07-001.jpg": {
+   "content-length": "2130784",
+   "content-type": "image/jpeg",
+   "etag": "\"1488998307.0-2130784-225119201\"",
+   "last-modified": "Wed, 08 Mar 2017 18:38:27 GMT",
+   "status": 200
+  },
+  "/magazines/199107/DMZ_1991-07-080.jpg": {
+   "content-length": "2092719",
+   "content-type": "image/jpeg",
+   "etag": "\"1488998327.0-2092719-227937256\"",
+   "last-modified": "Wed, 08 Mar 2017 18:38:47 GMT",
+   "status": 200
+  },
+  "/magazines/199108/DMZ_1991-08-001.jpg": {
+   "content-length": "2006821",
+   "content-type": "image/jpeg",
+   "etag": "\"1488998327.0-2006821-227085283\"",
+   "last-modified": "Wed, 08 Mar 2017 18:38:47 GMT",
+   "status": 200
+  },
+  "/magazines/199108/DMZ_1991-08-080.jpg": {
+   "content-length": "2039547",
+   "content-type": "image/jpeg",
+   "etag": "\"1488998347.0-2039547-229903338\"",
+   "last-modified": "Wed, 08 Mar 2017 18:39:07 GMT",
+   "status": 200
+  },
+  "/magazines/199109/DMZ_1991-09-001.jpg": {
+   "content-length": "1930424",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155129.0-1930424-229051365\"",
+   "last-modified": "Fri, 10 Mar 2017 14:12:09 GMT",
+   "status": 200
+  },
+  "/magazines/199109/DMZ_1991-09-080.jpg": {
+   "content-length": "1603863",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155160.0-1603863-231869420\"",
+   "last-modified": "Fri, 10 Mar 2017 14:12:40 GMT",
+   "status": 200
+  },
+  "/magazines/199110/DMZ_1991-10-001.jpg": {
+   "content-length": "2032124",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072485.0-2032124-213453781\"",
+   "last-modified": "Thu, 09 Mar 2017 15:14:45 GMT",
+   "status": 200
+  },
+  "/magazines/199110/DMZ_1991-10-080.jpg": {
+   "content-length": "2075345",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072506.0-2075345-216271836\"",
+   "last-modified": "Thu, 09 Mar 2017 15:15:06 GMT",
+   "status": 200
+  },
+  "/magazines/199111/DMZ_1991-11-001.jpg": {
+   "content-length": "1245464",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916399.0-1245464-215419863\"",
+   "last-modified": "Mon, 24 Jul 2017 17:13:19 GMT",
+   "status": 200
+  },
+  "/magazines/199111/DMZ_1991-11-080.jpg": {
+   "content-length": "1026137",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916427.0-1026137-218237918\"",
+   "last-modified": "Mon, 24 Jul 2017 17:13:47 GMT",
+   "status": 200
+  },
+  "/magazines/199112/DMZ_1991-12-001.jpg": {
+   "content-length": "1181445",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916427.0-1181445-217385945\"",
+   "last-modified": "Mon, 24 Jul 2017 17:13:47 GMT",
+   "status": 200
+  },
+  "/magazines/199112/DMZ_1991-12-080.jpg": {
+   "content-length": "1118769",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916456.0-1118769-220204000\"",
+   "last-modified": "Mon, 24 Jul 2017 17:14:16 GMT",
+   "status": 200
+  },
+  "/magazines/199113/DMZ_1991-13-001.jpg": {
+   "content-length": "2089667",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072507.0-2089667-219352027\"",
+   "last-modified": "Thu, 09 Mar 2017 15:15:07 GMT",
+   "status": 200
+  },
+  "/magazines/199113/DMZ_1991-13-080.jpg": {
+   "content-length": "1737659",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072528.0-1737659-222170082\"",
+   "last-modified": "Thu, 09 Mar 2017 15:15:28 GMT",
+   "status": 200
+  },
+  "/magazines/199114/DMZ_1991-14-001.jpg": {
+   "content-length": "1156915",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916456.0-1156915-221318109\"",
+   "last-modified": "Mon, 24 Jul 2017 17:14:16 GMT",
+   "status": 200
+  },
+  "/magazines/199114/DMZ_1991-14-080.jpg": {
+   "content-length": "1149287",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916486.0-1149287-224136164\"",
+   "last-modified": "Mon, 24 Jul 2017 17:14:46 GMT",
+   "status": 200
+  },
+  "/magazines/199115/DMZ_1991-15-001.jpg": {
+   "content-length": "2103534",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072529.0-2103534-223284191\"",
+   "last-modified": "Thu, 09 Mar 2017 15:15:29 GMT",
+   "status": 200
+  },
+  "/magazines/199115/DMZ_1991-15-080.jpg": {
+   "content-length": "2289723",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072551.0-2289723-226102246\"",
+   "last-modified": "Thu, 09 Mar 2017 15:15:51 GMT",
+   "status": 200
+  },
+  "/magazines/199116/DMZ_1991-16-001.jpg": {
+   "content-length": "2187125",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072551.0-2187125-225250273\"",
+   "last-modified": "Thu, 09 Mar 2017 15:15:51 GMT",
+   "status": 200
+  },
+  "/magazines/199116/DMZ_1991-16-080.jpg": {
+   "content-length": "1958687",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072574.0-1958687-228068328\"",
+   "last-modified": "Thu, 09 Mar 2017 15:16:14 GMT",
+   "status": 200
+  },
+  "/magazines/199117/DMZ_1991-17-001.jpg": {
+   "content-length": "2111247",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072575.0-2111247-227216355\"",
+   "last-modified": "Thu, 09 Mar 2017 15:16:15 GMT",
+   "status": 200
+  },
+  "/magazines/199117/DMZ_1991-17-080.jpg": {
+   "content-length": "1663525",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072599.0-1663525-230034410\"",
+   "last-modified": "Thu, 09 Mar 2017 15:16:39 GMT",
+   "status": 200
+  },
+  "/magazines/199118/DMZ_1991-18-001.jpg": {
+   "content-length": "2099817",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072599.0-2099817-229182437\"",
+   "last-modified": "Thu, 09 Mar 2017 15:16:39 GMT",
+   "status": 200
+  },
+  "/magazines/199118/DMZ_1991-18-080.jpg": {
+   "content-length": "1659201",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072624.0-1659201-232000492\"",
+   "last-modified": "Thu, 09 Mar 2017 15:17:04 GMT",
+   "status": 200
+  },
+  "/magazines/199119/DMZ_1991-19-001.jpg": {
+   "content-length": "1116805",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916486.0-1116805-231148519\"",
+   "last-modified": "Mon, 24 Jul 2017 17:14:46 GMT",
+   "status": 200
+  },
+  "/magazines/199119/DMZ_1991-19-080.jpg": {
+   "content-length": "1157962",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916517.0-1157962-233966574\"",
+   "last-modified": "Mon, 24 Jul 2017 17:15:17 GMT",
+   "status": 200
+  },
+  "/magazines/199120/DMZ_1991-20-001.jpg": {
+   "content-length": "1156325",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916517.0-1156325-215550935\"",
+   "last-modified": "Mon, 24 Jul 2017 17:15:17 GMT",
+   "status": 200
+  },
+  "/magazines/199120/DMZ_1991-20-080.jpg": {
+   "content-length": "1234441",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916548.0-1234441-218368990\"",
+   "last-modified": "Mon, 24 Jul 2017 17:15:48 GMT",
+   "status": 200
+  },
+  "/magazines/199121/DMZ_1991-21-001.jpg": {
+   "content-length": "1098035",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916549.0-1098035-217517017\"",
+   "last-modified": "Mon, 24 Jul 2017 17:15:49 GMT",
+   "status": 200
+  },
+  "/magazines/199121/DMZ_1991-21-080.jpg": {
+   "content-length": "1146302",
+   "content-type": "image/jpeg",
+   "etag": "\"1500916580.0-1146302-220335072\"",
+   "last-modified": "Mon, 24 Jul 2017 17:16:20 GMT",
+   "status": 200
+  },
+  "/magazines/199122/DMZ_1991-22-001.jpg": {
+   "content-length": "2147589",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072625.0-2147589-219483099\"",
+   "last-modified": "Thu, 09 Mar 2017 15:17:05 GMT",
+   "status": 200
+  },
+  "/magazines/199122/DMZ_1991-22-080.jpg": {
+   "content-length": "1802607",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072653.0-1802607-222301154\"",
+   "last-modified": "Thu, 09 Mar 2017 15:17:33 GMT",
+   "status": 200
+  },
+  "/magazines/199201/DMZ_1992-01-001.jpg": {
+   "content-length": "1293023",
+   "content-type": "image/jpeg",
+   "etag": "\"1489664876.0-1293023-215616471\"",
+   "last-modified": "Thu, 16 Mar 2017 11:47:56 GMT",
+   "status": 200
+  },
+  "/magazines/199201/DMZ_1992-01-080.jpg": {
+   "content-length": "1183409",
+   "content-type": "image/jpeg",
+   "etag": "\"1489664950.0-1183409-218434526\"",
+   "last-modified": "Thu, 16 Mar 2017 11:49:10 GMT",
+   "status": 200
+  },
+  "/magazines/199202/DMZ_1992-02-001.jpg": {
+   "content-length": "1199002",
+   "content-type": "image/jpeg",
+   "etag": "\"1489595720.0-1199002-217582553\"",
+   "last-modified": "Wed, 15 Mar 2017 16:35:20 GMT",
+   "status": 200
+  },
+  "/magazines/199202/DMZ_1992-02-072.jpg": {
+   "content-length": "793000",
+   "content-type": "image/jpeg",
+   "etag": "\"1489595787.0-793000-220662753\"",
+   "last-modified": "Wed, 15 Mar 2017 16:36:27 GMT",
+   "status": 200
+  },
+  "/magazines/199203/DMZ_1992-03-001.jpg": {
+   "content-length": "1286975",
+   "content-type": "image/jpeg",
+   "etag": "\"1489664950.0-1286975-219548635\"",
+   "last-modified": "Thu, 16 Mar 2017 11:49:10 GMT",
+   "status": 200
+  },
+  "/magazines/199203/DMZ_1992-03-072.jpg": {
+   "content-length": "1086071",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665018.0-1086071-222628835\"",
+   "last-modified": "Thu, 16 Mar 2017 11:50:18 GMT",
+   "status": 200
+  },
+  "/magazines/199204/DMZ_1992-04-001.jpg": {
+   "content-length": "1296006",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665019.0-1296006-221514717\"",
+   "last-modified": "Thu, 16 Mar 2017 11:50:19 GMT",
+   "status": 200
+  },
+  "/magazines/199204/DMZ_1992-04-072.jpg": {
+   "content-length": "1054285",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665088.0-1054285-224594917\"",
+   "last-modified": "Thu, 16 Mar 2017 11:51:28 GMT",
+   "status": 200
+  },
+  "/magazines/199205/DMZ_1992-05-001.jpg": {
+   "content-length": "1273038",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665089.0-1273038-223480799\"",
+   "last-modified": "Thu, 16 Mar 2017 11:51:29 GMT",
+   "status": 200
+  },
+  "/magazines/199205/DMZ_1992-05-072.jpg": {
+   "content-length": "1123364",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665160.0-1123364-226560999\"",
+   "last-modified": "Thu, 16 Mar 2017 11:52:40 GMT",
+   "status": 200
+  },
+  "/magazines/199206/DMZ_1992-06-01.jpg": {
+   "content-length": "1301131",
+   "content-type": "image/jpeg",
+   "etag": "\"1502214806.0-1301131-37686193\"",
+   "last-modified": "Tue, 08 Aug 2017 17:53:26 GMT",
+   "status": 200
+  },
+  "/magazines/199206/DMZ_1992-06-72.jpg": {
+   "content-length": "1029728",
+   "content-type": "image/jpeg",
+   "etag": "\"1502214853.0-1029728-40766393\"",
+   "last-modified": "Tue, 08 Aug 2017 17:54:13 GMT",
+   "status": 200
+  },
+  "/magazines/199207/DMZ_1992-07-001.jpg": {
+   "content-length": "1282170",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665161.0-1282170-227412963\"",
+   "last-modified": "Thu, 16 Mar 2017 11:52:41 GMT",
+   "status": 200
+  },
+  "/magazines/199207/DMZ_1992-07-072.jpg": {
+   "content-length": "1132754",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665232.0-1132754-230493163\"",
+   "last-modified": "Thu, 16 Mar 2017 11:53:52 GMT",
+   "status": 200
+  },
+  "/magazines/199208/DMZ_1992-08-001.jpg": {
+   "content-length": "1310890",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665233.0-1310890-229379045\"",
+   "last-modified": "Thu, 16 Mar 2017 11:53:53 GMT",
+   "status": 200
+  },
+  "/magazines/199208/DMZ_1992-08-072.jpg": {
+   "content-length": "1063983",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665306.0-1063983-232459245\"",
+   "last-modified": "Thu, 16 Mar 2017 11:55:06 GMT",
+   "status": 200
+  },
+  "/magazines/199209/DMZ_1992-09-01.jpg": {
+   "content-length": "1254053",
+   "content-type": "image/jpeg",
+   "etag": "\"1502214854.0-1254053-43191223\"",
+   "last-modified": "Tue, 08 Aug 2017 17:54:14 GMT",
+   "status": 200
+  },
+  "/magazines/199209/DMZ_1992-09-72.jpg": {
+   "content-length": "1068567",
+   "content-type": "image/jpeg",
+   "etag": "\"1502214901.0-1068567-46271423\"",
+   "last-modified": "Tue, 08 Aug 2017 17:55:01 GMT",
+   "status": 200
+  },
+  "/magazines/199210/DMZ_1992-10-001.jpg": {
+   "content-length": "1277419",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665307.0-1277419-215747543\"",
+   "last-modified": "Thu, 16 Mar 2017 11:55:07 GMT",
+   "status": 200
+  },
+  "/magazines/199210/DMZ_1992-10-072.jpg": {
+   "content-length": "1057621",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665382.0-1057621-218827743\"",
+   "last-modified": "Thu, 16 Mar 2017 11:56:22 GMT",
+   "status": 200
+  },
+  "/magazines/199211/DMZ_1992-11-001.jpg": {
+   "content-length": "1287660",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665383.0-1287660-217713625\"",
+   "last-modified": "Thu, 16 Mar 2017 11:56:23 GMT",
+   "status": 200
+  },
+  "/magazines/199211/DMZ_1992-11-072.jpg": {
+   "content-length": "1178308",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665457.0-1178308-220793825\"",
+   "last-modified": "Thu, 16 Mar 2017 11:57:37 GMT",
+   "status": 200
+  },
+  "/magazines/199212/DMZ_1992-12-001.jpg": {
+   "content-length": "1270439",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665459.0-1270439-219679707\"",
+   "last-modified": "Thu, 16 Mar 2017 11:57:39 GMT",
+   "status": 200
+  },
+  "/magazines/199212/DMZ_1992-12-072.jpg": {
+   "content-length": "1202112",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665540.0-1202112-222759907\"",
+   "last-modified": "Thu, 16 Mar 2017 11:59:00 GMT",
+   "status": 200
+  },
+  "/magazines/199213/DMZ_1992-13-01.jpg": {
+   "content-length": "1326546",
+   "content-type": "image/jpeg",
+   "etag": "\"1502214902.0-1326546-34147245\"",
+   "last-modified": "Tue, 08 Aug 2017 17:55:02 GMT",
+   "status": 200
+  },
+  "/magazines/199213/DMZ_1992-13-80.jpg": {
+   "content-length": "1060362",
+   "content-type": "image/jpeg",
+   "etag": "\"1502214956.0-1060362-36965300\"",
+   "last-modified": "Tue, 08 Aug 2017 17:55:56 GMT",
+   "status": 200
+  },
+  "/magazines/199214/DMZ_1992-14-01.jpg": {
+   "content-length": "1256455",
+   "content-type": "image/jpeg",
+   "etag": "\"1502214956.0-1256455-35982255\"",
+   "last-modified": "Tue, 08 Aug 2017 17:55:56 GMT",
+   "status": 200
+  },
+  "/magazines/199214/DMZ_1992-14-80.jpg": {
+   "content-length": "1140979",
+   "content-type": "image/jpeg",
+   "etag": "\"1502215011.0-1140979-38800310\"",
+   "last-modified": "Tue, 08 Aug 2017 17:56:51 GMT",
+   "status": 200
+  },
+  "/magazines/199215/DMZ_1992-15-01.jpg": {
+   "content-length": "1272489",
+   "content-type": "image/jpeg",
+   "etag": "\"1502215012.0-1272489-37817265\"",
+   "last-modified": "Tue, 08 Aug 2017 17:56:52 GMT",
+   "status": 200
+  },
+  "/magazines/199215/DMZ_1992-15-80.jpg": {
+   "content-length": "1102116",
+   "content-type": "image/jpeg",
+   "etag": "\"1502215065.0-1102116-40635320\"",
+   "last-modified": "Tue, 08 Aug 2017 17:57:45 GMT",
+   "status": 200
+  },
+  "/magazines/199216/DMZ_1992-16-001.jpg": {
+   "content-length": "1270692",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665653.0-1270692-227544035\"",
+   "last-modified": "Thu, 16 Mar 2017 12:00:53 GMT",
+   "status": 200
+  },
+  "/magazines/199216/DMZ_1992-16-080.jpg": {
+   "content-length": "1226368",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665777.0-1226368-230362090\"",
+   "last-modified": "Thu, 16 Mar 2017 12:02:57 GMT",
+   "status": 200
+  },
+  "/magazines/199217/DMZ_1992-17-01.jpg": {
+   "content-length": "1204295",
+   "content-type": "image/jpeg",
+   "etag": "\"1502215066.0-1204295-41487285\"",
+   "last-modified": "Tue, 08 Aug 2017 17:57:46 GMT",
+   "status": 200
+  },
+  "/magazines/199217/DMZ_1992-17-80.jpg": {
+   "content-length": "1119110",
+   "content-type": "image/jpeg",
+   "etag": "\"1502215119.0-1119110-44305340\"",
+   "last-modified": "Tue, 08 Aug 2017 17:58:39 GMT",
+   "status": 200
+  },
+  "/magazines/199218/DMZ_1992-18-001.jpg": {
+   "content-length": "1176212",
+   "content-type": "image/jpeg",
+   "etag": "\"1493310290.0-1176212-231476199\"",
+   "last-modified": "Thu, 27 Apr 2017 16:24:50 GMT",
+   "status": 200
+  },
+  "/magazines/199218/DMZ_1992-18-081.jpg": {
+   "content-length": "973989",
+   "content-type": "image/jpeg",
+   "etag": "\"1493310295.0-973989-234621935\"",
+   "last-modified": "Thu, 27 Apr 2017 16:24:55 GMT",
+   "status": 200
+  },
+  "/magazines/199219/DMZ_1992-19-001.jpg": {
+   "content-length": "1288063",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665779.0-1288063-233442281\"",
+   "last-modified": "Thu, 16 Mar 2017 12:02:59 GMT",
+   "status": 200
+  },
+  "/magazines/199219/DMZ_1992-19-080.jpg": {
+   "content-length": "1260814",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665898.0-1260814-236260336\"",
+   "last-modified": "Thu, 16 Mar 2017 12:04:58 GMT",
+   "status": 200
+  },
+  "/magazines/199220/DMZ_1992-20-01.jpg": {
+   "content-length": "1265388",
+   "content-type": "image/jpeg",
+   "etag": "\"1502215120.0-1265388-30608297\"",
+   "last-modified": "Tue, 08 Aug 2017 17:58:40 GMT",
+   "status": 200
+  },
+  "/magazines/199220/DMZ_1992-20-80.jpg": {
+   "content-length": "1173898",
+   "content-type": "image/jpeg",
+   "etag": "\"1502215176.0-1173898-33426352\"",
+   "last-modified": "Tue, 08 Aug 2017 17:59:36 GMT",
+   "status": 200
+  },
+  "/magazines/199221/DMZ_1992-21-01.jpg": {
+   "content-length": "1262018",
+   "content-type": "image/jpeg",
+   "etag": "\"1502215177.0-1262018-32443307\"",
+   "last-modified": "Tue, 08 Aug 2017 17:59:37 GMT",
+   "status": 200
+  },
+  "/magazines/199221/DMZ_1992-21-88.jpg": {
+   "content-length": "1153485",
+   "content-type": "image/jpeg",
+   "etag": "\"1502215234.0-1153485-37882810\"",
+   "last-modified": "Tue, 08 Aug 2017 18:00:34 GMT",
+   "status": 200
+  },
+  "/magazines/199222/DMZ_1992-22-01.jpg": {
+   "content-length": "1330152",
+   "content-type": "image/jpeg",
+   "etag": "\"1502215235.0-1330152-34278317\"",
+   "last-modified": "Tue, 08 Aug 2017 18:00:35 GMT",
+   "status": 200
+  },
+  "/magazines/199222/DMZ_1992-22-80.jpg": {
+   "content-length": "1134581",
+   "content-type": "image/jpeg",
+   "etag": "\"1502215286.0-1134581-37096372\"",
+   "last-modified": "Tue, 08 Aug 2017 18:01:26 GMT",
+   "status": 200
+  },
+  "/magazines/199301/DMZ_1993-01-01.jpg": {
+   "content-length": "1211574",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152708.0-1211574-30673833\"",
+   "last-modified": "Thu, 27 Jul 2017 10:51:48 GMT",
+   "status": 200
+  },
+  "/magazines/199301/DMZ_1993-01-64.jpg": {
+   "content-length": "1015344",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152735.0-1015344-34016178\"",
+   "last-modified": "Thu, 27 Jul 2017 10:52:15 GMT",
+   "status": 200
+  },
+  "/magazines/199302/DMZ_1993-02-001.jpg": {
+   "content-length": "2168646",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072653.0-2168646-219876315\"",
+   "last-modified": "Thu, 09 Mar 2017 15:17:33 GMT",
+   "status": 200
+  },
+  "/magazines/199302/DMZ_1993-02-064.jpg": {
+   "content-length": "1913812",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072675.0-1913812-223218660\"",
+   "last-modified": "Thu, 09 Mar 2017 15:17:55 GMT",
+   "status": 200
+  },
+  "/magazines/199303/DMZ_1993-03-01.jpg": {
+   "content-length": "1140412",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152736.0-1140412-34343853\"",
+   "last-modified": "Thu, 27 Jul 2017 10:52:16 GMT",
+   "status": 200
+  },
+  "/magazines/199303/DMZ_1993-03-72.jpg": {
+   "content-length": "1107722",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152767.0-1107722-37424053\"",
+   "last-modified": "Thu, 27 Jul 2017 10:52:47 GMT",
+   "status": 200
+  },
+  "/magazines/199304/DMZ_1993-04-01.jpg": {
+   "content-length": "1094641",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152767.0-1094641-36178863\"",
+   "last-modified": "Thu, 27 Jul 2017 10:52:47 GMT",
+   "status": 200
+  },
+  "/magazines/199304/DMZ_1993-04-72.jpg": {
+   "content-length": "1039296",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152798.0-1039296-39259063\"",
+   "last-modified": "Thu, 27 Jul 2017 10:53:18 GMT",
+   "status": 200
+  },
+  "/magazines/199305/DMZ_1993-05-001.jpg": {
+   "content-length": "1208396",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152799.0-1208396-225774561\"",
+   "last-modified": "Thu, 27 Jul 2017 10:53:19 GMT",
+   "status": 200
+  },
+  "/magazines/199305/DMZ_1993-05-072.jpg": {
+   "content-length": "1039315",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152831.0-1039315-228854761\"",
+   "last-modified": "Thu, 27 Jul 2017 10:53:51 GMT",
+   "status": 200
+  },
+  "/magazines/199306/DMZ_1993-06-001.jpg": {
+   "content-length": "2229820",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072676.0-2229820-227740643\"",
+   "last-modified": "Thu, 09 Mar 2017 15:17:56 GMT",
+   "status": 200
+  },
+  "/magazines/199306/DMZ_1993-06-072.jpg": {
+   "content-length": "1831057",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072701.0-1831057-230820843\"",
+   "last-modified": "Thu, 09 Mar 2017 15:18:21 GMT",
+   "status": 200
+  },
+  "/magazines/199307/DMZ_1993-07-001.jpg": {
+   "content-length": "2118336",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072701.0-2118336-229706725\"",
+   "last-modified": "Thu, 09 Mar 2017 15:18:21 GMT",
+   "status": 200
+  },
+  "/magazines/199307/DMZ_1993-07-072.jpg": {
+   "content-length": "1814958",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072727.0-1814958-232786925\"",
+   "last-modified": "Thu, 09 Mar 2017 15:18:47 GMT",
+   "status": 200
+  },
+  "/magazines/199308/DMZ_1993-08-001.jpg": {
+   "content-length": "2154463",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155188.0-2154463-231672807\"",
+   "last-modified": "Fri, 10 Mar 2017 14:13:08 GMT",
+   "status": 200
+  },
+  "/magazines/199308/DMZ_1993-08-072.jpg": {
+   "content-length": "1914502",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155218.0-1914502-234753007\"",
+   "last-modified": "Fri, 10 Mar 2017 14:13:38 GMT",
+   "status": 200
+  },
+  "/magazines/199309/DMZ_1993-09-001.jpg": {
+   "content-length": "1982921",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072727.0-1982921-233638889\"",
+   "last-modified": "Thu, 09 Mar 2017 15:18:47 GMT",
+   "status": 200
+  },
+  "/magazines/199309/DMZ_1993-09-072.jpg": {
+   "content-length": "1921443",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072753.0-1921443-236719089\"",
+   "last-modified": "Thu, 09 Mar 2017 15:19:13 GMT",
+   "status": 200
+  },
+  "/magazines/199310/DMZ_1993-10-01.jpg": {
+   "content-length": "1152867",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152831.0-1152867-30804905\"",
+   "last-modified": "Thu, 27 Jul 2017 10:53:51 GMT",
+   "status": 200
+  },
+  "/magazines/199310/DMZ_1993-10-72.jpg": {
+   "content-length": "1188346",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152865.0-1188346-33885105\"",
+   "last-modified": "Thu, 27 Jul 2017 10:54:25 GMT",
+   "status": 200
+  },
+  "/magazines/199311/DMZ_1993-11-01.jpg": {
+   "content-length": "1155413",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152865.0-1155413-32639915\"",
+   "last-modified": "Thu, 27 Jul 2017 10:54:25 GMT",
+   "status": 200
+  },
+  "/magazines/199311/DMZ_1993-11-72.jpg": {
+   "content-length": "1109509",
+   "content-type": "image/jpeg",
+   "etag": "\"1501152899.0-1109509-35720115\"",
+   "last-modified": "Thu, 27 Jul 2017 10:54:59 GMT",
+   "status": 200
+  },
+  "/magazines/199312/DMZ_1993-12-001.jpg": {
+   "content-length": "1208194",
+   "content-type": "image/jpeg",
+   "etag": "\"1489665899.0-1208194-221973469\"",
+   "last-modified": "Thu, 16 Mar 2017 12:04:59 GMT",
+   "status": 200
+  },
+  "/magazines/199312/DMZ_1993-12-072.jpg": {
+   "content-length": "1183533",
+   "content-type": "image/jpeg",
+   "etag": "\"1489666013.0-1183533-225053669\"",
+   "last-modified": "Thu, 16 Mar 2017 12:06:53 GMT",
+   "status": 200
+  },
+  "/magazines/199313/DMZ_1993-13-01.jpg": {
+   "content-length": "1121930",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695858.0-1121930-36309935\"",
+   "last-modified": "Wed, 02 Aug 2017 17:44:18 GMT",
+   "status": 200
+  },
+  "/magazines/199313/DMZ_1993-13-72.jpg": {
+   "content-length": "1165604",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695887.0-1165604-39390135\"",
+   "last-modified": "Wed, 02 Aug 2017 17:44:47 GMT",
+   "status": 200
+  },
+  "/magazines/199314/DMZ_1993-14-001.jpg": {
+   "content-length": "1291293",
+   "content-type": "image/jpeg",
+   "etag": "\"1489666014.0-1291293-225905633\"",
+   "last-modified": "Thu, 16 Mar 2017 12:06:54 GMT",
+   "status": 200
+  },
+  "/magazines/199314/DMZ_1993-14-072.jpg": {
+   "content-length": "1282921",
+   "content-type": "image/jpeg",
+   "etag": "\"1489666128.0-1282921-228985833\"",
+   "last-modified": "Thu, 16 Mar 2017 12:08:48 GMT",
+   "status": 200
+  },
+  "/magazines/199315/DMZ_1993-15-001.jpg": {
+   "content-length": "2308254",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155218.0-2308254-227871715\"",
+   "last-modified": "Fri, 10 Mar 2017 14:13:38 GMT",
+   "status": 200
+  },
+  "/magazines/199315/DMZ_1993-15-072.jpg": {
+   "content-length": "2082409",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155249.0-2082409-230951915\"",
+   "last-modified": "Fri, 10 Mar 2017 14:14:09 GMT",
+   "status": 200
+  },
+  "/magazines/199316/DMZ_1993-16-001.jpg": {
+   "content-length": "2342524",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072779.0-2342524-229837797\"",
+   "last-modified": "Thu, 09 Mar 2017 15:19:39 GMT",
+   "status": 200
+  },
+  "/magazines/199316/DMZ_1993-16-072.jpg": {
+   "content-length": "2145134",
+   "content-type": "image/jpeg",
+   "etag": "\"1489072807.0-2145134-232917997\"",
+   "last-modified": "Thu, 09 Mar 2017 15:20:07 GMT",
+   "status": 200
+  },
+  "/magazines/199317/DMZ_1993-17-01.jpg": {
+   "content-length": "1152997",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695887.0-1152997-43649975\"",
+   "last-modified": "Wed, 02 Aug 2017 17:44:47 GMT",
+   "status": 200
+  },
+  "/magazines/199317/DMZ_1993-17-48.jpg": {
+   "content-length": "926601",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695906.0-926601-47516610\"",
+   "last-modified": "Wed, 02 Aug 2017 17:45:06 GMT",
+   "status": 200
+  },
+  "/magazines/199318/DMZ_1993-18-01.jpg": {
+   "content-length": "1259507",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695906.0-1259507-45484985\"",
+   "last-modified": "Wed, 02 Aug 2017 17:45:06 GMT",
+   "status": 200
+  },
+  "/magazines/199318/DMZ_1993-18-48.jpg": {
+   "content-length": "1192928",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695924.0-1192928-49351620\"",
+   "last-modified": "Wed, 02 Aug 2017 17:45:24 GMT",
+   "status": 200
+  },
+  "/magazines/199319/DMZ_1993-19-01.jpg": {
+   "content-length": "1193554",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695925.0-1193554-47319995\"",
+   "last-modified": "Wed, 02 Aug 2017 17:45:25 GMT",
+   "status": 200
+  },
+  "/magazines/199319/DMZ_1993-19-48.jpg": {
+   "content-length": "1204909",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695943.0-1204909-51186630\"",
+   "last-modified": "Wed, 02 Aug 2017 17:45:43 GMT",
+   "status": 200
+  },
+  "/magazines/199320/DMZ_1993-20-001.jpg": {
+   "content-length": "2242290",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155250.0-2242290-220138459\"",
+   "last-modified": "Fri, 10 Mar 2017 14:14:10 GMT",
+   "status": 200
+  },
+  "/magazines/199320/DMZ_1993-20-048.jpg": {
+   "content-length": "2101253",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155271.0-2101253-224005094\"",
+   "last-modified": "Fri, 10 Mar 2017 14:14:31 GMT",
+   "status": 200
+  },
+  "/magazines/199321/DMZ_1993-21-001.jpg": {
+   "content-length": "1223472",
+   "content-type": "image/jpeg",
+   "etag": "\"1490518741.0-1223472-222104541\"",
+   "last-modified": "Sun, 26 Mar 2017 08:59:01 GMT",
+   "status": 200
+  },
+  "/magazines/199321/DMZ_1993-21-079.jpg": {
+   "content-length": "1139369",
+   "content-type": "image/jpeg",
+   "etag": "\"1490518889.0-1139369-227478508\"",
+   "last-modified": "Sun, 26 Mar 2017 09:01:29 GMT",
+   "status": 200
+  },
+  "/magazines/199322/DMZ_1993-22-01.jpg": {
+   "content-length": "1165691",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695944.0-1165691-36441007\"",
+   "last-modified": "Wed, 02 Aug 2017 17:45:44 GMT",
+   "status": 200
+  },
+  "/magazines/199322/DMZ_1993-22-48.jpg": {
+   "content-length": "1216833",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695963.0-1216833-40307642\"",
+   "last-modified": "Wed, 02 Aug 2017 17:46:03 GMT",
+   "status": 200
+  },
+  "/magazines/199401/DMZ_1994-01-001.jpg": {
+   "content-length": "1876826",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155271.0-1876826-220203995\"",
+   "last-modified": "Fri, 10 Mar 2017 14:14:31 GMT",
+   "status": 200
+  },
+  "/magazines/199401/DMZ_1994-01-048.jpg": {
+   "content-length": "2208887",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155292.0-2208887-224070630\"",
+   "last-modified": "Fri, 10 Mar 2017 14:14:52 GMT",
+   "status": 200
+  },
+  "/magazines/199402/DMZ_1994-02-001.jpg": {
+   "content-length": "2132850",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155293.0-2132850-222170077\"",
+   "last-modified": "Fri, 10 Mar 2017 14:14:53 GMT",
+   "status": 200
+  },
+  "/magazines/199402/DMZ_1994-02-048.jpg": {
+   "content-length": "2106784",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155314.0-2106784-226036712\"",
+   "last-modified": "Fri, 10 Mar 2017 14:15:14 GMT",
+   "status": 200
+  },
+  "/magazines/199403/DMZ_1994-03-001.jpg": {
+   "content-length": "1241485",
+   "content-type": "image/jpeg",
+   "etag": "\"1489666129.0-1241485-224136159\"",
+   "last-modified": "Thu, 16 Mar 2017 12:08:49 GMT",
+   "status": 200
+  },
+  "/magazines/199403/DMZ_1994-03-048.jpg": {
+   "content-length": "1267806",
+   "content-type": "image/jpeg",
+   "etag": "\"1489666209.0-1267806-228002794\"",
+   "last-modified": "Thu, 16 Mar 2017 12:10:09 GMT",
+   "status": 200
+  },
+  "/magazines/199404/DMZ_1994-04-001.jpg": {
+   "content-length": "1998298",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155337.0-1998298-226102241\"",
+   "last-modified": "Fri, 10 Mar 2017 14:15:37 GMT",
+   "status": 200
+  },
+  "/magazines/199404/DMZ_1994-04-046.jpg": {
+   "content-length": "1875591",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155359.0-1875591-229313514\"",
+   "last-modified": "Fri, 10 Mar 2017 14:15:59 GMT",
+   "status": 200
+  },
+  "/magazines/199405/DMZ_1994-05-001.jpg": {
+   "content-length": "2176523",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155360.0-2176523-228068323\"",
+   "last-modified": "Fri, 10 Mar 2017 14:16:00 GMT",
+   "status": 200
+  },
+  "/magazines/199405/DMZ_1994-05-048.jpg": {
+   "content-length": "2247224",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155382.0-2247224-231934958\"",
+   "last-modified": "Fri, 10 Mar 2017 14:16:22 GMT",
+   "status": 200
+  },
+  "/magazines/199406/DMZ_1994-06-001.jpg": {
+   "content-length": "2218040",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155383.0-2218040-230034405\"",
+   "last-modified": "Fri, 10 Mar 2017 14:16:23 GMT",
+   "status": 200
+  },
+  "/magazines/199406/DMZ_1994-06-048.jpg": {
+   "content-length": "2287760",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155406.0-2287760-233901040\"",
+   "last-modified": "Fri, 10 Mar 2017 14:16:46 GMT",
+   "status": 200
+  },
+  "/magazines/199407/DMZ_1994-07-001.jpg": {
+   "content-length": "2121068",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155406.0-2121068-232000487\"",
+   "last-modified": "Fri, 10 Mar 2017 14:16:46 GMT",
+   "status": 200
+  },
+  "/magazines/199407/DMZ_1994-07-046.jpg": {
+   "content-length": "1968031",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155429.0-1968031-235211760\"",
+   "last-modified": "Fri, 10 Mar 2017 14:17:09 GMT",
+   "status": 200
+  },
+  "/magazines/199408/DMZ_1994-08-001.jpg": {
+   "content-length": "2138239",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155429.0-2138239-233966569\"",
+   "last-modified": "Fri, 10 Mar 2017 14:17:09 GMT",
+   "status": 200
+  },
+  "/magazines/199408/DMZ_1994-08-048.jpg": {
+   "content-length": "2334972",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155453.0-2334972-237833204\"",
+   "last-modified": "Fri, 10 Mar 2017 14:17:33 GMT",
+   "status": 200
+  },
+  "/magazines/199409/DMZ_1994-09-01.jpg": {
+   "content-length": "1170656",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695963.0-1170656-47516603\"",
+   "last-modified": "Wed, 02 Aug 2017 17:46:03 GMT",
+   "status": 200
+  },
+  "/magazines/199409/DMZ_1994-09-64.jpg": {
+   "content-length": "1304589",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695989.0-1304589-50858948\"",
+   "last-modified": "Wed, 02 Aug 2017 17:46:29 GMT",
+   "status": 200
+  },
+  "/magazines/199410/DMZ_1994-10-01.jpg": {
+   "content-length": "1141895",
+   "content-type": "image/jpeg",
+   "etag": "\"1501695989.0-1141895-32967595\"",
+   "last-modified": "Wed, 02 Aug 2017 17:46:29 GMT",
+   "status": 200
+  },
+  "/magazines/199410/DMZ_1994-10-64.jpg": {
+   "content-length": "1286795",
+   "content-type": "image/jpeg",
+   "etag": "\"1501696018.0-1286795-36309940\"",
+   "last-modified": "Wed, 02 Aug 2017 17:46:58 GMT",
+   "status": 200
+  },
+  "/magazines/199411/DMZ_1994-11-001.jpg": {
+   "content-length": "2170361",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155454.0-2170361-222301149\"",
+   "last-modified": "Fri, 10 Mar 2017 14:17:34 GMT",
+   "status": 200
+  },
+  "/magazines/199411/DMZ_1994-11-064.jpg": {
+   "content-length": "2267609",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155486.0-2267609-225643494\"",
+   "last-modified": "Fri, 10 Mar 2017 14:18:06 GMT",
+   "status": 200
+  },
+  "/magazines/199412/DMZ_1994-12-001.jpg": {
+   "content-length": "2130798",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155487.0-2130798-224267231\"",
+   "last-modified": "Fri, 10 Mar 2017 14:18:07 GMT",
+   "status": 200
+  },
+  "/magazines/199412/DMZ_1994-12-064.jpg": {
+   "content-length": "2303199",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155520.0-2303199-227609576\"",
+   "last-modified": "Fri, 10 Mar 2017 14:18:40 GMT",
+   "status": 200
+  },
+  "/magazines/199413/DMZ_1994-13-001.jpg": {
+   "content-length": "2172740",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155520.0-2172740-226233313\"",
+   "last-modified": "Fri, 10 Mar 2017 14:18:40 GMT",
+   "status": 200
+  },
+  "/magazines/199413/DMZ_1994-13-064.jpg": {
+   "content-length": "2340271",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155554.0-2340271-229575658\"",
+   "last-modified": "Fri, 10 Mar 2017 14:19:14 GMT",
+   "status": 200
+  },
+  "/magazines/199414/DMZ_1994-14-001.jpg": {
+   "content-length": "2057955",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155554.0-2057955-228199395\"",
+   "last-modified": "Fri, 10 Mar 2017 14:19:14 GMT",
+   "status": 200
+  },
+  "/magazines/199414/DMZ_1994-14-064.jpg": {
+   "content-length": "2321931",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155589.0-2321931-231541740\"",
+   "last-modified": "Fri, 10 Mar 2017 14:19:49 GMT",
+   "status": 200
+  },
+  "/magazines/199415/DMZ_1994-15-01.jpg": {
+   "content-length": "1062768",
+   "content-type": "image/jpeg",
+   "etag": "\"1501696018.0-1062768-42142645\"",
+   "last-modified": "Wed, 02 Aug 2017 17:46:58 GMT",
+   "status": 200
+  },
+  "/magazines/199415/DMZ_1994-15-64.jpg": {
+   "content-length": "1283032",
+   "content-type": "image/jpeg",
+   "etag": "\"1501696045.0-1283032-45484990\"",
+   "last-modified": "Wed, 02 Aug 2017 17:47:25 GMT",
+   "status": 200
+  },
+  "/magazines/199416/DMZ_1994-16-01.jpg": {
+   "content-length": "1027113",
+   "content-type": "image/jpeg",
+   "etag": "\"1501696046.0-1027113-43977655\"",
+   "last-modified": "Wed, 02 Aug 2017 17:47:26 GMT",
+   "status": 200
+  },
+  "/magazines/199416/DMZ_1994-16-64.jpg": {
+   "content-length": "1284895",
+   "content-type": "image/jpeg",
+   "etag": "\"1501696075.0-1284895-47320000\"",
+   "last-modified": "Wed, 02 Aug 2017 17:47:55 GMT",
+   "status": 200
+  },
+  "/magazines/199417/DMZ_1994-17-001.jpg": {
+   "content-length": "2060629",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155589.0-2060629-234097641\"",
+   "last-modified": "Fri, 10 Mar 2017 14:19:49 GMT",
+   "status": 200
+  },
+  "/magazines/199417/DMZ_1994-17-064.jpg": {
+   "content-length": "2248815",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155624.0-2248815-237439986\"",
+   "last-modified": "Fri, 10 Mar 2017 14:20:24 GMT",
+   "status": 200
+  },
+  "/magazines/199418/DMZ_1994-18-001.jpg": {
+   "content-length": "2155112",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155625.0-2155112-236063723\"",
+   "last-modified": "Fri, 10 Mar 2017 14:20:25 GMT",
+   "status": 200
+  },
+  "/magazines/199418/DMZ_1994-18-064.jpg": {
+   "content-length": "1970826",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155661.0-1970826-239406068\"",
+   "last-modified": "Fri, 10 Mar 2017 14:21:01 GMT",
+   "status": 200
+  },
+  "/magazines/199419/DMZ_1994-19-001.jpg": {
+   "content-length": "1558835",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155661.0-1558835-238029805\"",
+   "last-modified": "Fri, 10 Mar 2017 14:21:01 GMT",
+   "status": 200
+  },
+  "/magazines/199419/DMZ_1994-19-064.jpg": {
+   "content-length": "2275789",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155698.0-2275789-241372150\"",
+   "last-modified": "Fri, 10 Mar 2017 14:21:38 GMT",
+   "status": 200
+  },
+  "/magazines/199420/DMZ_1994-20-001.jpg": {
+   "content-length": "1190617",
+   "content-type": "image/jpeg",
+   "etag": "\"1489666211.0-1190617-222432221\"",
+   "last-modified": "Thu, 16 Mar 2017 12:10:11 GMT",
+   "status": 200
+  },
+  "/magazines/199420/DMZ_1994-20-064.jpg": {
+   "content-length": "1244903",
+   "content-type": "image/jpeg",
+   "etag": "\"1489666317.0-1244903-225774566\"",
+   "last-modified": "Thu, 16 Mar 2017 12:11:57 GMT",
+   "status": 200
+  },
+  "/magazines/199421/DMZ_1994-21-001.jpg": {
+   "content-length": "2159320",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155699.0-2159320-224398303\"",
+   "last-modified": "Fri, 10 Mar 2017 14:21:39 GMT",
+   "status": 200
+  },
+  "/magazines/199421/DMZ_1994-21-064.jpg": {
+   "content-length": "2263800",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155736.0-2263800-227740648\"",
+   "last-modified": "Fri, 10 Mar 2017 14:22:16 GMT",
+   "status": 200
+  },
+  "/magazines/199422/DMZ_1994-22-001.jpg": {
+   "content-length": "2014604",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155736.0-2014604-226364385\"",
+   "last-modified": "Fri, 10 Mar 2017 14:22:16 GMT",
+   "status": 200
+  },
+  "/magazines/199422/DMZ_1994-22-062.jpg": {
+   "content-length": "2081647",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155773.0-2081647-229051368\"",
+   "last-modified": "Fri, 10 Mar 2017 14:22:53 GMT",
+   "status": 200
+  },
+  "/magazines/199501/DMZ_1995-01-001.jpg": {
+   "content-length": "2057722",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155774.0-2057722-222497757\"",
+   "last-modified": "Fri, 10 Mar 2017 14:22:54 GMT",
+   "status": 200
+  },
+  "/magazines/199501/DMZ_1995-01-064.jpg": {
+   "content-length": "2224399",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155813.0-2224399-225840102\"",
+   "last-modified": "Fri, 10 Mar 2017 14:23:33 GMT",
+   "status": 200
+  },
+  "/magazines/199502/DMZ_1995-02-001.jpg": {
+   "content-length": "1992636",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155814.0-1992636-224463839\"",
+   "last-modified": "Fri, 10 Mar 2017 14:23:34 GMT",
+   "status": 200
+  },
+  "/magazines/199502/DMZ_1995-02-064.jpg": {
+   "content-length": "2070669",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155853.0-2070669-227806184\"",
+   "last-modified": "Fri, 10 Mar 2017 14:24:13 GMT",
+   "status": 200
+  },
+  "/magazines/199503/DMZ_1995-03-001.jpg": {
+   "content-length": "2192266",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155854.0-2192266-226429921\"",
+   "last-modified": "Fri, 10 Mar 2017 14:24:14 GMT",
+   "status": 200
+  },
+  "/magazines/199503/DMZ_1995-03-064.jpg": {
+   "content-length": "2277348",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155895.0-2277348-229772266\"",
+   "last-modified": "Fri, 10 Mar 2017 14:24:55 GMT",
+   "status": 200
+  },
+  "/magazines/199504/DMZ_1995-04-001.jpg": {
+   "content-length": "2225326",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155895.0-2225326-228396003\"",
+   "last-modified": "Fri, 10 Mar 2017 14:24:55 GMT",
+   "status": 200
+  },
+  "/magazines/199504/DMZ_1995-04-064.jpg": {
+   "content-length": "2073392",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155936.0-2073392-231738348\"",
+   "last-modified": "Fri, 10 Mar 2017 14:25:36 GMT",
+   "status": 200
+  },
+  "/magazines/19950506/DMZ_1995-0506-001.jpg": {
+   "content-length": "2075106",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155937.0-2075106-1005915313\"",
+   "last-modified": "Fri, 10 Mar 2017 14:25:37 GMT",
+   "status": 200
+  },
+  "/magazines/19950506/DMZ_1995-0506-064.jpg": {
+   "content-length": "2315923",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155979.0-2315923-1009257658\"",
+   "last-modified": "Fri, 10 Mar 2017 14:26:19 GMT",
+   "status": 200
+  },
+  "/magazines/199507/DMZ_1995-07-001.jpg": {
+   "content-length": "2206432",
+   "content-type": "image/jpeg",
+   "etag": "\"1489155980.0-2206432-234294249\"",
+   "last-modified": "Fri, 10 Mar 2017 14:26:20 GMT",
+   "status": 200
+  },
+  "/magazines/199507/DMZ_1995-07-084.jpg": {
+   "content-length": "2075705",
+   "content-type": "image/jpeg",
+   "etag": "\"1489156037.0-2075705-238423028\"",
+   "last-modified": "Fri, 10 Mar 2017 14:27:17 GMT",
+   "status": 200
+  },
+  "/magazines/199508/DMZ_1995-08-001.jpg": {
+   "content-length": "1071537",
+   "content-type": "image/jpeg",
+   "etag": "\"1493310295.0-1071537-236260331\"",
+   "last-modified": "Thu, 27 Apr 2017 16:24:55 GMT",
+   "status": 200
+  },
+  "/magazines/199508/DMZ_1995-08-084.jpg": {
+   "content-length": "1115573",
+   "content-type": "image/jpeg",
+   "etag": "\"1493310301.0-1115573-240389110\"",
+   "last-modified": "Thu, 27 Apr 2017 16:25:01 GMT",
+   "status": 200
+  },
+  "/magazines/199509/DMZ_1995-09-001.jpg": {
+   "content-length": "2135196",
+   "content-type": "image/jpeg",
+   "etag": "\"1489156038.0-2135196-238226413\"",
+   "last-modified": "Fri, 10 Mar 2017 14:27:18 GMT",
+   "status": 200
+  },
+  "/magazines/199509/DMZ_1995-09-084.jpg": {
+   "content-length": "2020223",
+   "content-type": "image/jpeg",
+   "etag": "\"1489156096.0-2020223-242355192\"",
+   "last-modified": "Fri, 10 Mar 2017 14:28:16 GMT",
+   "status": 200
+  },
+  "/magazines/199510/DMZ_1995-10-001.jpg": {
+   "content-length": "2286206",
+   "content-type": "image/jpeg",
+   "etag": "\"1489156096.0-2286206-222628829\"",
+   "last-modified": "Fri, 10 Mar 2017 14:28:16 GMT",
+   "status": 200
+  },
+  "/magazines/199510/DMZ_1995-10-084.jpg": {
+   "content-length": "1983839",
+   "content-type": "image/jpeg",
+   "etag": "\"1489156156.0-1983839-226757608\"",
+   "last-modified": "Fri, 10 Mar 2017 14:29:16 GMT",
+   "status": 200
+  },
+  "/magazines/199511/DMZ_1995-11-001.jpg": {
+   "content-length": "2142644",
+   "content-type": "image/jpeg",
+   "etag": "\"1489156156.0-2142644-224594911\"",
+   "last-modified": "Fri, 10 Mar 2017 14:29:16 GMT",
+   "status": 200
+  },
+  "/magazines/199511/DMZ_1995-11-084.jpg": {
+   "content-length": "2107180",
+   "content-type": "image/jpeg",
+   "etag": "\"1489156218.0-2107180-228723690\"",
+   "last-modified": "Fri, 10 Mar 2017 14:30:18 GMT",
+   "status": 200
+  },
+  "/magazines/199512/DMZ_1995-12-001.jpg": {
+   "content-length": "1150916",
+   "content-type": "image/jpeg",
+   "etag": "\"1490183174.0-1150916-226560993\"",
+   "last-modified": "Wed, 22 Mar 2017 11:46:14 GMT",
+   "status": 200
+  },
+  "/magazines/199512/DMZ_1995-12-084.jpg": {
+   "content-length": "1112246",
+   "content-type": "image/jpeg",
+   "etag": "\"1490183303.0-1112246-230689772\"",
+   "last-modified": "Wed, 22 Mar 2017 11:48:23 GMT",
+   "status": 200
+  },
+  "/magazines/199513/DMZ_1995-13-001.jpg": {
+   "content-length": "1938940",
+   "content-type": "image/jpeg",
+   "etag": "\"1489156219.0-1938940-228527075\"",
+   "last-modified": "Fri, 10 Mar 2017 14:30:19 GMT",
+   "status": 200
+  },
+  "/magazines/199513/DMZ_1995-13-084.jpg": {
+   "content-length": "2073348",
+   "content-type": "image/jpeg",
+   "etag": "\"1489156281.0-2073348-232655854\"",
+   "last-modified": "Fri, 10 Mar 2017 14:31:21 GMT",
+   "status": 200
+  },
+  "/magazines/199514/DMZ_1995-14-001.jpg": {
+   "content-length": "2142349",
+   "content-type": "image/jpeg",
+   "etag": "\"1489156282.0-2142349-230493157\"",
+   "last-modified": "Fri, 10 Mar 2017 14:31:22 GMT",
+   "status": 200
+  },
+  "/magazines/199514/DMZ_1995-14-084.jpg": {
+   "content-length": "2074038",
+   "content-type": "image/jpeg",
+   "etag": "\"1489156346.0-2074038-234621936\"",
+   "last-modified": "Fri, 10 Mar 2017 14:32:26 GMT",
+   "status": 200
+  },
+  "/magazines/199515/DMZ_1995-15-001.jpg": {
+   "content-length": "1116441",
+   "content-type": "image/jpeg",
+   "etag": "\"1489759116.0-1116441-232459239\"",
+   "last-modified": "Fri, 17 Mar 2017 13:58:36 GMT",
+   "status": 200
+  },
+  "/magazines/199515/DMZ_1995-15-092.jpg": {
+   "content-length": "1220759",
+   "content-type": "image/jpeg",
+   "etag": "\"1489759231.0-1220759-236325873\"",
+   "last-modified": "Fri, 17 Mar 2017 14:00:31 GMT",
+   "status": 200
+  },
+  "/pdf/198601-Original.pdf": {
+   "content-length": "265",
+   "content-type": "text/html; charset=utf-8",
+   "status": 500
+  },
+  "/pdf/198601.pdf": {
+   "content-length": "15105472",
+   "content-type": "application/pdf",
+   "etag": "\"1504986566.0-15105472-984024500\"",
+   "last-modified": "Sat, 09 Sep 2017 19:49:26 GMT",
+   "status": 200
+  },
+  "/pdf/198602.pdf": {
+   "content-length": "18024807",
+   "content-type": "application/pdf",
+   "etag": "\"1504987159.0-18024807-984352181\"",
+   "last-modified": "Sat, 09 Sep 2017 19:59:19 GMT",
+   "status": 200
+  },
+  "/pdf/198603.pdf": {
+   "content-length": "18478586",
+   "content-type": "application/pdf",
+   "etag": "\"1504987459.0-18478586-984679862\"",
+   "last-modified": "Sat, 09 Sep 2017 20:04:19 GMT",
+   "status": 200
+  },
+  "/pdf/198604.pdf": {
+   "content-length": "23329624",
+   "content-type": "application/pdf",
+   "etag": "\"1504987772.0-23329624-985007543\"",
+   "last-modified": "Sat, 09 Sep 2017 20:09:32 GMT",
+   "status": 200
+  },
+  "/pdf/198701.pdf": {
+   "content-length": "19032390",
+   "content-type": "application/pdf",
+   "etag": "\"1504988117.0-19032390-984483253\"",
+   "last-modified": "Sat, 09 Sep 2017 20:15:17 GMT",
+   "status": 200
+  },
+  "/pdf/198702.pdf": {
+   "content-length": "21422879",
+   "content-type": "application/pdf",
+   "etag": "\"1504988488.0-21422879-984810934\"",
+   "last-modified": "Sat, 09 Sep 2017 20:21:28 GMT",
+   "status": 200
+  },
+  "/pdf/198703.pdf": {
+   "content-length": "19358555",
+   "content-type": "application/pdf",
+   "etag": "\"1504989158.0-19358555-985138615\"",
+   "last-modified": "Sat, 09 Sep 2017 20:32:38 GMT",
+   "status": 200
+  },
+  "/pdf/19870405.pdf": {
+   "content-length": "33327407",
+   "content-type": "application/pdf",
+   "etag": "\"1505000561.0-33327407-1166411293\"",
+   "last-modified": "Sat, 09 Sep 2017 23:42:41 GMT",
+   "status": 200
+  },
+  "/pdf/198706.pdf": {
+   "content-length": "27882487",
+   "content-type": "application/pdf",
+   "etag": "\"1504989624.0-27882487-986121658\"",
+   "last-modified": "Sat, 09 Sep 2017 20:40:24 GMT",
+   "status": 200
+  },
+  "/pdf/198707.pdf": {
+   "content-length": "21906862",
+   "content-type": "application/pdf",
+   "etag": "\"1504990442.0-21906862-986449339\"",
+   "last-modified": "Sat, 09 Sep 2017 20:54:02 GMT",
+   "status": 200
+  },
+  "/pdf/198708.pdf": {
+   "content-length": "22711805",
+   "content-type": "application/pdf",
+   "etag": "\"1504991265.0-22711805-986777020\"",
+   "last-modified": "Sat, 09 Sep 2017 21:07:45 GMT",
+   "status": 200
+  },
+  "/pdf/198709.pdf": {
+   "content-length": "28193113",
+   "content-type": "application/pdf",
+   "etag": "\"1504992112.0-28193113-987104701\"",
+   "last-modified": "Sat, 09 Sep 2017 21:21:52 GMT",
+   "status": 200
+  },
+  "/pdf/198710.pdf": {
+   "content-length": "23573588",
+   "content-type": "application/pdf",
+   "etag": "\"1504993650.0-23573588-984548789\"",
+   "last-modified": "Sat, 09 Sep 2017 21:47:30 GMT",
+   "status": 200
+  },
+  "/pdf/198710b.pdf": {
+   "content-length": "22519348",
+   "content-type": "application/pdf",
+   "etag": "\"1504992876.0-22519348-1088816663\"",
+   "last-modified": "Sat, 09 Sep 2017 21:34:36 GMT",
+   "status": 200
+  },
+  "/pdf/198801.pdf": {
+   "content-length": "24474598",
+   "content-type": "application/pdf",
+   "etag": "\"1504994070.0-24474598-984942006\"",
+   "last-modified": "Sat, 09 Sep 2017 21:54:30 GMT",
+   "status": 200
+  },
+  "/pdf/198802.pdf": {
+   "content-length": "20562016",
+   "content-type": "application/pdf",
+   "etag": "\"1504994407.0-20562016-985269687\"",
+   "last-modified": "Sat, 09 Sep 2017 22:00:07 GMT",
+   "status": 200
+  },
+  "/pdf/198803.pdf": {
+   "content-length": "23928187",
+   "content-type": "application/pdf",
+   "etag": "\"1504994725.0-23928187-985597368\"",
+   "last-modified": "Sat, 09 Sep 2017 22:05:25 GMT",
+   "status": 200
+  },
+  "/pdf/198804.pdf": {
+   "content-length": "24943062",
+   "content-type": "application/pdf",
+   "etag": "\"1504995039.0-24943062-985925049\"",
+   "last-modified": "Sat, 09 Sep 2017 22:10:39 GMT",
+   "status": 200
+  },
+  "/pdf/198805.pdf": {
+   "content-length": "24362335",
+   "content-type": "application/pdf",
+   "etag": "\"1504995359.0-24362335-986252730\"",
+   "last-modified": "Sat, 09 Sep 2017 22:15:59 GMT",
+   "status": 200
+  },
+  "/pdf/198806.pdf": {
+   "content-length": "24970770",
+   "content-type": "application/pdf",
+   "etag": "\"1504995683.0-24970770-986580411\"",
+   "last-modified": "Sat, 09 Sep 2017 22:21:23 GMT",
+   "status": 200
+  },
+  "/pdf/198807.pdf": {
+   "content-length": "22069886",
+   "content-type": "application/pdf",
+   "etag": "\"1504995976.0-22069886-986908092\"",
+   "last-modified": "Sat, 09 Sep 2017 22:26:16 GMT",
+   "status": 200
+  },
+  "/pdf/198808.pdf": {
+   "content-length": "20261222",
+   "content-type": "application/pdf",
+   "etag": "\"1504996239.0-20261222-987235773\"",
+   "last-modified": "Sat, 09 Sep 2017 22:30:39 GMT",
+   "status": 200
+  },
+  "/pdf/198809.pdf": {
+   "content-length": "21732720",
+   "content-type": "application/pdf",
+   "etag": "\"1504996943.0-21732720-987563454\"",
+   "last-modified": "Sat, 09 Sep 2017 22:42:23 GMT",
+   "status": 200
+  },
+  "/pdf/198810.pdf": {
+   "content-length": "22987208",
+   "content-type": "application/pdf",
+   "etag": "\"1504997647.0-22987208-985007542\"",
+   "last-modified": "Sat, 09 Sep 2017 22:54:07 GMT",
+   "status": 200
+  },
+  "/pdf/198811.pdf": {
+   "content-length": "26011862",
+   "content-type": "application/pdf",
+   "etag": "\"1504998016.0-26011862-985335223\"",
+   "last-modified": "Sat, 09 Sep 2017 23:00:16 GMT",
+   "status": 200
+  },
+  "/pdf/198812.pdf": {
+   "content-length": "25647525",
+   "content-type": "application/pdf",
+   "etag": "\"1504998332.0-25647525-985662904\"",
+   "last-modified": "Sat, 09 Sep 2017 23:05:32 GMT",
+   "status": 200
+  },
+  "/pdf/198813.pdf": {
+   "content-length": "26061502",
+   "content-type": "application/pdf",
+   "etag": "\"1504999187.0-26061502-985990585\"",
+   "last-modified": "Sat, 09 Sep 2017 23:19:47 GMT",
+   "status": 200
+  },
+  "/pdf/198814.pdf": {
+   "content-length": "25274281",
+   "content-type": "application/pdf",
+   "etag": "\"1504999497.0-25274281-986318266\"",
+   "last-modified": "Sat, 09 Sep 2017 23:24:57 GMT",
+   "status": 200
+  },
+  "/pdf/198815.pdf": {
+   "content-length": "24838919",
+   "content-type": "application/pdf",
+   "etag": "\"1505000344.0-24838919-986645947\"",
+   "last-modified": "Sat, 09 Sep 2017 23:39:04 GMT",
+   "status": 200
+  },
+  "/pdf/19881617.pdf": {
+   "content-length": "25641314",
+   "content-type": "application/pdf",
+   "etag": "\"1505000868.0-25641314-1169491492\"",
+   "last-modified": "Sat, 09 Sep 2017 23:47:48 GMT",
+   "status": 200
+  },
+  "/pdf/198901.pdf": {
+   "content-length": "24108625",
+   "content-type": "application/pdf",
+   "etag": "\"1505001187.0-24108625-985400759\"",
+   "last-modified": "Sat, 09 Sep 2017 23:53:07 GMT",
+   "status": 200
+  },
+  "/pdf/198902.pdf": {
+   "content-length": "26026118",
+   "content-type": "application/pdf",
+   "etag": "\"1505002025.0-26026118-985728440\"",
+   "last-modified": "Sun, 10 Sep 2017 00:07:05 GMT",
+   "status": 200
+  },
+  "/pdf/198903.pdf": {
+   "content-length": "23488554",
+   "content-type": "application/pdf",
+   "etag": "\"1505002323.0-23488554-986056121\"",
+   "last-modified": "Sun, 10 Sep 2017 00:12:03 GMT",
+   "status": 200
+  },
+  "/pdf/198904.pdf": {
+   "content-length": "26283467",
+   "content-type": "application/pdf",
+   "etag": "\"1505003170.0-26283467-986383802\"",
+   "last-modified": "Sun, 10 Sep 2017 00:26:10 GMT",
+   "status": 200
+  },
+  "/pdf/198905.pdf": {
+   "content-length": "26335898",
+   "content-type": "application/pdf",
+   "etag": "\"1505004021.0-26335898-986711483\"",
+   "last-modified": "Sun, 10 Sep 2017 00:40:21 GMT",
+   "status": 200
+  },
+  "/pdf/198906.pdf": {
+   "content-length": "25672804",
+   "content-type": "application/pdf",
+   "etag": "\"1505004324.0-25672804-987039164\"",
+   "last-modified": "Sun, 10 Sep 2017 00:45:24 GMT",
+   "status": 200
+  },
+  "/pdf/198907.pdf": {
+   "content-length": "23914949",
+   "content-type": "application/pdf",
+   "etag": "\"1505004625.0-23914949-987366845\"",
+   "last-modified": "Sun, 10 Sep 2017 00:50:25 GMT",
+   "status": 200
+  },
+  "/pdf/198908.pdf": {
+   "content-length": "27021492",
+   "content-type": "application/pdf",
+   "etag": "\"1505005495.0-27021492-987694526\"",
+   "last-modified": "Sun, 10 Sep 2017 01:04:55 GMT",
+   "status": 200
+  },
+  "/pdf/198909.pdf": {
+   "content-length": "20461113",
+   "content-type": "application/pdf",
+   "etag": "\"1505005752.0-20461113-988022207\"",
+   "last-modified": "Sun, 10 Sep 2017 01:09:12 GMT",
+   "status": 200
+  },
+  "/pdf/198910.pdf": {
+   "content-length": "23352350",
+   "content-type": "application/pdf",
+   "etag": "\"1505006459.0-23352350-985466295\"",
+   "last-modified": "Sun, 10 Sep 2017 01:20:59 GMT",
+   "status": 200
+  },
+  "/pdf/198911.pdf": {
+   "content-length": "26189195",
+   "content-type": "application/pdf",
+   "etag": "\"1505006615.0-26189195-985793976\"",
+   "last-modified": "Sun, 10 Sep 2017 01:23:35 GMT",
+   "status": 200
+  },
+  "/pdf/198912.pdf": {
+   "content-length": "25595148",
+   "content-type": "application/pdf",
+   "etag": "\"1505006914.0-25595148-986121657\"",
+   "last-modified": "Sun, 10 Sep 2017 01:28:34 GMT",
+   "status": 200
+  },
+  "/pdf/198913.pdf": {
+   "content-length": "27678270",
+   "content-type": "application/pdf",
+   "etag": "\"1505007767.0-27678270-986449338\"",
+   "last-modified": "Sun, 10 Sep 2017 01:42:47 GMT",
+   "status": 200
+  },
+  "/pdf/198914.pdf": {
+   "content-length": "26828063",
+   "content-type": "application/pdf",
+   "etag": "\"1505008601.0-26828063-986777019\"",
+   "last-modified": "Sun, 10 Sep 2017 01:56:41 GMT",
+   "status": 200
+  },
+  "/pdf/198915.pdf": {
+   "content-length": "24183820",
+   "content-type": "application/pdf",
+   "etag": "\"1505008895.0-24183820-987104700\"",
+   "last-modified": "Sun, 10 Sep 2017 02:01:35 GMT",
+   "status": 200
+  },
+  "/pdf/198916.pdf": {
+   "content-length": "26082713",
+   "content-type": "application/pdf",
+   "etag": "\"1505009863.0-26082713-987432381\"",
+   "last-modified": "Sun, 10 Sep 2017 02:17:43 GMT",
+   "status": 200
+  },
+  "/pdf/198916b.pdf": {
+   "content-length": "23239532",
+   "content-type": "application/pdf",
+   "etag": "\"1505009037.0-23239532-1092224543\"",
+   "last-modified": "Sun, 10 Sep 2017 02:03:57 GMT",
+   "status": 200
+  },
+  "/pdf/198917.pdf": {
+   "content-length": "26816123",
+   "content-type": "application/pdf",
+   "etag": "\"1505010716.0-26816123-987760062\"",
+   "last-modified": "Sun, 10 Sep 2017 02:31:56 GMT",
+   "status": 200
+  },
+  "/pdf/198918.pdf": {
+   "content-length": "20209390",
+   "content-type": "application/pdf",
+   "etag": "\"1505010960.0-20209390-988087743\"",
+   "last-modified": "Sun, 10 Sep 2017 02:36:00 GMT",
+   "status": 200
+  },
+  "/pdf/199001.pdf": {
+   "content-length": "19005747",
+   "content-type": "application/pdf",
+   "etag": "\"1505011188.0-19005747-981796271\"",
+   "last-modified": "Sun, 10 Sep 2017 02:39:48 GMT",
+   "status": 200
+  },
+  "/pdf/199002.pdf": {
+   "content-length": "19974407",
+   "content-type": "application/pdf",
+   "etag": "\"1505011434.0-19974407-982123952\"",
+   "last-modified": "Sun, 10 Sep 2017 02:43:54 GMT",
+   "status": 200
+  },
+  "/pdf/199003.pdf": {
+   "content-length": "25241837",
+   "content-type": "application/pdf",
+   "etag": "\"1505012231.0-25241837-982451633\"",
+   "last-modified": "Sun, 10 Sep 2017 02:57:11 GMT",
+   "status": 200
+  },
+  "/pdf/199004.pdf": {
+   "content-length": "25756518",
+   "content-type": "application/pdf",
+   "etag": "\"1505013017.0-25756518-982779314\"",
+   "last-modified": "Sun, 10 Sep 2017 03:10:17 GMT",
+   "status": 200
+  },
+  "/pdf/199005.pdf": {
+   "content-length": "24945142",
+   "content-type": "application/pdf",
+   "etag": "\"1505013299.0-24945142-983106995\"",
+   "last-modified": "Sun, 10 Sep 2017 03:14:59 GMT",
+   "status": 200
+  },
+  "/pdf/199006.pdf": {
+   "content-length": "23739268",
+   "content-type": "application/pdf",
+   "etag": "\"1505013585.0-23739268-983434676\"",
+   "last-modified": "Sun, 10 Sep 2017 03:19:45 GMT",
+   "status": 200
+  },
+  "/pdf/199007.pdf": {
+   "content-length": "24135495",
+   "content-type": "application/pdf",
+   "etag": "\"1505013862.0-24135495-983762357\"",
+   "last-modified": "Sun, 10 Sep 2017 03:24:22 GMT",
+   "status": 200
+  },
+  "/pdf/199008.pdf": {
+   "content-length": "31313861",
+   "content-type": "application/pdf",
+   "etag": "\"1505014035.0-31313861-984090038\"",
+   "last-modified": "Sun, 10 Sep 2017 03:27:15 GMT",
+   "status": 200
+  },
+  "/pdf/199009.pdf": {
+   "content-length": "26039674",
+   "content-type": "application/pdf",
+   "etag": "\"1505014343.0-26039674-984417719\"",
+   "last-modified": "Sun, 10 Sep 2017 03:32:23 GMT",
+   "status": 200
+  },
+  "/pdf/199010.pdf": {
+   "content-length": "29627724",
+   "content-type": "application/pdf",
+   "etag": "\"1505014519.0-29627724-981861807\"",
+   "last-modified": "Sun, 10 Sep 2017 03:35:19 GMT",
+   "status": 200
+  },
+  "/pdf/199011.pdf": {
+   "content-length": "23870791",
+   "content-type": "application/pdf",
+   "etag": "\"1505014802.0-23870791-982189488\"",
+   "last-modified": "Sun, 10 Sep 2017 03:40:02 GMT",
+   "status": 200
+  },
+  "/pdf/199012.pdf": {
+   "content-length": "23398996",
+   "content-type": "application/pdf",
+   "etag": "\"1505015090.0-23398996-982517169\"",
+   "last-modified": "Sun, 10 Sep 2017 03:44:50 GMT",
+   "status": 200
+  },
+  "/pdf/199013.pdf": {
+   "content-length": "26565442",
+   "content-type": "application/pdf",
+   "etag": "\"1505015386.0-26565442-982844850\"",
+   "last-modified": "Sun, 10 Sep 2017 03:49:46 GMT",
+   "status": 200
+  },
+  "/pdf/199014.pdf": {
+   "content-length": "23617008",
+   "content-type": "application/pdf",
+   "etag": "\"1505015661.0-23617008-983172531\"",
+   "last-modified": "Sun, 10 Sep 2017 03:54:21 GMT",
+   "status": 200
+  },
+  "/pdf/199015.pdf": {
+   "content-length": "23785392",
+   "content-type": "application/pdf",
+   "etag": "\"1505015928.0-23785392-983500212\"",
+   "last-modified": "Sun, 10 Sep 2017 03:58:48 GMT",
+   "status": 200
+  },
+  "/pdf/199016.pdf": {
+   "content-length": "22945902",
+   "content-type": "application/pdf",
+   "etag": "\"1505016205.0-22945902-983827893\"",
+   "last-modified": "Sun, 10 Sep 2017 04:03:25 GMT",
+   "status": 200
+  },
+  "/pdf/199017.pdf": {
+   "content-length": "25146449",
+   "content-type": "application/pdf",
+   "etag": "\"1505016511.0-25146449-984155574\"",
+   "last-modified": "Sun, 10 Sep 2017 04:08:31 GMT",
+   "status": 200
+  },
+  "/pdf/199018.pdf": {
+   "content-length": "24610286",
+   "content-type": "application/pdf",
+   "etag": "\"1505017372.0-24610286-984483255\"",
+   "last-modified": "Sun, 10 Sep 2017 04:22:52 GMT",
+   "status": 200
+  },
+  "/pdf/199019.pdf": {
+   "content-length": "26853787",
+   "content-type": "application/pdf",
+   "etag": "\"1505017696.0-26853787-984810936\"",
+   "last-modified": "Sun, 10 Sep 2017 04:28:16 GMT",
+   "status": 200
+  },
+  "/pdf/199020.pdf": {
+   "content-length": "23131052",
+   "content-type": "application/pdf",
+   "etag": "\"1505017962.0-23131052-982255024\"",
+   "last-modified": "Sun, 10 Sep 2017 04:32:42 GMT",
+   "status": 200
+  },
+  "/pdf/199101.pdf": {
+   "content-length": "23667957",
+   "content-type": "application/pdf",
+   "etag": "\"1505018240.0-23667957-982255024\"",
+   "last-modified": "Sun, 10 Sep 2017 04:37:20 GMT",
+   "status": 200
+  },
+  "/pdf/199102.pdf": {
+   "content-length": "23212399",
+   "content-type": "application/pdf",
+   "etag": "\"1505018509.0-23212399-982582705\"",
+   "last-modified": "Sun, 10 Sep 2017 04:41:49 GMT",
+   "status": 200
+  },
+  "/pdf/199103.pdf": {
+   "content-length": "23372125",
+   "content-type": "application/pdf",
+   "etag": "\"1505018783.0-23372125-982910386\"",
+   "last-modified": "Sun, 10 Sep 2017 04:46:23 GMT",
+   "status": 200
+  },
+  "/pdf/199104.pdf": {
+   "content-length": "24090439",
+   "content-type": "application/pdf",
+   "etag": "\"1505019055.0-24090439-983238067\"",
+   "last-modified": "Sun, 10 Sep 2017 04:50:55 GMT",
+   "status": 200
+  },
+  "/pdf/199105.pdf": {
+   "content-length": "22410233",
+   "content-type": "application/pdf",
+   "etag": "\"1505019460.0-22410233-983565748\"",
+   "last-modified": "Sun, 10 Sep 2017 04:57:40 GMT",
+   "status": 200
+  },
+  "/pdf/199106.pdf": {
+   "content-length": "25772685",
+   "content-type": "application/pdf",
+   "etag": "\"1505019746.0-25772685-983893429\"",
+   "last-modified": "Sun, 10 Sep 2017 05:02:26 GMT",
+   "status": 200
+  },
+  "/pdf/199107.pdf": {
+   "content-length": "25886898",
+   "content-type": "application/pdf",
+   "etag": "\"1505020033.0-25886898-984221110\"",
+   "last-modified": "Sun, 10 Sep 2017 05:07:13 GMT",
+   "status": 200
+  },
+  "/pdf/199108.pdf": {
+   "content-length": "24823297",
+   "content-type": "application/pdf",
+   "etag": "\"1505020319.0-24823297-984548791\"",
+   "last-modified": "Sun, 10 Sep 2017 05:11:59 GMT",
+   "status": 200
+  },
+  "/pdf/199109.pdf": {
+   "content-length": "24528234",
+   "content-type": "application/pdf",
+   "etag": "\"1505020609.0-24528234-984876472\"",
+   "last-modified": "Sun, 10 Sep 2017 05:16:49 GMT",
+   "status": 200
+  },
+  "/pdf/199110.pdf": {
+   "content-length": "25133496",
+   "content-type": "application/pdf",
+   "etag": "\"1505020884.0-25133496-982320560\"",
+   "last-modified": "Sun, 10 Sep 2017 05:21:24 GMT",
+   "status": 200
+  },
+  "/pdf/199111.pdf": {
+   "content-length": "21907664",
+   "content-type": "application/pdf",
+   "etag": "\"1505021150.0-21907664-982648241\"",
+   "last-modified": "Sun, 10 Sep 2017 05:25:50 GMT",
+   "status": 200
+  },
+  "/pdf/199112.pdf": {
+   "content-length": "22439593",
+   "content-type": "application/pdf",
+   "etag": "\"1505021417.0-22439593-982975922\"",
+   "last-modified": "Sun, 10 Sep 2017 05:30:17 GMT",
+   "status": 200
+  },
+  "/pdf/199113.pdf": {
+   "content-length": "24071175",
+   "content-type": "application/pdf",
+   "etag": "\"1505021702.0-24071175-983303603\"",
+   "last-modified": "Sun, 10 Sep 2017 05:35:02 GMT",
+   "status": 200
+  },
+  "/pdf/199114.pdf": {
+   "content-length": "22286147",
+   "content-type": "application/pdf",
+   "etag": "\"1505021981.0-22286147-983631284\"",
+   "last-modified": "Sun, 10 Sep 2017 05:39:41 GMT",
+   "status": 200
+  },
+  "/pdf/199115.pdf": {
+   "content-length": "25481916",
+   "content-type": "application/pdf",
+   "etag": "\"1505022278.0-25481916-983958965\"",
+   "last-modified": "Sun, 10 Sep 2017 05:44:38 GMT",
+   "status": 200
+  },
+  "/pdf/199116.pdf": {
+   "content-length": "25777191",
+   "content-type": "application/pdf",
+   "etag": "\"1505022564.0-25777191-984286646\"",
+   "last-modified": "Sun, 10 Sep 2017 05:49:24 GMT",
+   "status": 200
+  },
+  "/pdf/199117.pdf": {
+   "content-length": "25618186",
+   "content-type": "application/pdf",
+   "etag": "\"1505022849.0-25618186-984614327\"",
+   "last-modified": "Sun, 10 Sep 2017 05:54:09 GMT",
+   "status": 200
+  },
+  "/pdf/199118.pdf": {
+   "content-length": "25382609",
+   "content-type": "application/pdf",
+   "etag": "\"1505023146.0-25382609-984942008\"",
+   "last-modified": "Sun, 10 Sep 2017 05:59:06 GMT",
+   "status": 200
+  },
+  "/pdf/199119.pdf": {
+   "content-length": "23234304",
+   "content-type": "application/pdf",
+   "etag": "\"1505023434.0-23234304-985269689\"",
+   "last-modified": "Sun, 10 Sep 2017 06:03:54 GMT",
+   "status": 200
+  },
+  "/pdf/199120.pdf": {
+   "content-length": "24372645",
+   "content-type": "application/pdf",
+   "etag": "\"1505023716.0-24372645-982713777\"",
+   "last-modified": "Sun, 10 Sep 2017 06:08:36 GMT",
+   "status": 200
+  },
+  "/pdf/199121.pdf": {
+   "content-length": "23808786",
+   "content-type": "application/pdf",
+   "etag": "\"1505023993.0-23808786-983041458\"",
+   "last-modified": "Sun, 10 Sep 2017 06:13:13 GMT",
+   "status": 200
+  },
+  "/pdf/199122.pdf": {
+   "content-length": "122724692",
+   "content-type": "application/pdf",
+   "etag": "\"1493421509.0-122724692-983369139\"",
+   "last-modified": "Fri, 28 Apr 2017 23:18:29 GMT",
+   "status": 200
+  },
+  "/pdf/199201.pdf": {
+   "content-length": "123750468",
+   "content-type": "application/pdf",
+   "etag": "\"1493422894.0-123750468-982713777\"",
+   "last-modified": "Fri, 28 Apr 2017 23:41:34 GMT",
+   "status": 200
+  },
+  "/pdf/199202.pdf": {
+   "content-length": "121084901",
+   "content-type": "application/pdf",
+   "etag": "\"1493424347.0-121084901-983041458\"",
+   "last-modified": "Sat, 29 Apr 2017 00:05:47 GMT",
+   "status": 200
+  },
+  "/pdf/199203.pdf": {
+   "content-length": "114989465",
+   "content-type": "application/pdf",
+   "etag": "\"1493425622.0-114989465-983369139\"",
+   "last-modified": "Sat, 29 Apr 2017 00:27:02 GMT",
+   "status": 200
+  },
+  "/pdf/199204.pdf": {
+   "content-length": "115677047",
+   "content-type": "application/pdf",
+   "etag": "\"1493426975.0-115677047-983696820\"",
+   "last-modified": "Sat, 29 Apr 2017 00:49:35 GMT",
+   "status": 200
+  },
+  "/pdf/199205.pdf": {
+   "content-length": "110705870",
+   "content-type": "application/pdf",
+   "etag": "\"1493428298.0-110705870-984024501\"",
+   "last-modified": "Sat, 29 Apr 2017 01:11:38 GMT",
+   "status": 200
+  },
+  "/pdf/199206.pdf": {
+   "content-length": "114110422",
+   "content-type": "application/pdf",
+   "etag": "\"1503389520.0-114110422-984352182\"",
+   "last-modified": "Tue, 22 Aug 2017 08:12:00 GMT",
+   "status": 200
+  },
+  "/pdf/199207.pdf": {
+   "content-length": "107926004",
+   "content-type": "application/pdf",
+   "etag": "\"1493431640.0-107926004-984679863\"",
+   "last-modified": "Sat, 29 Apr 2017 02:07:20 GMT",
+   "status": 200
+  },
+  "/pdf/199208.pdf": {
+   "content-length": "115469106",
+   "content-type": "application/pdf",
+   "etag": "\"1493432954.0-115469106-985007544\"",
+   "last-modified": "Sat, 29 Apr 2017 02:29:14 GMT",
+   "status": 200
+  },
+  "/pdf/199209.pdf": {
+   "content-length": "108723437",
+   "content-type": "application/pdf",
+   "etag": "\"1503389522.0-108723437-985335225\"",
+   "last-modified": "Tue, 22 Aug 2017 08:12:02 GMT",
+   "status": 200
+  },
+  "/pdf/199210.pdf": {
+   "content-length": "102238421",
+   "content-type": "application/pdf",
+   "etag": "\"1493436166.0-102238421-982779313\"",
+   "last-modified": "Sat, 29 Apr 2017 03:22:46 GMT",
+   "status": 200
+  },
+  "/pdf/199211.pdf": {
+   "content-length": "107147673",
+   "content-type": "application/pdf",
+   "etag": "\"1493437515.0-107147673-983106994\"",
+   "last-modified": "Sat, 29 Apr 2017 03:45:15 GMT",
+   "status": 200
+  },
+  "/pdf/199212.pdf": {
+   "content-length": "101721728",
+   "content-type": "application/pdf",
+   "etag": "\"1493438708.0-101721728-983434675\"",
+   "last-modified": "Sat, 29 Apr 2017 04:05:08 GMT",
+   "status": 200
+  },
+  "/pdf/199213.pdf": {
+   "content-length": "121613674",
+   "content-type": "application/pdf",
+   "etag": "\"1503389524.0-121613674-983762356\"",
+   "last-modified": "Tue, 22 Aug 2017 08:12:04 GMT",
+   "status": 200
+  },
+  "/pdf/199214.pdf": {
+   "content-length": "112753460",
+   "content-type": "application/pdf",
+   "etag": "\"1503389527.0-112753460-984090037\"",
+   "last-modified": "Tue, 22 Aug 2017 08:12:07 GMT",
+   "status": 200
+  },
+  "/pdf/199215.pdf": {
+   "content-length": "113598543",
+   "content-type": "application/pdf",
+   "etag": "\"1503389529.0-113598543-984417718\"",
+   "last-modified": "Tue, 22 Aug 2017 08:12:09 GMT",
+   "status": 200
+  },
+  "/pdf/199216.pdf": {
+   "content-length": "109552123",
+   "content-type": "application/pdf",
+   "etag": "\"1503389532.0-109552123-984745399\"",
+   "last-modified": "Tue, 22 Aug 2017 08:12:12 GMT",
+   "status": 200
+  },
+  "/pdf/199217.pdf": {
+   "content-length": "115197958",
+   "content-type": "application/pdf",
+   "etag": "\"1503389534.0-115197958-985073080\"",
+   "last-modified": "Tue, 22 Aug 2017 08:12:14 GMT",
+   "status": 200
+  },
+  "/pdf/199218.pdf": {
+   "content-length": "292206183",
+   "content-type": "application/pdf",
+   "etag": "\"1493446052.0-292206183-985400761\"",
+   "last-modified": "Sat, 29 Apr 2017 06:07:32 GMT",
+   "status": 200
+  },
+  "/pdf/199219.pdf": {
+   "content-length": "112163025",
+   "content-type": "application/pdf",
+   "etag": "\"1493447490.0-112163025-985728442\"",
+   "last-modified": "Sat, 29 Apr 2017 06:31:30 GMT",
+   "status": 200
+  },
+  "/pdf/199220.pdf": {
+   "content-length": "108670892",
+   "content-type": "application/pdf",
+   "etag": "\"1503389536.0-108670892-983172530\"",
+   "last-modified": "Tue, 22 Aug 2017 08:12:16 GMT",
+   "status": 200
+  },
+  "/pdf/199221.pdf": {
+   "content-length": "119790591",
+   "content-type": "application/pdf",
+   "etag": "\"1503389539.0-119790591-983500211\"",
+   "last-modified": "Tue, 22 Aug 2017 08:12:19 GMT",
+   "status": 200
+  },
+  "/pdf/199222.pdf": {
+   "content-length": "113911764",
+   "content-type": "application/pdf",
+   "etag": "\"1503389541.0-113911764-983827892\"",
+   "last-modified": "Tue, 22 Aug 2017 08:12:21 GMT",
+   "status": 200
+  },
+  "/pdf/199301.pdf": {
+   "content-length": "68380884",
+   "content-type": "application/pdf",
+   "etag": "\"1501696412.0-68380884-983172530\"",
+   "last-modified": "Wed, 02 Aug 2017 17:53:32 GMT",
+   "status": 200
+  },
+  "/pdf/199302.pdf": {
+   "content-length": "88429881",
+   "content-type": "application/pdf",
+   "etag": "\"1493450501.0-88429881-983500211\"",
+   "last-modified": "Sat, 29 Apr 2017 07:21:41 GMT",
+   "status": 200
+  },
+  "/pdf/199303.pdf": {
+   "content-length": "89792864",
+   "content-type": "application/pdf",
+   "etag": "\"1493451670.0-89792864-983827892\"",
+   "last-modified": "Sat, 29 Apr 2017 07:41:10 GMT",
+   "status": 200
+  },
+  "/pdf/199304.pdf": {
+   "content-length": "79737756",
+   "content-type": "application/pdf",
+   "etag": "\"1501696388.0-79737756-984155573\"",
+   "last-modified": "Wed, 02 Aug 2017 17:53:08 GMT",
+   "status": 200
+  },
+  "/pdf/199305.pdf": {
+   "content-length": "81310369",
+   "content-type": "application/pdf",
+   "etag": "\"1501696390.0-81310369-984483254\"",
+   "last-modified": "Wed, 02 Aug 2017 17:53:10 GMT",
+   "status": 200
+  },
+  "/pdf/199306.pdf": {
+   "content-length": "104341762",
+   "content-type": "application/pdf",
+   "etag": "\"1493452937.0-104341762-984810935\"",
+   "last-modified": "Sat, 29 Apr 2017 08:02:17 GMT",
+   "status": 200
+  },
+  "/pdf/199307.pdf": {
+   "content-length": "102033030",
+   "content-type": "application/pdf",
+   "etag": "\"1493454166.0-102033030-985138616\"",
+   "last-modified": "Sat, 29 Apr 2017 08:22:46 GMT",
+   "status": 200
+  },
+  "/pdf/199308.pdf": {
+   "content-length": "98849696",
+   "content-type": "application/pdf",
+   "etag": "\"1493455369.0-98849696-985466297\"",
+   "last-modified": "Sat, 29 Apr 2017 08:42:49 GMT",
+   "status": 200
+  },
+  "/pdf/199309.pdf": {
+   "content-length": "95283629",
+   "content-type": "application/pdf",
+   "etag": "\"1493456638.0-95283629-985793978\"",
+   "last-modified": "Sat, 29 Apr 2017 09:03:58 GMT",
+   "status": 200
+  },
+  "/pdf/199310.pdf": {
+   "content-length": "82470703",
+   "content-type": "application/pdf",
+   "etag": "\"1501696391.0-82470703-983238066\"",
+   "last-modified": "Wed, 02 Aug 2017 17:53:11 GMT",
+   "status": 200
+  },
+  "/pdf/199311.pdf": {
+   "content-length": "83668248",
+   "content-type": "application/pdf",
+   "etag": "\"1501696414.0-83668248-983565747\"",
+   "last-modified": "Wed, 02 Aug 2017 17:53:34 GMT",
+   "status": 200
+  },
+  "/pdf/199312.pdf": {
+   "content-length": "101735935",
+   "content-type": "application/pdf",
+   "etag": "\"1493459212.0-101735935-983893428\"",
+   "last-modified": "Sat, 29 Apr 2017 09:46:52 GMT",
+   "status": 200
+  },
+  "/pdf/199313.pdf": {
+   "content-length": "80835643",
+   "content-type": "application/pdf",
+   "etag": "\"1501830846.0-80835643-984221109\"",
+   "last-modified": "Fri, 04 Aug 2017 07:14:06 GMT",
+   "status": 200
+  },
+  "/pdf/199314.pdf": {
+   "content-length": "102023382",
+   "content-type": "application/pdf",
+   "etag": "\"1493460659.0-102023382-984548790\"",
+   "last-modified": "Sat, 29 Apr 2017 10:10:59 GMT",
+   "status": 200
+  },
+  "/pdf/199315.pdf": {
+   "content-length": "107328425",
+   "content-type": "application/pdf",
+   "etag": "\"1493462135.0-107328425-984876471\"",
+   "last-modified": "Sat, 29 Apr 2017 10:35:35 GMT",
+   "status": 200
+  },
+  "/pdf/199316.pdf": {
+   "content-length": "107988451",
+   "content-type": "application/pdf",
+   "etag": "\"1493463465.0-107988451-985204152\"",
+   "last-modified": "Sat, 29 Apr 2017 10:57:45 GMT",
+   "status": 200
+  },
+  "/pdf/199317.pdf": {
+   "content-length": "51740140",
+   "content-type": "application/pdf",
+   "etag": "\"1501830851.0-51740140-985531833\"",
+   "last-modified": "Fri, 04 Aug 2017 07:14:11 GMT",
+   "status": 200
+  },
+  "/pdf/199318.pdf": {
+   "content-length": "53050322",
+   "content-type": "application/pdf",
+   "etag": "\"1501830856.0-53050322-985859514\"",
+   "last-modified": "Fri, 04 Aug 2017 07:14:16 GMT",
+   "status": 200
+  },
+  "/pdf/199319.pdf": {
+   "content-length": "52335848",
+   "content-type": "application/pdf",
+   "etag": "\"1501830861.0-52335848-986187195\"",
+   "last-modified": "Fri, 04 Aug 2017 07:14:21 GMT",
+   "status": 200
+  },
+  "/pdf/199320.pdf": {
+   "content-length": "58137127",
+   "content-type": "application/pdf",
+   "etag": "\"1493464281.0-58137127-983631283\"",
+   "last-modified": "Sat, 29 Apr 2017 11:11:21 GMT",
+   "status": 200
+  },
+  "/pdf/199321.pdf": {
+   "content-length": "180233678",
+   "content-type": "application/pdf",
+   "etag": "\"1493468764.0-180233678-983958964\"",
+   "last-modified": "Sat, 29 Apr 2017 12:26:04 GMT",
+   "status": 200
+  },
+  "/pdf/199322.pdf": {
+   "content-length": "50917163",
+   "content-type": "application/pdf",
+   "etag": "\"1501830866.0-50917163-984286645\"",
+   "last-modified": "Fri, 04 Aug 2017 07:14:26 GMT",
+   "status": 200
+  },
+  "/pdf/199401.pdf": {
+   "content-length": "54898146",
+   "content-type": "application/pdf",
+   "etag": "\"1493469559.0-54898146-983631283\"",
+   "last-modified": "Sat, 29 Apr 2017 12:39:19 GMT",
+   "status": 200
+  },
+  "/pdf/199402.pdf": {
+   "content-length": "55260556",
+   "content-type": "application/pdf",
+   "etag": "\"1493470338.0-55260556-983958964\"",
+   "last-modified": "Sat, 29 Apr 2017 12:52:18 GMT",
+   "status": 200
+  },
+  "/pdf/199403.pdf": {
+   "content-length": "54979978",
+   "content-type": "application/pdf",
+   "etag": "\"1493471163.0-54979978-984286645\"",
+   "last-modified": "Sat, 29 Apr 2017 13:06:03 GMT",
+   "status": 200
+  },
+  "/pdf/199404.pdf": {
+   "content-length": "50452127",
+   "content-type": "application/pdf",
+   "etag": "\"1493471944.0-50452127-984614326\"",
+   "last-modified": "Sat, 29 Apr 2017 13:19:04 GMT",
+   "status": 200
+  },
+  "/pdf/199405.pdf": {
+   "content-length": "54875439",
+   "content-type": "application/pdf",
+   "etag": "\"1493472775.0-54875439-984942007\"",
+   "last-modified": "Sat, 29 Apr 2017 13:32:55 GMT",
+   "status": 200
+  },
+  "/pdf/199406.pdf": {
+   "content-length": "56443068",
+   "content-type": "application/pdf",
+   "etag": "\"1493473594.0-56443068-985269688\"",
+   "last-modified": "Sat, 29 Apr 2017 13:46:34 GMT",
+   "status": 200
+  },
+  "/pdf/199407.pdf": {
+   "content-length": "53504202",
+   "content-type": "application/pdf",
+   "etag": "\"1493474368.0-53504202-985597369\"",
+   "last-modified": "Sat, 29 Apr 2017 13:59:28 GMT",
+   "status": 200
+  },
+  "/pdf/199408.pdf": {
+   "content-length": "57310882",
+   "content-type": "application/pdf",
+   "etag": "\"1493475248.0-57310882-985925050\"",
+   "last-modified": "Sat, 29 Apr 2017 14:14:08 GMT",
+   "status": 200
+  },
+  "/pdf/199409.pdf": {
+   "content-length": "65198576",
+   "content-type": "application/pdf",
+   "etag": "\"1501830873.0-65198576-986252731\"",
+   "last-modified": "Fri, 04 Aug 2017 07:14:33 GMT",
+   "status": 200
+  },
+  "/pdf/199410.pdf": {
+   "content-length": "65812205",
+   "content-type": "application/pdf",
+   "etag": "\"1501830879.0-65812205-983696819\"",
+   "last-modified": "Fri, 04 Aug 2017 07:14:39 GMT",
+   "status": 200
+  },
+  "/pdf/199411.pdf": {
+   "content-length": "85038182",
+   "content-type": "application/pdf",
+   "etag": "\"1493476389.0-85038182-984024500\"",
+   "last-modified": "Sat, 29 Apr 2017 14:33:09 GMT",
+   "status": 200
+  },
+  "/pdf/199412.pdf": {
+   "content-length": "81621160",
+   "content-type": "application/pdf",
+   "etag": "\"1493477513.0-81621160-984352181\"",
+   "last-modified": "Sat, 29 Apr 2017 14:51:53 GMT",
+   "status": 200
+  },
+  "/pdf/199413.pdf": {
+   "content-length": "88181264",
+   "content-type": "application/pdf",
+   "etag": "\"1493478808.0-88181264-984679862\"",
+   "last-modified": "Sat, 29 Apr 2017 15:13:28 GMT",
+   "status": 200
+  },
+  "/pdf/199414.pdf": {
+   "content-length": "86026610",
+   "content-type": "application/pdf",
+   "etag": "\"1493479956.0-86026610-985007543\"",
+   "last-modified": "Sat, 29 Apr 2017 15:32:36 GMT",
+   "status": 200
+  },
+  "/pdf/199415.pdf": {
+   "content-length": "66839823",
+   "content-type": "application/pdf",
+   "etag": "\"1501831520.0-66839823-985335224\"",
+   "last-modified": "Fri, 04 Aug 2017 07:25:20 GMT",
+   "status": 200
+  },
+  "/pdf/199416.pdf": {
+   "content-length": "66632030",
+   "content-type": "application/pdf",
+   "etag": "\"1501831482.0-66632030-985662905\"",
+   "last-modified": "Fri, 04 Aug 2017 07:24:42 GMT",
+   "status": 200
+  },
+  "/pdf/199417.pdf": {
+   "content-length": "81736975",
+   "content-type": "application/pdf",
+   "etag": "\"1493482448.0-81736975-985990586\"",
+   "last-modified": "Sat, 29 Apr 2017 16:14:08 GMT",
+   "status": 200
+  },
+  "/pdf/199418.pdf": {
+   "content-length": "82308034",
+   "content-type": "application/pdf",
+   "etag": "\"1493483519.0-82308034-986318267\"",
+   "last-modified": "Sat, 29 Apr 2017 16:31:59 GMT",
+   "status": 200
+  },
+  "/pdf/199419.pdf": {
+   "content-length": "85952045",
+   "content-type": "application/pdf",
+   "etag": "\"1493484697.0-85952045-986645948\"",
+   "last-modified": "Sat, 29 Apr 2017 16:51:37 GMT",
+   "status": 200
+  },
+  "/pdf/199420.pdf": {
+   "content-length": "80849285",
+   "content-type": "application/pdf",
+   "etag": "\"1493485876.0-80849285-984090036\"",
+   "last-modified": "Sat, 29 Apr 2017 17:11:16 GMT",
+   "status": 200
+  },
+  "/pdf/199421.pdf": {
+   "content-length": "85538044",
+   "content-type": "application/pdf",
+   "etag": "\"1493487199.0-85538044-984417717\"",
+   "last-modified": "Sat, 29 Apr 2017 17:33:19 GMT",
+   "status": 200
+  },
+  "/pdf/199422.pdf": {
+   "content-length": "86854326",
+   "content-type": "application/pdf",
+   "etag": "\"1493488452.0-86854326-984745398\"",
+   "last-modified": "Sat, 29 Apr 2017 17:54:12 GMT",
+   "status": 200
+  },
+  "/pdf/199501.pdf": {
+   "content-length": "80845990",
+   "content-type": "application/pdf",
+   "etag": "\"1493489645.0-80845990-984090036\"",
+   "last-modified": "Sat, 29 Apr 2017 18:14:05 GMT",
+   "status": 200
+  },
+  "/pdf/199502.pdf": {
+   "content-length": "82874350",
+   "content-type": "application/pdf",
+   "etag": "\"1493490873.0-82874350-984417717\"",
+   "last-modified": "Sat, 29 Apr 2017 18:34:33 GMT",
+   "status": 200
+  },
+  "/pdf/199503.pdf": {
+   "content-length": "91881003",
+   "content-type": "application/pdf",
+   "etag": "\"1493492071.0-91881003-984745398\"",
+   "last-modified": "Sat, 29 Apr 2017 18:54:31 GMT",
+   "status": 200
+  },
+  "/pdf/199504.pdf": {
+   "content-length": "81978871",
+   "content-type": "application/pdf",
+   "etag": "\"1493493326.0-81978871-985073079\"",
+   "last-modified": "Sat, 29 Apr 2017 19:15:26 GMT",
+   "status": 200
+  },
+  "/pdf/19950506.pdf": {
+   "content-length": "84041639",
+   "content-type": "application/pdf",
+   "etag": "\"1493515391.0-84041639-1166673438\"",
+   "last-modified": "Sun, 30 Apr 2017 01:23:11 GMT",
+   "status": 200
+  },
+  "/pdf/199507.pdf": {
+   "content-length": "120787819",
+   "content-type": "application/pdf",
+   "etag": "\"1493495081.0-120787819-986056122\"",
+   "last-modified": "Sat, 29 Apr 2017 19:44:41 GMT",
+   "status": 200
+  },
+  "/pdf/199508.pdf": {
+   "content-length": "358882364",
+   "content-type": "application/pdf",
+   "etag": "\"1493497905.0-358882364-986383803\"",
+   "last-modified": "Sat, 29 Apr 2017 20:31:45 GMT",
+   "status": 200
+  },
+  "/pdf/199509.pdf": {
+   "content-length": "122693287",
+   "content-type": "application/pdf",
+   "etag": "\"1493499475.0-122693287-986711484\"",
+   "last-modified": "Sat, 29 Apr 2017 20:57:55 GMT",
+   "status": 200
+  },
+  "/pdf/199510.pdf": {
+   "content-length": "117261799",
+   "content-type": "application/pdf",
+   "etag": "\"1493500955.0-117261799-984155572\"",
+   "last-modified": "Sat, 29 Apr 2017 21:22:35 GMT",
+   "status": 200
+  },
+  "/pdf/199511.pdf": {
+   "content-length": "120044394",
+   "content-type": "application/pdf",
+   "etag": "\"1493502299.0-120044394-984483253\"",
+   "last-modified": "Sat, 29 Apr 2017 21:44:59 GMT",
+   "status": 200
+  },
+  "/pdf/199512.pdf": {
+   "content-length": "114445559",
+   "content-type": "application/pdf",
+   "etag": "\"1493503473.0-114445559-984810934\"",
+   "last-modified": "Sat, 29 Apr 2017 22:04:33 GMT",
+   "status": 200
+  },
+  "/pdf/199513.pdf": {
+   "content-length": "110885579",
+   "content-type": "application/pdf",
+   "etag": "\"1493504813.0-110885579-985138615\"",
+   "last-modified": "Sat, 29 Apr 2017 22:26:53 GMT",
+   "status": 200
+  },
+  "/pdf/199514.pdf": {
+   "content-length": "115605773",
+   "content-type": "application/pdf",
+   "etag": "\"1493506257.0-115605773-985466296\"",
+   "last-modified": "Sat, 29 Apr 2017 22:50:57 GMT",
+   "status": 200
+  },
+  "/pdf/199515.pdf": {
+   "content-length": "563123977",
+   "content-type": "application/pdf",
+   "etag": "\"1493509840.0-563123977-985793977\"",
+   "last-modified": "Sat, 29 Apr 2017 23:50:40 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199317.pdf": {
+   "content-length": "90700078",
+   "content-type": "application/pdf",
+   "etag": "\"1503389842.0-90700078-2458978658\"",
+   "last-modified": "Tue, 22 Aug 2017 08:17:22 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199318.pdf": {
+   "content-length": "85506354",
+   "content-type": "application/pdf",
+   "etag": "\"1503389844.0-85506354-2459306339\"",
+   "last-modified": "Tue, 22 Aug 2017 08:17:24 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199319.pdf": {
+   "content-length": "86812684",
+   "content-type": "application/pdf",
+   "etag": "\"1503389846.0-86812684-2459634020\"",
+   "last-modified": "Tue, 22 Aug 2017 08:17:26 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199320.pdf": {
+   "content-length": "136874488",
+   "content-type": "application/pdf",
+   "etag": "\"1496778925.0-136874488-2457078108\"",
+   "last-modified": "Tue, 06 Jun 2017 19:55:25 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199321.pdf": {
+   "content-length": "84892950",
+   "content-type": "application/pdf",
+   "etag": "\"1503389848.0-84892950-2457405789\"",
+   "last-modified": "Tue, 22 Aug 2017 08:17:28 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199322.pdf": {
+   "content-length": "86371089",
+   "content-type": "application/pdf",
+   "etag": "\"1503389850.0-86371089-2457733470\"",
+   "last-modified": "Tue, 22 Aug 2017 08:17:30 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199401.pdf": {
+   "content-length": "142195791",
+   "content-type": "application/pdf",
+   "etag": "\"1496780637.0-142195791-2457078108\"",
+   "last-modified": "Tue, 06 Jun 2017 20:23:57 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199402.pdf": {
+   "content-length": "141150412",
+   "content-type": "application/pdf",
+   "etag": "\"1496782376.0-141150412-2457405789\"",
+   "last-modified": "Tue, 06 Jun 2017 20:52:56 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199403.pdf": {
+   "content-length": "144171492",
+   "content-type": "application/pdf",
+   "etag": "\"1496784139.0-144171492-2457733470\"",
+   "last-modified": "Tue, 06 Jun 2017 21:22:19 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199404.pdf": {
+   "content-length": "140048778",
+   "content-type": "application/pdf",
+   "etag": "\"1496785987.0-140048778-2458061151\"",
+   "last-modified": "Tue, 06 Jun 2017 21:53:07 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199405.pdf": {
+   "content-length": "122786233",
+   "content-type": "application/pdf",
+   "etag": "\"1496787625.0-122786233-2458388832\"",
+   "last-modified": "Tue, 06 Jun 2017 22:20:25 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199406.pdf": {
+   "content-length": "139795323",
+   "content-type": "application/pdf",
+   "etag": "\"1496789526.0-139795323-2458716513\"",
+   "last-modified": "Tue, 06 Jun 2017 22:52:06 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199407.pdf": {
+   "content-length": "132723355",
+   "content-type": "application/pdf",
+   "etag": "\"1496791263.0-132723355-2459044194\"",
+   "last-modified": "Tue, 06 Jun 2017 23:21:03 GMT",
+   "status": 200
+  },
+  "/pdf/HighScore-199408.pdf": {
+   "content-length": "140407039",
+   "content-type": "application/pdf",
+   "etag": "\"1496792987.0-140407039-2459371875\"",
+   "last-modified": "Tue, 06 Jun 2017 23:49:47 GMT",
+   "status": 200
+  }
+ }
+}
