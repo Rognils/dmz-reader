@@ -1,0 +1,10 @@
+# Nedladdade PDF:er, PDF-cache och sökindex versionshanteras inte (plan G4)
+*.pdf
+cache/
+data/samples/
+search.db
+*.db
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
