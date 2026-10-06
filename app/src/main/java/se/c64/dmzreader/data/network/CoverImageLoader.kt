@@ -31,9 +31,13 @@ object CoverImageLoader {
     private const val CACHE_DIRECTORY = "cover_cache"
 
     fun create(context: Context): ImageLoader {
+        val debuggable = context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
+        return create(context, createHttpClient(logRequests = debuggable), debuggable)
+    }
+
+    /** Med egen HTTP-klient, så att tester kan läsa av samtidigheten. */
+    fun create(context: Context, client: OkHttpClient, logErrors: Boolean = false): ImageLoader {
         val appContext = context.applicationContext
-        val debuggable = appContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
-        val client = createHttpClient(logRequests = debuggable)
         return ImageLoader.Builder(appContext)
             .components { add(OkHttpNetworkFetcherFactory(callFactory = { client })) }
             .diskCache {
@@ -44,7 +48,7 @@ object CoverImageLoader {
             }
             // Minnescachen har Coils standardstorlek.
             .crossfade(true)
-            .apply { if (debuggable) logger(DebugLogger(Logger.Level.Warn)) }
+            .apply { if (logErrors) logger(DebugLogger(Logger.Level.Warn)) }
             .build()
     }
 
