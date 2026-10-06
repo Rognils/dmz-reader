@@ -58,12 +58,13 @@ class IssueViewModel(repository: LibraryRepository, issueId: String) : ViewModel
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), IssueUiState())
 }
 
-/** Nummervyn (planens E6), utan läsning och nedladdning. De kommer i FAS 3 och 5. */
+/** Nummervyn (planens E6). Permanent nedladdning kommer i FAS 5. */
 @Composable
 fun IssueScreen(
     viewModel: IssueViewModel,
     imageLoader: ImageLoader,
     onOpenIssue: (issueId: String) -> Unit,
+    onRead: (issueId: String) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -79,7 +80,7 @@ fun IssueScreen(
             )
         }
         when {
-            details != null -> IssueContent(details.issue, details.related, imageLoader, onOpenIssue)
+            details != null -> IssueContent(details.issue, details.related, imageLoader, onOpenIssue, onRead)
             !state.loading -> Text(
                 text = "Numret finns inte i det aktuella arkivindexet.",
                 style = MaterialTheme.typography.bodyLarge,
@@ -96,6 +97,7 @@ private fun IssueContent(
     related: RelatedIssue?,
     imageLoader: ImageLoader,
     onOpenIssue: (String) -> Unit,
+    onRead: (String) -> Unit,
 ) {
     Column(modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 24.dp)) {
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -116,19 +118,22 @@ private fun IssueContent(
 
         val action = issue.readAction()
         Button(
-            onClick = {},
-            enabled = false,
+            onClick = { onRead(issue.issueId) },
+            enabled = action == ReadAction.READ,
             modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
             colors = ButtonDefaults.buttonColors(
+                containerColor = DmzColors.Accent,
+                contentColor = DmzColors.Background,
                 disabledContainerColor = DmzColors.Surface,
                 disabledContentColor = DmzColors.TextSecondary,
             ),
         ) {
             Text(
                 text = when (action) {
-                    ReadAction.COMING_SOON -> "Läsaren kommer snart"
+                    ReadAction.READ -> "Läs"
                     ReadAction.PDF_MISSING -> "PDF saknas"
                 },
+                style = MaterialTheme.typography.titleMedium,
             )
         }
 

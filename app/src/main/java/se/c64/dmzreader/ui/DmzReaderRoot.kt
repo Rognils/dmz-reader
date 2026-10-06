@@ -12,6 +12,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,6 +37,8 @@ import se.c64.dmzreader.ui.issue.IssueScreen
 import se.c64.dmzreader.ui.issue.IssueViewModel
 import se.c64.dmzreader.ui.library.LibraryScreen
 import se.c64.dmzreader.ui.library.LibraryViewModel
+import se.c64.dmzreader.ui.reader.ReaderRoute
+import se.c64.dmzreader.ui.reader.ReaderViewModel
 import se.c64.dmzreader.ui.search.SearchScreen
 import se.c64.dmzreader.ui.settings.DiagnosticsScreen
 import se.c64.dmzreader.ui.settings.DiagnosticsViewModel
@@ -61,12 +65,14 @@ private object Routes {
     const val STATISTICS = "statistics"
     const val SETTINGS = "settings"
     const val DIAGNOSTICS = "settings/diagnostics"
+    const val READER = "reader/{issueId}"
 
+    fun reader(issueId: String) = "reader/$issueId"
     fun year(publicationId: String, year: Int) = "year/$publicationId/$year"
     fun issue(issueId: String) = "issue/$issueId"
 
     /** Vyer som visas utan bottenfält. */
-    val withoutBottomBar = setOf(SETTINGS, DIAGNOSTICS)
+    val withoutBottomBar = setOf(SETTINGS, DIAGNOSTICS, READER)
 }
 
 private data class Tab(val route: String, val label: String, val icon: ImageVector)
@@ -88,6 +94,8 @@ fun DmzReaderRoot(container: AppContainer) {
 
     Scaffold(
         containerColor = DmzColors.Background,
+        // Läsaren ritar under systemfälten. Övriga vyer håller sig innanför dem.
+        contentWindowInsets = if (destination?.route == Routes.READER) WindowInsets(0) else ScaffoldDefaults.contentWindowInsets,
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar(containerColor = DmzColors.Surface) {
@@ -177,9 +185,29 @@ fun DmzReaderRoot(container: AppContainer) {
                         viewModel = viewModel,
                         imageLoader = container.imageLoader,
                         onOpenIssue = { navController.navigate(Routes.issue(it)) },
+                        onRead = { navController.navigate(Routes.reader(it)) },
                         onBack = { navController.popBackStack() },
                     )
                 }
+            }
+            composable(
+                route = Routes.READER,
+                arguments = listOf(navArgument("issueId") { type = NavType.StringType }),
+            ) { entry ->
+                val issueId = requireNotNull(entry.arguments?.getString("issueId"))
+                val viewModel: ReaderViewModel = viewModel(
+                    factory = viewModelFactory {
+                        initializer {
+                            ReaderViewModel(
+                                issueId,
+                                container.libraryRepository,
+                                container.pdfRepository,
+                                container.thumbnailRoot,
+                            )
+                        }
+                    },
+                )
+                ReaderRoute(viewModel, container.imageLoader, onClose = { navController.popBackStack() })
             }
             composable(Routes.SEARCH) { SearchScreen() }
             composable(Routes.FAVORITES) { FavoritesScreen() }
