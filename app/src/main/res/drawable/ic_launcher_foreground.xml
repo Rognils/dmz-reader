@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ett uppslaget tidningsnummer med en markör, i appens accentfärg. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#ECE8DF"
+        android:pathData="M34,36h18v36h-18z" />
+    <path
+        android:fillColor="#A9A499"
+        android:pathData="M56,36h18v36h-18z" />
+    <path
+        android:fillColor="#F5B53D"
+        android:pathData="M60,62h10v6h-10z" />
+</vector>
