@@ -1,6 +1,7 @@
 package se.c64.dmzreader
 
 import android.content.Context
+import coil3.ImageLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -10,10 +11,13 @@ import kotlinx.coroutines.launch
 import se.c64.dmzreader.data.db.DmzDatabase
 import se.c64.dmzreader.data.inventory.InventoryImporter
 import se.c64.dmzreader.data.inventory.InventoryLoadResult
+import se.c64.dmzreader.data.network.CoverImageLoader
 import se.c64.dmzreader.data.repository.DiagnosticsRepository
 import se.c64.dmzreader.data.repository.LibraryRepository
 import se.c64.dmzreader.data.settings.ActiveInventoryStore
 import se.c64.dmzreader.data.settings.DataStoreActiveInventoryStore
+import se.c64.dmzreader.data.settings.DataStoreLibraryPreferences
+import se.c64.dmzreader.data.settings.LibraryPreferences
 
 /** Läget för inläsningen av det inventory som följer med appen. */
 sealed interface InventoryStatus {
@@ -27,6 +31,10 @@ class AppContainer(private val context: Context) {
 
     val database: DmzDatabase by lazy { DmzDatabase.create(context) }
     val activeInventory: ActiveInventoryStore by lazy { DataStoreActiveInventoryStore(context) }
+    val libraryPreferences: LibraryPreferences by lazy { DataStoreLibraryPreferences(context) }
+
+    /** En enda bildladdare för hela appen, så att cache och samtidighetsgräns delas. */
+    val imageLoader: ImageLoader by lazy { CoverImageLoader.create(context) }
     val libraryRepository by lazy { LibraryRepository(database.issueDao()) }
     val diagnosticsRepository by lazy { DiagnosticsRepository(context, database) }
 
