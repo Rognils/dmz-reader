@@ -1,7 +1,7 @@
 package se.c64.dmzreader
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
@@ -58,8 +58,8 @@ class LibraryNavigationTest {
         // Årgång → Nummer. Omslaget har en beskrivning för skärmläsare.
         waitForDescription("Datormagazin 1989 Nr 6")
         rule.onNodeWithContentDescription("Datormagazin 1989 Nr 6").performClick()
-        waitForText("Läsaren kommer snart")
-        rule.onNodeWithText("Läsaren kommer snart").assertIsNotEnabled()
+        waitForText("Läs")
+        rule.onNodeWithText("Läs").assertIsEnabled()
         rule.onNodeWithText("DATORMAGAZIN 1989").assertIsDisplayed()
         rule.onNodeWithText("≈ 48 sidor").assertIsDisplayed()
         rule.onNodeWithText("25,7 MB").assertIsDisplayed()
@@ -85,7 +85,7 @@ class LibraryNavigationTest {
             .performScrollToNode(hasContentDescription("Datormagazin 1993 Nr 22"))
         rule.onNodeWithContentDescription("Datormagazin 1993 Nr 22").assertIsDisplayed()
         rule.onNodeWithContentDescription("Datormagazin 1993 Nr 22").performClick()
-        waitForText("Läsaren kommer snart")
+        waitForText("Läs")
 
         pressBack()
         // Utan bevarad position hade rutnätet börjat om från början. Då hade rubriken
