@@ -6,6 +6,7 @@ Python-verktyg som gör om DMZArkivets råa katalogstruktur till det inventory s
 
 - Python 3.10 eller senare
 - paketet `jsonschema` (för validering mot `docs/inventory.schema.json`)
+- paketet `Pillow` med WebP-stöd (för omslagsminiatyrerna)
 
 ```bash
 python3 -m venv .venv
@@ -27,6 +28,11 @@ Exemplen nedan skriver `python3`. Använd `.venv/bin/python` om du installerat i
 | `data/inventory_diagnostics.json` | härledd data för toolchainen, ingår inte i appen | `archive_inventory.py` |
 | `data/inventory_diff.json` | jämförelse mot ett annat inventory; versionshanteras inte | `archive_inventory.py --compare-to` |
 | `docs/inventory.schema.json` | JSON Schema (draft 2020-12) för inventory | för hand |
+| `cache/covers/` | omslag i original, cirka 1,5 GB; versionshanteras inte | `fetch_covers.py` |
+| `data/covers/` | **omslagsminiatyrer som följer med appen** | `build_covers.py` |
+| `data/covers_manifest.json` | källa, storlek och kontrollsumma per miniatyr | `build_covers.py` |
+| `data/cover_review.json` | visuell granskning av kontaktkartan | för hand |
+| `docs/screenshots/covers/contact_sheet.png` | alla valda omslag som små bilder | `build_covers.py` |
 
 ## Köra inventeringen
 
@@ -93,7 +99,8 @@ Det som inte går att härleda ur filnamnen rättas här, inte i koden.
 
 | Fält | Verkan |
 |---|---|
-| `coverFlags` | ersätter listan. Tillåtna värden: `rotate_cw`, `rotate_ccw`, `rotate_180` (högst en) och `crop_left_half`, `crop_right_half` (högst en). Appen vrider först och beskär sedan. |
+| `coverFlags` | ersätter listan. Rättar webbens sidbild 1. Tillåtna värden: `rotate_cw`, `rotate_ccw`, `rotate_180` (högst en) och `crop_left_half`, `crop_right_half` (högst en). Ordningen är alltid vridning, beskärning, skalning. |
+| `coverSource` | tvingar källan för miniatyren: `covers_ftp` eller `web_page1`. Skrivs inte till inventory. |
 | `spreadOffset` | ersätter värdet; heltal eller `null` |
 | `issueLabel` | ersätter visningstexten |
 | `flags` | **läggs till** de genererade flaggorna |
@@ -148,8 +155,35 @@ python3 -m unittest discover -s tools/tests -v
 - `test_normalize.py`: namnreglerna, med verkliga filnamn och alla specialfall
 - `test_inventory.py`: fälten i inventory, rättelser, schemavalidering, felfall, jämförelse och determinism
 - `test_fts_testdb.py`: testindexets format, innehåll och determinism
+- `test_covers.py`: transformordningen, klassningen och de versionshanterade miniatyrerna
 
 Testerna kör mot cachefilerna i `data/` och gör inga nätanrop.
+
+## Omslag (`fetch_covers.py` och `build_covers.py`)
+
+Omslagen tas fram av toolchainen och följer med i appen som miniatyrer (ADR 0016).
+
+```bash
+python3 tools/fetch_covers.py             # hämtar original till cache/covers/ (en gång)
+python3 tools/build_covers.py --review    # bygger data/covers/ och kontaktkartan
+python3 tools/archive_inventory.py --offline
+```
+
+**Hämtning.** `fetch_covers.py` hämtar webbplatsens sidbild 1 för alla nummer (HTTPS) och alla `.jpg` och `.png` i FTP-katalogen `Covers`. En anslutning, 0,6 s paus mellan filerna, och filer som redan finns i cachen med rätt storlek hoppas över, så en avbruten körning kan startas om. `--offline` visar bara vad som finns.
+
+**Källa per nummer**, i den här ordningen:
+
+1. bearbetat omslag från `Covers`. En fil räknas som bearbetad om den skiljer sig från sidbild 1 vid en nedskalad pixeljämförelse (inte bara i filstorlek). De flesta filerna i `Covers` är obearbetade kopior av skanningen.
+2. webbens sidbild 1, rättad enligt `coverFlags` i `tools/overrides.json`
+3. ingen bild; appen visar en platshållare
+
+**Transformordningen** är alltid: vridning, beskärning, skalning. `coverFlags` tillämpas bara på webbens sidbild, aldrig på en fil från `Covers`.
+
+**Miniatyrer.** Högst 600 px breda, WebP med kvalitet 80. Utdatan är deterministisk för en given version av Pillow: samma original ger samma filer. `data/covers/` versionshanteras, eftersom miniatyrerna är små och avgör appens utseende. Appens byggsteg kopierar dem till `assets/covers/`.
+
+**Granskning.** `--review` skriver större kontaktkartor per år till `cache/covers/review/`. Titta igenom dem efter en ny hämtning. Ett omslag som är ett uppslag eller står på sidan rättas med `coverFlags` i `tools/overrides.json`, och granskningen förs in i `data/cover_review.json` (klasserna `ok`, `uppslag_vridet`, `annat`). Kör sedan om `build_covers.py` och `archive_inventory.py`.
+
+Efter en ändring av miniatyrerna: höj `datasetSequence` i `tools/config.json`, så att appen läser in det nya inventoryt.
 
 ## Testindex för FTS5 (`build_fts_testdb.py`)
 

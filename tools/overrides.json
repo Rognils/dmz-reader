@@ -2,8 +2,88 @@
   "comment": "Manuella rättelser som slås ihop med inventory efter normaliseringen. Se tools/README.md.",
   "overrides": {
     "datormagazin-1986-01": {
-      "coverFlags": ["rotate_cw", "crop_right_half"],
-      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs. Vriden medurs ligger baksidan till vänster och framsidan till höger (granskat i FAS 2)."
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs: vriden medurs ligger baksidan till vänster och framsidan till höger. Miniatyren tas från det bearbetade omslaget i Covers; rättningen gäller reservvägen med coverUrl."
+    },
+    "datormagazin-1987-07": {
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs, och Covers saknar omslag för numret. Framsidan är högra halvan efter vridning medurs (granskat på kontaktkartan i FAS 2)."
+    },
+    "datormagazin-1987-08": {
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs, och Covers saknar omslag för numret. Framsidan är högra halvan efter vridning medurs (granskat på kontaktkartan i FAS 2)."
+    },
+    "datormagazin-1987-09": {
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs, och Covers saknar omslag för numret. Framsidan är högra halvan efter vridning medurs (granskat på kontaktkartan i FAS 2)."
+    },
+    "datormagazin-1987-10": {
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs, och Covers saknar omslag för numret. Framsidan är högra halvan efter vridning medurs (granskat på kontaktkartan i FAS 2)."
+    },
+    "datormagazin-1988-09": {
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs, och Covers saknar omslag för numret. Framsidan är högra halvan efter vridning medurs (granskat på kontaktkartan i FAS 2)."
+    },
+    "datormagazin-1988-10": {
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs, och Covers saknar omslag för numret. Framsidan är högra halvan efter vridning medurs (granskat på kontaktkartan i FAS 2)."
+    },
+    "datormagazin-1988-13": {
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs, och Covers saknar omslag för numret. Framsidan är högra halvan efter vridning medurs (granskat på kontaktkartan i FAS 2)."
+    },
+    "datormagazin-1988-15": {
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs, och Covers saknar omslag för numret. Framsidan är högra halvan efter vridning medurs (granskat på kontaktkartan i FAS 2)."
+    },
+    "datormagazin-1989-02": {
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs, och Covers saknar omslag för numret. Framsidan är högra halvan efter vridning medurs (granskat på kontaktkartan i FAS 2)."
+    },
+    "datormagazin-1989-04": {
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs, och Covers saknar omslag för numret. Framsidan är högra halvan efter vridning medurs (granskat på kontaktkartan i FAS 2)."
+    },
+    "datormagazin-1989-05": {
+      "coverFlags": [
+        "rotate_cw",
+        "crop_right_half"
+      ],
+      "reason": "Sidbild 1 är ett liggande uppslag vridet 90 grader moturs, och Covers saknar omslag för numret. Framsidan är högra halvan efter vridning medurs (granskat på kontaktkartan i FAS 2)."
     }
   }
 }

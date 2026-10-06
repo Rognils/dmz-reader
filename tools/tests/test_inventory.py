@@ -46,7 +46,7 @@ class Generated(unittest.TestCase):
 class InventoryContent(Generated):
     FIELDS = {
         "issueId", "publicationId", "publicationTitle", "year", "issueLabel", "sortKey",
-        "sourceKey", "sourceNames", "relatedIssueId", "coverUrl", "coverFlags", "ocrPdfUrl",
+        "sourceKey", "sourceNames", "relatedIssueId", "coverUrl", "coverFlags", "coverAsset", "ocrPdfUrl",
         "ocrPdfSize", "ocrPdfEtag", "ocrPdfLastModified", "largePdfUrl", "largePdfSize",
         "hqSource", "scanPagePattern", "scanPageCount", "pageCount", "spreadOffset", "flags",
     }
@@ -242,12 +242,12 @@ class MissingMaterial(Generated):
 
 
 class Overrides(Generated):
-    def test_committed_override_sets_cover_transform(self):
-        self.assertEqual(self.issues["datormagazin-1986-01"]["coverFlags"],
-                         ["crop_right_half", "rotate_cw"])
-        others = [i for i, issue in self.issues.items()
-                  if issue["coverFlags"] and i != "datormagazin-1986-01"]
-        self.assertEqual(others, [])
+    def test_committed_overrides_set_cover_transform(self):
+        flagged = {i: issue["coverFlags"] for i, issue in self.issues.items() if issue["coverFlags"]}
+        self.assertEqual(len(flagged), 12)
+        self.assertEqual(set(map(tuple, flagged.values())), {("crop_right_half", "rotate_cw")})
+        self.assertIn("datormagazin-1986-01", flagged)
+        self.assertIn("datormagazin-1989-05", flagged)
         self.assertEqual(self.diagnostics["issues"]["datormagazin-1986-01"]["appliedOverrides"],
                          ["coverFlags"])
 
@@ -281,6 +281,17 @@ class Overrides(Generated):
     def test_spread_offset_can_be_reset_to_null(self):
         inventory = self.fresh()
         ai.apply_overrides(inventory, {"datormagazin-1989-06": {"spreadOffset": None}})
+
+    def test_cover_source_override_is_not_an_inventory_field(self):
+        inventory = self.fresh()
+        diagnostics = copy.deepcopy(self.diagnostics)
+        ai.apply_overrides(inventory, {"datormagazin-1989-06": {"coverSource": "web_page1"}}, diagnostics)
+        issue = next(i for i in inventory["issues"] if i["issueId"] == "datormagazin-1989-06")
+        self.assertNotIn("coverSource", issue)
+        self.assertEqual(diagnostics["issues"]["datormagazin-1989-06"]["appliedOverrides"], ["coverSource"])
+        self.assertEqual(self.errors(inventory), [])
+        with self.assertRaises(ai.OverrideError):
+            ai.apply_overrides(self.fresh(), {"datormagazin-1989-06": {"coverSource": "ftp"}})
 
     def test_unknown_issue_id_is_an_error(self):
         with self.assertRaisesRegex(ai.OverrideError, "okänt issueId: datormagazin-1999-01"):
@@ -348,12 +359,12 @@ class SchemaValidation(Generated):
     def test_optional_fields_may_be_absent_or_null(self):
         inventory = self.fresh()
         issue = self.issue(inventory)
-        for field in ("relatedIssueId", "ocrPdfSize", "ocrPdfEtag", "ocrPdfLastModified",
+        for field in ("relatedIssueId", "coverAsset", "ocrPdfSize", "ocrPdfEtag", "ocrPdfLastModified",
                       "largePdfUrl", "largePdfSize", "hqSource", "scanPagePattern",
                       "scanPageCount", "pageCount", "spreadOffset"):
             issue[field] = None
         self.assertEqual(self.errors(inventory), [])
-        for field in ("relatedIssueId", "ocrPdfSize", "pageCount", "spreadOffset"):
+        for field in ("relatedIssueId", "coverAsset", "ocrPdfSize", "pageCount", "spreadOffset"):
             del issue[field]
         self.assertEqual(self.errors(inventory), [])
 
@@ -378,7 +389,9 @@ class SchemaValidation(Generated):
                  ("flags", "double_issue"), ("coverFlags", ["rotated"]),
                  ("coverFlags", ["rotate_cw", "rotate_180"]),
                  ("coverFlags", ["crop_left_half", "crop_right_half"]),
-                 ("scanPagePattern", "ftp://dmzarkivet.se/x/DMZ_1989-06-001.jpg")]
+                 ("scanPagePattern", "ftp://dmzarkivet.se/x/DMZ_1989-06-001.jpg"),
+                 ("coverAsset", "covers/Omslag 1.webp"), ("coverAsset", "datormagazin-1989-06.webp"),
+                 ("coverAsset", "covers/../x.webp"), ("coverAsset", "covers/datormagazin-1989-06.jpg")]
         for field, value in cases:
             inventory = self.fresh()
             self.issue(inventory)[field] = value

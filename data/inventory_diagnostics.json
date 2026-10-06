@@ -1,13 +1,15 @@
 {
- "datasetVersion": "2026-10-06-003",
- "generator": "archive_inventory.py 0.2.1",
+ "datasetVersion": "2026-10-06-004",
+ "generator": "archive_inventory.py 0.3.0",
  "httpsProbedAt": "2026-10-06T11:30:53Z",
  "issues": {
   "datormagazin-1986-01": {
    "appliedOverrides": [
     "coverFlags"
    ],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1986-01-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 8069426,
    "ftpOcrPdfSize": 89016973,
@@ -28,7 +30,9 @@
   },
   "datormagazin-1986-02": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1986-02-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 5461737,
    "ftpOcrPdfSize": 101964831,
@@ -44,7 +48,9 @@
   },
   "datormagazin-1986-03": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1986-03-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 8787200,
    "ftpOcrPdfSize": 105949528,
@@ -60,7 +66,9 @@
   },
   "datormagazin-1986-04": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 99954855,
@@ -77,7 +85,9 @@
   },
   "datormagazin-1987-01": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1987-01-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 7673880,
    "ftpOcrPdfSize": 111431661,
@@ -93,7 +103,9 @@
   },
   "datormagazin-1987-02": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1987-02-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6947421,
    "ftpOcrPdfSize": 123457371,
@@ -109,7 +121,9 @@
   },
   "datormagazin-1987-03": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1987-03-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 18281159,
    "ftpOcrPdfSize": 202386922,
@@ -125,7 +139,9 @@
   },
   "datormagazin-1987-04-05": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1987-04-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1834477,
    "ftpOcrPdfSize": 58456351,
@@ -141,7 +157,9 @@
   },
   "datormagazin-1987-06": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1987-06-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 10020435,
    "ftpOcrPdfSize": 154173941,
@@ -156,8 +174,12 @@
    "webPdfSize": 27882487
   },
   "datormagazin-1987-07": {
-   "appliedOverrides": [],
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 211205512,
@@ -172,8 +194,12 @@
    "webPdfSize": 21906862
   },
   "datormagazin-1987-08": {
-   "appliedOverrides": [],
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 213051410,
@@ -188,8 +214,12 @@
    "webPdfSize": 22711805
   },
   "datormagazin-1987-09": {
-   "appliedOverrides": [],
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
@@ -204,8 +234,12 @@
    "webPdfSize": 28193113
   },
   "datormagazin-1987-10": {
-   "appliedOverrides": [],
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
@@ -221,7 +255,9 @@
   },
   "datormagazin-1987-10b": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
@@ -237,7 +273,9 @@
   },
   "datormagazin-1988-01": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1988-01-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 8964577,
    "ftpOcrPdfSize": 142655340,
@@ -253,7 +291,9 @@
   },
   "datormagazin-1988-02": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1988-02-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9411488,
    "ftpOcrPdfSize": 79240324,
@@ -269,7 +309,9 @@
   },
   "datormagazin-1988-03": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1988-03-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6638568,
    "ftpOcrPdfSize": 97089456,
@@ -285,7 +327,9 @@
   },
   "datormagazin-1988-04": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1988-04-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 5396228,
    "ftpOcrPdfSize": 95674823,
@@ -301,7 +345,9 @@
   },
   "datormagazin-1988-05": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1988-05-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 13707461,
    "ftpOcrPdfSize": 95625004,
@@ -317,7 +363,9 @@
   },
   "datormagazin-1988-06": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1988-06-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 5895198,
    "ftpOcrPdfSize": 97092781,
@@ -333,7 +381,9 @@
   },
   "datormagazin-1988-07": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1988-07-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6218042,
    "ftpOcrPdfSize": 83047881,
@@ -349,7 +399,9 @@
   },
   "datormagazin-1988-08": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1988-08-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6119681,
    "ftpOcrPdfSize": 78303315,
@@ -364,8 +416,12 @@
    "webPdfSize": 20261222
   },
   "datormagazin-1988-09": {
-   "appliedOverrides": [],
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
@@ -380,8 +436,12 @@
    "webPdfSize": 21732720
   },
   "datormagazin-1988-10": {
-   "appliedOverrides": [],
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
@@ -397,7 +457,9 @@
   },
   "datormagazin-1988-11": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1988-11-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6146417,
    "ftpOcrPdfSize": 108502201,
@@ -413,7 +475,9 @@
   },
   "datormagazin-1988-12": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1988-12-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 5262111,
    "ftpOcrPdfSize": 99784069,
@@ -428,8 +492,12 @@
    "webPdfSize": 25647525
   },
   "datormagazin-1988-13": {
-   "appliedOverrides": [],
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
@@ -445,7 +513,9 @@
   },
   "datormagazin-1988-14": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1988-14-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6014900,
    "ftpOcrPdfSize": 98876343,
@@ -460,8 +530,12 @@
    "webPdfSize": 25274281
   },
   "datormagazin-1988-15": {
-   "appliedOverrides": [],
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
@@ -477,7 +551,9 @@
   },
   "datormagazin-1988-16-17": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1988-1617-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6045578,
    "ftpOcrPdfSize": 98334577,
@@ -493,7 +569,9 @@
   },
   "datormagazin-1989-01": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-01-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6061586,
    "ftpOcrPdfSize": 98945860,
@@ -508,8 +586,12 @@
    "webPdfSize": 24108625
   },
   "datormagazin-1989-02": {
-   "appliedOverrides": [],
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
@@ -525,7 +607,9 @@
   },
   "datormagazin-1989-03": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-03-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6006489,
    "ftpOcrPdfSize": 94591576,
@@ -540,8 +624,12 @@
    "webPdfSize": 23488554
   },
   "datormagazin-1989-04": {
-   "appliedOverrides": [],
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
@@ -556,8 +644,12 @@
    "webPdfSize": 26283467
   },
   "datormagazin-1989-05": {
-   "appliedOverrides": [],
+   "appliedOverrides": [
+    "coverFlags"
+   ],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
@@ -573,7 +665,9 @@
   },
   "datormagazin-1989-06": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-06-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6136649,
    "ftpOcrPdfSize": 55338224,
@@ -589,7 +683,9 @@
   },
   "datormagazin-1989-07": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-07-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 5422056,
    "ftpOcrPdfSize": 54962567,
@@ -605,7 +701,9 @@
   },
   "datormagazin-1989-08": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-08-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1644629,
    "ftpOcrPdfSize": 55458682,
@@ -621,7 +719,9 @@
   },
   "datormagazin-1989-09": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-09-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6008376,
    "ftpOcrPdfSize": 82920453,
@@ -637,7 +737,9 @@
   },
   "datormagazin-1989-10": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-10-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1694288,
    "ftpOcrPdfSize": 49035920,
@@ -653,7 +755,9 @@
   },
   "datormagazin-1989-11": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-11-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1988276,
    "ftpOcrPdfSize": 54923303,
@@ -669,7 +773,9 @@
   },
   "datormagazin-1989-12": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-12-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6227678,
    "ftpOcrPdfSize": 99738796,
@@ -685,7 +791,9 @@
   },
   "datormagazin-1989-13": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-13-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1673947,
    "ftpOcrPdfSize": 57077902,
@@ -701,7 +809,9 @@
   },
   "datormagazin-1989-14": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-14-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1755512,
    "ftpOcrPdfSize": 56466965,
@@ -717,7 +827,9 @@
   },
   "datormagazin-1989-15": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-15-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 4964909,
    "ftpOcrPdfSize": 89234009,
@@ -733,7 +845,9 @@
   },
   "datormagazin-1989-16": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-16-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1580269,
    "ftpOcrPdfSize": 54266892,
@@ -749,7 +863,9 @@
   },
   "datormagazin-1989-16b": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
@@ -765,7 +881,9 @@
   },
   "datormagazin-1989-17": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-17-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1761746,
    "ftpOcrPdfSize": 58117931,
@@ -781,7 +899,9 @@
   },
   "datormagazin-1989-18": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1989-18-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 4580893,
    "ftpOcrPdfSize": 78142743,
@@ -797,7 +917,9 @@
   },
   "datormagazin-1990-01": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1990-01-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6389386,
    "ftpOcrPdfSize": 76923295,
@@ -813,7 +935,9 @@
   },
   "datormagazin-1990-02": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1990-02-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 4767042,
    "ftpOcrPdfSize": 78560006,
@@ -829,7 +953,9 @@
   },
   "datormagazin-1990-03": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1990-03-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1708473,
    "ftpOcrPdfSize": 57289275,
@@ -845,7 +971,9 @@
   },
   "datormagazin-1990-04": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1990-04-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1577800,
    "ftpOcrPdfSize": 55701642,
@@ -861,7 +989,9 @@
   },
   "datormagazin-1990-05": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1990-05-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6210310,
    "ftpOcrPdfSize": 98286900,
@@ -877,7 +1007,9 @@
   },
   "datormagazin-1990-06": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1990-06-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6388029,
    "ftpOcrPdfSize": 97661101,
@@ -893,7 +1025,9 @@
   },
   "datormagazin-1990-07": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1990-07-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6161549,
    "ftpOcrPdfSize": 97378296,
@@ -909,7 +1043,9 @@
   },
   "datormagazin-1990-08": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1990-08-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1881660,
    "ftpOcrPdfSize": 60259095,
@@ -925,7 +1061,9 @@
   },
   "datormagazin-1990-09": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1990-09-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 6039641,
    "ftpOcrPdfSize": 106950065,
@@ -941,7 +1079,9 @@
   },
   "datormagazin-1990-10": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1990-10-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": false,
    "ftpCoverSize": 1677866,
    "ftpOcrPdfSize": 57790015,
@@ -957,7 +1097,9 @@
   },
   "datormagazin-1990-11": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1990-11-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 3970146,
    "ftpOcrPdfSize": 91061768,
@@ -973,7 +1115,9 @@
   },
   "datormagazin-1990-12": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1990-12-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 7327415,
    "ftpOcrPdfSize": 87429617,
@@ -989,7 +1133,9 @@
   },
   "datormagazin-1990-13": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1990-13-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6268017,
    "ftpOcrPdfSize": 102067979,
@@ -1005,7 +1151,9 @@
   },
   "datormagazin-1990-14": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1990-14-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 5995876,
    "ftpOcrPdfSize": 87893201,
@@ -1021,7 +1169,9 @@
   },
   "datormagazin-1990-15": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1990-15-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 5507876,
    "ftpOcrPdfSize": 95384812,
@@ -1037,7 +1187,9 @@
   },
   "datormagazin-1990-16": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1990-16-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6567992,
    "ftpOcrPdfSize": 90065424,
@@ -1053,7 +1205,9 @@
   },
   "datormagazin-1990-17": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1990-17-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6383867,
    "ftpOcrPdfSize": 96967419,
@@ -1069,7 +1223,9 @@
   },
   "datormagazin-1990-18": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1990-18-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 22816761,
    "ftpOcrPdfSize": 107181612,
@@ -1085,7 +1241,9 @@
   },
   "datormagazin-1990-19": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1990-19-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6038545,
    "ftpOcrPdfSize": 101255080,
@@ -1101,7 +1259,9 @@
   },
   "datormagazin-1990-20": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1990-20-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 5778784,
    "ftpOcrPdfSize": 90911862,
@@ -1117,7 +1277,9 @@
   },
   "datormagazin-1991-01": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-01-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6519507,
    "ftpOcrPdfSize": 88460536,
@@ -1133,7 +1295,9 @@
   },
   "datormagazin-1991-02": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1991-02-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 2681501,
    "ftpOcrPdfSize": 93116085,
@@ -1149,7 +1313,9 @@
   },
   "datormagazin-1991-03": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-03-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 3178001,
    "ftpOcrPdfSize": 51390484,
@@ -1165,7 +1331,9 @@
   },
   "datormagazin-1991-04": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-04-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 1594771,
    "ftpOcrPdfSize": 96640229,
@@ -1181,7 +1349,9 @@
   },
   "datormagazin-1991-05": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 55382410,
@@ -1197,7 +1367,9 @@
   },
   "datormagazin-1991-06": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-06-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6715994,
    "ftpOcrPdfSize": 100843895,
@@ -1213,7 +1385,9 @@
   },
   "datormagazin-1991-07": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-07-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8458129,
    "ftpOcrPdfSize": 99167510,
@@ -1229,7 +1403,9 @@
   },
   "datormagazin-1991-08": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-08-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 7860186,
    "ftpOcrPdfSize": 93162477,
@@ -1245,7 +1421,9 @@
   },
   "datormagazin-1991-09": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-09-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 7808924,
    "ftpOcrPdfSize": 94615952,
@@ -1261,7 +1439,9 @@
   },
   "datormagazin-1991-10": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-10-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 7845432,
    "ftpOcrPdfSize": 98190270,
@@ -1277,7 +1457,9 @@
   },
   "datormagazin-1991-11": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-11-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 4523988,
    "ftpOcrPdfSize": 81643853,
@@ -1293,7 +1475,9 @@
   },
   "datormagazin-1991-12": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-12-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 4172921,
    "ftpOcrPdfSize": 81819473,
@@ -1309,7 +1493,9 @@
   },
   "datormagazin-1991-13": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-13-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 5240508,
    "ftpOcrPdfSize": 100585259,
@@ -1325,7 +1511,9 @@
   },
   "datormagazin-1991-14": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-14-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 4138149,
    "ftpOcrPdfSize": 84698119,
@@ -1341,7 +1529,9 @@
   },
   "datormagazin-1991-15": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-15-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8073249,
    "ftpOcrPdfSize": 105599770,
@@ -1357,7 +1547,9 @@
   },
   "datormagazin-1991-16": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-16-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 5310501,
    "ftpOcrPdfSize": 111358519,
@@ -1373,7 +1565,9 @@
   },
   "datormagazin-1991-17": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-17-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 5237420,
    "ftpOcrPdfSize": 108040332,
@@ -1389,7 +1583,9 @@
   },
   "datormagazin-1991-18": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-18-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 5051847,
    "ftpOcrPdfSize": 107553551,
@@ -1405,7 +1601,9 @@
   },
   "datormagazin-1991-19": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-19-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 3958883,
    "ftpOcrPdfSize": 90368041,
@@ -1421,7 +1619,9 @@
   },
   "datormagazin-1991-20": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-20-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 4335924,
    "ftpOcrPdfSize": 92329465,
@@ -1437,7 +1637,9 @@
   },
   "datormagazin-1991-21": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-21-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 3987421,
    "ftpOcrPdfSize": 90777160,
@@ -1453,7 +1655,9 @@
   },
   "datormagazin-1991-22": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1991-22-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8556594,
    "ftpOcrPdfSize": 122724692,
@@ -1469,7 +1673,9 @@
   },
   "datormagazin-1992-01": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-01-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8352412,
    "ftpOcrPdfSize": 123750468,
@@ -1485,7 +1691,9 @@
   },
   "datormagazin-1992-02": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-02-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 2236313,
    "ftpOcrPdfSize": 121084901,
@@ -1501,7 +1709,9 @@
   },
   "datormagazin-1992-03": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-03-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9164787,
    "ftpOcrPdfSize": 114989465,
@@ -1517,7 +1727,9 @@
   },
   "datormagazin-1992-04": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-04-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6264476,
    "ftpOcrPdfSize": 115677047,
@@ -1533,7 +1745,9 @@
   },
   "datormagazin-1992-05": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-05-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9038494,
    "ftpOcrPdfSize": 110705870,
@@ -1549,7 +1763,9 @@
   },
   "datormagazin-1992-06": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 114110422,
@@ -1565,7 +1781,9 @@
   },
   "datormagazin-1992-07": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-07-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8957567,
    "ftpOcrPdfSize": 107926004,
@@ -1581,7 +1799,9 @@
   },
   "datormagazin-1992-08": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-08-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9220326,
    "ftpOcrPdfSize": 115469106,
@@ -1597,7 +1817,9 @@
   },
   "datormagazin-1992-09": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 108723437,
@@ -1613,7 +1835,9 @@
   },
   "datormagazin-1992-10": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-10-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8362792,
    "ftpOcrPdfSize": 102238421,
@@ -1629,7 +1853,9 @@
   },
   "datormagazin-1992-11": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-11-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9474422,
    "ftpOcrPdfSize": 107147673,
@@ -1645,7 +1871,9 @@
   },
   "datormagazin-1992-12": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-12-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6203642,
    "ftpOcrPdfSize": 101721728,
@@ -1661,7 +1889,9 @@
   },
   "datormagazin-1992-13": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 121613674,
@@ -1677,7 +1907,9 @@
   },
   "datormagazin-1992-14": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 112753460,
@@ -1693,7 +1925,9 @@
   },
   "datormagazin-1992-15": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 113598543,
@@ -1709,7 +1943,9 @@
   },
   "datormagazin-1992-16": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-16-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6251777,
    "ftpOcrPdfSize": 109552123,
@@ -1725,7 +1961,9 @@
   },
   "datormagazin-1992-17": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 115197958,
@@ -1741,7 +1979,9 @@
   },
   "datormagazin-1992-18": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-18-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 19875466,
    "ftpOcrPdfSize": 292206183,
@@ -1757,7 +1997,9 @@
   },
   "datormagazin-1992-19": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1992-19-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9341860,
    "ftpOcrPdfSize": 112163025,
@@ -1773,7 +2015,9 @@
   },
   "datormagazin-1992-20": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 108670892,
@@ -1789,7 +2033,9 @@
   },
   "datormagazin-1992-21": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 119790591,
@@ -1805,7 +2051,9 @@
   },
   "datormagazin-1992-22": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 113911764,
@@ -1821,7 +2069,9 @@
   },
   "datormagazin-1993-01": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 68380884,
@@ -1837,7 +2087,9 @@
   },
   "datormagazin-1993-02": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-02-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8652423,
    "ftpOcrPdfSize": 88429881,
@@ -1853,7 +2105,9 @@
   },
   "datormagazin-1993-03": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 78922903,
@@ -1869,7 +2123,9 @@
   },
   "datormagazin-1993-04": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 79737756,
@@ -1885,7 +2141,9 @@
   },
   "datormagazin-1993-05": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-05-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 15534452,
    "ftpOcrPdfSize": 81310369,
@@ -1901,7 +2159,9 @@
   },
   "datormagazin-1993-06": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-06-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 5331925,
    "ftpOcrPdfSize": 104341762,
@@ -1917,7 +2177,9 @@
   },
   "datormagazin-1993-07": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-07-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8568143,
    "ftpOcrPdfSize": 102033030,
@@ -1933,7 +2195,9 @@
   },
   "datormagazin-1993-08": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-08-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8561134,
    "ftpOcrPdfSize": 98849696,
@@ -1949,7 +2213,9 @@
   },
   "datormagazin-1993-09": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-09-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 7750877,
    "ftpOcrPdfSize": 95283629,
@@ -1965,7 +2231,9 @@
   },
   "datormagazin-1993-10": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 82470703,
@@ -1981,7 +2249,9 @@
   },
   "datormagazin-1993-11": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 83668248,
@@ -1997,7 +2267,9 @@
   },
   "datormagazin-1993-12": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-12-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8596395,
    "ftpOcrPdfSize": 101735935,
@@ -2013,7 +2285,9 @@
   },
   "datormagazin-1993-13": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 80835643,
@@ -2029,7 +2303,9 @@
   },
   "datormagazin-1993-14": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-14-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8684142,
    "ftpOcrPdfSize": 102023382,
@@ -2045,7 +2321,9 @@
   },
   "datormagazin-1993-15": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-15-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9644342,
    "ftpOcrPdfSize": 107328425,
@@ -2061,7 +2339,9 @@
   },
   "datormagazin-1993-16": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-16-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9842928,
    "ftpOcrPdfSize": 107988451,
@@ -2077,7 +2357,9 @@
   },
   "datormagazin-1993-17": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 51740140,
@@ -2093,7 +2375,9 @@
   },
   "datormagazin-1993-18": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 53050322,
@@ -2109,7 +2393,9 @@
   },
   "datormagazin-1993-19": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 52335848,
@@ -2125,7 +2411,9 @@
   },
   "datormagazin-1993-20": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-20-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9320386,
    "ftpOcrPdfSize": 58137127,
@@ -2141,7 +2429,9 @@
   },
   "datormagazin-1993-21": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1993-21-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 14131735,
    "ftpOcrPdfSize": 180233678,
@@ -2157,7 +2447,9 @@
   },
   "datormagazin-1993-22": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 50917163,
@@ -2173,7 +2465,9 @@
   },
   "datormagazin-1994-01": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-01-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 7069990,
    "ftpOcrPdfSize": 54898146,
@@ -2189,7 +2483,9 @@
   },
   "datormagazin-1994-02": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-02-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8727986,
    "ftpOcrPdfSize": 55260556,
@@ -2205,7 +2501,9 @@
   },
   "datormagazin-1994-03": {
    "appliedOverrides": [],
+   "coverSource": "covers_ftp",
    "ftpCoverPath": "Covers/DMZ_1994-03-001.jpg",
+   "ftpCoverProcessed": true,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 5895349,
    "ftpOcrPdfSize": 54979978,
@@ -2221,7 +2519,9 @@
   },
   "datormagazin-1994-04": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-04-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 7910212,
    "ftpOcrPdfSize": 50452127,
@@ -2237,7 +2537,9 @@
   },
   "datormagazin-1994-05": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-05-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8805087,
    "ftpOcrPdfSize": 54875439,
@@ -2253,7 +2555,9 @@
   },
   "datormagazin-1994-06": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-06-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8451651,
    "ftpOcrPdfSize": 56443068,
@@ -2269,7 +2573,9 @@
   },
   "datormagazin-1994-07": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-07-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8172258,
    "ftpOcrPdfSize": 53504202,
@@ -2285,7 +2591,9 @@
   },
   "datormagazin-1994-08": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-08-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8765792,
    "ftpOcrPdfSize": 57310882,
@@ -2301,7 +2609,9 @@
   },
   "datormagazin-1994-09": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 65198576,
@@ -2317,7 +2627,9 @@
   },
   "datormagazin-1994-10": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 65812205,
@@ -2333,7 +2645,9 @@
   },
   "datormagazin-1994-11": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-11-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9229275,
    "ftpOcrPdfSize": 85038182,
@@ -2349,7 +2663,9 @@
   },
   "datormagazin-1994-12": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-12-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 5629781,
    "ftpOcrPdfSize": 81621160,
@@ -2365,7 +2681,9 @@
   },
   "datormagazin-1994-13": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-13-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9249976,
    "ftpOcrPdfSize": 88181264,
@@ -2381,7 +2699,9 @@
   },
   "datormagazin-1994-14": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-14-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8268891,
    "ftpOcrPdfSize": 86026610,
@@ -2397,7 +2717,9 @@
   },
   "datormagazin-1994-15": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 66839823,
@@ -2413,7 +2735,9 @@
   },
   "datormagazin-1994-16": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": null,
+   "ftpCoverProcessed": null,
    "ftpCoverSameSizeAsScanPage1": null,
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 66632030,
@@ -2429,7 +2753,9 @@
   },
   "datormagazin-1994-17": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-17-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8119551,
    "ftpOcrPdfSize": 81736975,
@@ -2445,7 +2771,9 @@
   },
   "datormagazin-1994-18": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-18-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9135441,
    "ftpOcrPdfSize": 82308034,
@@ -2461,7 +2789,9 @@
   },
   "datormagazin-1994-19": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-19-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6576634,
    "ftpOcrPdfSize": 85952045,
@@ -2477,7 +2807,9 @@
   },
   "datormagazin-1994-20": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-20-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8286586,
    "ftpOcrPdfSize": 80849285,
@@ -2493,7 +2825,9 @@
   },
   "datormagazin-1994-21": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-21-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8892778,
    "ftpOcrPdfSize": 85538044,
@@ -2509,7 +2843,9 @@
   },
   "datormagazin-1994-22": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1994-22-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8012539,
    "ftpOcrPdfSize": 86854326,
@@ -2525,7 +2861,9 @@
   },
   "datormagazin-1995-01": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-01-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8225479,
    "ftpOcrPdfSize": 80845990,
@@ -2541,7 +2879,9 @@
   },
   "datormagazin-1995-02": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-02-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 4560382,
    "ftpOcrPdfSize": 82874350,
@@ -2557,7 +2897,9 @@
   },
   "datormagazin-1995-03": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-03-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9443221,
    "ftpOcrPdfSize": 91881003,
@@ -2573,7 +2915,9 @@
   },
   "datormagazin-1995-04": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-04-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9506382,
    "ftpOcrPdfSize": 81978871,
@@ -2589,7 +2933,9 @@
   },
   "datormagazin-1995-05-06": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-0506-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8485468,
    "ftpOcrPdfSize": 84041639,
@@ -2605,7 +2951,9 @@
   },
   "datormagazin-1995-07": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-07-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8235737,
    "ftpOcrPdfSize": 120787819,
@@ -2621,7 +2969,9 @@
   },
   "datormagazin-1995-08": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-08-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 18033317,
    "ftpOcrPdfSize": 358882364,
@@ -2637,7 +2987,9 @@
   },
   "datormagazin-1995-09": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-09-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 8872257,
    "ftpOcrPdfSize": 122693287,
@@ -2653,7 +3005,9 @@
   },
   "datormagazin-1995-10": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-10-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6251040,
    "ftpOcrPdfSize": 117261799,
@@ -2669,7 +3023,9 @@
   },
   "datormagazin-1995-11": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-11-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 6014476,
    "ftpOcrPdfSize": 120044394,
@@ -2685,7 +3041,9 @@
   },
   "datormagazin-1995-12": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-12-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 2440099,
    "ftpOcrPdfSize": 114445559,
@@ -2701,7 +3059,9 @@
   },
   "datormagazin-1995-13": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-13-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 4133857,
    "ftpOcrPdfSize": 110885579,
@@ -2717,7 +3077,9 @@
   },
   "datormagazin-1995-14": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-14-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 5223249,
    "ftpOcrPdfSize": 115605773,
@@ -2738,7 +3100,9 @@
   },
   "datormagazin-1995-15": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/DMZ_1995-15-001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 23604389,
    "ftpOcrPdfSize": 563123977,
@@ -2754,7 +3118,9 @@
   },
   "highscore-1993-17": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1993-17_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 12090064,
    "ftpOcrPdfSize": 90700078,
@@ -2770,7 +3136,9 @@
   },
   "highscore-1993-18": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1993-18_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 19650058,
    "ftpOcrPdfSize": 85506354,
@@ -2786,7 +3154,9 @@
   },
   "highscore-1993-19": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1993-19_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 21147471,
    "ftpOcrPdfSize": 86812684,
@@ -2802,7 +3172,9 @@
   },
   "highscore-1993-20": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1993-20_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 20379289,
    "ftpOcrPdfSize": 136874488,
@@ -2818,7 +3190,9 @@
   },
   "highscore-1993-21": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1993-21_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 9201613,
    "ftpOcrPdfSize": 84892950,
@@ -2834,7 +3208,9 @@
   },
   "highscore-1993-22": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1993-22_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 22159808,
    "ftpOcrPdfSize": 86371089,
@@ -2850,7 +3226,9 @@
   },
   "highscore-1994-01": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1994-01_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 22344103,
    "ftpOcrPdfSize": 142195791,
@@ -2866,7 +3244,9 @@
   },
   "highscore-1994-02": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1994-02_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 20342377,
    "ftpOcrPdfSize": 141150412,
@@ -2882,7 +3262,9 @@
   },
   "highscore-1994-03": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1994-03_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 23431184,
    "ftpOcrPdfSize": 144171492,
@@ -2898,7 +3280,9 @@
   },
   "highscore-1994-04": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1994-04_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 18093971,
    "ftpOcrPdfSize": 140048778,
@@ -2914,7 +3298,9 @@
   },
   "highscore-1994-05": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1994-05_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 32962814,
    "ftpOcrPdfSize": 122786233,
@@ -2930,7 +3316,9 @@
   },
   "highscore-1994-06": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1994-06_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 22062974,
    "ftpOcrPdfSize": 139795323,
@@ -2946,7 +3334,9 @@
   },
   "highscore-1994-07": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1994-07_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 20419532,
    "ftpOcrPdfSize": 132723355,
@@ -2962,7 +3352,9 @@
   },
   "highscore-1994-08": {
    "appliedOverrides": [],
+   "coverSource": "web_page1",
    "ftpCoverPath": "Covers/HighScore_1994-08_001.jpg",
+   "ftpCoverProcessed": false,
    "ftpCoverSameSizeAsScanPage1": true,
    "ftpCoverSize": 21336238,
    "ftpOcrPdfSize": 140407039,

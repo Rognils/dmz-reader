@@ -1,0 +1,62 @@
+{
+ "comment": "Visuell granskning av kontaktkartan i FAS 2 (2026-10-06). Klasser: ok, uppslag_vridet, annat. Nummer som inte står här är ok.",
+ "default": "ok",
+ "exceptions": {
+  "datormagazin-1986-01": {
+   "class": "uppslag_vridet",
+   "note": "Webbens sidbild 1 är ett vridet uppslag. Miniatyren kommer från det bearbetade omslaget i Covers."
+  },
+  "datormagazin-1987-07": {
+   "class": "uppslag_vridet",
+   "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+  },
+  "datormagazin-1987-08": {
+   "class": "uppslag_vridet",
+   "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+  },
+  "datormagazin-1987-09": {
+   "class": "uppslag_vridet",
+   "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+  },
+  "datormagazin-1987-10": {
+   "class": "uppslag_vridet",
+   "note": "Vridet uppslag, rättat. Skanningen är dessutom trasig: revor med svarta fält över omslaget."
+  },
+  "datormagazin-1988-09": {
+   "class": "uppslag_vridet",
+   "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+  },
+  "datormagazin-1988-10": {
+   "class": "uppslag_vridet",
+   "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+  },
+  "datormagazin-1988-13": {
+   "class": "uppslag_vridet",
+   "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+  },
+  "datormagazin-1988-15": {
+   "class": "uppslag_vridet",
+   "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+  },
+  "datormagazin-1989-02": {
+   "class": "uppslag_vridet",
+   "note": "Vridet uppslag, rättat. Skanningen är dessutom trasig: nedre högra delen av omslaget saknas."
+  },
+  "datormagazin-1989-04": {
+   "class": "uppslag_vridet",
+   "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+  },
+  "datormagazin-1989-05": {
+   "class": "uppslag_vridet",
+   "note": "Webbens sidbild 1 är ett vridet uppslag. Rättad med rotate_cw och crop_right_half."
+  },
+  "datormagazin-1991-02": {
+   "class": "annat",
+   "note": "Omslaget i Covers har en riven nederkant med vita fält. Rätt sida och rätt håll."
+  },
+  "datormagazin-1994-19": {
+   "class": "annat",
+   "note": "Skanningen har svarta fält upptill och nedtill och en riven vit del. Rätt sida och rätt håll."
+  }
+ }
+}
