@@ -384,7 +384,13 @@ Webbplatsen har dessutom diskettavbilder under `/coverdisk/DMZ-ÅÅÅÅ-NN.zip` 
 | OCR-fel | Ja: utspärrad text i den äldre generationen, skräp från dekor |
 | Filer som byts ut i arkivet | Ja: 1993 nr 3 skiljer mellan webb och FTP |
 
-## 14. Belastning på arkivservern under FAS 0
+## 14. Verifiering av `--offline`
+
+Offlinegenereringen är deterministisk och använder exakt den rålistning som onlinekörningen skapade. En andra fullständig serverlistning gjordes medvetet inte, för att inte belasta servern i onödan.
+
+Två körningar med `--offline` ger byte-identisk `data/archive_inventory.json` (samma SHA-256).
+
+## 15. Belastning på arkivservern under FAS 0
 
 - FTP: en anslutning åt gången, passivt läge, 0,6 s paus före varje kataloganrop. Cirka 215 kataloganrop totalt, plus en nedladdning (stickprov B, 89 MB).
 - HTTPS: cirka 640 små förfrågningar (HEAD, några webbsidor och två sidbilder) med 0,6 s paus, plus två nedladdningar (stickprov A och C, 131 MB).
