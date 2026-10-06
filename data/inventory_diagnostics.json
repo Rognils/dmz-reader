@@ -1,6 +1,6 @@
 {
  "datasetVersion": "2026-10-06-002",
- "generator": "archive_inventory.py 0.2.0",
+ "generator": "archive_inventory.py 0.2.1",
  "httpsProbedAt": "2026-10-06T11:30:53Z",
  "issues": {
   "datormagazin-1986-01": {
@@ -3183,5 +3183,6 @@
    "reason": "filnamnet följer inte mönstret DMZ_ÅÅÅÅ-NN[MM][b][-Spelbilaga]-SS[S].jpg|png eller HighScore_ÅÅÅÅ-NN_SSS.jpg",
    "size": 3628312
   }
- ]
+ ],
+ "warnings": []
 }

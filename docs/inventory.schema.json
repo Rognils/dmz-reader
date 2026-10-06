@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://dmz-reader.invalid/inventory.schema.json",
   "title": "DMZ Reader archive_inventory.json",
-  "description": "Katalogdata för DMZ Reader (planens C2 och D1). Genereras av tools/archive_inventory.py. Fält som får vara null får också utelämnas.",
+  "description": "Katalogdata för DMZ Reader (planens C2 och D1). Genereras av tools/archive_inventory.py. Fält som får vara null får också utelämnas, utom coverUrl och ocrPdfUrl som alltid måste finnas.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "datasetVersion", "generatedAt", "generator", "publications", "issues"],
@@ -94,16 +94,16 @@
           "anyOf": [{ "$ref": "#/$defs/issueId" }, { "type": "null" }]
         },
         "coverUrl": {
-          "description": "Webbplatsens sidbild 1.",
-          "$ref": "#/$defs/httpsUrl"
+          "description": "Webbplatsens sidbild 1. null om den saknas; då har numret flaggan missing_cover.",
+          "anyOf": [{ "$ref": "#/$defs/httpsUrl" }, { "type": "null" }]
         },
         "coverFlags": {
           "description": "Egenskaper hos omslagsbilden. Känt värde: \"rotated\" (liggande, vriden 90 grader).",
           "$ref": "#/$defs/flagList"
         },
         "ocrPdfUrl": {
-          "description": "Kanonisk läs-PDF på webbplatsen.",
-          "$ref": "#/$defs/httpsUrl"
+          "description": "Kanonisk läs-PDF på webbplatsen. null om den saknas; då har numret flaggan missing_ocr_pdf.",
+          "anyOf": [{ "$ref": "#/$defs/httpsUrl" }, { "type": "null" }]
         },
         "ocrPdfSize": { "type": ["integer", "null"], "minimum": 1 },
         "ocrPdfEtag": { "type": ["string", "null"], "minLength": 1 },

@@ -25,7 +25,7 @@ Exemplen nedan skriver `python3`. Använd `.venv/bin/python` om du installerat i
 | `data/sample_measurements.json` | uppmätta sidantal från stickprov | för hand |
 | `data/archive_inventory.json` | **inventory för appen** | `archive_inventory.py` |
 | `data/inventory_diagnostics.json` | härledd data för toolchainen, ingår inte i appen | `archive_inventory.py` |
-| `data/inventory_diff.json` | senaste jämförelsen mot föregående inventory | `archive_inventory.py` |
+| `data/inventory_diff.json` | jämförelse mot ett annat inventory; versionshanteras inte | `archive_inventory.py --compare-to` |
 | `docs/inventory.schema.json` | JSON Schema (draft 2020-12) för inventory | för hand |
 
 ## Köra inventeringen
@@ -42,10 +42,11 @@ Läser bara cachefilerna i `data/`. Inga anrop görs mot arkivet. Kommandot:
 2. bygger inventory med adresser och storlekar från `data/https_probe.json`
 3. slår ihop rättelserna i `tools/overrides.json`
 4. validerar resultatet
-5. jämför mot det befintliga inventoryt
-6. skriver de tre filerna i `data/`
+5. skriver `data/archive_inventory.json` och `data/inventory_diagnostics.json`
 
 Om valideringen ger fel skrivs inga filer och kommandot avslutas med kod 1.
+
+**Saknat material stoppar inte exporten.** Om webbplatsen saknar läs-PDF eller sidbild 1 för ett nummer blir `ocrPdfUrl` respektive `coverUrl` `null`, numret får flaggan `missing_ocr_pdf` respektive `missing_cover`, och en rad som börjar med `VARNING` skrivs till stdout och till `warnings` i diagnostikfilen.
 
 **Determinism:** samma indata ger byte-identiska filer. Nycklarna är sorterade, ordningen är stabil och ingen klocka läses. `generatedAt` tas från datumet i `datasetVersion`.
 
@@ -71,8 +72,8 @@ Höj `datasetSequence` i `tools/config.json` när ett nytt inventory ska ges ut 
 | `--offline` | använd bara cachen |
 | `--dataset-version ÅÅÅÅ-MM-DD-NNN` | sätt `datasetVersion` för hand (standard: listningens datum plus `datasetSequence`) |
 | `--generated-at TID` | sätt `generatedAt` för hand, t.ex. `2026-10-06T12:00:00Z` |
-| `--previous FIL` | jämför mot detta inventory i stället för den befintliga filen |
-| `--output-dir KATALOG` | skriv de tre utdatafilerna dit i stället för till `data/` |
+| `--compare-to FIL` | jämför det nya inventoryt mot denna fil och skriv `data/inventory_diff.json` |
+| `--output-dir KATALOG` | skriv utdatafilerna dit i stället för till `data/` |
 | `--validate FIL` | validera bara ett befintligt inventory |
 
 ## Manuella rättelser (`tools/overrides.json`)
@@ -104,7 +105,7 @@ Rättelserna slås ihop efter normaliseringen och före valideringen, i sorterad
 
 Körs alltid före export. Kontrollerar:
 
-- strukturen mot `docs/inventory.schema.json` (obligatoriska fält, typer, format, inga okända fält)
+- strukturen mot `docs/inventory.schema.json` (obligatoriska fält, typer, format, inga okända fält). `coverUrl` och `ocrPdfUrl` måste finnas men får vara `null`.
 - att `issueId` är unika
 - att `relatedIssueId` pekar på ett nummer som finns
 - att `sortKey` är unik och ligger i stigande ordning inom varje publikation och år, och börjar med numrets år
@@ -116,20 +117,27 @@ Validera en fil för sig:
 python3 tools/archive_inventory.py --validate data/archive_inventory.json
 ```
 
-## Jämförelse mot föregående inventory
+## Jämförelse mot ett annat inventory
 
-Varje körning jämför det nya inventoryt med den fil som redan ligger på plats. Rapporten skrivs till stdout och till `data/inventory_diff.json`:
+En jämförelse görs bara när du ber om den, med `--compare-to`. Utan flaggan skrivs ingen jämförelse.
 
+Jämför mot den version som ligger i git:
+
+```bash
+git show HEAD:data/archive_inventory.json > /tmp/prev.json
+python3 tools/archive_inventory.py --offline --compare-to /tmp/prev.json
+```
+
+Byt `HEAD` mot en tagg för att jämföra mot en äldre utgåva, till exempel `v0.0-fas0`.
+
+Rapporten skrivs till stdout och till `data/inventory_diff.json`:
+
+- `previousDatasetVersion`, `currentDatasetVersion`: vilka två versioner som jämförts
 - `added`, `removed`: nya och borttagna `issueId`
 - `changed`: ändrade nummer, med gammalt och nytt värde per fält
 - `header`: ändringar i `schemaVersion`, `datasetVersion` med mera
 
-Om inventoryt är oförändrat lämnas `inventory_diff.json` orörd. Filen visar alltså alltid den senaste verkliga ändringen. Jämför mot en annan version med `--previous`:
-
-```bash
-git show v0.0-fas0:data/archive_inventory.json > /tmp/gammalt.json
-python3 tools/archive_inventory.py --offline --previous /tmp/gammalt.json
-```
+`data/inventory_diff.json` är en arbetsfil och ligger i `.gitignore`.
 
 ## Tester
 

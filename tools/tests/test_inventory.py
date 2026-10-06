@@ -131,7 +131,8 @@ class InventoryContent(Generated):
 
     def test_only_known_flags(self):
         known = {"double_issue", "variant_b", "supplement", "scan_two_digit_pages", "scan_png",
-                 "scan_supplement", "scan_named_after_first_number"}
+                 "scan_supplement", "scan_named_after_first_number",
+                 "missing_cover", "missing_ocr_pdf"}
         used = {flag for issue in self.issues.values() for flag in issue["flags"]}
         self.assertLessEqual(used, known)
 
@@ -145,6 +146,99 @@ class InventoryContent(Generated):
                          {"OCR PDF v2": 90, "OCR PDF": 94, None: 1})
         self.assertEqual(sum(d["ftpCoverPath"] is None for d in diag.values()), 38)
         self.assertEqual(len(self.diagnostics["specialCases"]), 3)
+
+
+class MissingMaterial(Generated):
+    """Ett nummer utan läs-PDF eller omslag exporteras ändå, med flagga och varning."""
+
+    PDF = "/pdf/198906.pdf"
+    COVER = "/magazines/198906/DMZ_1989-06-001.jpg"
+    ISSUE = "datormagazin-1989-06"
+
+    def build(self, **status_by_path):
+        analysis = ai.analyze(self.listing, self.config["roots"], self.config["extraRoots"])
+        probe = copy.deepcopy(ai._read_json(DATA / "https_probe.json"))
+        for path, status in status_by_path.items():
+            self.assertIn(path, probe["results"])
+            probe["results"][path] = {"status": status}
+        inventory, diagnostics = ai.build_inventory(
+            self.listing, analysis, probe, {}, self.inventory["datasetVersion"])
+        issue = next(i for i in inventory["issues"] if i["issueId"] == self.ISSUE)
+        return inventory, diagnostics, issue
+
+    def test_nothing_is_missing_in_the_real_archive(self):
+        self.assertEqual(self.diagnostics["warnings"], [])
+        for issue in self.issues.values():
+            self.assertNotIn("missing_cover", issue["flags"])
+            self.assertNotIn("missing_ocr_pdf", issue["flags"])
+
+    def test_missing_cover(self):
+        inventory, diagnostics, issue = self.build(**{self.COVER: 404})
+        self.assertIn("coverUrl", issue)
+        self.assertIsNone(issue["coverUrl"])
+        self.assertEqual(issue["flags"], ["missing_cover"])
+        self.assertIsNotNone(issue["ocrPdfUrl"])
+        self.assertEqual(len(inventory["issues"]), 185)
+        self.assertEqual(len(diagnostics["warnings"]), 1)
+        self.assertIn(f"{self.ISSUE}: ingen sidbild 1", diagnostics["warnings"][0])
+        self.assertEqual(self.errors(inventory), [])
+
+    def test_missing_ocr_pdf(self):
+        inventory, diagnostics, issue = self.build(**{self.PDF: 500})
+        self.assertIn("ocrPdfUrl", issue)
+        self.assertIsNone(issue["ocrPdfUrl"])
+        self.assertIsNone(issue["ocrPdfSize"])
+        self.assertIsNone(issue["ocrPdfEtag"])
+        self.assertIsNone(issue["ocrPdfLastModified"])
+        self.assertEqual(issue["flags"], ["missing_ocr_pdf"])
+        self.assertIsNotNone(issue["coverUrl"])
+        self.assertEqual(len(inventory["issues"]), 185)
+        self.assertEqual(len(diagnostics["warnings"]), 1)
+        self.assertIn(f"{self.ISSUE}: ingen läs-PDF", diagnostics["warnings"][0])
+        self.assertIsNone(diagnostics["issues"][self.ISSUE]["ocrPdfFtpSource"])
+        self.assertEqual(self.errors(inventory), [])
+
+    def test_both_missing(self):
+        inventory, diagnostics, issue = self.build(**{self.PDF: 404, self.COVER: 404})
+        self.assertEqual(issue["flags"], ["missing_cover", "missing_ocr_pdf"])
+        self.assertEqual(len(diagnostics["warnings"]), 2)
+        self.assertEqual(self.errors(inventory), [])
+
+    def test_measured_page_count_is_not_used_without_pdf(self):
+        analysis = ai.analyze(self.listing, self.config["roots"], self.config["extraRoots"])
+        probe = copy.deepcopy(ai._read_json(DATA / "https_probe.json"))
+        probe["results"]["/pdf/198601.pdf"] = {"status": 404}
+        measurements = ai._read_json(DATA / "sample_measurements.json")["measurements"]
+        inventory, _ = ai.build_inventory(self.listing, analysis, probe, measurements,
+                                          self.inventory["datasetVersion"])
+        self.assertIsNone(inventory["issues"][0]["pageCount"])
+
+    def test_warning_is_printed_by_the_tool(self):
+        """Varningen ska synas på stdout, och exporten ska gå igenom."""
+        import io
+        from contextlib import redirect_stdout
+        from unittest import mock
+
+        real_read = ai._read_json
+
+        def fake_read(path):
+            data = real_read(path)
+            if Path(path).name == "https_probe.json":
+                data["results"][self.PDF] = {"status": 404}
+            return data
+
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(ai, "_read_json", fake_read):
+            out = io.StringIO()
+            with redirect_stdout(out):
+                code = ai.main(["--offline", "--output-dir", tmp])
+            self.assertEqual(code, 0)
+            self.assertIn(f"VARNING {self.ISSUE}: ingen läs-PDF", out.getvalue())
+            written = json.loads((Path(tmp) / "archive_inventory.json").read_text(encoding="utf-8"))
+            issue = next(i for i in written["issues"] if i["issueId"] == self.ISSUE)
+            self.assertIsNone(issue["ocrPdfUrl"])
+            diagnostics = json.loads(
+                (Path(tmp) / "inventory_diagnostics.json").read_text(encoding="utf-8"))
+            self.assertEqual(len(diagnostics["warnings"]), 1)
 
 
 class Overrides(Generated):
@@ -262,11 +356,14 @@ class SchemaValidation(Generated):
             del issue[field]
         self.assertEqual(self.errors(inventory), [])
 
-    def test_required_urls_may_not_be_null(self):
+    def test_urls_may_be_null_but_must_be_present(self):
         for field in ("coverUrl", "ocrPdfUrl"):
             inventory = self.fresh()
             self.issue(inventory)[field] = None
-            self.assertTrue(self.errors(inventory), field)
+            self.assertEqual(self.errors(inventory), [], field)
+            del self.issue(inventory)[field]
+            self.assertTrue(any(f"'{field}' is a required property" in e
+                                for e in self.errors(inventory)), field)
 
     def test_unknown_field_is_rejected(self):
         inventory = self.fresh()
@@ -400,14 +497,13 @@ class Diff(Generated):
         self.assertEqual(diff["changed"][0]["fields"], {"ocrPdfChecksum": {"old": "sha256:abc"}})
         self.assertIn("(borttaget)", ai.format_diff(diff))
 
-    def test_committed_diff_is_against_fas_0(self):
-        path = DATA / "inventory_diff.json"
-        if not path.exists():
-            self.skipTest("data/inventory_diff.json saknas")
-        diff = json.loads(path.read_text(encoding="utf-8"))
-        self.assertEqual(diff["previousDatasetVersion"], "2026-10-06-001")
+    def test_diff_names_both_dataset_versions(self):
+        previous = self.fresh()
+        previous["datasetVersion"] = "2026-09-01-001"
+        diff = ai.diff_inventories(previous, self.inventory)
+        self.assertEqual(diff["previousDatasetVersion"], "2026-09-01-001")
         self.assertEqual(diff["currentDatasetVersion"], self.inventory["datasetVersion"])
-        self.assertEqual((diff["added"], diff["removed"]), ([], []))
+        self.assertIn("2026-09-01-001 → " + self.inventory["datasetVersion"], ai.format_diff(diff))
 
 
 class Determinism(Generated):
@@ -434,30 +530,50 @@ class Determinism(Generated):
 
     def test_two_offline_runs_give_byte_identical_files(self):
         """Acceptanskriterium: två körningar med --offline ger identiska filer."""
-        names = ("archive_inventory.json", "inventory_diagnostics.json", "inventory_diff.json")
+        names = ("archive_inventory.json", "inventory_diagnostics.json")
+        with tempfile.TemporaryDirectory() as one, tempfile.TemporaryDirectory() as two:
+            first = self.run_tool("--output-dir", one)
+            second = self.run_tool("--output-dir", two)
+            self.assertEqual(first.returncode, 0, first.stdout + first.stderr)
+            self.assertEqual(second.returncode, 0, second.stdout + second.stderr)
+            self.assertEqual(first.stdout, second.stdout)
+            for name in names:
+                self.assertEqual((Path(one) / name).read_bytes(),
+                                 (Path(two) / name).read_bytes(), name)
+            # Körning över befintliga filer ändrar dem inte heller.
+            third = self.run_tool("--output-dir", one)
+            self.assertEqual(third.returncode, 0)
+            for name in names:
+                self.assertEqual((Path(one) / name).read_bytes(),
+                                 (Path(two) / name).read_bytes(), name)
+
+    def test_no_diff_without_compare_to(self):
         with tempfile.TemporaryDirectory() as tmp:
-            out = Path(tmp)
-            previous = out / "previous.json"
+            self.assertEqual(self.run_tool("--output-dir", tmp).returncode, 0)
+            self.assertEqual(self.run_tool("--output-dir", tmp).returncode, 0)
+            self.assertFalse((Path(tmp) / "inventory_diff.json").exists())
+
+    def test_compare_to_writes_diff_with_both_dataset_versions(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            previous = Path(tmp) / "previous.json"
             old = self.fresh()
             old["datasetVersion"] = "2026-09-01-001"
             old["issues"] = old["issues"][:-1]
             previous.write_text(ai.dump_json(old), encoding="utf-8")
 
-            first = self.run_tool("--output-dir", tmp, "--previous", str(previous))
+            first = self.run_tool("--output-dir", tmp, "--compare-to", str(previous))
             self.assertEqual(first.returncode, 0, first.stdout + first.stderr)
-            snapshot = {name: (out / name).read_bytes() for name in names}
+            self.assertIn("nya nummer: 1", first.stdout)
+            diff_path = Path(tmp) / "inventory_diff.json"
+            diff = json.loads(diff_path.read_text(encoding="utf-8"))
+            self.assertEqual(diff["previousDatasetVersion"], "2026-09-01-001")
+            self.assertEqual(diff["currentDatasetVersion"], self.inventory["datasetVersion"])
+            self.assertEqual(diff["added"], [self.inventory["issues"][-1]["issueId"]])
 
-            # Andra körningen: samma indata, och inventory finns redan.
-            second = self.run_tool("--output-dir", tmp)
-            self.assertEqual(second.returncode, 0, second.stdout + second.stderr)
-            self.assertIn("oförändrat", second.stdout)
-            for name in names:
-                self.assertEqual((out / name).read_bytes(), snapshot[name], name)
-
-            third = self.run_tool("--output-dir", tmp, "--previous", str(previous))
-            for name in names:
-                self.assertEqual((out / name).read_bytes(), snapshot[name], name)
-            self.assertEqual(first.stdout, third.stdout)
+            snapshot = diff_path.read_bytes()
+            again = self.run_tool("--output-dir", tmp, "--compare-to", str(previous))
+            self.assertEqual(again.stdout, first.stdout)
+            self.assertEqual(diff_path.read_bytes(), snapshot)
 
     def test_validate_command(self):
         with tempfile.TemporaryDirectory() as tmp:

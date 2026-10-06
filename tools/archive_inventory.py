@@ -14,9 +14,10 @@ uppgifterna om dem kommer från data/https_probe.json, som
 tools/https_probe.py tar fram. Manuella rättelser läses från
 tools/overrides.json.
 
-Steg 4: validera mot docs/inventory.schema.json, jämför mot föregående
-inventory och skriv data/archive_inventory.json, data/inventory_diagnostics.json
-och data/inventory_diff.json. Samma indata ger byte-identiska filer.
+Steg 4: validera mot docs/inventory.schema.json och skriv
+data/archive_inventory.json och data/inventory_diagnostics.json. Samma indata
+ger byte-identiska filer. Med --compare-to jämförs resultatet mot ett annat
+inventory, och skillnaden skrivs till data/inventory_diff.json.
 
 Servern belastas försiktigt: en anslutning, passivt läge och en paus
 på minst 0,5 sekunder mellan varje kataloganrop.
@@ -34,7 +35,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
 MIN_PAUSE_SECONDS = 0.5
@@ -558,6 +559,7 @@ def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: di
     issues_out = []
     diagnostics_issues = {}
     problems = []
+    warnings = []
 
     for issue_id, issue in analysis["issues"].items():
         identity = issue["identity"]
@@ -569,23 +571,34 @@ def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: di
         pdf = results.get(pdf_url_path(identity))
         if pdf is None:
             raise SystemExit(f"{issue_id}: saknas i https_probe.json. Kör tools/https_probe.py.")
-        if pdf["status"] != 200:
-            raise SystemExit(f"{issue_id}: ingen läs-PDF på webbplatsen (status {pdf['status']}). "
-                             "Numret kan inte exporteras utan ocrPdfUrl.")
-        ocr_size = int(pdf["content-length"])
+        # Ett nummer utan läs-PDF eller omslag exporteras ändå, med flagga och varning.
+        has_pdf = pdf["status"] == 200
+        ocr_size = int(pdf["content-length"]) if has_pdf and "content-length" in pdf else None
+        if not has_pdf:
+            flags.add("missing_ocr_pdf")
+            warnings.append(f"{issue_id}: ingen läs-PDF på webbplatsen "
+                            f"(status {pdf['status']}); ocrPdfUrl är null")
 
-        cover = results.get(page_url_path(issue, 1)) if 1 in main_pages else None
-        if cover is None or cover["status"] != 200:
-            raise SystemExit(f"{issue_id}: ingen sidbild 1 på webbplatsen. "
-                             "Numret kan inte exporteras utan coverUrl.")
+        cover = None
+        if 1 in main_pages:
+            cover = results.get(page_url_path(issue, 1))
+            if cover is None:
+                raise SystemExit(f"{issue_id}: sidbild 1 saknas i https_probe.json. "
+                                 "Kör tools/https_probe.py.")
+        has_cover = cover is not None and cover["status"] == 200
+        if not has_cover:
+            flags.add("missing_cover")
+            reason = f"status {cover['status']}" if cover else "numret har ingen skannad sida 1"
+            warnings.append(f"{issue_id}: ingen sidbild 1 på webbplatsen ({reason}); coverUrl är null")
 
         # Vilken FTP-generation webbfilen motsvarar avgörs av storleken.
         ftp_generation = None
-        for kind, name in (("ocr_pdf_v2", "OCR PDF v2"), ("ocr_pdf", "OCR PDF")):
-            if kind in files and files[kind]["size"] == ocr_size:
-                ftp_generation = name
-        if ftp_generation is None:
-            problems.append(f"{issue_id}: webbens PDF ({ocr_size} byte) motsvarar ingen FTP-fil")
+        if ocr_size is not None:
+            for kind, name in (("ocr_pdf_v2", "OCR PDF v2"), ("ocr_pdf", "OCR PDF")):
+                if kind in files and files[kind]["size"] == ocr_size:
+                    ftp_generation = name
+            if ftp_generation is None:
+                problems.append(f"{issue_id}: webbens PDF ({ocr_size} byte) motsvarar ingen FTP-fil")
 
         if identity["numberEnd"] is not None:
             flags.add("double_issue")
@@ -612,7 +625,7 @@ def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: di
         measured = measurements.get(issue_id)
         measurement_used = False
         if measured is not None:
-            if measured["ocrPdfSize"] == ocr_size:
+            if has_pdf and measured["ocrPdfSize"] == ocr_size:
                 page_count = measured["pageCount"]
                 measurement_used = True
             else:
@@ -629,12 +642,12 @@ def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: di
             "sourceKey": make_source_key(identity),
             "sourceNames": sorted(source_names),
             "relatedIssueId": related_issue_id(identity),
-            "coverUrl": WEB_BASE_URL + page_url_path(issue, 1),
+            "coverUrl": WEB_BASE_URL + page_url_path(issue, 1) if has_cover else None,
             "coverFlags": [],
-            "ocrPdfUrl": WEB_BASE_URL + pdf_url_path(identity),
+            "ocrPdfUrl": WEB_BASE_URL + pdf_url_path(identity) if has_pdf else None,
             "ocrPdfSize": ocr_size,
-            "ocrPdfEtag": pdf.get("etag"),
-            "ocrPdfLastModified": pdf.get("last-modified"),
+            "ocrPdfEtag": pdf.get("etag") if has_pdf else None,
+            "ocrPdfLastModified": pdf.get("last-modified") if has_pdf else None,
             "largePdfUrl": ftp_url(large["path"]) if large else None,
             "largePdfSize": large["size"] if large else None,
             "hqSource": "scans" if main_pages else ("large_pdf" if large else None),
@@ -684,6 +697,7 @@ def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: di
         "resolvedByRule": analysis["resolved"],
         "outsideRoots": analysis["outsideRoots"],
         "problems": problems,
+        "warnings": warnings,
     }
     return inventory, diagnostics
 
@@ -885,7 +899,8 @@ def diff_inventories(previous: dict, current: dict) -> dict:
 
 def format_diff(diff: dict, max_examples: int = 5) -> str:
     """Läsbar rapport över en jämförelse."""
-    lines = [f"Jämförelse: {diff['previousDatasetVersion']} → {diff['currentDatasetVersion']}"]
+    lines = [f"Jämförelse: datasetVersion {diff['previousDatasetVersion']} → "
+             f"{diff['currentDatasetVersion']}"]
     for field, change in diff["header"].items():
         if field != "publications":
             lines.append(f"  {field}: {change['old']} → {change['new']}")
@@ -973,10 +988,11 @@ def main(argv=None) -> int:
                         help="standard: listningens datum plus datasetSequence i config.json")
     parser.add_argument("--generated-at", metavar="TID",
                         help="värde för generatedAt (standard: datasetVersions datum, kl. 00:00:00Z)")
-    parser.add_argument("--previous", metavar="FIL", type=Path,
-                        help="jämför mot detta inventory (standard: den befintliga filen)")
+    parser.add_argument("--compare-to", metavar="FIL", type=Path,
+                        help="jämför det nya inventoryt mot denna fil och skriv "
+                             "data/inventory_diff.json (utan flaggan görs ingen jämförelse)")
     parser.add_argument("--output-dir", metavar="KATALOG", type=Path,
-                        help="skriv inventory, diagnostik och jämförelse hit i stället för till data/")
+                        help="skriv utdatafilerna hit i stället för till data/")
     parser.add_argument("--validate", metavar="FIL", type=Path,
                         help="validera bara ett befintligt inventory och avsluta")
     args = parser.parse_args(argv)
@@ -1024,6 +1040,8 @@ def main(argv=None) -> int:
     print(f"Filer utanför de listade katalogerna (arkivets rot): {len(analysis['outsideRoots'])}")
     for problem in diagnostics["problems"]:
         print(f"  OBS {problem}")
+    for warning in diagnostics["warnings"]:
+        print(f"VARNING {warning}")
     overridden = sorted(i for i, d in diagnostics["issues"].items() if d["appliedOverrides"])
     print(f"Manuella rättelser: {len(overridden)} nummer" + (f" ({', '.join(overridden)})" if overridden else ""))
 
@@ -1040,23 +1058,11 @@ def main(argv=None) -> int:
 
     inventory_path = target("inventoryPath")
     inventory_text = dump_json(inventory)
-    existing_text = inventory_path.read_text(encoding="utf-8") if inventory_path.exists() else None
 
-    if args.previous is not None:
-        previous = _read_json(args.previous)
-    elif existing_text is not None and existing_text != inventory_text:
-        previous = json.loads(existing_text)
-    else:
-        previous = None
-
-    if previous is not None:
-        diff = diff_inventories(previous, inventory)
+    if args.compare_to is not None:
+        diff = diff_inventories(_read_json(args.compare_to), inventory)
         print(format_diff(diff))
         write_text(target("diffPath"), dump_json(diff))
-    elif existing_text is None:
-        print("Jämförelse: inget föregående inventory finns.")
-    else:
-        print("Jämförelse: inventory är oförändrat. Den sparade jämförelsen lämnas orörd.")
 
     write_text(inventory_path, inventory_text)
     write_text(target("diagnosticsPath"), dump_json(diagnostics))
