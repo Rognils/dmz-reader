@@ -48,3 +48,6 @@ Arkivet drivs av en privatperson. Planen (A4) kräver att servern belastas förs
 - Ett omslag som misslyckats försöker igen först nästa gång kortet visas.
 - I debug-byggen loggas varje förfrågan med antalet aktiva (`DmzCovers` i logcat), och Coils fel loggas på varningsnivå.
 - Compose-testerna kräver Espresso 3.7.0 uttryckligen. Den version som följer med Compose fungerar inte på Android 16.
+
+## Uppdatering 2026-10-06 (ADR 0016)
+Omslagen laddas nu i första hand från inbyggda miniatyrer i assets (`coverAsset`), utan nät och utan `coverFlags`. Det som står ovan om nät, cache, samtidighet och `coverFlags` gäller reservvägen med `coverUrl`. 1986 nr 1 får sin miniatyr från det bearbetade omslaget i `Covers`; dess `coverFlags` gäller bara reservvägen.
