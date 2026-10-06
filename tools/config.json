@@ -7,6 +7,7 @@
     "pauseSeconds": 0.6
   },
   "roots": ["Covers", "OCR PDF", "Large PDF", "Original Scans"],
+  "extraRoots": ["OCR PDF v2"],
   "rawListingPath": "data/raw_listing.json",
   "inventoryPath": "data/archive_inventory.json"
 }

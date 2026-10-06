@@ -3164,6 +3164,548 @@
     "type": "file"
    }
   ],
+  "OCR PDF v2": [
+   {
+    "modify": "20170909194926",
+    "name": "198601.pdf",
+    "size": 15105472,
+    "type": "file"
+   },
+   {
+    "modify": "20170909195919",
+    "name": "198602.pdf",
+    "size": 18024807,
+    "type": "file"
+   },
+   {
+    "modify": "20170909200419",
+    "name": "198603.pdf",
+    "size": 18478586,
+    "type": "file"
+   },
+   {
+    "modify": "20170909200932",
+    "name": "198604.pdf",
+    "size": 23329624,
+    "type": "file"
+   },
+   {
+    "modify": "20170909201517",
+    "name": "198701.pdf",
+    "size": 19032390,
+    "type": "file"
+   },
+   {
+    "modify": "20170909202128",
+    "name": "198702.pdf",
+    "size": 21422879,
+    "type": "file"
+   },
+   {
+    "modify": "20170909203238",
+    "name": "198703.pdf",
+    "size": 19358555,
+    "type": "file"
+   },
+   {
+    "modify": "20170909234241",
+    "name": "19870405.pdf",
+    "size": 33327407,
+    "type": "file"
+   },
+   {
+    "modify": "20170909204024",
+    "name": "198706.pdf",
+    "size": 27882487,
+    "type": "file"
+   },
+   {
+    "modify": "20170909205402",
+    "name": "198707.pdf",
+    "size": 21906862,
+    "type": "file"
+   },
+   {
+    "modify": "20170909210745",
+    "name": "198708.pdf",
+    "size": 22711805,
+    "type": "file"
+   },
+   {
+    "modify": "20170909212152",
+    "name": "198709.pdf",
+    "size": 28193113,
+    "type": "file"
+   },
+   {
+    "modify": "20170909214730",
+    "name": "198710.pdf",
+    "size": 23573588,
+    "type": "file"
+   },
+   {
+    "modify": "20170909213436",
+    "name": "198710b.pdf",
+    "size": 22519348,
+    "type": "file"
+   },
+   {
+    "modify": "20170909215430",
+    "name": "198801.pdf",
+    "size": 24474598,
+    "type": "file"
+   },
+   {
+    "modify": "20170909220007",
+    "name": "198802.pdf",
+    "size": 20562016,
+    "type": "file"
+   },
+   {
+    "modify": "20170909220525",
+    "name": "198803.pdf",
+    "size": 23928187,
+    "type": "file"
+   },
+   {
+    "modify": "20170909221039",
+    "name": "198804.pdf",
+    "size": 24943062,
+    "type": "file"
+   },
+   {
+    "modify": "20170909221559",
+    "name": "198805.pdf",
+    "size": 24362335,
+    "type": "file"
+   },
+   {
+    "modify": "20170909222123",
+    "name": "198806.pdf",
+    "size": 24970770,
+    "type": "file"
+   },
+   {
+    "modify": "20170909222616",
+    "name": "198807.pdf",
+    "size": 22069886,
+    "type": "file"
+   },
+   {
+    "modify": "20170909223039",
+    "name": "198808.pdf",
+    "size": 20261222,
+    "type": "file"
+   },
+   {
+    "modify": "20170909224223",
+    "name": "198809.pdf",
+    "size": 21732720,
+    "type": "file"
+   },
+   {
+    "modify": "20170909225407",
+    "name": "198810.pdf",
+    "size": 22987208,
+    "type": "file"
+   },
+   {
+    "modify": "20170909230016",
+    "name": "198811.pdf",
+    "size": 26011862,
+    "type": "file"
+   },
+   {
+    "modify": "20170909230532",
+    "name": "198812.pdf",
+    "size": 25647525,
+    "type": "file"
+   },
+   {
+    "modify": "20170909231947",
+    "name": "198813.pdf",
+    "size": 26061502,
+    "type": "file"
+   },
+   {
+    "modify": "20170909232457",
+    "name": "198814.pdf",
+    "size": 25274281,
+    "type": "file"
+   },
+   {
+    "modify": "20170909233904",
+    "name": "198815.pdf",
+    "size": 24838919,
+    "type": "file"
+   },
+   {
+    "modify": "20170909234748",
+    "name": "19881617.pdf",
+    "size": 25641314,
+    "type": "file"
+   },
+   {
+    "modify": "20170909235307",
+    "name": "198901.pdf",
+    "size": 24108625,
+    "type": "file"
+   },
+   {
+    "modify": "20170910000705",
+    "name": "198902.pdf",
+    "size": 26026118,
+    "type": "file"
+   },
+   {
+    "modify": "20170910001203",
+    "name": "198903.pdf",
+    "size": 23488554,
+    "type": "file"
+   },
+   {
+    "modify": "20170910002610",
+    "name": "198904.pdf",
+    "size": 26283467,
+    "type": "file"
+   },
+   {
+    "modify": "20170910004021",
+    "name": "198905.pdf",
+    "size": 26335898,
+    "type": "file"
+   },
+   {
+    "modify": "20170910004524",
+    "name": "198906.pdf",
+    "size": 25672804,
+    "type": "file"
+   },
+   {
+    "modify": "20170910005025",
+    "name": "198907.pdf",
+    "size": 23914949,
+    "type": "file"
+   },
+   {
+    "modify": "20170910010455",
+    "name": "198908.pdf",
+    "size": 27021492,
+    "type": "file"
+   },
+   {
+    "modify": "20170910010912",
+    "name": "198909.pdf",
+    "size": 20461113,
+    "type": "file"
+   },
+   {
+    "modify": "20170910012059",
+    "name": "198910.pdf",
+    "size": 23352350,
+    "type": "file"
+   },
+   {
+    "modify": "20170910012335",
+    "name": "198911.pdf",
+    "size": 26189195,
+    "type": "file"
+   },
+   {
+    "modify": "20170910012834",
+    "name": "198912.pdf",
+    "size": 25595148,
+    "type": "file"
+   },
+   {
+    "modify": "20170910014247",
+    "name": "198913.pdf",
+    "size": 27678270,
+    "type": "file"
+   },
+   {
+    "modify": "20170910015641",
+    "name": "198914.pdf",
+    "size": 26828063,
+    "type": "file"
+   },
+   {
+    "modify": "20170910020135",
+    "name": "198915.pdf",
+    "size": 24183820,
+    "type": "file"
+   },
+   {
+    "modify": "20170910021743",
+    "name": "198916.pdf",
+    "size": 26082713,
+    "type": "file"
+   },
+   {
+    "modify": "20170910020357",
+    "name": "198916b.pdf",
+    "size": 23239532,
+    "type": "file"
+   },
+   {
+    "modify": "20170910023156",
+    "name": "198917.pdf",
+    "size": 26816123,
+    "type": "file"
+   },
+   {
+    "modify": "20170910023600",
+    "name": "198918.pdf",
+    "size": 20209390,
+    "type": "file"
+   },
+   {
+    "modify": "20170910023948",
+    "name": "199001.pdf",
+    "size": 19005747,
+    "type": "file"
+   },
+   {
+    "modify": "20170910024354",
+    "name": "199002.pdf",
+    "size": 19974407,
+    "type": "file"
+   },
+   {
+    "modify": "20170910025711",
+    "name": "199003.pdf",
+    "size": 25241837,
+    "type": "file"
+   },
+   {
+    "modify": "20170910031017",
+    "name": "199004.pdf",
+    "size": 25756518,
+    "type": "file"
+   },
+   {
+    "modify": "20170910031459",
+    "name": "199005.pdf",
+    "size": 24945142,
+    "type": "file"
+   },
+   {
+    "modify": "20170910031945",
+    "name": "199006.pdf",
+    "size": 23739268,
+    "type": "file"
+   },
+   {
+    "modify": "20170910032422",
+    "name": "199007.pdf",
+    "size": 24135495,
+    "type": "file"
+   },
+   {
+    "modify": "20170910032715",
+    "name": "199008.pdf",
+    "size": 31313861,
+    "type": "file"
+   },
+   {
+    "modify": "20170910033223",
+    "name": "199009.pdf",
+    "size": 26039674,
+    "type": "file"
+   },
+   {
+    "modify": "20170910033519",
+    "name": "199010.pdf",
+    "size": 29627724,
+    "type": "file"
+   },
+   {
+    "modify": "20170910034002",
+    "name": "199011.pdf",
+    "size": 23870791,
+    "type": "file"
+   },
+   {
+    "modify": "20170910034450",
+    "name": "199012.pdf",
+    "size": 23398996,
+    "type": "file"
+   },
+   {
+    "modify": "20170910034946",
+    "name": "199013.pdf",
+    "size": 26565442,
+    "type": "file"
+   },
+   {
+    "modify": "20170910035421",
+    "name": "199014.pdf",
+    "size": 23617008,
+    "type": "file"
+   },
+   {
+    "modify": "20170910035848",
+    "name": "199015.pdf",
+    "size": 23785392,
+    "type": "file"
+   },
+   {
+    "modify": "20170910040325",
+    "name": "199016.pdf",
+    "size": 22945902,
+    "type": "file"
+   },
+   {
+    "modify": "20170910040831",
+    "name": "199017.pdf",
+    "size": 25146449,
+    "type": "file"
+   },
+   {
+    "modify": "20170910042252",
+    "name": "199018.pdf",
+    "size": 24610286,
+    "type": "file"
+   },
+   {
+    "modify": "20170910042816",
+    "name": "199019.pdf",
+    "size": 26853787,
+    "type": "file"
+   },
+   {
+    "modify": "20170910043242",
+    "name": "199020.pdf",
+    "size": 23131052,
+    "type": "file"
+   },
+   {
+    "modify": "20170910043720",
+    "name": "199101.pdf",
+    "size": 23667957,
+    "type": "file"
+   },
+   {
+    "modify": "20170910044149",
+    "name": "199102.pdf",
+    "size": 23212399,
+    "type": "file"
+   },
+   {
+    "modify": "20170910044623",
+    "name": "199103.pdf",
+    "size": 23372125,
+    "type": "file"
+   },
+   {
+    "modify": "20170910045055",
+    "name": "199104.pdf",
+    "size": 24090439,
+    "type": "file"
+   },
+   {
+    "modify": "20170910045740",
+    "name": "199105.pdf",
+    "size": 22410233,
+    "type": "file"
+   },
+   {
+    "modify": "20170910050226",
+    "name": "199106.pdf",
+    "size": 25772685,
+    "type": "file"
+   },
+   {
+    "modify": "20170910050713",
+    "name": "199107.pdf",
+    "size": 25886898,
+    "type": "file"
+   },
+   {
+    "modify": "20170910051159",
+    "name": "199108.pdf",
+    "size": 24823297,
+    "type": "file"
+   },
+   {
+    "modify": "20170910051649",
+    "name": "199109.pdf",
+    "size": 24528234,
+    "type": "file"
+   },
+   {
+    "modify": "20170910052124",
+    "name": "199110.pdf",
+    "size": 25133496,
+    "type": "file"
+   },
+   {
+    "modify": "20170910052550",
+    "name": "199111.pdf",
+    "size": 21907664,
+    "type": "file"
+   },
+   {
+    "modify": "20170910053017",
+    "name": "199112.pdf",
+    "size": 22439593,
+    "type": "file"
+   },
+   {
+    "modify": "20170910053502",
+    "name": "199113.pdf",
+    "size": 24071175,
+    "type": "file"
+   },
+   {
+    "modify": "20170910053941",
+    "name": "199114.pdf",
+    "size": 22286147,
+    "type": "file"
+   },
+   {
+    "modify": "20170910054438",
+    "name": "199115.pdf",
+    "size": 25481916,
+    "type": "file"
+   },
+   {
+    "modify": "20170910054924",
+    "name": "199116.pdf",
+    "size": 25777191,
+    "type": "file"
+   },
+   {
+    "modify": "20170910055409",
+    "name": "199117.pdf",
+    "size": 25618186,
+    "type": "file"
+   },
+   {
+    "modify": "20170910055906",
+    "name": "199118.pdf",
+    "size": 25382609,
+    "type": "file"
+   },
+   {
+    "modify": "20170910060354",
+    "name": "199119.pdf",
+    "size": 23234304,
+    "type": "file"
+   },
+   {
+    "modify": "20170910060836",
+    "name": "199120.pdf",
+    "size": 24372645,
+    "type": "file"
+   },
+   {
+    "modify": "20170910061313",
+    "name": "199121.pdf",
+    "size": 23808786,
+    "type": "file"
+   }
+  ],
   "Original Scans": [
    {
     "modify": "20200720072752",
@@ -72263,8 +72805,8 @@
   "MFMT",
   "AVBL"
  ],
- "ftpCalls": 190,
- "listedAt": "2026-10-06T11:17:45Z",
+ "ftpCalls": 2,
+ "listedAt": "2026-10-06T11:20:56Z",
  "method": "MLSD",
  "pauseSeconds": 0.6,
  "rawListingVersion": 1,
@@ -72272,6 +72814,7 @@
   "Covers",
   "Large PDF",
   "OCR PDF",
+  "OCR PDF v2",
   "Original Scans"
  ],
  "server": "dmzarkivet.se"
