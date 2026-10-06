@@ -15,7 +15,8 @@ import org.junit.Test
 import java.io.File
 
 /**
- * Migreringen från databasversion 1 (FAS 1) till 2 (Issue.coverAsset).
+ * Migreringen från databasversion 1 (FAS 1) via 2 (Issue.coverAsset) till 3
+ * (ETag och Last-Modified i IssueLocalState).
  * Version 1 byggs upp ur det exporterade schemat, precis som den såg ut.
  */
 class MigrationTest {
@@ -93,7 +94,12 @@ class MigrationTest {
                 )
                 assertEquals("Annons", db.bookmarkDao().getAll().single().title)
                 assertEquals(600, db.readingSessionDao().getAll().single().durationSeconds)
-                assertEquals(DownloadState.DOWNLOADED, db.issueLocalStateDao().getAll().single().downloadState)
+                val local = db.issueLocalStateDao().getAll().single()
+                assertEquals(DownloadState.DOWNLOADED, local.downloadState)
+                assertEquals(48, local.observedPageCount)
+                // Kolumnerna från version 3 finns och är tomma.
+                assertNull(local.observedPdfEtag)
+                assertNull(local.observedPdfLastModified)
             } finally {
                 db.close()
             }

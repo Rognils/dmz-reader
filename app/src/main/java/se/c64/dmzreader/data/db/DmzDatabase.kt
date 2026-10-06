@@ -22,10 +22,11 @@ import kotlinx.coroutines.Dispatchers
         Bookmark::class,
         ReadingSession::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
-    // Version 2 lägger till Issue.coverAsset. Användardata rörs inte av migreringen.
-    autoMigrations = [AutoMigration(from = 1, to = 2)],
+    // Version 2 lägger till Issue.coverAsset. Version 3 lägger till ETag och
+    // Last-Modified i IssueLocalState. Användardata rörs inte av migreringarna.
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)],
 )
 @ColumnTypeConverters(Converters::class)
 abstract class DmzDatabase : RoomDatabase() {

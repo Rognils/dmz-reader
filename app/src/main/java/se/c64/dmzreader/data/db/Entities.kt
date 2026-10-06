@@ -47,6 +47,9 @@ data class IssueLocalState(
     @PrimaryKey val issueId: String,
     val observedPageCount: Int? = null,
     val observedPdfSize: Long? = null,
+    /** ETag och Last-Modified från servern när filen hämtades (planens C7). */
+    val observedPdfEtag: String? = null,
+    val observedPdfLastModified: String? = null,
     val downloadState: DownloadState = DownloadState.NONE,
     val downloadedPath: String? = null,
     val downloadedBytes: Long? = null,

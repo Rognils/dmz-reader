@@ -142,6 +142,7 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.okhttp.mockwebserver)
     hostSqlite(libs.sqlite.bundled.jvm)
 
     androidTestImplementation(libs.junit)
