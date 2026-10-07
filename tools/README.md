@@ -195,6 +195,44 @@ Bygger `app/src/debug/assets/fts_test.db`: ett litet sökindex i samma format so
 
 Kör om skriptet och committa filen om texten eller frågorna ändras.
 
+## Uppdatera arkivet på telefonen
+
+När arkivet har fått nya nummer, eller en fil har bytts, behöver appen inte byggas om. Arkivindexet görs på datorn och importeras i appen.
+
+1. **Kör toolchainen.** Gör en ny listning och bygg indexet, som i avsnittet "Online" ovan:
+
+   ```
+   python3 tools/archive_inventory.py          # ny FTP-listning
+   python3 tools/https_probe.py                # HEAD mot webbplatsen för det som är nytt
+   python3 tools/archive_inventory.py --offline
+   ```
+
+   Kontrollera utskriften: antalet nummer, eventuella specialfall och att valideringen går igenom. Vill du se vad som har ändrats sedan förra indexet, lägg till `--compare-to <den gamla filen>` på sista raden.
+
+2. **Kopiera `data/archive_inventory.json` till telefonen.** Till exempel med USB:
+
+   ```
+   adb push data/archive_inventory.json /sdcard/Download/
+   ```
+
+   Vilken väg som helst går bra, bara filen hamnar där telefonens filväljare når den.
+
+3. **Importera i appen.** Inställningar → Arkivindex → Importera arkivindex, och välj filen.
+
+   Appen kopierar filen, validerar den och visar hur många nummer som är nya, borttagna och ändrade jämfört med det index som gäller. Ingenting ändras förrän du trycker Importera.
+
+Bra att veta:
+
+- **Din data rörs inte.** Favoriter, bokmärken, läsdata och nedladdade nummer finns kvar. Ett nummer som har försvunnit ur indexet visas som "Saknas i aktuellt arkivindex" och kopplas ihop med sin data igen om det kommer tillbaka.
+- **En trasig fil avvisas** med en förklaring, och det tidigare indexet gäller.
+- **Nya nummer saknar inbyggd miniatyr.** Omslaget hämtas då från webben. Miniatyrerna följer med först i nästa appversion (`tools/build_covers.py`).
+- **En nedladdad PDF som har bytts i arkivet** raderas aldrig automatiskt. Nummervyn visar "Din nedladdade kopia är äldre" med knappen Uppdatera nedladdning.
+- **Ångra:** Inställningar → Arkivindex → Återgå till inbyggt index.
+
+### Testindex (`make_test_inventories.py`)
+
+`tools/testdata/` innehåller index för att pröva importen: ett giltigt med ett nytt, ett borttaget och ett ändrat nummer, och fyra trasiga. De byggs från det riktiga indexet med `python3 tools/make_test_inventories.py` och är inte riktiga arkivindex. Importera dem inte för vanlig användning.
+
 ## Namnregler och specialfall
 
 Reglerna står i början av avsnittet "Namnregler" i `archive_inventory.py` och beskrivs i `docs/archive_notes.md`. En fil som inte matchar någon regel gissas aldrig: den listas som specialfall i utskriften och i `specialCases` i diagnostikfilen.
