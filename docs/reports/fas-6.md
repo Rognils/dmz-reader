@@ -170,7 +170,7 @@ I `docs/screenshots/fas6/`:
 
 - **Borttagningar följer inte med i en backup.** Ett borttaget bokmärke kommer tillbaka om en äldre backup importeras.
 - **Ett bokmärke med ändrad titel räknas som nytt** vid import av en backup med den gamla titeln, eftersom titeln ingår i dubblettregeln.
-- **Aktivitetshanterarens Stop-knapp** är prövad genom dess kommandon, inte genom själva knappen.
+- **Stopp via aktivitetshanteraren testades med motsvarande kommandon, inte med knappen** (`cmd jobscheduler stop` med användarskälet och `am stop-app`). Nedladdningstiderna är för korta, cirka fyra sekunder, för att hinna navigera till knappen medan nedladdningen pågår.
 - **C7 och D6 är visade med påhittad data.** Ett riktigt filbyte i arkivet eller ett riktigt försvunnet nummer kan först uppstå med import av inventory i FAS 7.
 - **Titlar skrevs utan å, ä och ö vid verifieringen på telefonen,** eftersom `adb` inte kan skriva dem. JVM-testerna använder dem.
 - **Stjärnan gäller ankarsidan.** I ett uppslag är det sidan man kom dit med, eller vänstersidan efter ett sidbyte.
