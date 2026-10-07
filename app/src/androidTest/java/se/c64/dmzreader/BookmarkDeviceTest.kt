@@ -167,4 +167,18 @@ class BookmarkDeviceTest {
         }
         Log.i("DmzVerify", "GHOST $ghost inlagt")
     }
+
+    /**
+     * Verktyg för verifiering av planens C7: ändrar den sparade PDF-storleken för
+     * bokmärkena i numret i argumentet dmzStale, som om filen hade bytts i arkivet
+     * sedan de skapades.
+     */
+    @Test
+    fun makeBookmarksStaleOnRequest() = runBlocking<Unit> {
+        val staleIssueId = arguments.getString("dmzStale")
+        assumeTrue(staleIssueId != null)
+        val dao = appContainer(context).database.bookmarkDao()
+        val changed = dao.getAll().filter { it.issueId == staleIssueId }.onEach { dao.update(it.copy(pdfSize = 1)) }
+        Log.i("DmzVerify", "STALE $staleIssueId: ${changed.size} bokmärken")
+    }
 }
