@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -108,6 +109,12 @@ class CoverFlagsTransformation(private val transform: CoverTransform) : Transfor
 }
 
 /**
+ * Miniatyrerna som följer med appen, som sökvägar under assets ("covers/….webp").
+ * null när det inte är känt, till exempel i en förhandsvisning.
+ */
+val LocalBundledCovers = staticCompositionLocalOf<Set<String>?> { null }
+
+/**
  * Omslaget för ett nummer i formatet [COVER_ASPECT_RATIO].
  *
  * Källorna prövas i tur och ordning: den inbyggda miniatyren, sedan coverUrl.
@@ -123,7 +130,10 @@ fun IssueCover(
 ) {
     val shape = RoundedCornerShape(cornerRadius)
     val description = issue.fullTitle()
-    val sources = remember(issue.coverAsset, issue.coverUrl, issue.coverFlags) { coverSources(issue) }
+    val bundledCovers = LocalBundledCovers.current
+    val sources = remember(issue.coverAsset, issue.coverUrl, issue.coverFlags, bundledCovers) {
+        coverSources(issue, bundledCovers)
+    }
     // Hur många källor som har misslyckats. Nästa i listan prövas.
     var failed by remember(sources) { mutableIntStateOf(0) }
 

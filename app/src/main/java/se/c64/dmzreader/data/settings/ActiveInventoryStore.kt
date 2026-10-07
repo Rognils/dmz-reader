@@ -13,8 +13,23 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
+/** Varifrån det aktiva arkivindexet kommer (planens D4). */
+enum class InventorySource {
+    /** Filen som följer med appen i assets. */
+    BUNDLED,
+
+    /** En fil som användaren har importerat till filesDir/data/inventory.json. */
+    IMPORTED,
+}
+
 /** Vilket inventory som ligger i Issue-tabellen just nu. */
-data class ActiveInventory(val datasetVersion: String, val schemaVersion: Int)
+data class ActiveInventory(
+    val datasetVersion: String,
+    val schemaVersion: Int,
+    val source: InventorySource = InventorySource.BUNDLED,
+    /** När indexet importerades, i millisekunder. null för det inbyggda. */
+    val importedAt: Long? = null,
+)
 
 interface ActiveInventoryStore {
     fun observe(): Flow<ActiveInventory?>
@@ -39,7 +54,12 @@ class DataStoreActiveInventoryStore(context: Context) : ActiveInventoryStore {
         val datasetVersion = preferences[DATASET_VERSION]
         val schemaVersion = preferences[SCHEMA_VERSION]
         if (datasetVersion != null && schemaVersion != null) {
-            ActiveInventory(datasetVersion, schemaVersion)
+            ActiveInventory(
+                datasetVersion = datasetVersion,
+                schemaVersion = schemaVersion,
+                source = if (preferences[SOURCE] == InventorySource.IMPORTED.name) InventorySource.IMPORTED else InventorySource.BUNDLED,
+                importedAt = preferences[IMPORTED_AT],
+            )
         } else {
             null
         }
@@ -51,12 +71,16 @@ class DataStoreActiveInventoryStore(context: Context) : ActiveInventoryStore {
         dataStore.edit { preferences ->
             preferences[DATASET_VERSION] = value.datasetVersion
             preferences[SCHEMA_VERSION] = value.schemaVersion
+            preferences[SOURCE] = value.source.name
+            if (value.importedAt != null) preferences[IMPORTED_AT] = value.importedAt else preferences.remove(IMPORTED_AT)
         }
     }
 
     private companion object {
         val DATASET_VERSION = stringPreferencesKey("active_dataset_version")
         val SCHEMA_VERSION = intPreferencesKey("active_schema_version")
+        val SOURCE = stringPreferencesKey("active_inventory_source")
+        val IMPORTED_AT = longPreferencesKey("active_inventory_imported_at")
     }
 }
 

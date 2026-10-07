@@ -279,6 +279,7 @@ class SettingsViewModel(
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
+    archiveIndexViewModel: ArchiveIndexViewModel,
     onBack: () -> Unit,
     onOpenDiagnostics: () -> Unit,
     modifier: Modifier = Modifier,
@@ -399,6 +400,9 @@ fun SettingsScreen(
                     color = DmzColors.TextSecondary,
                 )
             }
+
+            Spacer(Modifier.height(20.dp))
+            ArchiveIndexSection(archiveIndexViewModel)
 
             Spacer(Modifier.height(20.dp))
             Panel(

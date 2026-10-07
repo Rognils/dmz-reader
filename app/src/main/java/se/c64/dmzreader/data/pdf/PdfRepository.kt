@@ -29,6 +29,25 @@ class PdfRepository(
 ) {
     fun cachedFile(issueId: String): File? = cache.file(issueId).takeIf { it.isFile }
 
+    // Nummer vars cachefil redan har hämtats om i den här körningen. Stämmer filen
+    // ändå inte med indexet är det indexet som är fel, och då hämtas den inte om igen.
+    private val refetched: MutableSet<String> = java.util.Collections.synchronizedSet(HashSet())
+
+    /**
+     * Cachefilen för numret, om den går att använda. En fil vars storlek inte
+     * stämmer med arkivindexet är från en äldre version av PDF:en (planens C7):
+     * den kastas, så att läsaren hämtar den aktuella. Läs-cachen är tillfällig,
+     * till skillnad från nedladdningar, som aldrig raderas automatiskt.
+     */
+    fun usableCachedFile(issue: IssueEntity): File? {
+        val file = cachedFile(issue.issueId) ?: return null
+        val expected = issue.ocrPdfSize ?: return file
+        if (file.length() == expected || !refetched.add(issue.issueId)) return file
+        log("${issue.issueId}: cachefilen är från en äldre version av arkivfilen och hämtas om")
+        cache.remove(issue.issueId)
+        return null
+    }
+
     /** Storleken på läs-cachen i byte. */
     fun cacheBytes(): Long = cache.totalBytes()
 

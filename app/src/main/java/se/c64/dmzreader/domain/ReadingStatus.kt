@@ -124,7 +124,24 @@ data class IssueWithState(
 
     /** Sant när numret är nedladdat och kan läsas utan nät. */
     val isDownloaded: Boolean get() = downloadState == DownloadState.DOWNLOADED
+
+    /**
+     * Sant när arkivindexet uppger en annan version av PDF:en än den som är
+     * nedladdad (planens C7). Kopian finns kvar och går att läsa; den raderas aldrig automatiskt.
+     */
+    val downloadOutdated: Boolean get() = downloadIsOutdated(issue, local)
+
+    /** Sant när en uppdatering av den nedladdade kopian är begärd och väntar eller pågår. */
+    val updateRequested: Boolean get() = isDownloaded && local?.downloadQueuedAt != null
 }
+
+fun downloadIsOutdated(issue: IssueEntity, local: IssueLocalState?): Boolean {
+    if (local?.downloadState != DownloadState.DOWNLOADED) return false
+    val downloaded = local.observedPdfVersion() ?: PdfVersion(local.downloadedBytes, null, null)
+    return issue.pdfVersion().differsFrom(downloaded)
+}
+
+const val DOWNLOAD_OUTDATED_TEXT = "Arkivfilen har uppdaterats. Din nedladdade kopia är äldre."
 
 /** "Nedladdat" i biblioteket: de nedladdade numren, senast nedladdade först. */
 fun downloadedIssues(items: List<IssueWithState>): List<IssueWithState> =

@@ -14,9 +14,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 import se.c64.dmzreader.data.backup.BackupRepository
 import se.c64.dmzreader.data.db.DmzDatabase
-import se.c64.dmzreader.data.inventory.InventoryImporter
+import se.c64.dmzreader.data.inventory.InventoryManager
 import se.c64.dmzreader.data.inventory.InventoryLoadResult
 import se.c64.dmzreader.data.network.CoverImageLoader
 import se.c64.dmzreader.data.offline.LocalStateStore
@@ -170,12 +171,34 @@ class AppContainer(private val context: Context) {
     private val _inventoryStatus = MutableStateFlow<InventoryStatus>(InventoryStatus.Loading)
     val inventoryStatus: StateFlow<InventoryStatus> = _inventoryStatus
 
-    /** Läser in assets/archive_inventory.json om dess version inte redan är aktiv. */
+    /**
+     * Arkivindexet: det inbyggda i assets eller ett importerat i filesDir/data/ (planens D4 och D5).
+     */
+    val inventoryManager: InventoryManager by lazy {
+        InventoryManager(
+            directory = File(context.filesDir, "data"),
+            activeInventory = activeInventory,
+            currentIssues = { database.issueDao().getAll() },
+            replaceIssues = { database.issueDao().replaceAll(it) },
+            readBundled = { context.assets.open(BUNDLED_INVENTORY).bufferedReader().use { it.readText() } },
+            log = { Log.i("DmzInventory", it) },
+        )
+    }
+
+    /** Miniatyrerna som följer med appen. Ett coverAsset används bara om filen finns här. */
+    val bundledCovers: Set<String> by lazy {
+        context.assets.list("covers").orEmpty().mapTo(HashSet()) { "covers/$it" }
+    }
+
+    /** Öppnar en fil som användaren har valt i systemets filväljare. */
+    fun openDocument(uri: Uri): InputStream =
+        context.contentResolver.openInputStream(uri) ?: throw IOException("Filen gick inte att öppna.")
+
+    /** Läser in det importerade arkivindexet om det finns och är giltigt, annars det inbyggda. */
     fun loadBundledInventory() {
         scope.launch {
             val result = try {
-                val text = context.assets.open(BUNDLED_INVENTORY).bufferedReader().use { it.readText() }
-                InventoryImporter(database.issueDao(), activeInventory).load(text)
+                inventoryManager.loadAtStartup()
             } catch (e: Exception) {
                 InventoryLoadResult.Rejected("Arkivindexet gick inte att läsa in: ${e.message}")
             }

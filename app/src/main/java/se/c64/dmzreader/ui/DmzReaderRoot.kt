@@ -41,6 +41,8 @@ import se.c64.dmzreader.ui.library.LibraryViewModel
 import se.c64.dmzreader.ui.reader.ReaderRoute
 import se.c64.dmzreader.ui.reader.ReaderViewModel
 import se.c64.dmzreader.ui.search.SearchScreen
+import se.c64.dmzreader.ui.search.SearchViewModel
+import se.c64.dmzreader.ui.settings.ArchiveIndexViewModel
 import se.c64.dmzreader.ui.settings.DiagnosticsScreen
 import se.c64.dmzreader.ui.settings.DiagnosticsViewModel
 import se.c64.dmzreader.ui.settings.SettingsScreen
@@ -239,7 +241,19 @@ fun DmzReaderRoot(container: AppContainer) {
                 )
                 ReaderRoute(viewModel, container.imageLoader, onClose = { navController.popBackStack() })
             }
-            composable(Routes.SEARCH) { SearchScreen() }
+            composable(Routes.SEARCH) {
+                val viewModel: SearchViewModel = viewModel(
+                    factory = viewModelFactory {
+                        initializer { SearchViewModel(container.libraryRepository, container.bookmarkRepository) }
+                    },
+                )
+                SearchScreen(
+                    viewModel = viewModel,
+                    imageLoader = container.imageLoader,
+                    onOpenIssue = { navController.navigate(Routes.issue(it)) },
+                    onReadPage = { id, pageNumber -> navController.navigate(Routes.reader(id, pageNumber)) },
+                )
+            }
             composable(Routes.FAVORITES) {
                 val viewModel: FavoritesViewModel = viewModel(
                     factory = viewModelFactory {
@@ -279,8 +293,16 @@ fun DmzReaderRoot(container: AppContainer) {
                         }
                     },
                 )
+                val archiveIndexViewModel: ArchiveIndexViewModel = viewModel(
+                    factory = viewModelFactory {
+                        initializer {
+                            ArchiveIndexViewModel(container.inventoryManager, container.activeInventory, container::openDocument)
+                        }
+                    },
+                )
                 SettingsScreen(
                     viewModel = viewModel,
+                    archiveIndexViewModel = archiveIndexViewModel,
                     onBack = { navController.popBackStack() },
                     onOpenDiagnostics = { navController.navigate(Routes.DIAGNOSTICS) },
                 )

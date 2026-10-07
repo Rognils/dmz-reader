@@ -137,9 +137,13 @@ class PdfDownloader(
                     return@withContext DownloadResult.LengthMismatch(total, written)
                 }
 
-                target.delete()
+                // rename ersätter en befintlig fil i ett steg. En äldre kopia finns därför
+                // kvar ända tills den nya, verifierade filen ligger på plats.
                 if (!part.renameTo(target)) {
-                    return@withContext DownloadResult.NetworkError("Filen kunde inte läggas på plats.")
+                    target.delete()
+                    if (!part.renameTo(target)) {
+                        return@withContext DownloadResult.NetworkError("Filen kunde inte läggas på plats.")
+                    }
                 }
                 validatorFile.delete()
                 DownloadResult.Success(

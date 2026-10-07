@@ -99,14 +99,14 @@ class InventoryImportInstrumentedTest {
         assertTrue(removedIssue > 0)
         val newer = original
             .replace("\"datasetVersion\": \"${parsed.datasetVersion}\"", "\"datasetVersion\": \"2027-01-01-001\"")
-            .replace("\"issueId\": \"datormagazin-1986-01\"", "\"issueId\": \"datormagazin-1985-01\"")
-            .replace("\"sortKey\": \"1986-01\"", "\"sortKey\": \"1985-01\"")
+            .replace("\"issueId\": \"datormagazin-1986-01\"", "\"issueId\": \"datormagazin-1986-99\"")
+            .replace("\"sortKey\": \"1986-01\"", "\"sortKey\": \"1986-99\"")
 
         val result = importer.load(newer)
 
         assertEquals(InventoryLoadResult.Replaced("2027-01-01-001", 185), result)
         assertNull(db.issueDao().get("datormagazin-1986-01"))
-        assertNotNull(db.issueDao().get("datormagazin-1985-01"))
+        assertNotNull(db.issueDao().get("datormagazin-1986-99"))
         assertEquals(listOf(orphan, kept), db.issueUserStateDao().getAll())
         assertEquals(1, db.bookmarkDao().getAll().size)
         assertEquals(1, db.readingSessionDao().getAll().size)

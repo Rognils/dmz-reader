@@ -70,4 +70,22 @@ class CoverSourceTest {
         val source = coverSources(issueEntity("datormagazin-1989-06", coverUrl = odd)).single()
         assertEquals(odd, (source as CoverSource.Remote).url)
     }
+
+    /** Ett importerat arkivindex kan peka på en miniatyr som inte följer med appen (planens FAS 7). */
+    @Test
+    fun `coverAsset is only a hint - a thumbnail that is not bundled is skipped`() {
+        val issue = issueEntity("datormagazin-1996-01", coverAsset = "covers/datormagazin-1996-01.webp")
+        val bundled = setOf("covers/datormagazin-1989-06.webp")
+        // Miniatyren finns inte i appen: coverUrl används direkt.
+        val sources = coverSources(issue, bundled)
+        assertEquals(1, sources.size)
+        assertTrue(sources.single() is CoverSource.Remote)
+        // Finns den används den först, som vanligt.
+        val known = coverSources(issue.copy(coverAsset = "covers/datormagazin-1989-06.webp"), bundled)
+        assertEquals(listOf(true, false), known.map { it is CoverSource.Asset })
+        // Varken miniatyr eller adress: platshållaren.
+        assertTrue(coverSources(issue.copy(coverUrl = null), bundled).isEmpty())
+        // Okänt vilka miniatyrer som finns: den prövas, och laddningen får avgöra.
+        assertEquals(2, coverSources(issue).size)
+    }
 }

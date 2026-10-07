@@ -17,6 +17,7 @@ import se.c64.dmzreader.data.db.Bookmark
 import se.c64.dmzreader.data.db.DownloadState
 import se.c64.dmzreader.data.repository.BookmarkRepository
 import se.c64.dmzreader.domain.ARCHIVE_FILE_CHANGED_TEXT
+import se.c64.dmzreader.domain.DOWNLOAD_OUTDATED_TEXT
 import se.c64.dmzreader.domain.archiveFileChanged
 import se.c64.dmzreader.domain.newestFirst
 import se.c64.dmzreader.ui.components.BookmarkEditDialog
@@ -102,6 +103,8 @@ data class IssueUiState(
     val downloadProgress: DownloadProgress? = null,
     /** Numrets bokmärken, nyast först. */
     val bookmarks: List<Bookmark> = emptyList(),
+    /** Sant om den senaste uppdateringen av den nedladdade kopian misslyckades. */
+    val updateFailed: Boolean = false,
 ) {
     val isFavorite: Boolean get() = reading?.state?.isFavorite == true
 
@@ -124,8 +127,10 @@ class IssueViewModel(
         repository.observeIssueWithState(issueId),
         offlineRepository.active,
         bookmarkRepository.observeAll(),
-    ) { details, reading, active, bookmarks ->
+        offlineRepository.failedUpdates,
+    ) { details, reading, active, bookmarks, failedUpdates ->
         IssueUiState(
+            updateFailed = issueId in failedUpdates,
             loading = false,
             details = details,
             reading = reading,
@@ -162,6 +167,16 @@ class IssueViewModel(
     fun download() {
         viewModelScope.launch {
             if (offlineRepository.requestDownload(issueId) == DownloadRequest.QUEUED) downloadScheduler.start()
+        }
+    }
+
+    /**
+     * "Uppdatera nedladdning": hämtar den aktuella arkivfilen. Den gamla kopian
+     * finns kvar tills den nya är komplett, och om uppdateringen misslyckas.
+     */
+    fun updateDownload() {
+        viewModelScope.launch {
+            if (offlineRepository.requestUpdate(issueId)) downloadScheduler.start()
         }
     }
 
@@ -243,6 +258,10 @@ fun IssueScreen(
                             downloadedBytes = state.reading?.local?.downloadedBytes,
                             expectedBytes = details.issue.ocrPdfSize,
                             runsInBackground = viewModel.downloadsRunInBackground,
+                            outdated = state.reading?.downloadOutdated == true,
+                            updating = state.reading?.updateRequested == true,
+                            updateFailed = state.updateFailed,
+                            onUpdate = viewModel::updateDownload,
                             shouldAskAboutNotifications = viewModel::shouldAskAboutNotifications,
                             onNotificationQuestionShown = viewModel::notificationQuestionShown,
                             onDownload = viewModel::download,
@@ -447,6 +466,10 @@ private fun DownloadSection(
     downloadedBytes: Long?,
     expectedBytes: Long?,
     runsInBackground: Boolean,
+    outdated: Boolean,
+    updating: Boolean,
+    updateFailed: Boolean,
+    onUpdate: () -> Unit,
     shouldAskAboutNotifications: suspend () -> Boolean,
     onNotificationQuestionShown: () -> Unit,
     onDownload: () -> Unit,
@@ -536,6 +559,37 @@ private fun DownloadSection(
                         color = DmzColors.TextPrimary,
                         modifier = Modifier.padding(start = 10.dp).testTag("download-status"),
                     )
+                }
+                if (updating) {
+                    // Den gamla kopian går att läsa medan den nya hämtas.
+                    val percent = progress?.fraction?.let { (it * 100).toInt() }
+                    Spacer(Modifier.height(10.dp))
+                    Text(
+                        text = percent?.let { "Uppdaterar $it %" } ?: "Uppdateringen står i kö",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = DmzColors.TextPrimary,
+                        modifier = Modifier.testTag("update-status"),
+                    )
+                    if (progress != null) {
+                        Spacer(Modifier.height(6.dp))
+                        ProgressLine(progress.fraction ?: 0f)
+                    }
+                    Spacer(Modifier.height(10.dp))
+                    StatusButton("Avbryt uppdateringen", Modifier.fillMaxWidth(), onClick = onCancel)
+                } else if (outdated) {
+                    // Planens C7: kopian raderas aldrig automatiskt. Användaren väljer själv.
+                    Spacer(Modifier.height(10.dp))
+                    Notice(DOWNLOAD_OUTDATED_TEXT, modifier = Modifier.testTag("download-outdated"))
+                    if (updateFailed) {
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            "Uppdateringen misslyckades. Din gamla kopia finns kvar.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = DmzColors.Failure,
+                        )
+                    }
+                    Spacer(Modifier.height(10.dp))
+                    StatusButton("Uppdatera nedladdning", Modifier.fillMaxWidth(), onClick = onUpdate)
                 }
                 Spacer(Modifier.height(10.dp))
                 StatusButton("Ta bort nedladdning", Modifier.fillMaxWidth()) { confirmRemove = true }

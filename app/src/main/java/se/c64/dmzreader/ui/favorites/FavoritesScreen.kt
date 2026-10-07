@@ -47,6 +47,7 @@ import se.c64.dmzreader.domain.ARCHIVE_FILE_CHANGED_TEXT
 import se.c64.dmzreader.domain.BookmarkGroup
 import se.c64.dmzreader.domain.IssueWithState
 import se.c64.dmzreader.domain.MISSING_FROM_INVENTORY_TEXT
+import se.c64.dmzreader.domain.MissingIssue
 import se.c64.dmzreader.domain.PersonalLibrary
 import se.c64.dmzreader.domain.fullTitle
 import se.c64.dmzreader.domain.personalLibrary
@@ -116,7 +117,7 @@ fun FavoritesScreen(
             item(key = "empty") { EmptyState() }
         }
 
-        if (library.favorites.isNotEmpty() || library.missingFavorites.isNotEmpty()) {
+        if (library.favorites.isNotEmpty() || library.missingIssues.isNotEmpty()) {
             item(key = "favorites-title") {
                 SectionTitle("Favoritnummer", "${library.favorites.size + library.missingFavorites.size}")
             }
@@ -130,8 +131,8 @@ fun FavoritesScreen(
                     repeat(COLUMNS - row.size) { Spacer(Modifier.weight(1f)) }
                 }
             }
-            items(library.missingFavorites, key = { "missing-fav-$it" }) { issueId ->
-                MissingFavorite(issueId, onRemove = { viewModel.removeFavorite(issueId) })
+            items(library.missingIssues, key = { "missing-${it.issueId}" }) { missing ->
+                MissingIssueRow(missing, onRemoveFavorite = { viewModel.removeFavorite(missing.issueId) })
                 Spacer(Modifier.height(8.dp))
             }
         }
@@ -223,18 +224,27 @@ private fun FavoriteCell(
     }
 }
 
-/** En favorit vars nummer inte finns i det aktiva arkivindexet (planens D6). */
+/**
+ * Ett nummer som inte finns i det aktiva arkivindexet men har favoritmarkering
+ * eller läsdata (planens D6). Favoritmarkeringen går att ta bort; läsdatan
+ * ligger kvar och hör ihop med numret igen om det kommer tillbaka.
+ */
 @Composable
-private fun MissingFavorite(issueId: String, onRemove: () -> Unit) {
-    Panel {
+private fun MissingIssueRow(missing: MissingIssue, onRemoveFavorite: () -> Unit) {
+    Panel(modifier = Modifier.testTag("missing-${missing.issueId}")) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(issueId, style = MonoStyles.Data, color = DmzColors.TextPrimary)
+                Text(missing.issueId, style = MonoStyles.Data, color = DmzColors.TextPrimary)
                 Spacer(Modifier.height(2.dp))
                 Notice(MISSING_FROM_INVENTORY_TEXT)
+                if (missing.description.isNotEmpty()) {
+                    Text(missing.description, style = MaterialTheme.typography.bodyMedium, color = DmzColors.TextSecondary)
+                }
             }
-            TextButton(onClick = onRemove, modifier = Modifier.heightIn(min = 48.dp)) {
-                Text("Ta bort", color = DmzColors.TextPrimary)
+            if (missing.isFavorite) {
+                TextButton(onClick = onRemoveFavorite, modifier = Modifier.heightIn(min = 48.dp)) {
+                    Text("Ta bort", color = DmzColors.TextPrimary)
+                }
             }
         }
     }

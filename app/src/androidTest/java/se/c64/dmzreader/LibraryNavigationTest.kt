@@ -145,8 +145,10 @@ class LibraryNavigationTest {
         rule.onNodeWithText("Bibliotek").assertDoesNotExist()
         rule.onNodeWithText("Statistik").assertDoesNotExist()
 
-        rule.onNodeWithText("Diagnostik").performClick()
-        waitForText("ARKIVINDEX")
+        // Diagnostik ligger sist i inställningarna, nedanför det som ryms på skärmen.
+        rule.onNodeWithText("Diagnostik").performScrollTo().performClick()
+        // Rubriken ARKIVINDEX finns också i inställningarna. FTS5-TEST finns bara i diagnostiken.
+        waitForText("FTS5-TEST")
         rule.onNodeWithText("Bibliotek").assertDoesNotExist()
 
         pressBack()
