@@ -80,6 +80,23 @@ interface IssueLocalStateDao {
     @Upsert
     suspend fun upsert(state: IssueLocalState)
 
+    @Insert
+    suspend fun insert(state: IssueLocalState)
+
+    /** Ger antalet ändrade rader: 0 om numret inte har någon rad. */
+    @Update
+    suspend fun update(state: IssueLocalState): Int
+
+    /** Nästa nummer i nedladdningskön: det som begärdes först. */
+    @Query(
+        "SELECT * FROM IssueLocalState WHERE downloadState = 'QUEUED' " +
+            "ORDER BY downloadQueuedAt IS NULL, downloadQueuedAt, issueId LIMIT 1"
+    )
+    suspend fun nextQueued(): IssueLocalState?
+
+    @Query("SELECT COUNT(*) FROM IssueLocalState WHERE downloadState = 'QUEUED'")
+    suspend fun queuedCount(): Int
+
     @Query("SELECT * FROM IssueLocalState WHERE issueId = :issueId")
     suspend fun get(issueId: String): IssueLocalState?
 

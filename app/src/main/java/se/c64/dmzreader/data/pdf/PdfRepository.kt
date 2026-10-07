@@ -5,7 +5,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import se.c64.dmzreader.data.db.IssueEntity
 import se.c64.dmzreader.data.db.IssueLocalState
-import se.c64.dmzreader.data.db.IssueLocalStateDao
+import se.c64.dmzreader.data.offline.LocalStateStore
 import java.io.File
 
 /**
@@ -24,12 +24,18 @@ fun pdfDiffersFromInventory(issue: IssueEntity, size: Long, etag: String?, lastM
 class PdfRepository(
     private val cache: PdfCache,
     private val downloader: PdfDownloader,
-    private val localStateDao: IssueLocalStateDao,
+    private val localState: LocalStateStore,
 ) {
     // En PDF-nedladdning åt gången. Nästa väntar tills den förra är klar eller avbruten.
     private val downloadLock = Mutex()
 
     fun cachedFile(issueId: String): File? = cache.file(issueId).takeIf { it.isFile }
+
+    /** Storleken på läs-cachen i byte. */
+    fun cacheBytes(): Long = cache.totalBytes()
+
+    /** Tömmer läs-cachen, även påbörjade nedladdningar. */
+    fun clearCache() = cache.clear()
 
     /** Markerar numret som öppnat och håller cachen under taket. Det öppna numret tas aldrig bort. */
     fun markOpened(issueId: String) {
@@ -55,16 +61,15 @@ class PdfRepository(
     }
 
     private suspend fun recordDownload(issue: IssueEntity, result: DownloadResult.Success) {
-        val current = localStateDao.get(issue.issueId) ?: IssueLocalState(issueId = issue.issueId)
-        localStateDao.upsert(
+        localState.update(issue.issueId) { current ->
             current.copy(
                 observedPdfSize = result.size,
                 observedPdfEtag = result.etag,
                 observedPdfLastModified = result.lastModified,
                 // Ett sidantal som mättes på en annan fil gäller inte längre.
                 observedPageCount = current.observedPageCount.takeIf { current.observedPdfSize == result.size },
-            ),
-        )
+            )
+        }
         if (pdfDiffersFromInventory(issue, result.size, result.etag, result.lastModified)) {
             Log.w(
                 LOG_TAG,
@@ -76,18 +81,14 @@ class PdfRepository(
 
     /** Sparar sidantalet som mättes när PDF:en öppnades. */
     suspend fun recordPageCount(issueId: String, pageCount: Int, fileSize: Long) {
-        val current = localStateDao.get(issueId) ?: IssueLocalState(issueId = issueId)
-        if (current.observedPageCount != pageCount || current.observedPdfSize != fileSize) {
-            localStateDao.upsert(current.copy(observedPageCount = pageCount, observedPdfSize = fileSize))
-        }
+        localState.update(issueId) { it.copy(observedPageCount = pageCount, observedPdfSize = fileSize) }
     }
 
-    suspend fun localState(issueId: String): IssueLocalState? = localStateDao.get(issueId)
+    suspend fun localState(issueId: String): IssueLocalState? = localState.get(issueId)
 
     /** Sparar användarens förskjutning av uppslagsparningen. */
     suspend fun saveSpreadOffset(issueId: String, offset: Int) {
-        val current = localStateDao.get(issueId) ?: IssueLocalState(issueId = issueId)
-        localStateDao.upsert(current.copy(detectedSpreadOffset = offset))
+        localState.update(issueId) { it.copy(detectedSpreadOffset = offset) }
     }
 
     companion object {

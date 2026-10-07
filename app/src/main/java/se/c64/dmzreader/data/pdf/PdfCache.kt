@@ -3,35 +3,63 @@ package se.c64.dmzreader.data.pdf
 import java.io.File
 
 /**
- * Läs-cachen för PDF:er i cacheDir/pdf/ (ADR 0017).
+ * En katalog med PDF:er, en per nummer. Används både för läs-cachen och för
+ * permanenta nedladdningar (ADR 0013 och 0017).
  *
  * En färdig fil heter {issueId}.pdf. En pågående nedladdning heter
  * {issueId}.pdf.part och har sin validerare (ETag eller Last-Modified) i
  * {issueId}.pdf.part.validator. En .pdf-fil är alltid komplett.
  */
-class PdfCache(
-    val directory: File,
-    private val maxBytes: Long = DEFAULT_MAX_BYTES,
-    private val now: () -> Long = System::currentTimeMillis,
-) {
+open class PdfFiles(val directory: File) {
     fun file(issueId: String) = File(directory, "$issueId.pdf")
     fun partFile(issueId: String) = File(directory, "$issueId.pdf.part")
     fun validatorFile(issueId: String) = File(directory, "$issueId.pdf.part.validator")
-
-    fun isCached(issueId: String): Boolean = file(issueId).isFile
-
-    /** Markerar filen som nyss öppnad. Ordningen styr vilka filer som rensas först. */
-    fun touch(issueId: String) {
-        file(issueId).takeIf { it.isFile }?.setLastModified(now())
-    }
 
     fun totalBytes(): Long = directory.listFiles().orEmpty().filter { it.isFile }.sumOf { it.length() }
 
     /** Tar bort allt som hör till ett nummer. */
     fun remove(issueId: String) {
         file(issueId).delete()
+        removePart(issueId)
+    }
+
+    /** Tar bort en påbörjad nedladdning. Den färdiga filen rörs inte. */
+    fun removePart(issueId: String) {
         partFile(issueId).delete()
         validatorFile(issueId).delete()
+    }
+
+    /** Nummer som har en påbörjad nedladdning (.part eller validerare) i katalogen. */
+    fun issueIdsWithParts(): Set<String> = directory.listFiles().orEmpty()
+        .filter { it.isFile && !it.name.endsWith(".pdf") }
+        .mapNotNull { issueIdOf(it) }
+        .toSet()
+
+    /** Tar bort alla filer i katalogen. */
+    fun clear() {
+        directory.listFiles().orEmpty().filter { it.isFile }.forEach { it.delete() }
+    }
+
+    protected fun issueIdOf(file: File): String? = SUFFIXES.firstOrNull { file.name.endsWith(it) }
+        ?.let { file.name.removeSuffix(it) }
+
+    private companion object {
+        // Längsta suffixet först, så att .pdf.part inte tolkas som .pdf.
+        val SUFFIXES = listOf(".pdf.part.validator", ".pdf.part", ".pdf")
+    }
+}
+
+/** Läs-cachen i cacheDir/pdf/, med ett tak där de minst nyligen öppnade filerna rensas först (ADR 0017). */
+class PdfCache(
+    directory: File,
+    private val maxBytes: Long = DEFAULT_MAX_BYTES,
+    private val now: () -> Long = System::currentTimeMillis,
+) : PdfFiles(directory) {
+    fun isCached(issueId: String): Boolean = file(issueId).isFile
+
+    /** Markerar filen som nyss öppnad. Ordningen styr vilka filer som rensas först. */
+    fun touch(issueId: String) {
+        file(issueId).takeIf { it.isFile }?.setLastModified(now())
     }
 
     /**
@@ -63,13 +91,7 @@ class PdfCache(
 
     private class Entry(val issueId: String, val files: List<File>, val lastUsed: Long)
 
-    private fun issueIdOf(file: File): String? = SUFFIXES.firstOrNull { file.name.endsWith(it) }
-        ?.let { file.name.removeSuffix(it) }
-
     companion object {
         const val DEFAULT_MAX_BYTES = 1_500L * 1024 * 1024
-
-        // Längsta suffixet först, så att .pdf.part inte tolkas som .pdf.
-        private val SUFFIXES = listOf(".pdf.part.validator", ".pdf.part", ".pdf")
     }
 }

@@ -1,5 +1,26 @@
 package se.c64.dmzreader.ui.issue
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import se.c64.dmzreader.data.db.DownloadState
+import se.c64.dmzreader.data.offline.DownloadRequest
+import se.c64.dmzreader.data.offline.OfflineRepository
+import se.c64.dmzreader.data.pdf.DownloadProgress
+import se.c64.dmzreader.data.settings.DownloadPreferences
+import se.c64.dmzreader.domain.downloadProgressText
+import se.c64.dmzreader.offline.DownloadScheduler
+import se.c64.dmzreader.ui.components.OfflineBadge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -64,19 +85,57 @@ import se.c64.dmzreader.ui.theme.MonoStyles
 data class IssueUiState(
     val loading: Boolean = true,
     val details: IssueDetails? = null,
-    /** Användarens läsdata och gällande sidantal. null tills numret är inläst. */
+    /** Användarens läsdata, nedladdningsstatus och gällande sidantal. null tills numret är inläst. */
     val reading: IssueWithState? = null,
+    /** Förloppet, om det är det här numret som laddas ned just nu. */
+    val downloadProgress: DownloadProgress? = null,
 )
 
 class IssueViewModel(
     repository: LibraryRepository,
     private val readingRepository: ReadingRepository,
+    private val offlineRepository: OfflineRepository,
+    private val downloadScheduler: DownloadScheduler,
+    private val downloadPreferences: DownloadPreferences,
     private val issueId: String,
 ) : ViewModel() {
-    val state: StateFlow<IssueUiState> =
-        combine(repository.observeIssueDetails(issueId), repository.observeIssueWithState(issueId)) { details, reading ->
-            IssueUiState(loading = false, details = details, reading = reading)
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), IssueUiState())
+    val state: StateFlow<IssueUiState> = combine(
+        repository.observeIssueDetails(issueId),
+        repository.observeIssueWithState(issueId),
+        offlineRepository.active,
+    ) { details, reading, active ->
+        IssueUiState(
+            loading = false,
+            details = details,
+            reading = reading,
+            downloadProgress = active?.takeIf { it.issueId == issueId }?.progress,
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), IssueUiState())
+
+    /** Falskt på Android 8–13, där nedladdningen bara pågår medan appen är öppen. */
+    val downloadsRunInBackground: Boolean get() = downloadScheduler.runsInBackground
+
+    /** Sant första gången användaren laddar ned något: då ställs frågan om notiser. */
+    suspend fun shouldAskAboutNotifications(): Boolean = !downloadPreferences.notificationQuestionShown()
+
+    fun notificationQuestionShown() {
+        viewModelScope.launch { downloadPreferences.setNotificationQuestionShown() }
+    }
+
+    /** Laddar ned numret för läsning utan nät. Finns det i läs-cachen flyttas det, utan nätverkstrafik. */
+    fun download() {
+        viewModelScope.launch {
+            if (offlineRepository.requestDownload(issueId) == DownloadRequest.QUEUED) downloadScheduler.start()
+        }
+    }
+
+    fun cancelDownload() {
+        viewModelScope.launch { offlineRepository.cancel(issueId) }
+    }
+
+    fun removeDownload() {
+        viewModelScope.launch { offlineRepository.remove(issueId) }
+    }
 
     /**
      * Manuell lässtatus (planens C10): READ, UNREAD eller null för automatisk
@@ -88,7 +147,7 @@ class IssueViewModel(
     }
 }
 
-/** Nummervyn (planens E6). Permanent nedladdning kommer i FAS 5. */
+/** Nummervyn (planens E6). */
 @Composable
 fun IssueScreen(
     viewModel: IssueViewModel,
@@ -118,6 +177,22 @@ fun IssueScreen(
                 onOpenIssue = onOpenIssue,
                 onRead = onRead,
                 onSetReadStatus = viewModel::setReadStatus,
+                download = {
+                    if (details.issue.readAction() == ReadAction.READ) {
+                        DownloadSection(
+                            state = state.reading?.downloadState ?: DownloadState.NONE,
+                            progress = state.downloadProgress,
+                            downloadedBytes = state.reading?.local?.downloadedBytes,
+                            expectedBytes = details.issue.ocrPdfSize,
+                            runsInBackground = viewModel.downloadsRunInBackground,
+                            shouldAskAboutNotifications = viewModel::shouldAskAboutNotifications,
+                            onNotificationQuestionShown = viewModel::notificationQuestionShown,
+                            onDownload = viewModel::download,
+                            onCancel = viewModel::cancelDownload,
+                            onRemove = viewModel::removeDownload,
+                        )
+                    }
+                },
             )
             !state.loading -> Text(
                 text = "Numret finns inte i det aktuella arkivindexet.",
@@ -138,6 +213,7 @@ private fun IssueContent(
     onOpenIssue: (String) -> Unit,
     onRead: (String) -> Unit,
     onSetReadStatus: (ReadStatusOverride?) -> Unit,
+    download: @Composable () -> Unit,
 ) {
     val progress = reading?.progress ?: readingProgress(null, null)
     val lastPage = reading?.state?.lastPage
@@ -178,6 +254,8 @@ private fun IssueContent(
                 style = MaterialTheme.typography.titleMedium,
             )
         }
+
+        download()
 
         val pages = pageCountText(reading?.pageCount ?: issue.pageCount, issue.scanPageCount)
         val size = fileSizeText(issue.ocrPdfSize)
@@ -256,5 +334,169 @@ private fun StatusButton(text: String, modifier: Modifier, onClick: () -> Unit) 
         contentPadding = PaddingValues(horizontal = 8.dp),
     ) {
         Text(text, style = MaterialTheme.typography.labelLarge, color = DmzColors.TextPrimary, maxLines = 1)
+    }
+}
+
+/**
+ * Nedladdning för läsning utan nät: Ladda ned, Köad, Laddar ned X % (med
+ * Avbryt), Nedladdad · storlek och Ta bort nedladdning (med bekräftelse).
+ */
+@Composable
+private fun DownloadSection(
+    state: DownloadState,
+    progress: DownloadProgress?,
+    downloadedBytes: Long?,
+    expectedBytes: Long?,
+    runsInBackground: Boolean,
+    shouldAskAboutNotifications: suspend () -> Boolean,
+    onNotificationQuestionShown: () -> Unit,
+    onDownload: () -> Unit,
+    onCancel: () -> Unit,
+    onRemove: () -> Unit,
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var explainNotifications by rememberSaveable { mutableStateOf(false) }
+    var confirmRemove by rememberSaveable { mutableStateOf(false) }
+    // Nedladdningen startar oavsett svaret. Utan behörigheten visas bara ingen notis.
+    val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { onDownload() }
+
+    fun startDownload() {
+        scope.launch {
+            val needsPermission = Build.VERSION.SDK_INT >= 33 &&
+                context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+            if (needsPermission && shouldAskAboutNotifications()) explainNotifications = true else onDownload()
+        }
+    }
+
+    Spacer(Modifier.height(12.dp))
+    Panel(modifier = Modifier.testTag("download-section")) {
+        when (state) {
+            DownloadState.NONE -> {
+                StatusButton("Ladda ned", Modifier.fillMaxWidth(), onClick = ::startDownload)
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = "Sparar numret på telefonen, så att det går att läsa utan nät.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = DmzColors.TextSecondary,
+                )
+            }
+
+            DownloadState.QUEUED, DownloadState.DOWNLOADING -> {
+                val downloading = state == DownloadState.DOWNLOADING
+                val percent = progress?.fraction?.let { (it * 100).toInt() }
+                Text(
+                    text = when {
+                        !downloading -> "Köad"
+                        percent != null -> "Laddar ned $percent %"
+                        else -> "Laddar ned …"
+                    },
+                    style = MaterialTheme.typography.titleMedium,
+                    color = DmzColors.TextPrimary,
+                    modifier = Modifier.testTag("download-status"),
+                )
+                if (downloading) {
+                    Spacer(Modifier.height(8.dp))
+                    ProgressLine(progress?.fraction ?: 0f)
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        text = downloadProgressText(progress, expectedBytes),
+                        style = MonoStyles.DataSmall,
+                        color = DmzColors.TextSecondary,
+                    )
+                } else {
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = if (runsInBackground) {
+                            "Numret hämtas när det blir dess tur och nätet tillåter."
+                        } else {
+                            "Numret hämtas när det blir dess tur."
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = DmzColors.TextSecondary,
+                    )
+                }
+                if (!runsInBackground) {
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        text = "Håll appen öppen tills nedladdningen är klar.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = DmzColors.Accent,
+                    )
+                }
+                Spacer(Modifier.height(10.dp))
+                StatusButton("Avbryt", Modifier.fillMaxWidth(), onClick = onCancel)
+            }
+
+            DownloadState.DOWNLOADED -> {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    OfflineBadge()
+                    Text(
+                        text = "Nedladdad" + (fileSizeText(downloadedBytes)?.let { " · $it" } ?: ""),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = DmzColors.TextPrimary,
+                        modifier = Modifier.padding(start = 10.dp).testTag("download-status"),
+                    )
+                }
+                Spacer(Modifier.height(10.dp))
+                StatusButton("Ta bort nedladdning", Modifier.fillMaxWidth()) { confirmRemove = true }
+            }
+
+            DownloadState.FAILED -> {
+                Text(
+                    text = "Nedladdningen misslyckades",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = DmzColors.Failure,
+                    modifier = Modifier.testTag("download-status"),
+                )
+                Spacer(Modifier.height(10.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    StatusButton("Försök igen", Modifier.weight(1f), onClick = onDownload)
+                    StatusButton("Avbryt", Modifier.weight(1f), onClick = onCancel)
+                }
+            }
+        }
+    }
+
+    if (explainNotifications) {
+        AlertDialog(
+            onDismissRequest = { explainNotifications = false },
+            title = { Text("Visa nedladdningen i en notis?") },
+            text = {
+                Text(
+                    "Nedladdningen fortsätter när du lämnar appen. Med en notis ser du hur långt den har " +
+                        "kommit och kan avbryta den. Appen skickar inga andra notiser.",
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    explainNotifications = false
+                    onNotificationQuestionShown()
+                    permission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }) { Text("Fortsätt") }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    explainNotifications = false
+                    onNotificationQuestionShown()
+                    onDownload()
+                }) { Text("Utan notis") }
+            },
+        )
+    }
+
+    if (confirmRemove) {
+        AlertDialog(
+            onDismissRequest = { confirmRemove = false },
+            title = { Text("Ta bort nedladdningen?") },
+            text = { Text("Filen tas bort från telefonen. Läsposition och lästa sidor finns kvar.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmRemove = false
+                    onRemove()
+                }) { Text("Ta bort") }
+            },
+            dismissButton = { TextButton(onClick = { confirmRemove = false }) { Text("Behåll") } },
+        )
     }
 }

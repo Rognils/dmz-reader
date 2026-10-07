@@ -22,4 +22,10 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        // Nummer som står kvar i nedladdningskön, till exempel efter att appen stoppats.
+        (application as DmzReaderApp).container.resumeDownloads()
+    }
 }

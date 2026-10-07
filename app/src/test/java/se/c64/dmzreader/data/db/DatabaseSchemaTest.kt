@@ -77,7 +77,7 @@ class DatabaseSchemaTest {
             listOf(
                 "issueId", "observedPageCount", "observedPdfSize", "observedPdfEtag",
                 "observedPdfLastModified", "downloadState", "downloadedPath",
-                "downloadedBytes", "downloadedAt", "detectedSpreadOffset",
+                "downloadedBytes", "downloadedAt", "downloadQueuedAt", "detectedSpreadOffset",
             ),
             columns,
         )

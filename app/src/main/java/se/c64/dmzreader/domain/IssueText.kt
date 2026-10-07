@@ -1,6 +1,7 @@
 package se.c64.dmzreader.domain
 
 import se.c64.dmzreader.data.db.IssueEntity
+import se.c64.dmzreader.data.pdf.DownloadProgress
 import java.util.Locale
 
 /** Visningstexter för ett nummer. Ren logik utan Android-beroenden. */
@@ -60,4 +61,17 @@ fun relatedIssueFor(
     }
     val supplement = pointingHere.minWithOrNull(compareBy({ it.publicationId }, { it.sortKey })) ?: return null
     return RelatedIssue(supplement.issueId, "Med bilagan ${supplement.publicationTitle} ${supplement.issueLabel}")
+}
+
+/** Text som "7,4 av 15,1 MB · 49 %". */
+fun downloadProgressText(progress: DownloadProgress?, expectedSize: Long?): String {
+    val total = progress?.totalBytes ?: expectedSize
+    val done = fileSizeText(progress?.bytesDownloaded?.coerceAtLeast(1))?.removeSuffix(" MB") ?: "0,0"
+    val totalText = fileSizeText(total)
+    val percent = total?.takeIf { it > 0 }?.let { ((progress?.bytesDownloaded ?: 0) * 100 / it).toInt() }
+    return when {
+        progress == null -> "Ansluter …"
+        totalText != null && percent != null -> "$done av $totalText · $percent %"
+        else -> "$done MB"
+    }
 }

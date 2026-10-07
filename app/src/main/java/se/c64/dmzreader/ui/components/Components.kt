@@ -1,6 +1,14 @@
 package se.c64.dmzreader.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -88,5 +96,35 @@ fun ProgressLine(fraction: Float, modifier: Modifier = Modifier) {
                 .fillMaxHeight()
                 .background(DmzColors.Accent),
         )
+    }
+}
+
+/**
+ * Märket på omslaget för ett nedladdat nummer: en pil ned mot en linje, i en
+ * mörk rundel så att det syns mot både ljusa och mörka omslag.
+ */
+@Composable
+fun OfflineBadge(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .size(22.dp)
+            .clip(CircleShape)
+            .background(DmzColors.Background.copy(alpha = 0.88f))
+            .border(1.dp, DmzColors.Accent, CircleShape)
+            .semantics { contentDescription = "Nedladdad" },
+        contentAlignment = Alignment.Center,
+    ) {
+        Canvas(modifier = Modifier.size(12.dp)) {
+            val stroke = size.width * 0.14f
+            val middle = size.width / 2
+            val tip = size.height * 0.62f
+            val head = size.width * 0.28f
+            fun line(from: Offset, to: Offset) =
+                drawLine(DmzColors.Accent, from, to, strokeWidth = stroke, cap = StrokeCap.Round)
+            line(Offset(middle, size.height * 0.05f), Offset(middle, tip))
+            line(Offset(middle - head, tip - head), Offset(middle, tip))
+            line(Offset(middle + head, tip - head), Offset(middle, tip))
+            line(Offset(size.width * 0.12f, size.height * 0.94f), Offset(size.width * 0.88f, size.height * 0.94f))
+        }
     }
 }

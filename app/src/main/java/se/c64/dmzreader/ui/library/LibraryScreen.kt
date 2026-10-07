@@ -58,6 +58,8 @@ import se.c64.dmzreader.data.repository.LibraryRepository
 import se.c64.dmzreader.data.settings.LibraryPreferences
 import se.c64.dmzreader.domain.PublicationYears
 import se.c64.dmzreader.domain.continueReadingIssue
+import se.c64.dmzreader.domain.downloadedIssues
+import se.c64.dmzreader.domain.readPagesText
 import se.c64.dmzreader.domain.groupByPublication
 import se.c64.dmzreader.domain.readCountsByYear
 import se.c64.dmzreader.domain.recentlyReadIssues
@@ -70,7 +72,14 @@ import se.c64.dmzreader.ui.theme.DmzColors
 import se.c64.dmzreader.ui.theme.MonoStyles
 
 /** Nummer att fortsätta läsa, med läspositionen och hur stor del som är läst. */
-data class ContinueReading(val issue: IssueEntity, val page: Int, val pageCount: Int?, val fraction: Float?)
+data class ContinueReading(
+    val issue: IssueEntity,
+    val page: Int,
+    val pageCount: Int?,
+    val fraction: Float?,
+    /** "7 av 28 lästa · 25 %", eller null när sidantalet är okänt. */
+    val readText: String?,
+)
 
 data class LibraryUiState(
     val loading: Boolean = true,
@@ -81,7 +90,7 @@ data class LibraryUiState(
     val recentlyRead: List<IssueEntity> = emptyList(),
     /** Antal lästa nummer per årgång, med nyckeln (publicationId, year). */
     val readCounts: Map<Pair<String, Int>, Int> = emptyMap(),
-    // Sektionerna nedan har ingen data förrän FAS 5–6 och är dolda så länge de är tomma.
+    // Favoriter har ingen data förrän FAS 6 och är dold så länge den är tom.
     val favorites: List<IssueEntity> = emptyList(),
     val downloaded: List<IssueEntity> = emptyList(),
 )
@@ -106,10 +115,11 @@ class LibraryViewModel(
             publications = publications,
             selected = selectPublication(publications, savedPublicationId),
             continueReading = continued?.let {
-                ContinueReading(it.issue, it.state?.lastPage ?: 1, it.pageCount, it.progress.fraction)
+                ContinueReading(it.issue, it.state?.lastPage ?: 1, it.pageCount, it.progress.fraction, readPagesText(it.progress))
             },
             recentlyRead = recentlyReadIssues(issues, continued?.issue?.issueId).map { it.issue },
             readCounts = readCountsByYear(issues),
+            downloaded = downloadedIssues(issues).map { it.issue },
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), LibraryUiState())
 
@@ -328,6 +338,11 @@ private fun ContinueReadingCard(
                     style = MonoStyles.Data,
                     color = DmzColors.TextPrimary,
                 )
+                // Texten säger vad strecket visar: andelen lästa sidor, inte läget i numret.
+                item.readText?.let {
+                    Spacer(Modifier.height(2.dp))
+                    Text(it, style = MonoStyles.DataSmall, color = DmzColors.TextSecondary)
+                }
                 item.fraction?.let {
                     Spacer(Modifier.height(8.dp))
                     ProgressLine(it)
