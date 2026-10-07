@@ -90,7 +90,7 @@ data class LibraryUiState(
     val recentlyRead: List<IssueEntity> = emptyList(),
     /** Antal lästa nummer per årgång, med nyckeln (publicationId, year). */
     val readCounts: Map<Pair<String, Int>, Int> = emptyMap(),
-    // Favoriter har ingen data förrän FAS 6 och är dold så länge den är tom.
+    // Sektionerna nedan är dolda så länge de är tomma.
     val favorites: List<IssueEntity> = emptyList(),
     val downloaded: List<IssueEntity> = emptyList(),
 )
@@ -120,6 +120,7 @@ class LibraryViewModel(
             recentlyRead = recentlyReadIssues(issues, continued?.issue?.issueId).map { it.issue },
             readCounts = readCountsByYear(issues),
             downloaded = downloadedIssues(issues).map { it.issue },
+            favorites = issues.filter { it.state?.isFavorite == true }.map { it.issue },
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), LibraryUiState())
 

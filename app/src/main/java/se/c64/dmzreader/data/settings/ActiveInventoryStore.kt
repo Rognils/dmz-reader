@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -105,5 +106,26 @@ class DataStoreDownloadPreferences(context: Context) : DownloadPreferences {
     private companion object {
         val WIFI_ONLY = booleanPreferencesKey("download_wifi_only")
         val NOTIFICATION_QUESTION_SHOWN = booleanPreferencesKey("download_notification_question_shown")
+    }
+}
+
+/** Uppgifter om säkerhetskopior (planens E11). */
+interface BackupPreferences {
+    /** När den senaste exporten gjordes, i millisekunder, eller null om ingen har gjorts. */
+    fun observeLastExport(): Flow<Long?>
+    suspend fun setLastExport(timeMillis: Long)
+}
+
+class DataStoreBackupPreferences(context: Context) : BackupPreferences {
+    private val dataStore = context.applicationContext.settingsDataStore
+
+    override fun observeLastExport(): Flow<Long?> = dataStore.data.map { it[LAST_EXPORT] }
+
+    override suspend fun setLastExport(timeMillis: Long) {
+        dataStore.edit { it[LAST_EXPORT] = timeMillis }
+    }
+
+    private companion object {
+        val LAST_EXPORT = longPreferencesKey("backup_last_export")
     }
 }

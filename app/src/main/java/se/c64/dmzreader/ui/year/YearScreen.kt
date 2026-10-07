@@ -56,6 +56,7 @@ import se.c64.dmzreader.domain.IssueWithState
 import se.c64.dmzreader.domain.ReadStatus
 import se.c64.dmzreader.domain.YearFilter
 import se.c64.dmzreader.domain.readStatusText
+import se.c64.dmzreader.ui.components.FavoriteBadge
 import se.c64.dmzreader.ui.components.IssueCover
 import se.c64.dmzreader.ui.components.OfflineBadge
 import se.c64.dmzreader.ui.components.ProgressLine
@@ -228,6 +229,9 @@ private fun IssueCell(item: IssueWithState, imageLoader: ImageLoader, onClick: (
             IssueCover(issue, imageLoader, modifier = Modifier.fillMaxWidth().alpha(if (read) READ_ALPHA else 1f))
             if (item.isDownloaded) {
                 OfflineBadge(modifier = Modifier.align(Alignment.TopEnd).padding(5.dp))
+            }
+            if (item.state?.isFavorite == true) {
+                FavoriteBadge(modifier = Modifier.align(Alignment.TopStart).padding(5.dp))
             }
         }
         Spacer(Modifier.height(5.dp))

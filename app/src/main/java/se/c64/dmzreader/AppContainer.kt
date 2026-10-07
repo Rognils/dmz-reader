@@ -1,6 +1,7 @@
 package se.c64.dmzreader
 
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.system.Os
 import android.util.Log
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.IOException
+import se.c64.dmzreader.data.backup.BackupRepository
 import se.c64.dmzreader.data.db.DmzDatabase
 import se.c64.dmzreader.data.inventory.InventoryImporter
 import se.c64.dmzreader.data.inventory.InventoryLoadResult
@@ -23,11 +26,14 @@ import se.c64.dmzreader.data.pdf.PdfDownloader
 import se.c64.dmzreader.data.pdf.PdfFiles
 import se.c64.dmzreader.data.pdf.TransferCoordinator
 import se.c64.dmzreader.data.pdf.PdfRepository
+import se.c64.dmzreader.data.repository.BookmarkRepository
 import se.c64.dmzreader.data.repository.DiagnosticsRepository
 import se.c64.dmzreader.data.repository.LibraryRepository
 import se.c64.dmzreader.data.repository.ReadingRepository
 import se.c64.dmzreader.data.settings.ActiveInventoryStore
+import se.c64.dmzreader.data.settings.BackupPreferences
 import se.c64.dmzreader.data.settings.DataStoreActiveInventoryStore
+import se.c64.dmzreader.data.settings.DataStoreBackupPreferences
 import se.c64.dmzreader.data.settings.DataStoreDownloadPreferences
 import se.c64.dmzreader.data.settings.DataStoreLibraryPreferences
 import se.c64.dmzreader.data.settings.DownloadPreferences
@@ -131,6 +137,33 @@ class AppContainer(private val context: Context) {
     }
     val readingRepository by lazy {
         ReadingRepository(database.issueUserStateDao(), database.readingSessionDao())
+    }
+    val bookmarkRepository by lazy {
+        BookmarkRepository(database.bookmarkDao(), database.issueDao(), database.issueLocalStateDao())
+    }
+
+    /** Export och import av användarens data (ADR 0012). */
+    val backupRepository by lazy {
+        BackupRepository(
+            database.issueUserStateDao(),
+            database.bookmarkDao(),
+            database.readingSessionDao(),
+            database.backupDao(),
+            appVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "okänd",
+        )
+    }
+    val backupPreferences: BackupPreferences by lazy { DataStoreBackupPreferences(context) }
+
+    /** Läser en fil som användaren har valt i systemets filväljare. */
+    fun readDocument(uri: Uri): String =
+        context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+            ?: throw IOException("Filen gick inte att öppna.")
+
+    /** Skriver till en fil som användaren har skapat i systemets filväljare. */
+    fun writeDocument(uri: Uri, text: String) {
+        // "wt" kortar filen, så att en äldre och längre fil inte lämnar rester.
+        (context.contentResolver.openOutputStream(uri, "wt") ?: throw IOException("Filen gick inte att skriva."))
+            .bufferedWriter().use { it.write(text) }
     }
     val diagnosticsRepository by lazy { DiagnosticsRepository(context, database) }
 

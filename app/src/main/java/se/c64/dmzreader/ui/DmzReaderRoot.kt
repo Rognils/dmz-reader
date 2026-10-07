@@ -33,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import se.c64.dmzreader.AppContainer
 import se.c64.dmzreader.ui.favorites.FavoritesScreen
+import se.c64.dmzreader.ui.favorites.FavoritesViewModel
 import se.c64.dmzreader.ui.issue.IssueScreen
 import se.c64.dmzreader.ui.issue.IssueViewModel
 import se.c64.dmzreader.ui.library.LibraryScreen
@@ -66,15 +67,19 @@ private object Routes {
     const val STATISTICS = "statistics"
     const val SETTINGS = "settings"
     const val DIAGNOSTICS = "settings/diagnostics"
-    const val READER = "reader/{issueId}"
+    const val READER = "reader/{issueId}?page={page}"
 
-    fun reader(issueId: String) = "reader/$issueId"
+    /** Läsaren för ett nummer. Med [page] öppnas den på den sidan, annars på läspositionen. */
+    fun reader(issueId: String, page: Int? = null) = "reader/$issueId" + (page?.let { "?page=$it" } ?: "")
     fun year(publicationId: String, year: Int) = "year/$publicationId/$year"
     fun issue(issueId: String) = "issue/$issueId"
 
     /** Vyer som visas utan bottenfält. */
     val withoutBottomBar = setOf(SETTINGS, DIAGNOSTICS, READER)
 }
+
+/** Värdet på sidargumentet när ingen sida är begärd. */
+private const val NO_PAGE = -1
 
 private data class Tab(val route: String, val label: String, val icon: ImageVector)
 
@@ -187,6 +192,7 @@ fun DmzReaderRoot(container: AppContainer) {
                                     container.offlineRepository,
                                     container.downloadScheduler,
                                     container.downloadPreferences,
+                                    container.bookmarkRepository,
                                     issueId,
                                 )
                             }
@@ -197,15 +203,23 @@ fun DmzReaderRoot(container: AppContainer) {
                         imageLoader = container.imageLoader,
                         onOpenIssue = { navController.navigate(Routes.issue(it)) },
                         onRead = { navController.navigate(Routes.reader(it)) },
+                        onReadPage = { id, pageNumber -> navController.navigate(Routes.reader(id, pageNumber)) },
                         onBack = { navController.popBackStack() },
                     )
                 }
             }
             composable(
                 route = Routes.READER,
-                arguments = listOf(navArgument("issueId") { type = NavType.StringType }),
+                arguments = listOf(
+                    navArgument("issueId") { type = NavType.StringType },
+                    navArgument("page") {
+                        type = NavType.IntType
+                        defaultValue = NO_PAGE
+                    },
+                ),
             ) { entry ->
                 val issueId = requireNotNull(entry.arguments?.getString("issueId"))
+                val page = entry.arguments?.getInt("page")?.takeIf { it != NO_PAGE }
                 val viewModel: ReaderViewModel = viewModel(
                     factory = viewModelFactory {
                         initializer {
@@ -215,8 +229,10 @@ fun DmzReaderRoot(container: AppContainer) {
                                 container.pdfRepository,
                                 container.readingRepository,
                                 container.offlineRepository,
+                                container.bookmarkRepository,
                                 container.thumbnailRoot,
                                 container.applicationScope,
+                                requestedPage = page,
                             )
                         }
                     },
@@ -224,7 +240,25 @@ fun DmzReaderRoot(container: AppContainer) {
                 ReaderRoute(viewModel, container.imageLoader, onClose = { navController.popBackStack() })
             }
             composable(Routes.SEARCH) { SearchScreen() }
-            composable(Routes.FAVORITES) { FavoritesScreen() }
+            composable(Routes.FAVORITES) {
+                val viewModel: FavoritesViewModel = viewModel(
+                    factory = viewModelFactory {
+                        initializer {
+                            FavoritesViewModel(
+                                container.libraryRepository,
+                                container.bookmarkRepository,
+                                container.readingRepository,
+                            )
+                        }
+                    },
+                )
+                FavoritesScreen(
+                    viewModel = viewModel,
+                    imageLoader = container.imageLoader,
+                    onOpenIssue = { navController.navigate(Routes.issue(it)) },
+                    onReadPage = { id, pageNumber -> navController.navigate(Routes.reader(id, pageNumber)) },
+                )
+            }
             composable(Routes.STATISTICS) { StatisticsScreen() }
             composable(Routes.SETTINGS) {
                 val viewModel: SettingsViewModel = viewModel(
@@ -237,6 +271,10 @@ fun DmzReaderRoot(container: AppContainer) {
                                 container.downloadPreferences,
                                 container.downloadScheduler,
                                 container.thumbnailRoot,
+                                container.backupRepository,
+                                container.backupPreferences,
+                                readDocument = container::readDocument,
+                                writeDocument = container::writeDocument,
                             )
                         }
                     },

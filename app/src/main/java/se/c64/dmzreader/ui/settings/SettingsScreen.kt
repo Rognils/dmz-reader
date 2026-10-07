@@ -1,6 +1,22 @@
 package se.c64.dmzreader.ui.settings
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.testTag
+import kotlinx.coroutines.flow.update
+import se.c64.dmzreader.data.backup.BackupFile
+import se.c64.dmzreader.data.backup.BackupFormatException
+import se.c64.dmzreader.data.backup.BackupRepository
+import se.c64.dmzreader.data.backup.ImportSummary
+import se.c64.dmzreader.data.backup.parseBackup
+import se.c64.dmzreader.data.settings.BackupPreferences
+import se.c64.dmzreader.ui.theme.MonoStyles
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
@@ -85,6 +101,40 @@ data class StorageUiState(
     val wifiOnly: Boolean = true,
 )
 
+/** Läget för säkerhetskopian i inställningarna. */
+data class BackupUiState(
+    /** När den senaste exporten gjordes, eller null om ingen har gjorts. */
+    val lastExport: Long? = null,
+    /** En inläst backup som väntar på att användaren bekräftar importen. */
+    val pendingImport: PendingImport? = null,
+    /** Ett besked till användaren: klart, eller vad som gick fel. */
+    val message: String? = null,
+)
+
+class PendingImport(val backup: BackupFile, val summary: ImportSummary)
+
+/** "7 oktober 2026 20:15". */
+fun backupDateText(timeMillis: Long, zone: ZoneId = ZoneId.systemDefault()): String =
+    DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm", Locale.forLanguageTag("sv"))
+        .format(Instant.ofEpochMilli(timeMillis).atZone(zone))
+
+/** Raderna i sammanfattningen som visas före en import. */
+fun importSummaryLines(summary: ImportSummary): List<String> = listOf(
+    "Filen innehåller:",
+    "${summary.favorites} favoritnummer",
+    "${summary.bookmarks} bokmärken",
+    "${summary.sessions} lässessioner",
+    "${summary.issuesWithReadingData} nummer med läsdata",
+    "",
+    if (summary.nothingToDo) {
+        "Allt i filen finns redan på telefonen. Ingenting ändras."
+    } else {
+        "Importen lägger till ${summary.newIssues} nya nummer och uppdaterar ${summary.updatedIssues}, " +
+            "och lägger till ${summary.newBookmarks} bokmärken och ${summary.newSessions} sessioner. " +
+            "Ingenting tas bort."
+    },
+)
+
 class SettingsViewModel(
     private val offlineRepository: OfflineRepository,
     private val pdfRepository: PdfRepository,
@@ -92,8 +142,83 @@ class SettingsViewModel(
     private val downloadPreferences: DownloadPreferences,
     private val downloadScheduler: DownloadScheduler,
     private val thumbnailRoot: File,
+    private val backupRepository: BackupRepository,
+    private val backupPreferences: BackupPreferences,
+    private val readDocument: (Uri) -> String,
+    private val writeDocument: (Uri, String) -> Unit,
 ) : ViewModel() {
     private val sizes = MutableStateFlow(0L to 0L)
+    private val backupDialog = MutableStateFlow(BackupUiState())
+
+    val backup: StateFlow<BackupUiState> =
+        combine(backupDialog, backupPreferences.observeLastExport()) { dialog, lastExport ->
+            dialog.copy(lastExport = lastExport)
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), BackupUiState())
+
+    /** Föreslaget filnamn för exporten: dmz-reader-backup-ÅÅÅÅ-MM-DD.json. */
+    fun exportFileName(): String = BackupRepository.fileName(System.currentTimeMillis())
+
+    /** Skriver säkerhetskopian till filen användaren valde. */
+    fun exportTo(uri: Uri) {
+        viewModelScope.launch {
+            try {
+                val data = backupRepository.currentData()
+                val text = backupRepository.export()
+                withContext(Dispatchers.IO) { writeDocument(uri, text) }
+                backupPreferences.setLastExport(System.currentTimeMillis())
+                backupDialog.update {
+                    it.copy(
+                        message = "Säkerhetskopian är sparad: ${data.userStates.size} nummer med data, " +
+                            "${data.bookmarks.size} bokmärken och ${data.sessions.size} lässessioner.",
+                    )
+                }
+            } catch (e: Exception) {
+                backupDialog.update { it.copy(message = "Säkerhetskopian kunde inte sparas: ${e.message}") }
+            }
+        }
+    }
+
+    /** Läser och granskar filen användaren valde. Ingenting importeras förrän användaren bekräftar. */
+    fun openImport(uri: Uri) {
+        viewModelScope.launch {
+            try {
+                val backup = withContext(Dispatchers.IO) { parseBackup(readDocument(uri)) }
+                val summary = backupRepository.preview(backup)
+                backupDialog.update { it.copy(pendingImport = PendingImport(backup, summary)) }
+            } catch (e: BackupFormatException) {
+                backupDialog.update { it.copy(message = e.message) }
+            } catch (e: Exception) {
+                backupDialog.update { it.copy(message = "Filen gick inte att läsa: ${e.message}") }
+            }
+        }
+    }
+
+    fun confirmImport() {
+        val pending = backupDialog.value.pendingImport ?: return
+        backupDialog.update { it.copy(pendingImport = null) }
+        viewModelScope.launch {
+            try {
+                val summary = backupRepository.import(pending.backup)
+                backupDialog.update {
+                    it.copy(
+                        message = if (summary.nothingToDo) {
+                            "Allt i säkerhetskopian fanns redan. Ingenting ändrades."
+                        } else {
+                            "Importen är klar: ${summary.newIssues} nya nummer, ${summary.updatedIssues} uppdaterade, " +
+                                "${summary.newBookmarks} nya bokmärken och ${summary.newSessions} nya sessioner."
+                        },
+                    )
+                }
+            } catch (e: Exception) {
+                // Importen görs i en transaktion, så ett fel lämnar allt som det var.
+                backupDialog.update { it.copy(message = "Importen misslyckades, och ingenting har ändrats: ${e.message}") }
+            }
+        }
+    }
+
+    fun dismissBackupDialog() {
+        backupDialog.update { it.copy(pendingImport = null, message = null) }
+    }
 
     val state: StateFlow<StorageUiState> = combine(
         sizes,
@@ -149,7 +274,7 @@ class SettingsViewModel(
         directory.walkTopDown().filter { it.isFile }.sumOf { it.length() }
 }
 
-/** Inställningar: lagring och nedladdningar, och ingången till Diagnostik. Import och backup kommer senare. */
+/** Inställningar: lagring och nedladdningar, säkerhetskopia och ingången till Diagnostik. */
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
@@ -158,7 +283,15 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
 ) {
     val storage by viewModel.state.collectAsStateWithLifecycle()
+    val backup by viewModel.backup.collectAsStateWithLifecycle()
     var confirmRemoveAll by rememberSaveable { mutableStateOf(false) }
+    // Filerna väljs i systemets filväljare. Appen behöver ingen lagringsbehörighet.
+    val exportPicker = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+        if (uri != null) viewModel.exportTo(uri)
+    }
+    val importPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) viewModel.openImport(uri)
+    }
 
     Column(modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         ScreenHeader("Inställningar", onBack)
@@ -237,6 +370,36 @@ fun SettingsScreen(
             }
 
             Spacer(Modifier.height(20.dp))
+            MonoLabel("Säkerhetskopia")
+            Spacer(Modifier.height(8.dp))
+            Panel {
+                Text(
+                    text = backup.lastExport?.let { "Senaste export: ${backupDateText(it)}" } ?: "Ingen export har gjorts",
+                    style = MonoStyles.Data,
+                    color = DmzColors.TextPrimary,
+                    modifier = Modifier.testTag("last-export"),
+                )
+                Spacer(Modifier.height(10.dp))
+                OutlinedButton(
+                    onClick = { exportPicker.launch(viewModel.exportFileName()) },
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                ) { Text("Exportera", color = DmzColors.TextPrimary) }
+                Spacer(Modifier.height(8.dp))
+                OutlinedButton(
+                    // Filtypen kan anges olika av olika filhanterare, så alla filer går att välja.
+                    onClick = { importPicker.launch(arrayOf("application/json", "text/plain", "application/octet-stream", "*/*")) },
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                ) { Text("Importera", color = DmzColors.TextPrimary) }
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "Säkerhetskopian innehåller favoriter, bokmärken, läspositioner, lästa sidor och lässessioner. " +
+                        "Nedladdade nummer ingår inte. En import lägger till och slår ihop, och tar aldrig bort något.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = DmzColors.TextSecondary,
+                )
+            }
+
+            Spacer(Modifier.height(20.dp))
             Panel(
                 modifier = Modifier.clickable(role = Role.Button, onClick = onOpenDiagnostics),
             ) {
@@ -261,6 +424,36 @@ fun SettingsScreen(
                 }
             }
         }
+    }
+
+    backup.pendingImport?.let { pending ->
+        AlertDialog(
+            onDismissRequest = viewModel::dismissBackupDialog,
+            title = { Text("Importera säkerhetskopian?") },
+            text = {
+                Column(modifier = Modifier.testTag("import-summary")) {
+                    Text(
+                        "Exporterad ${pending.backup.exportedAt.take(10)} med appversion ${pending.backup.appVersion}.",
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    importSummaryLines(pending.summary).forEach { line ->
+                        if (line.isEmpty()) Spacer(Modifier.height(8.dp)) else Text(line, style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = viewModel::confirmImport) { Text("Importera") } },
+            dismissButton = { TextButton(onClick = viewModel::dismissBackupDialog) { Text("Avbryt") } },
+        )
+    }
+
+    backup.message?.let { message ->
+        AlertDialog(
+            onDismissRequest = viewModel::dismissBackupDialog,
+            title = { Text("Säkerhetskopia") },
+            text = { Text(message, modifier = Modifier.testTag("backup-message")) },
+            confirmButton = { TextButton(onClick = viewModel::dismissBackupDialog) { Text("OK") } },
+        )
     }
 
     if (confirmRemoveAll) {

@@ -35,7 +35,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -44,6 +43,10 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -83,6 +86,7 @@ import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.ImageLoader
 import kotlinx.coroutines.launch
+import se.c64.dmzreader.data.db.Bookmark
 import se.c64.dmzreader.data.db.IssueEntity
 import se.c64.dmzreader.data.pdf.DownloadProgress
 import se.c64.dmzreader.data.pdf.PdfDocument
@@ -91,7 +95,9 @@ import se.c64.dmzreader.domain.fullTitle
 import se.c64.dmzreader.domain.ReadStatus
 import se.c64.dmzreader.domain.ReadingProgress
 import se.c64.dmzreader.domain.spreadsFor
+import se.c64.dmzreader.ui.components.BookmarkEditDialog
 import se.c64.dmzreader.ui.components.IssueCover
+import se.c64.dmzreader.ui.components.StarIcon
 import se.c64.dmzreader.ui.components.MonoLabel
 import se.c64.dmzreader.ui.theme.DmzColors
 import se.c64.dmzreader.ui.theme.MonoStyles
@@ -243,6 +249,29 @@ private fun ReaderScreen(
     var controlsVisible by rememberSaveable { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
+    // Bokmärken: ett tryck på stjärnan ger en snackbar med en åtgärd.
+    val snackbar = remember { SnackbarHostState() }
+    var editing by remember { mutableStateOf<Bookmark?>(null) }
+    LaunchedEffect(viewModel) {
+        viewModel.messages.collect { message ->
+            // Ett nytt meddelande ersätter det som visas.
+            snackbar.currentSnackbarData?.dismiss()
+            launch {
+                when (message) {
+                    is ReaderMessage.BookmarkAdded -> {
+                        val result = snackbar.showSnackbar("Bokmärke sparat", "Lägg till titel", duration = SnackbarDuration.Long)
+                        if (result == SnackbarResult.ActionPerformed) editing = message.bookmark
+                    }
+
+                    is ReaderMessage.BookmarkRemoved -> {
+                        val result = snackbar.showSnackbar("Bokmärket borttaget", "Ångra", duration = SnackbarDuration.Long)
+                        if (result == SnackbarResult.ActionPerformed) viewModel.restoreBookmarks(message.bookmarks)
+                    }
+                }
+            }
+        }
+    }
+
     ImmersiveMode()
     BackHandler(onBack = onClose)
 
@@ -339,6 +368,9 @@ private fun ReaderScreen(
                 indicator = pageIndicatorText(shownPages, state.position.page, state.pageCount, state.pagesRead),
                 showSpreadShift = landscape && state.canShiftSpread,
                 onShiftSpread = viewModel::shiftSpread,
+                bookmarked = state.pageIsBookmarked,
+                bookmarkPage = state.position.page,
+                onToggleBookmark = viewModel::toggleBookmark,
                 onClose = onClose,
             )
         }
@@ -356,6 +388,27 @@ private fun ReaderScreen(
                 onGoToPage = viewModel::goToPage,
             )
         }
+
+        // Ovanför miniatyrremsan när kontrollerna visas, annars längst ned.
+        SnackbarHost(
+            hostState = snackbar,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .windowInsetsPadding(WindowInsets.displayCutout)
+                .padding(bottom = if (controlsVisible) 190.dp else 16.dp),
+        )
+    }
+
+    editing?.let { bookmark ->
+        BookmarkEditDialog(
+            bookmark = bookmark,
+            onSave = { title, note ->
+                viewModel.editBookmark(bookmark.id, title, note)
+                editing = null
+            },
+            onDelete = null,
+            onDismiss = { editing = null },
+        )
     }
 }
 
@@ -391,6 +444,9 @@ private fun ReaderTopBar(
     indicator: String,
     showSpreadShift: Boolean,
     onShiftSpread: () -> Unit,
+    bookmarked: Boolean,
+    bookmarkPage: Int,
+    onToggleBookmark: () -> Unit,
     onClose: () -> Unit,
 ) {
     Row(
@@ -424,10 +480,20 @@ private fun ReaderTopBar(
                 Text("Flytta uppslag", color = DmzColors.Accent, style = MaterialTheme.typography.labelLarge)
             }
         }
-        // Bokmärken kommer i FAS 6 och HQ i FAS 11. Knapparna visar var de hamnar.
-        IconButton(onClick = {}, enabled = false, modifier = Modifier.size(48.dp)) {
-            Icon(Icons.Filled.Star, contentDescription = "Bokmärke, kommer senare", tint = DmzColors.Label.copy(alpha = 0.5f))
+        // Fylld stjärna: sidan har ett bokmärke, och ett tryck tar bort det.
+        IconButton(
+            onClick = onToggleBookmark,
+            modifier = Modifier.size(48.dp).testTag("bookmark-toggle").semantics {
+                contentDescription = if (bookmarked) {
+                    "Ta bort bokmärket på sida $bookmarkPage"
+                } else {
+                    "Sätt bokmärke på sida $bookmarkPage"
+                }
+            },
+        ) {
+            StarIcon(filled = bookmarked, tint = if (bookmarked) DmzColors.Accent else DmzColors.TextPrimary)
         }
+        // HQ kommer i FAS 11. Knappen visar var den hamnar.
         TextButton(onClick = {}, enabled = false, modifier = Modifier.heightIn(min = 48.dp)) {
             Text("HQ", color = DmzColors.Label.copy(alpha = 0.5f), style = MonoStyles.Data)
         }
