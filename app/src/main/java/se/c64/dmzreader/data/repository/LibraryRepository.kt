@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.map
 import se.c64.dmzreader.data.db.IssueDao
 import se.c64.dmzreader.data.db.IssueEntity
 import se.c64.dmzreader.data.db.IssueLocalStateDao
+import se.c64.dmzreader.data.db.IssueUserState
 import se.c64.dmzreader.data.db.IssueUserStateDao
 import se.c64.dmzreader.data.db.PublicationCount
 import se.c64.dmzreader.data.db.YearCount
@@ -42,6 +43,9 @@ class LibraryRepository(
                 )
             }
         }
+
+    /** All användardata om nummer, även för nummer som inte finns i katalogen (planens D6). */
+    fun observeUserStates(): Flow<List<IssueUserState>> = userStateDao.observeAll()
 
     /** Numren i en årgång med läsdata, i tidningens ordning. */
     fun observeIssuesWithState(publicationId: String, year: Int): Flow<List<IssueWithState>> =

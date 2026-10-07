@@ -16,8 +16,8 @@ import java.io.File
 
 /**
  * Migreringen från databasversion 1 (FAS 1) via 2 (Issue.coverAsset), 3
- * (ETag och Last-Modified i IssueLocalState) och 4 (IssueUserState.seenPages) till 5
- * (IssueLocalState.downloadQueuedAt).
+ * (ETag och Last-Modified i IssueLocalState), 4 (IssueUserState.seenPages) och 5
+ * (IssueLocalState.downloadQueuedAt) till 6 (PDF-versionen i Bookmark).
  * Den gamla versionen byggs upp ur det exporterade schemat, precis som den såg ut.
  */
 class MigrationTest {
@@ -101,6 +101,40 @@ class MigrationTest {
                 // Kolumnerna från version 3 finns och är tomma.
                 assertNull(local.observedPdfEtag)
                 assertNull(local.observedPdfLastModified)
+            } finally {
+                db.close()
+            }
+        } finally {
+            file.delete()
+            File(file.path + "-wal").delete()
+            File(file.path + "-shm").delete()
+        }
+    }
+
+    /** Version 5 (FAS 5) till 6: Bookmark får PDF-versionen. Befintliga bokmärken finns kvar. */
+    @Test
+    fun `migration from version 5 adds the pdf version to bookmarks and keeps existing data`() = runTest {
+        val file = File.createTempFile("dmz-migration", ".db").apply { delete() }
+        try {
+            createVersion(file, 5)
+            val db = Room.databaseBuilder<DmzDatabase>(file.path)
+                .setDriver(BundledSQLiteDriver())
+                .setQueryCoroutineContext(Dispatchers.IO)
+                .build()
+            try {
+                val bookmark = db.bookmarkDao().getAll().single()
+                assertEquals("Annons", bookmark.title)
+                assertEquals(14, bookmark.pageNumber)
+                assertEquals(1500L, bookmark.createdAt)
+                assertNull(bookmark.pdfSize)
+                assertNull(bookmark.pdfEtag)
+                assertNull(bookmark.pdfLastModified)
+                assertEquals(12, db.issueUserStateDao().get("datormagazin-1989-06")!!.lastPage)
+                assertEquals(1, db.readingSessionDao().getAll().size)
+                assertEquals(48, db.issueLocalStateDao().get("datormagazin-1989-06")!!.observedPageCount)
+
+                assertEquals(1, db.bookmarkDao().update(bookmark.copy(pdfSize = 25_672_804, pdfEtag = "\"a\"")))
+                assertEquals(25_672_804L, db.bookmarkDao().get(bookmark.id)!!.pdfSize)
             } finally {
                 db.close()
             }
