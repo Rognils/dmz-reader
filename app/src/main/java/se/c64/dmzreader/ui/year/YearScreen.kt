@@ -9,6 +9,8 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +31,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -143,6 +147,9 @@ fun YearScreen(
 
 @Composable
 private fun FilterRow(selected: YearFilter, onSelect: (YearFilter) -> Unit) {
+    // Raden är bredare än skärmen. Det valda chipet rullas alltid helt in i bild.
+    val requesters = remember { YearFilter.entries.associateWith { BringIntoViewRequester() } }
+    LaunchedEffect(selected) { requesters.getValue(selected).bringIntoView() }
     Row(
         modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -152,7 +159,7 @@ private fun FilterRow(selected: YearFilter, onSelect: (YearFilter) -> Unit) {
                 selected = filter == selected,
                 onClick = { onSelect(filter) },
                 label = { Text(filter.label, style = MaterialTheme.typography.labelLarge) },
-                modifier = Modifier.heightIn(min = 48.dp),
+                modifier = Modifier.heightIn(min = 48.dp).bringIntoViewRequester(requesters.getValue(filter)),
                 colors = FilterChipDefaults.filterChipColors(
                     containerColor = DmzColors.Surface,
                     labelColor = DmzColors.TextSecondary,
