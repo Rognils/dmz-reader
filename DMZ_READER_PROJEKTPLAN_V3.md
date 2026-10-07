@@ -313,14 +313,21 @@ Ett bokmärke är också det som tidigare kallades "favoritsida". Det finns bara
 
 ```text
 Bookmark
-├── id           Long, primärnyckel
-├── issueId      String (ingen FK)
-├── pageNumber   Int, enligt C7
-├── title        String?
-├── note         String?
-├── createdAt    Long
-└── updatedAt    Long
+├── id                Long, primärnyckel (gäller bara i telefonens databas)
+├── bookmarkId        String, UUID som skapas en gång och aldrig ändras
+├── issueId           String (ingen FK)
+├── pageNumber        Int, enligt C7
+├── title             String?
+├── note              String?
+├── createdAt         Long
+├── updatedAt         Long
+├── pdfSize           Long?, PDF-versionen när bokmärket skapades (C7)
+├── pdfEtag           String?
+├── pdfLastModified   String?
+└── deletedAt         Long?, mjuk radering
 ```
+
+Att ta bort ett bokmärke sätter `deletedAt`. Ett bokmärke med `deletedAt` visas aldrig, men raden finns kvar så att en äldre backup inte kan återuppliva det. "Ångra" nollställer `deletedAt`.
 
 I UI:t kan bokmärken visas under Favoriter tillsammans med favoritnummer.
 
@@ -718,7 +725,7 @@ Beslutet dokumenteras i ADR 0006.
 
 ```json
 {
-  "backupFormat": 1,
+  "backupFormat": 2,
   "exportedAt": "…",
   "appVersion": "…",
   "issueUserStates": [],
@@ -726,6 +733,11 @@ Beslutet dokumenteras i ADR 0006.
   "readingSessions": []
 }
 ```
+
+- `appVersion` är appens `versionName` (G4).
+- `issueUserStates` innehåller alla fält i C4, däribland `seenPages` (Base64) och `readStatusOverride`.
+- `bookmarks` innehåller alla fält i C5 utom `id`: `bookmarkId`, `deletedAt` och PDF-versionen (`pdfSize`, `pdfEtag`, `pdfLastModified`) följer med.
+- Format 1 (FAS 6) saknar `bookmarkId` och `deletedAt` och går fortfarande att importera.
 
 **Ingår inte:** PDF:er, cache, omslag, inventory, search.db eller `IssueLocalState`.
 
@@ -735,7 +747,7 @@ Beslutet dokumenteras i ADR 0006.
 - visa en sammanfattning före import (antal bokmärken, favoriter och sessioner)
 - sammanslagning:
   - `IssueUserState`: posten med senaste `updatedAt` vinner för `lastPage`, `readStatusOverride` och `isFavorite`. `seenPages` slås ihop (bitvis OR) och `maxPageReached` räknas om från resultatet. Det motsäger inte "Markera som oläst", eftersom den markeringen ligger i `readStatusOverride` och inte rör `seenPages` eller `maxPageReached`.
-  - bokmärken: dubbletter (samma issueId, pageNumber och title) hoppas över
+  - bokmärken matchas på `bookmarkId`: senaste `updatedAt` vinner för titel och anteckning. Är `deletedAt` satt på någon sida förblir bokmärket borttaget. Bokmärken ur format 1 får nya UUID, och bara för dem används dubblettregeln (samma issueId, pageNumber och title).
   - sessioner: dubbletter (samma issueId och startedAt) hoppas över
 - ingenting raderas vid import
 
@@ -1278,6 +1290,7 @@ Vad det innebär, inklusive nackdelar.
 - separata commits per logiskt steg
 - merge till `main` först när acceptanskriterierna är uppfyllda
 - tagg vid milstolpar: `v0.5-mvp`, `v1.0-private`
+- **appens version följer taggarna:** `versionName` är taggens nummer med tre delar och `versionCode` räknas ur det (0.6.1 ger 601, 0.7.0 ger 700, 1.0.0 ger 10000). Versionen sätts på ett ställe, i `app/build.gradle.kts`, och läses i koden från `BuildConfig`.
 - `data/raw_listing.json` och `archive_inventory.json` versionshanteras
 - nedladdade PDF:er, PDF-cachen och search.db versionshanteras **inte** (läggs i `.gitignore`)
 
@@ -1480,3 +1493,6 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-07 | Före FAS 5: E8: permanenta PDF:er lagras i `filesDir/issues/` | 0013 |
 | 2026-10-07 | Efter FAS 5 (v0.5.1): C3: nytt fält `downloadQueuedAt` i `IssueLocalState`, som bestämmer ordningen i nedladdningskön | 0013 |
 | 2026-10-07 | Efter FAS 5 (v0.5.1): E9: en PDF-överföring åt gången i hela appen, genom en gemensam `TransferCoordinator`. "Läs" går före kön, som pausas och återupptas. "Läs" på ett nummer som laddas ned väntar på den nedladdningen. | 0013 |
+| 2026-10-07 | v0.6.1: G4: appens `versionName` och `versionCode` följer taggarna och läses från `BuildConfig` | — |
+| 2026-10-07 | v0.6.1: C5 och E11: `backupFormat` 2. `Bookmark` får `bookmarkId` (UUID) och `deletedAt` (mjuk radering). Import matchar bokmärken på `bookmarkId`, och ett borttaget bokmärke förblir borttaget. Format 1 går fortfarande att importera. | 0012 |
+| 2026-10-07 | v0.6.1: C5 och E11: `seenPages` och bokmärkenas PDF-versionsfält (`pdfSize`, `pdfEtag`, `pdfLastModified`) tillagda, så att planen stämmer med koden | 0012, 0018 |
