@@ -68,7 +68,7 @@ class RelatedIssueTest {
         fun setUp() = runTest {
             db = inMemoryDatabase()
             InventoryImporter(db.issueDao(), FakeActiveInventoryStore()).load(TestFiles.inventory.readText())
-            repository = LibraryRepository(db.issueDao())
+            repository = LibraryRepository(db.issueDao(), db.issueUserStateDao(), db.issueLocalStateDao())
         }
 
         @After
