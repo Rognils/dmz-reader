@@ -134,8 +134,67 @@ interface BookmarkDao {
     @Insert
     suspend fun insert(bookmark: Bookmark): Long
 
+    @Update
+    suspend fun update(bookmark: Bookmark): Int
+
+    @Query("DELETE FROM Bookmark WHERE id = :id")
+    suspend fun delete(id: Long): Int
+
+    @Query("DELETE FROM Bookmark WHERE issueId = :issueId")
+    suspend fun deleteForIssue(issueId: String): Int
+
+    @Query("SELECT * FROM Bookmark WHERE id = :id")
+    suspend fun get(id: Long): Bookmark?
+
     @Query("SELECT * FROM Bookmark ORDER BY id")
     suspend fun getAll(): List<Bookmark>
+
+    @Query("SELECT * FROM Bookmark WHERE issueId = :issueId AND pageNumber = :pageNumber ORDER BY id")
+    suspend fun getForPage(issueId: String, pageNumber: Int): List<Bookmark>
+
+    @Query("SELECT * FROM Bookmark ORDER BY id")
+    fun observeAll(): Flow<List<Bookmark>>
+}
+
+/**
+ * Import av en backup (planens E11). Allt skrivs i en enda transaktion: går
+ * något fel rullas hela importen tillbaka och ingenting har ändrats.
+ */
+@Dao
+abstract class BackupDao {
+    @Insert
+    protected abstract suspend fun insertUserStates(states: List<IssueUserState>)
+
+    @Update
+    protected abstract suspend fun updateUserStates(states: List<IssueUserState>): Int
+
+    @Insert
+    protected abstract suspend fun insertBookmarks(bookmarks: List<Bookmark>)
+
+    @Insert
+    protected abstract suspend fun insertSessions(sessions: List<ReadingSession>)
+
+    /**
+     * Skriver det importen har räknat fram. [verify] körs sist, inne i
+     * transaktionen: kastar den ett undantag rullas allt tillbaka.
+     */
+    @Transaction
+    open suspend fun applyImport(
+        userStatesToInsert: List<IssueUserState>,
+        userStatesToUpdate: List<IssueUserState>,
+        bookmarksToInsert: List<Bookmark>,
+        sessionsToInsert: List<ReadingSession>,
+        verify: suspend () -> Unit,
+    ) {
+        insertUserStates(userStatesToInsert)
+        val updated = updateUserStates(userStatesToUpdate)
+        check(updated == userStatesToUpdate.size) {
+            "$updated av ${userStatesToUpdate.size} rader gick att uppdatera"
+        }
+        insertBookmarks(bookmarksToInsert)
+        insertSessions(sessionsToInsert)
+        verify()
+    }
 }
 
 @Dao
