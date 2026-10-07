@@ -33,6 +33,13 @@ class LibraryNavigationTest {
         }
     }
 
+    /** Årgångsvyns rubrik: "X / Y lästa". Antalet lästa beror på vad som är läst på telefonen. */
+    private fun waitForYear(issueCount: Int) {
+        rule.waitUntil(timeoutMillis = 10_000) {
+            rule.onAllNodes(hasText("/ $issueCount lästa", substring = true)).fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
     private fun pressBack() {
         rule.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
         rule.waitForIdle()
@@ -50,9 +57,8 @@ class LibraryNavigationTest {
         rule.onNodeWithText("Bibliotek").assertIsDisplayed()
 
         // Bibliotek → Årgång
-        rule.onNodeWithContentDescription("Datormagazin 1989, 19 nummer").performClick()
-        waitForText("19 nummer")
-        rule.onNodeWithText("19 nummer").assertIsDisplayed()
+        rule.onNodeWithContentDescription("Datormagazin 1989, 19 nummer", substring = true).performClick()
+        waitForYear(19)
         rule.onNodeWithText("Bibliotek").assertIsDisplayed()
 
         // Årgång → Nummer. Omslaget har en beskrivning för skärmläsare.
@@ -61,13 +67,14 @@ class LibraryNavigationTest {
         waitForText("Läs")
         rule.onNodeWithText("Läs").assertIsEnabled()
         rule.onNodeWithText("DATORMAGAZIN 1989").assertIsDisplayed()
-        rule.onNodeWithText("≈ 48 sidor").assertIsDisplayed()
+        // "≈ 48 sidor" från katalogen, eller det uppmätta "48 sidor" om numret har öppnats på telefonen.
+        rule.onNodeWithText("48 sidor", substring = true).assertIsDisplayed()
         rule.onNodeWithText("25,7 MB").assertIsDisplayed()
         rule.onNodeWithText("Bibliotek").assertIsDisplayed()
 
         // Tillbaka till årgången, och sedan till biblioteket.
         pressBack()
-        waitForText("19 nummer")
+        waitForYear(19)
         rule.onNodeWithContentDescription("Datormagazin 1989 Nr 6").assertIsDisplayed()
         pressBack()
         waitForText("171 nummer")
@@ -77,8 +84,8 @@ class LibraryNavigationTest {
     @Test
     fun scrollPositionInYearIsKeptWhenReturningFromIssue() {
         openDatormagazin()
-        rule.onNodeWithContentDescription("Datormagazin 1993, 22 nummer").performClick()
-        waitForText("22 nummer")
+        rule.onNodeWithContentDescription("Datormagazin 1993, 22 nummer", substring = true).performClick()
+        waitForYear(22)
 
         // Rulla ned till sista numret, som inte syns från början.
         rule.onNode(hasScrollToNodeAction())
@@ -92,7 +99,7 @@ class LibraryNavigationTest {
         // synts och Nr 22 inte funnits med. Nu ska det vara tvärtom.
         waitForDescription("Datormagazin 1993 Nr 22")
         rule.onNodeWithContentDescription("Datormagazin 1993 Nr 22").assertIsDisplayed()
-        rule.onNodeWithText("22 nummer").assertDoesNotExist()
+        rule.onNodeWithText("/ 22 lästa", substring = true).assertDoesNotExist()
         rule.onNodeWithContentDescription("Datormagazin 1993 Nr 1").assertDoesNotExist()
     }
 
@@ -101,7 +108,7 @@ class LibraryNavigationTest {
         waitForText("HighScore")
         rule.onNodeWithText("HighScore").performClick()
         waitForText("14 nummer")
-        rule.onNodeWithContentDescription("HighScore 1993, 6 nummer").performClick()
+        rule.onNodeWithContentDescription("HighScore 1993, 6 nummer", substring = true).performClick()
         waitForDescription("HighScore 1993 Nr 17")
         rule.onNodeWithContentDescription("HighScore 1993 Nr 17").performClick()
 

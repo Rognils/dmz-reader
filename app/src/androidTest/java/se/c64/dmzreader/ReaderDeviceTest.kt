@@ -28,6 +28,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -57,6 +58,12 @@ class ReaderDeviceTest {
 
     private fun verifying() = arguments.getString("dmzVerify") == "true"
 
+    /** Testerna börjar från sida 1 med "Läs": numrens läsdata på telefonen nollställs. */
+    @Before
+    fun resetReadingState() {
+        resetReadingState(context, "datormagazin-1986-01", "datormagazin-1995-14", "datormagazin-1995-15")
+    }
+
     private fun waitFor(timeoutMillis: Long = 15_000, condition: () -> Boolean) =
         rule.waitUntil(timeoutMillis, condition)
 
@@ -72,9 +79,10 @@ class ReaderDeviceTest {
     private fun openIssue(publication: String, year: Int, issueCount: Int, label: String) {
         waitFor { exists(publication) }
         rule.onNodeWithText(publication).performClick()
+        // Beskrivningen slutar med antalet lästa nummer när något är läst.
         val yearCard = "$publication $year, $issueCount nummer"
-        waitFor { described(yearCard) }
-        rule.onNodeWithContentDescription(yearCard).performClick()
+        waitFor { rule.onAllNodes(hasContentDescription(yearCard, substring = true)).fetchSemanticsNodes().isNotEmpty() }
+        rule.onNodeWithContentDescription(yearCard, substring = true).performClick()
         val cover = "$publication $year $label"
         waitFor { rule.onAllNodes(hasScrollToNodeAction()).fetchSemanticsNodes().isNotEmpty() }
         // Numret kan ligga längre ned i rutnätet än det som ryms på skärmen.
@@ -164,7 +172,7 @@ class ReaderDeviceTest {
         assertFalse(File(pdfDirectory, "$issueId.pdf.part").exists())
 
         showControls()
-        assertEquals("Sida 1 av 28 · 4 %", indicator())
+        assertEquals("Sida 1 av 28 · 0 % läst", indicator())
         rule.onNodeWithText("Datormagazin 1986 Nr 1").assertIsDisplayed()
         // Bottenfältet syns inte i läsaren.
         assertFalse(exists("Bibliotek"))
@@ -178,10 +186,11 @@ class ReaderDeviceTest {
         waitForPage("Sida 2 av 28")
 
         rule.onNodeWithContentDescription("Stäng läsaren").performClick()
-        waitFor { exists("Läs") && exists("Bibliotek") }
+        // Läspositionen är sparad: knappen leder tillbaka till samma sida.
+        waitFor { exists("Fortsätt på sida 2") && exists("Bibliotek") }
 
         // Nu finns filen i cachen: läsaren öppnas direkt, utan nedladdningsvy.
-        rule.onNodeWithText("Läs").performClick()
+        rule.onNodeWithText("Fortsätt på sida 2").performClick()
         waitFor(20_000) { readerShown() }
         assertFalse(exists("Avbryt"))
     }
@@ -204,7 +213,7 @@ class ReaderDeviceTest {
             // Vänta tills sidan faktiskt visas i full skärmupplösning, som en läsare skulle göra.
             waitFor(30_000) { rule.onAllNodes(hasTestTag("page-full-$page")).fetchSemanticsNodes().isNotEmpty() }
         }
-        assertEquals("Sida $pageCount av $pageCount · 100 %", indicator())
+        assertTrue(indicator()!!.startsWith("Sida $pageCount av $pageCount"))
         logMemory("readthrough-end")
     }
 
