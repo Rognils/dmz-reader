@@ -289,7 +289,8 @@ IssueUserState
 ├── issueId          String, primärnyckel (ingen FK)
 ├── isFavorite       Boolean
 ├── lastPage         Int?, var "Fortsätt läsa" öppnar
-├── maxPageReached   Int?, hur långt användaren kommit
+├── maxPageReached   Int?, hur långt användaren kommit (högsta sida i seenPages)
+├── seenPages        String?, lästa sidor som bitmängd (en bit per PDF-sidindex), lagrad som Base64-text
 ├── firstOpenedAt    Long?
 ├── lastOpenedAt     Long?
 ├── completedAt          Long?
@@ -300,7 +301,8 @@ IssueUserState
 **Regler:**
 
 - skrivs aldrig av import
-- en manuell markering ändrar aldrig `lastPage` eller `maxPageReached`. Läshistoriken bevaras.
+- en manuell markering ändrar aldrig `lastPage`, `maxPageReached` eller `seenPages`. Läshistoriken bevaras.
+- `maxPageReached` är alltid den högsta sidan i `seenPages`
 - överlever att numret försvinner ur inventory
 - exporteras och importeras via backup
 
@@ -371,11 +373,13 @@ Exempel (bara illustration): `datormagazin-1989-06-07`
 ## C10. Läsprogress och lässtatus
 
 - `lastPage` bestämmer var "Fortsätt läsa" öppnar.
-- `maxPageReached` bestämmer hur långt användaren kommit.
+- `seenPages` bestämmer hur mycket användaren har läst. `maxPageReached` är den högsta sidan i `seenPages`.
 
 ```text
-progress = maxPageReached / effectivePageCount   (om sidantalet är känt)
+progress = antal sidor i seenPages / effectivePageCount   (om sidantalet är känt)
 ```
+
+En sida räknas som läst när den har visats i minst 1,5 sekunder i följd. I uppslag räknas båda sidorna. Snabbläddring via reglage, miniatyrer eller snabba svep räknas inte.
 
 Status bestäms i två steg. Först gäller en eventuell manuell markering, annars den automatiska regeln.
 
@@ -387,7 +391,7 @@ Status bestäms i två steg. Först gäller en eventuell manuell markering, anna
 
 | Automatisk status | Regel |
 |---|---|
-| Oläst | `maxPageReached` saknas |
+| Oläst | `seenPages` är tom |
 | Påbörjad | läst, men progress under 90 %, eller okänt sidantal |
 | Läst | progress ≥ 90 % |
 
@@ -395,7 +399,7 @@ Status bestäms i två steg. Först gäller en eventuell manuell markering, anna
 - `completedAt` sätts första gången ett nummer blir "Läst", automatiskt eller manuellt.
 - **Markera som läst** sätter `READ`. Den gäller tills användaren ändrar den.
 - **Markera som oläst** sätter `UNREAD`. Numret visas då inte i "Fortsätt läsa".
-- `UNREAD` nollställs automatiskt till `null` när användaren läser i numret igen och bläddrar till en ny sida. Det är orimligt att ett nummer man läser står som oläst.
+- `UNREAD` nollställs automatiskt till `null` när en ny sida räknas som läst. Det är orimligt att ett nummer man läser står som oläst.
 - **Återställ** sätter `null`.
 
 ---
@@ -728,7 +732,7 @@ Beslutet dokumenteras i ADR 0006.
 - validera `backupFormat`
 - visa en sammanfattning före import (antal bokmärken, favoriter och sessioner)
 - sammanslagning:
-  - `IssueUserState`: posten med senaste `updatedAt` vinner för `lastPage`, `readStatusOverride` och `isFavorite`. `maxPageReached` blir alltid det högsta värdet. Det motsäger inte "Markera som oläst", eftersom den markeringen ligger i `readStatusOverride` och inte rör `maxPageReached`.
+  - `IssueUserState`: posten med senaste `updatedAt` vinner för `lastPage`, `readStatusOverride` och `isFavorite`. `seenPages` slås ihop (bitvis OR) och `maxPageReached` räknas om från resultatet. Det motsäger inte "Markera som oläst", eftersom den markeringen ligger i `readStatusOverride` och inte rör `seenPages` eller `maxPageReached`.
   - bokmärken: dubbletter (samma issueId, pageNumber och title) hoppas över
   - sessioner: dubbletter (samma issueId och startedAt) hoppas över
 - ingenting raderas vid import
@@ -1335,7 +1339,7 @@ Domänlogik (progress, status, effektivt sidantal, sammanslagning vid backup) te
 
 - biblioteket startar på under 1 sekund med cachad data
 - rullningen i omslagsrutnätet flyter
-- sidbyte i läsaren känns omedelbart för en nedladdad PDF
+- vid sidbyte ges visuell respons direkt. v2-PDF:er visar full sida inom några hundra ms. Äldre PDF:er (JPEG 2000) visar först en förhandsbild (mål under 0,5 s) och därefter full rendering. Gränssnittet blockeras aldrig av rendering.
 - ingen helsidesbitmap behålls i onödan; minnet för HQ har en gräns
 - fulltextsökning svarar på under 1 sekund
 
@@ -1462,3 +1466,7 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-06 | Före FAS 3: B2, B3 och C2 enligt ADR 0016: omslag är `coverAsset` i första hand, `coverUrl` i andra hand och platshållare sist. Toolchainen väljer källa för miniatyren. | 0016 |
 | 2026-10-06 | Före FAS 3: FAS 7: ett importerat `coverAsset` är bara en ledtråd; appen kontrollerar att filen finns i assets | 0016 |
 | 2026-10-06 | Före FAS 3: E7: miniatyrremsan i läsaren visar den faktiska PDF-sidan. `coverFlags` används aldrig i läsaren. | 0016 |
+| 2026-10-07 | Före FAS 4: G7: "sidbyte känns omedelbart" ersatt med krav på direkt visuell respons: v2-PDF:er visar full sida inom några hundra ms, äldre PDF:er (JPEG 2000) först en förhandsbild (mål under 0,5 s) | 0011 |
+| 2026-10-07 | Före FAS 4: C4: nytt fält `seenPages` i `IssueUserState` (bitmängd, en bit per PDF-sidindex, Base64-text). `maxPageReached` är högsta sidan i `seenPages`. | 0018 |
+| 2026-10-07 | Före FAS 4: C10: progress är antal sidor i `seenPages` delat med sidantalet. En sida räknas som läst efter 1,5 s i följd (båda sidorna i uppslag); snabbläddring räknas inte. `UNREAD` nollställs när en ny sida räknas som läst. | 0018 |
+| 2026-10-07 | Före FAS 4: E11: vid import av backup slås `seenPages` ihop med bitvis OR och `maxPageReached` räknas om | 0018 |
