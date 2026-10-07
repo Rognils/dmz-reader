@@ -15,8 +15,9 @@ import org.junit.Test
 import java.io.File
 
 /**
- * Migreringen från databasversion 1 (FAS 1) via 2 (Issue.coverAsset) och 3
- * (ETag och Last-Modified i IssueLocalState) till 4 (IssueUserState.seenPages).
+ * Migreringen från databasversion 1 (FAS 1) via 2 (Issue.coverAsset), 3
+ * (ETag och Last-Modified i IssueLocalState) och 4 (IssueUserState.seenPages) till 5
+ * (IssueLocalState.downloadQueuedAt).
  * Den gamla versionen byggs upp ur det exporterade schemat, precis som den såg ut.
  */
 class MigrationTest {
@@ -100,6 +101,38 @@ class MigrationTest {
                 // Kolumnerna från version 3 finns och är tomma.
                 assertNull(local.observedPdfEtag)
                 assertNull(local.observedPdfLastModified)
+            } finally {
+                db.close()
+            }
+        } finally {
+            file.delete()
+            File(file.path + "-wal").delete()
+            File(file.path + "-shm").delete()
+        }
+    }
+
+    /** Version 4 (FAS 4) till 5: downloadQueuedAt läggs till i IssueLocalState. Allt annat finns kvar. */
+    @Test
+    fun `migration from version 4 adds downloadQueuedAt and keeps existing data`() = runTest {
+        val file = File.createTempFile("dmz-migration", ".db").apply { delete() }
+        try {
+            createVersion(file, 4)
+            val db = Room.databaseBuilder<DmzDatabase>(file.path)
+                .setDriver(BundledSQLiteDriver())
+                .setQueryCoroutineContext(Dispatchers.IO)
+                .build()
+            try {
+                val local = db.issueLocalStateDao().get("datormagazin-1989-06")!!
+                assertEquals(DownloadState.DOWNLOADED, local.downloadState)
+                assertEquals(48, local.observedPageCount)
+                assertNull(local.downloadQueuedAt)
+                assertEquals(12, db.issueUserStateDao().get("datormagazin-1989-06")!!.lastPage)
+                assertEquals(1, db.bookmarkDao().getAll().size)
+                assertEquals(1, db.readingSessionDao().getAll().size)
+
+                // Den nya kolumnen styr köordningen.
+                assertEquals(1, db.issueLocalStateDao().update(local.copy(downloadState = DownloadState.QUEUED, downloadQueuedAt = 7)))
+                assertEquals(7L, db.issueLocalStateDao().nextQueued()!!.downloadQueuedAt)
             } finally {
                 db.close()
             }

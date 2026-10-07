@@ -54,6 +54,8 @@ data class IssueLocalState(
     val downloadedPath: String? = null,
     val downloadedBytes: Long? = null,
     val downloadedAt: Long? = null,
+    /** När nedladdningen begärdes. Bestämmer ordningen i kön. */
+    val downloadQueuedAt: Long? = null,
     val detectedSpreadOffset: Int? = null,
 )
 

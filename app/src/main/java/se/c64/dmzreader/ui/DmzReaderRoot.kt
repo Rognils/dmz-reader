@@ -43,6 +43,7 @@ import se.c64.dmzreader.ui.search.SearchScreen
 import se.c64.dmzreader.ui.settings.DiagnosticsScreen
 import se.c64.dmzreader.ui.settings.DiagnosticsViewModel
 import se.c64.dmzreader.ui.settings.SettingsScreen
+import se.c64.dmzreader.ui.settings.SettingsViewModel
 import se.c64.dmzreader.ui.statistics.StatisticsScreen
 import se.c64.dmzreader.ui.theme.DmzColors
 import se.c64.dmzreader.ui.year.YearScreen
@@ -179,7 +180,16 @@ fun DmzReaderRoot(container: AppContainer) {
                     val issueId = requireNotNull(entry.arguments?.getString("issueId"))
                     val viewModel: IssueViewModel = viewModel(
                         factory = viewModelFactory {
-                            initializer { IssueViewModel(container.libraryRepository, container.readingRepository, issueId) }
+                            initializer {
+                                IssueViewModel(
+                                    container.libraryRepository,
+                                    container.readingRepository,
+                                    container.offlineRepository,
+                                    container.downloadScheduler,
+                                    container.downloadPreferences,
+                                    issueId,
+                                )
+                            }
                         },
                     )
                     IssueScreen(
@@ -204,6 +214,7 @@ fun DmzReaderRoot(container: AppContainer) {
                                 container.libraryRepository,
                                 container.pdfRepository,
                                 container.readingRepository,
+                                container.offlineRepository,
                                 container.thumbnailRoot,
                                 container.applicationScope,
                             )
@@ -216,7 +227,22 @@ fun DmzReaderRoot(container: AppContainer) {
             composable(Routes.FAVORITES) { FavoritesScreen() }
             composable(Routes.STATISTICS) { StatisticsScreen() }
             composable(Routes.SETTINGS) {
+                val viewModel: SettingsViewModel = viewModel(
+                    factory = viewModelFactory {
+                        initializer {
+                            SettingsViewModel(
+                                container.offlineRepository,
+                                container.pdfRepository,
+                                container.libraryRepository,
+                                container.downloadPreferences,
+                                container.downloadScheduler,
+                                container.thumbnailRoot,
+                            )
+                        }
+                    },
+                )
                 SettingsScreen(
+                    viewModel = viewModel,
                     onBack = { navController.popBackStack() },
                     onOpenDiagnostics = { navController.navigate(Routes.DIAGNOSTICS) },
                 )

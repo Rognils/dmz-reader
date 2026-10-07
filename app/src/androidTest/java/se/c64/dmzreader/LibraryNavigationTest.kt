@@ -9,6 +9,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
@@ -120,7 +121,8 @@ class LibraryNavigationTest {
         rule.onNodeWithContentDescription("HighScore 1993 Nr 17").performClick()
 
         waitForText("Bilaga till Datormagazin 1993 Nr 17")
-        rule.onNodeWithText("Bilaga till Datormagazin 1993 Nr 17").performClick()
+        // Länken ligger under nedladdningsdelen och kan vara utanför skärmen.
+        rule.onNodeWithText("Bilaga till Datormagazin 1993 Nr 17").performScrollTo().performClick()
         waitForText("Med bilagan HighScore Nr 17")
         rule.onNodeWithText("DATORMAGAZIN 1993").assertIsDisplayed()
 

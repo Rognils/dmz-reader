@@ -4,6 +4,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import se.c64.dmzreader.data.db.DownloadState
+import se.c64.dmzreader.data.db.IssueLocalState
 import se.c64.dmzreader.data.db.IssueUserState
 import se.c64.dmzreader.data.db.ReadStatusOverride
 import se.c64.dmzreader.testing.issueEntity
@@ -237,13 +239,47 @@ class ReadingStatusTest {
 
     @Test
     fun `year filters`() {
-        assertTrue(YearFilter.entries.all { YearFilter.ALL.matches(ReadStatus.STARTED) && it.label.isNotEmpty() })
-        assertEquals(listOf("Alla", "Olästa", "Påbörjade", "Lästa"), YearFilter.entries.map { it.label })
-        assertTrue(YearFilter.UNREAD.matches(ReadStatus.UNREAD))
-        assertTrue(!YearFilter.UNREAD.matches(ReadStatus.READ))
-        assertTrue(YearFilter.STARTED.matches(ReadStatus.STARTED))
-        assertTrue(YearFilter.READ.matches(ReadStatus.READ))
-        assertTrue(!YearFilter.READ.matches(ReadStatus.STARTED))
+        assertEquals(listOf("Alla", "Olästa", "Påbörjade", "Lästa", "Offline"), YearFilter.entries.map { it.label })
+        val unread = item("datormagazin-1986-01", null)
+        val started = item("datormagazin-1986-02", state(1))
+        val read = item("datormagazin-1986-03", state(1, override = ReadStatusOverride.READ))
+        val downloaded = item("datormagazin-1986-04", null).copy(
+            local = IssueLocalState(issueId = "datormagazin-1986-04", downloadState = DownloadState.DOWNLOADED),
+        )
+        val queued = item("datormagazin-1987-01", null).copy(
+            local = IssueLocalState(issueId = "datormagazin-1987-01", downloadState = DownloadState.QUEUED),
+        )
+        val all = listOf(unread, started, read, downloaded, queued)
+        fun ids(filter: YearFilter) = all.filter { filter.matches(it) }.map { it.issue.issueId.takeLast(7) }
+        assertEquals(5, ids(YearFilter.ALL).size)
+        assertEquals(listOf("1986-01", "1986-04", "1987-01"), ids(YearFilter.UNREAD))
+        assertEquals(listOf("1986-02"), ids(YearFilter.STARTED))
+        assertEquals(listOf("1986-03"), ids(YearFilter.READ))
+        // Bara färdigt nedladdade nummer är offline, inte köade.
+        assertEquals(listOf("1986-04"), ids(YearFilter.OFFLINE))
+    }
+
+    @Test
+    fun `downloaded issues are listed with the latest first`() {
+        fun downloaded(issueId: String, at: Long?, state: DownloadState = DownloadState.DOWNLOADED) =
+            item(issueId, null).copy(local = IssueLocalState(issueId = issueId, downloadState = state, downloadedAt = at))
+        val items = listOf(
+            downloaded("datormagazin-1986-01", 100),
+            downloaded("datormagazin-1986-02", 900),
+            downloaded("datormagazin-1986-03", 500, DownloadState.DOWNLOADING),
+            item("datormagazin-1986-04", null),
+        )
+        assertEquals(
+            listOf("datormagazin-1986-02", "datormagazin-1986-01"),
+            downloadedIssues(items).map { it.issue.issueId },
+        )
+    }
+
+    @Test
+    fun `text for read pages on the continue card`() {
+        assertEquals("7 av 28 lästa · 25 %", readPagesText(readingProgress(state(1, 2, 3, 4, 5, 6, 25), 28)))
+        assertEquals("0 av 28 lästa · 0 %", readPagesText(readingProgress(null, 28)))
+        assertNull(readPagesText(readingProgress(state(1), null)))
     }
 
     @Test

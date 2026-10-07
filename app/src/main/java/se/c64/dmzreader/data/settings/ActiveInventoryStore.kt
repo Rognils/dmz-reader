@@ -3,6 +3,7 @@ package se.c64.dmzreader.data.settings
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -70,5 +71,39 @@ class DataStoreLibraryPreferences(context: Context) : LibraryPreferences {
 
     private companion object {
         val SELECTED_PUBLICATION = stringPreferencesKey("library_selected_publication")
+    }
+}
+
+/** Inställningar för permanenta nedladdningar (planens FAS 5). */
+interface DownloadPreferences {
+    /** Sant (standard): nedladdningar väntar på ett nät som inte debiteras per mängd. */
+    fun observeWifiOnly(): Flow<Boolean>
+    suspend fun wifiOnly(): Boolean = observeWifiOnly().first()
+    suspend fun setWifiOnly(value: Boolean)
+
+    /** Om användaren redan har fått frågan om notiser för nedladdningar. */
+    suspend fun notificationQuestionShown(): Boolean
+    suspend fun setNotificationQuestionShown()
+}
+
+class DataStoreDownloadPreferences(context: Context) : DownloadPreferences {
+    private val dataStore = context.applicationContext.settingsDataStore
+
+    override fun observeWifiOnly(): Flow<Boolean> = dataStore.data.map { it[WIFI_ONLY] ?: true }
+
+    override suspend fun setWifiOnly(value: Boolean) {
+        dataStore.edit { it[WIFI_ONLY] = value }
+    }
+
+    override suspend fun notificationQuestionShown(): Boolean =
+        dataStore.data.map { it[NOTIFICATION_QUESTION_SHOWN] ?: false }.first()
+
+    override suspend fun setNotificationQuestionShown() {
+        dataStore.edit { it[NOTIFICATION_QUESTION_SHOWN] = true }
+    }
+
+    private companion object {
+        val WIFI_ONLY = booleanPreferencesKey("download_wifi_only")
+        val NOTIFICATION_QUESTION_SHOWN = booleanPreferencesKey("download_notification_question_shown")
     }
 }

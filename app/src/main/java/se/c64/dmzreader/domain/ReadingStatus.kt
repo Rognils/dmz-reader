@@ -1,6 +1,8 @@
 package se.c64.dmzreader.domain
 
+import se.c64.dmzreader.data.db.DownloadState
 import se.c64.dmzreader.data.db.IssueEntity
+import se.c64.dmzreader.data.db.IssueLocalState
 import se.c64.dmzreader.data.db.IssueUserState
 import se.c64.dmzreader.data.db.ReadStatusOverride
 
@@ -110,9 +112,28 @@ private fun IssueUserState.completedIfRead(pageCount: Int?, now: Long): IssueUse
 
 // --- Biblioteket ---
 
-/** Ett nummer med användarens läsdata och det sidantal som gäller. */
-data class IssueWithState(val issue: IssueEntity, val state: IssueUserState?, val pageCount: Int?) {
+/** Ett nummer med användarens läsdata, telefonens lokala status och det sidantal som gäller. */
+data class IssueWithState(
+    val issue: IssueEntity,
+    val state: IssueUserState?,
+    val pageCount: Int?,
+    val local: IssueLocalState? = null,
+) {
     val progress: ReadingProgress = readingProgress(state, pageCount)
+    val downloadState: DownloadState get() = local?.downloadState ?: DownloadState.NONE
+
+    /** Sant när numret är nedladdat och kan läsas utan nät. */
+    val isDownloaded: Boolean get() = downloadState == DownloadState.DOWNLOADED
+}
+
+/** "Nedladdat" i biblioteket: de nedladdade numren, senast nedladdade först. */
+fun downloadedIssues(items: List<IssueWithState>): List<IssueWithState> =
+    items.filter { it.isDownloaded }.sortedByDescending { it.local?.downloadedAt ?: 0 }
+
+/** Texten under "Sida X av Y" på Fortsätt läsa-kortet: "7 av 28 lästa · 25 %". null utan känt sidantal. */
+fun readPagesText(progress: ReadingProgress): String? {
+    val total = progress.pageCount ?: return null
+    return "${progress.pagesRead} av $total lästa · ${progress.percent ?: 0} %"
 }
 
 /**
@@ -138,12 +159,13 @@ fun readCountsByYear(items: List<IssueWithState>): Map<Pair<String, Int>, Int> =
         .eachCount()
 
 enum class YearFilter(val label: String) {
-    ALL("Alla"), UNREAD("Olästa"), STARTED("Påbörjade"), READ("Lästa");
+    ALL("Alla"), UNREAD("Olästa"), STARTED("Påbörjade"), READ("Lästa"), OFFLINE("Offline");
 
-    fun matches(status: ReadStatus): Boolean = when (this) {
+    fun matches(item: IssueWithState): Boolean = when (this) {
         ALL -> true
-        UNREAD -> status == ReadStatus.UNREAD
-        STARTED -> status == ReadStatus.STARTED
-        READ -> status == ReadStatus.READ
+        UNREAD -> item.progress.status == ReadStatus.UNREAD
+        STARTED -> item.progress.status == ReadStatus.STARTED
+        READ -> item.progress.status == ReadStatus.READ
+        OFFLINE -> item.isDownloaded
     }
 }

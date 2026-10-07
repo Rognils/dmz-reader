@@ -86,7 +86,7 @@ import kotlinx.coroutines.launch
 import se.c64.dmzreader.data.db.IssueEntity
 import se.c64.dmzreader.data.pdf.DownloadProgress
 import se.c64.dmzreader.data.pdf.PdfDocument
-import se.c64.dmzreader.domain.fileSizeText
+import se.c64.dmzreader.domain.downloadProgressText
 import se.c64.dmzreader.domain.fullTitle
 import se.c64.dmzreader.domain.ReadStatus
 import se.c64.dmzreader.domain.ReadingProgress
@@ -127,19 +127,6 @@ fun ReaderRoute(
         )
 
         is ReaderUiState.Reading -> ReaderScreen(current, viewModel, onClose)
-    }
-}
-
-/** Text som "7,4 av 15,1 MB · 49 %". */
-fun downloadProgressText(progress: DownloadProgress?, expectedSize: Long?): String {
-    val total = progress?.totalBytes ?: expectedSize
-    val done = fileSizeText(progress?.bytesDownloaded?.coerceAtLeast(1))?.removeSuffix(" MB") ?: "0,0"
-    val totalText = fileSizeText(total)
-    val percent = total?.takeIf { it > 0 }?.let { ((progress?.bytesDownloaded ?: 0) * 100 / it).toInt() }
-    return when {
-        progress == null -> "Ansluter …"
-        totalText != null && percent != null -> "$done av $totalText · $percent %"
-        else -> "$done MB"
     }
 }
 

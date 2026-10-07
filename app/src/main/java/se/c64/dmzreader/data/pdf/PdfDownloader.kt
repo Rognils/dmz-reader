@@ -41,7 +41,8 @@ sealed interface DownloadResult {
 }
 
 /**
- * Hämtar en PDF till läs-cachen, med återupptagning (ADR 0017).
+ * Hämtar en PDF till en katalog (läs-cachen eller den permanenta lagringen), med
+ * återupptagning (ADR 0017).
  *
  * - Data skrivs till {issueId}.pdf.part. Filen döps om till .pdf först när
  *   storleken stämmer med den servern uppgav. En .pdf är därför alltid komplett.
@@ -52,7 +53,7 @@ sealed interface DownloadResult {
  */
 class PdfDownloader(
     private val client: OkHttpClient,
-    private val cache: PdfCache,
+    private val cache: PdfFiles,
     private val availableBytes: (File) -> Long = { it.usableSpace },
 ) {
     suspend fun download(

@@ -10,5 +10,6 @@ class DmzReaderApp : Application() {
         super.onCreate()
         container = AppContainer(this)
         container.loadBundledInventory()
+        container.reconcileDownloads()
     }
 }

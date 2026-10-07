@@ -7,6 +7,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import se.c64.dmzreader.data.pdf.DownloadProgress
+import se.c64.dmzreader.domain.downloadProgressText
 import se.c64.dmzreader.data.pdf.DownloadResult
 import se.c64.dmzreader.data.pdf.PageSize
 import se.c64.dmzreader.data.pdf.pdfDiffersFromInventory

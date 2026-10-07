@@ -38,6 +38,7 @@ class LibraryRepository(
                     issue = issue,
                     state = userById[issue.issueId],
                     pageCount = effectivePageCount(issue.pageCount, localById[issue.issueId]?.observedPageCount),
+                    local = localById[issue.issueId],
                 )
             }
         }

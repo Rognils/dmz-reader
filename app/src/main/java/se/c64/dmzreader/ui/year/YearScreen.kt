@@ -2,6 +2,7 @@ package se.c64.dmzreader.ui.year
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.horizontalScroll
@@ -52,6 +53,7 @@ import se.c64.dmzreader.domain.ReadStatus
 import se.c64.dmzreader.domain.YearFilter
 import se.c64.dmzreader.domain.readStatusText
 import se.c64.dmzreader.ui.components.IssueCover
+import se.c64.dmzreader.ui.components.OfflineBadge
 import se.c64.dmzreader.ui.components.ProgressLine
 import se.c64.dmzreader.ui.theme.DmzColors
 import se.c64.dmzreader.ui.theme.MonoStyles
@@ -79,7 +81,7 @@ class YearViewModel(
             YearUiState(
                 year = year,
                 publicationTitle = issues.firstOrNull()?.issue?.publicationTitle,
-                issues = issues.filter { selected.matches(it.progress.status) },
+                issues = issues.filter { selected.matches(it) },
                 issueCount = issues.size,
                 readCount = issues.count { it.progress.status == ReadStatus.READ },
                 filter = selected,
@@ -94,7 +96,7 @@ class YearViewModel(
 
 /**
  * Årgångsvyn: stort årtal, filter och ett rutnät med omslag (planens E5).
- * Offline-filtret läggs till i FAS 5.
+ * Filterraden går att rulla i sidled.
  */
 @Composable
 fun YearScreen(
@@ -215,7 +217,12 @@ private fun IssueCell(item: IssueWithState, imageLoader: ImageLoader, onClick: (
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         // Lästa nummer tonas ned, så att det olästa syns först.
-        IssueCover(issue, imageLoader, modifier = Modifier.fillMaxWidth().alpha(if (read) READ_ALPHA else 1f))
+        Box {
+            IssueCover(issue, imageLoader, modifier = Modifier.fillMaxWidth().alpha(if (read) READ_ALPHA else 1f))
+            if (item.isDownloaded) {
+                OfflineBadge(modifier = Modifier.align(Alignment.TopEnd).padding(5.dp))
+            }
+        }
         Spacer(Modifier.height(5.dp))
         // Ett läst nummer visar fullt streck även om det är markerat manuellt.
         val fraction = if (read) 1f else if (progress.status == ReadStatus.UNREAD) 0f else progress.fraction ?: 0.05f

@@ -62,6 +62,9 @@ class ReaderDeviceTest {
     @Before
     fun resetReadingState() {
         resetReadingState(context, "datormagazin-1986-01", "datormagazin-1995-14", "datormagazin-1995-15")
+        // Testerna gäller läs-cachen. En permanent nedladdning av samma nummer hade
+        // använts i stället, så den tas bort.
+        removeDownloads(context, "datormagazin-1986-01", "datormagazin-1995-14", "datormagazin-1995-15")
     }
 
     private fun waitFor(timeoutMillis: Long = 15_000, condition: () -> Boolean) =

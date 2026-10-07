@@ -67,3 +67,4 @@ Utan nät, vid HTTP-fel, fel längd eller för lite utrymme visas ett meddelande
 - Jämförelsen mot inventory bygger på vad servern uppger. ETag från en annan serverkonfiguration skulle ge falska varningar.
 - Verifierat på telefonen med 1995 nr 15 (563 123 977 byte): avbruten vid 369 MB, återupptagen därifrån, och den färdiga filen hade exakt rätt storlek. Hastigheten var cirka 17–28 MB/s över wifi.
 - Testerna kör mot en lokal testserver (MockWebServer) och täcker hel nedladdning, återupptagning, 200 på Range, fel längd, avbrott, för lite utrymme och rensning.
+- Samma nedladdningsmotor används sedan FAS 5 för permanenta nedladdningar i `filesDir/issues/` (ADR 0013). Filnamnsreglerna (`.pdf`, `.pdf.part`, `.pdf.part.validator`) är gemensamma i `PdfFiles`.

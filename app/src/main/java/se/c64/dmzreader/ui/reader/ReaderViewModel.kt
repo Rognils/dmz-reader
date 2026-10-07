@@ -23,6 +23,7 @@ import se.c64.dmzreader.data.pdf.DownloadResult
 import se.c64.dmzreader.data.pdf.PdfDocument
 import se.c64.dmzreader.data.pdf.PdfRepository
 import se.c64.dmzreader.data.db.ReadStatusOverride
+import se.c64.dmzreader.data.offline.OfflineRepository
 import se.c64.dmzreader.data.repository.LibraryRepository
 import se.c64.dmzreader.data.repository.ReadingRecorder
 import se.c64.dmzreader.data.repository.ReadingRepository
@@ -86,6 +87,7 @@ class ReaderViewModel(
     private val libraryRepository: LibraryRepository,
     private val pdfRepository: PdfRepository,
     private val readingRepository: ReadingRepository,
+    private val offlineRepository: OfflineRepository,
     private val thumbnailRoot: File,
     /** Lever längre än läsaren, så att skrivningar vid stängning hinner bli klara. */
     writeScope: CoroutineScope,
@@ -147,9 +149,10 @@ class ReaderViewModel(
                 _state.value = ReaderUiState.Failed(issue, "Numret har ingen PDF i arkivet.", false)
                 return@launch
             }
-            val cached = pdfRepository.cachedFile(issueId)
-            if (cached != null) {
-                open(issue, cached)
+            // En permanent nedladdning används alltid före läs-cachen och före nätet.
+            val local = offlineRepository.verifiedFile(issueId) ?: pdfRepository.cachedFile(issueId)
+            if (local != null) {
+                open(issue, local)
                 return@launch
             }
             _state.value = ReaderUiState.Downloading(issue, null)
@@ -172,7 +175,7 @@ class ReaderViewModel(
             throw e
         } catch (e: Exception) {
             // En fil som inte går att öppna ska inte ligga kvar och blockera nästa försök.
-            file.delete()
+            if (file.parentFile == offlineRepository.directory) offlineRepository.remove(issueId) else file.delete()
             _state.value = ReaderUiState.Failed(issue, "PDF:en gick inte att öppna. Försök igen för att hämta den på nytt.", true)
             return
         }
