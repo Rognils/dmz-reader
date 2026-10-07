@@ -120,7 +120,7 @@ Dessa regler gäller i alla faser och får aldrig brytas.
 | Databas | **Room 3** (`androidx.room3`, stabil 3.0.x) – inte Room 2 |
 | SQLite-drivrutin | `BundledSQLiteDriver` (paketerad SQLite med FTS5) – verifieras i FAS 1 (ADR 0006) |
 | Inställningar | DataStore |
-| Bakgrundsjobb | WorkManager |
+| Bakgrundsjobb | JobScheduler User-Initiated Data Transfer (UIDT) på API 34+. På API 26–33 finns ingen bakgrundsnedladdning. |
 | Bildladdning | Coil, omslag via HTTPS |
 | PDF-rendering | Utvärderas i FAS 3; i första hand Androids `PdfRenderer` |
 | minSdk | 26 |
@@ -595,7 +595,7 @@ Sektionerna visas uppifrån och ned. Sektioner utan innehåll döljs.
 ## E5. Årgångsvy
 
 - stort årtal och "X / Y lästa"
-- filterchips: Alla, Olästa, Påbörjade, Offline
+- filterchips i en horisontellt rullbar rad: Alla, Olästa, Påbörjade, Lästa, Offline
 - omslagsrutnät i 3 kolumner, med format cirka 0.72
 - per kort:
   - progress-streck och offline-ikon
@@ -653,15 +653,15 @@ Läsaren är projektets viktigaste funktion och prioriteras före allt utom bibl
 | "Läs nu" (tillfällig PDF) | `cacheDir` | Ja |
 | Renderade sidor, miniatyrer, HQ-sidor | `cacheDir` | Ja |
 | Omslag (webbens sidbild 1) | Coils diskcache | Ja |
-| "Ladda ned" (permanent PDF) | `filesDir/issues/` eller `getExternalFilesDir()` – **beslutas i FAS 5** | Nej |
+| "Ladda ned" (permanent PDF) | `filesDir/issues/` (ADR 0013) | Nej |
 | Importerat inventory och search.db | `filesDir/data/` | Nej |
 | Room-databasen | Standardplats | Nej |
 
 **Regler:**
 
-- inga breda lagringsbehörigheter. Både `filesDir` och `getExternalFilesDir()` fungerar utan behörigheter.
-- **var permanenta PDF:er lagras beslutas i FAS 5** utifrån de verkliga filstorlekarna från FAS 0 (mät först, välj sedan). Små filer passar `filesDir`; stora filer talar för app-specifik extern lagring. Beslutet dokumenteras i ADR 0013.
-- permanent nedladdning körs via WorkManager och överlever att appen stängs
+- inga breda lagringsbehörigheter. `filesDir` fungerar utan behörigheter.
+- permanenta PDF:er lagras i `filesDir/issues/{issueId}.pdf`. Skälet står i ADR 0013.
+- permanent nedladdning körs på API 34+ som ett UIDT-jobb och överlever att appen stängs. På API 26–33 sker nedladdningen medan appen är öppen, med en tydlig text om det. Ingen WorkManager-reserv byggs, eftersom den inte kan testas på någon tillgänglig enhet.
 - "Läs nu" körs interaktivt med synlig förloppsindikator och kan avbrytas
 - om en nedladdad fil finns används den alltid före nätet
 - inställningar visar använt utrymme och kan rensa cache
@@ -1025,7 +1025,7 @@ Varje fas har samma struktur:
 **Bygg:**
 
 - beslut om lagringsplats för permanenta PDF:er utifrån FAS 0:s filstorlekar (ADR 0013)
-- "Ladda ned" via WorkManager till den valda platsen
+- "Ladda ned" till `filesDir/issues/`: på API 34+ via JobScheduler User-Initiated Data Transfer (UIDT), på API 26–33 bara medan appen är öppen, med en tydlig text om det. Ingen WorkManager-reserv byggs.
 - `downloadState` och tillhörande fält i `IssueLocalState`
 - kö med högst en FTP-anslutning i taget
 - status i årgångsvy och nummervy (ikon och förlopp)
@@ -1037,7 +1037,7 @@ Varje fas har samma struktur:
 **Klart när:**
 
 - [ ] ett nedladdat nummer kan läsas i flygplansläge
-- [ ] en nedladdning överlever att appen stängs
+- [ ] en nedladdning överlever att appen stängs (API 34+)
 - [ ] en avbruten eller misslyckad nedladdning kan startas om och lämnar inga trasiga filer
 - [ ] borttagning frigör utrymmet
 
@@ -1168,6 +1168,8 @@ Varje fas har samma struktur:
 **Förutsätter:** FAS 6.
 
 **Bygg:** statistikvyn enligt E12.
+
+**Att utreda:** en session som pågår när appen tvångsstoppas eller kraschar går förlorad (FAS 4, ADR 0018). Löpande sparning av pågående sessioner utreds här.
 
 **Klart när:**
 
@@ -1470,3 +1472,7 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-07 | Före FAS 4: C4: nytt fält `seenPages` i `IssueUserState` (bitmängd, en bit per PDF-sidindex, Base64-text). `maxPageReached` är högsta sidan i `seenPages`. | 0018 |
 | 2026-10-07 | Före FAS 4: C10: progress är antal sidor i `seenPages` delat med sidantalet. En sida räknas som läst efter 1,5 s i följd (båda sidorna i uppslag); snabbläddring räknas inte. `UNREAD` nollställs när en ny sida räknas som läst. | 0018 |
 | 2026-10-07 | Före FAS 4: E11: vid import av backup slås `seenPages` ihop med bitvis OR och `maxPageReached` räknas om | 0018 |
+| 2026-10-07 | Före FAS 5: E5: filterchips Alla, Olästa, Påbörjade, Lästa och Offline i en horisontellt rullbar rad | — |
+| 2026-10-07 | Före FAS 5: A5, E8 och FAS 5: permanent nedladdning sker på API 34+ via JobScheduler User-Initiated Data Transfer (UIDT). På API 26–33 finns ingen bakgrundsnedladdning: nedladdningen sker medan appen är öppen, med en tydlig text om det. Ingen WorkManager-reserv byggs, eftersom den inte kan testas på någon tillgänglig enhet. | 0013 |
+| 2026-10-07 | Före FAS 5: FAS 10: sessioner som pågår vid tvångsstopp går förlorade. Löpande sparning utreds i FAS 10. | 0018 |
+| 2026-10-07 | Före FAS 5: E8: permanenta PDF:er lagras i `filesDir/issues/` | 0013 |
