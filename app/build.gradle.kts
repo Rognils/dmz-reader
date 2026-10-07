@@ -15,8 +15,8 @@ android {
         minSdk = 26
         targetSdk = 37
         // Följer taggarna (planens G4): 0.6.1 ger 601, 0.7.0 ger 700, 1.0.0 ger 10000.
-        versionCode = 601
-        versionName = "0.6.1"
+        versionCode = 700
+        versionName = "0.7.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
