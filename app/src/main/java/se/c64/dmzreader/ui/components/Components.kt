@@ -1,6 +1,9 @@
 package se.c64.dmzreader.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -16,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -67,5 +71,22 @@ fun PlaceholderScreen(title: String, message: String, modifier: Modifier = Modif
         Text(text = title, style = MaterialTheme.typography.headlineMedium, color = DmzColors.TextPrimary)
         Spacer(Modifier.height(12.dp))
         Text(text = message, style = MaterialTheme.typography.bodyLarge, color = DmzColors.TextSecondary)
+    }
+}
+
+/**
+ * Ett tunt progress-streck. [fraction] är 0–1. Strecket är dekoration: värdet
+ * ska också finnas som text eller i en beskrivning för skärmläsare.
+ */
+@Composable
+fun ProgressLine(fraction: Float, modifier: Modifier = Modifier) {
+    val shape = RoundedCornerShape(2.dp)
+    Box(modifier = modifier.fillMaxWidth().height(3.dp).clip(shape).background(DmzColors.BorderStrong)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(fraction.coerceIn(0f, 1f))
+                .fillMaxHeight()
+                .background(DmzColors.Accent),
+        )
     }
 }

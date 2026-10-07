@@ -16,10 +16,11 @@ class ReaderLogicTest {
 
     @Test
     fun `page indicator for a single page and for a spread`() {
-        assertEquals("Sida 1 av 28 · 4 %", pageIndicatorText(listOf(1), 1, 28))
-        assertEquals("Sida 7 av 28 · 25 %", pageIndicatorText(listOf(7), 7, 28))
-        assertEquals("Sida 6–7 av 28 · 25 %", pageIndicatorText(listOf(6, 7), 7, 28))
-        assertEquals("Sida 28 av 28 · 100 %", pageIndicatorText(listOf(28), 28, 28))
+        // Procenttalet är andelen lästa sidor, inte läget i numret.
+        assertEquals("Sida 1 av 28 · 0 % läst", pageIndicatorText(listOf(1), 1, 28, pagesRead = 0))
+        assertEquals("Sida 25 av 28 · 25 % läst", pageIndicatorText(listOf(25), 25, 28, pagesRead = 7))
+        assertEquals("Sida 6–7 av 28 · 25 % läst", pageIndicatorText(listOf(6, 7), 7, 28, pagesRead = 7))
+        assertEquals("Sida 28 av 28 · 100 % läst", pageIndicatorText(listOf(28), 28, 28, pagesRead = 28))
     }
 
     @Test

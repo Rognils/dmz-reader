@@ -9,24 +9,24 @@ import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.util.Log
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.job
-import kotlinx.coroutines.yield
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
+import se.c64.dmzreader.domain.RenderUrgency
 import java.io.Closeable
 import java.io.File
 import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.RejectedExecutionException
 
 /** En genomförd rendering och hur lång tid den tog. */
 data class RenderRecord(val kind: String, val pageNumber: Int, val width: Int, val height: Int, val millis: Long)
-
-/** Sidor som ska läsas renderas före miniatyrer. */
-enum class RenderPriority { HIGH, LOW }
 
 /** En sidas storlek i PDF-punkter. */
 data class PageSize(val width: Int, val height: Int) {
@@ -59,8 +59,19 @@ class PdfDocument private constructor(
     private val pageSizes = arrayOfNulls<PageSize>(pageCount)
     private val whitePaint = Paint().apply { color = Color.WHITE }
 
-    /** Antal sidrenderingar som väntar eller pågår. Miniatyrer släpper dem före sig. */
-    private val highPriorityWaiting = AtomicInteger(0)
+    /** En rendering som väntar på sin tur. [urgency] läses om varje gång kön väljer. */
+    private class Task(
+        val urgency: () -> Int,
+        val caller: Job,
+        val sequence: Long,
+        val run: () -> Unit,
+    ) {
+        val done = CompletableDeferred<Unit>()
+    }
+
+    // Väntande renderingar. Skyddas av sig själv som lås.
+    private val waiting = ArrayList<Task>()
+    private var nextSequence = 0L
 
     @Volatile
     private var closed = false
@@ -94,9 +105,9 @@ class PdfDocument private constructor(
         pageNumber: Int,
         width: Int,
         height: Int,
-        priority: RenderPriority = RenderPriority.HIGH,
+        urgency: () -> Int = { RenderUrgency.CURRENT },
     ): Bitmap =
-        renderOwned(width, height, priority) { bitmap ->
+        renderOwned(width, height, urgency) { bitmap ->
             val started = SystemClock.elapsedRealtime()
             // PdfRenderer ritar på genomskinlig botten. Tidningssidor ska vara vita.
             bitmap.eraseColor(Color.WHITE)
@@ -113,7 +124,7 @@ class PdfDocument private constructor(
      * som i full upplösning skulle bli över 100 MB.
      */
     suspend fun renderRegion(width: Int, height: Int, placements: List<PagePlacement>): Bitmap =
-        renderOwned(width, height, RenderPriority.HIGH) { bitmap ->
+        renderOwned(width, height, { RenderUrgency.CURRENT }) { bitmap ->
             val started = SystemClock.elapsedRealtime()
             val canvas = Canvas(bitmap)
             for (placement in placements) {
@@ -151,29 +162,50 @@ class PdfDocument private constructor(
     private suspend fun renderOwned(
         width: Int,
         height: Int,
-        priority: RenderPriority,
+        urgency: () -> Int,
         draw: (Bitmap) -> Unit,
     ): Bitmap {
         val caller = currentCoroutineContext().job
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        if (priority == RenderPriority.HIGH) highPriorityWaiting.incrementAndGet()
+        // En rendering som ingen längre väntar på hoppas över, så att kön inte
+        // fylls av sidor som användaren redan har bläddrat förbi.
+        val task = synchronized(waiting) {
+            Task(urgency, caller, nextSequence++) { if (caller.isActive) draw(bitmap) }.also { waiting += it }
+        }
         try {
-            withContext(NonCancellable + dispatcher) {
-                // Miniatyrer väntar tills sidorna som ska läsas är klara.
-                while (priority == RenderPriority.LOW && highPriorityWaiting.get() > 0 && caller.isActive) {
-                    yield()
-                }
-                // En rendering som ingen längre väntar på hoppas över, så att kön
-                // inte fylls av sidor som användaren redan har bläddrat förbi.
-                if (caller.isActive) draw(bitmap)
+            try {
+                // Varje anrop här tar en uppgift ur kön, men inte nödvändigtvis den här.
+                dispatcher.executor.execute(::runMostUrgent)
+            } catch (e: RejectedExecutionException) {
+                synchronized(waiting) { waiting -= task }
+                throw CancellationException("PDF:en är stängd")
             }
+            withContext(NonCancellable) { task.done.await() }
             currentCoroutineContext().ensureActive()
             return bitmap
         } catch (e: Throwable) {
             bitmap.recycle()
             throw e
-        } finally {
-            if (priority == RenderPriority.HIGH) highPriorityWaiting.decrementAndGet()
+        }
+    }
+
+    /**
+     * Kör den mest brådskande väntande renderingen. Körs bara på renderartråden.
+     * Hur bråttom en rendering har avgörs här och inte när den begärdes: en sida
+     * som var granne när den köades kan ha blivit den aktuella sedan dess.
+     * Avbrutna renderingar tas först, eftersom de bara ska frigöra sin bild.
+     */
+    private fun runMostUrgent() {
+        val task = synchronized(waiting) {
+            waiting.minWithOrNull(
+                compareBy<Task>({ if (it.caller.isActive) it.urgency() else Int.MIN_VALUE }, { it.sequence }),
+            )?.also { waiting -= it }
+        } ?: return
+        try {
+            task.run()
+            task.done.complete(Unit)
+        } catch (e: Throwable) {
+            task.done.completeExceptionally(e)
         }
     }
 

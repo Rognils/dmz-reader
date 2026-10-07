@@ -67,7 +67,3 @@ data class ReaderPosition(val page: Int) {
         return if (page in spread) this else ReaderPosition(spread.left)
     }
 }
-
-/** Läsprogress i procent, 0–100, avrundad till närmaste heltal. */
-fun progressPercent(page: Int, pageCount: Int): Int =
-    if (pageCount <= 0) 0 else (page.coerceIn(1, pageCount) * 100 + pageCount / 2) / pageCount

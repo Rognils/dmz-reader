@@ -36,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -56,25 +57,31 @@ import se.c64.dmzreader.data.inventory.InventoryLoadResult
 import se.c64.dmzreader.data.repository.LibraryRepository
 import se.c64.dmzreader.data.settings.LibraryPreferences
 import se.c64.dmzreader.domain.PublicationYears
+import se.c64.dmzreader.domain.continueReadingIssue
 import se.c64.dmzreader.domain.groupByPublication
+import se.c64.dmzreader.domain.readCountsByYear
+import se.c64.dmzreader.domain.recentlyReadIssues
 import se.c64.dmzreader.domain.selectPublication
 import se.c64.dmzreader.ui.components.IssueCover
 import se.c64.dmzreader.ui.components.MonoLabel
 import se.c64.dmzreader.ui.components.Panel
+import se.c64.dmzreader.ui.components.ProgressLine
 import se.c64.dmzreader.ui.theme.DmzColors
 import se.c64.dmzreader.ui.theme.MonoStyles
 
-/** Nummer att fortsätta läsa, med läspositionen. Fylls i från FAS 4. */
-data class ContinueReading(val issue: IssueEntity, val page: Int, val pageCount: Int?)
+/** Nummer att fortsätta läsa, med läspositionen och hur stor del som är läst. */
+data class ContinueReading(val issue: IssueEntity, val page: Int, val pageCount: Int?, val fraction: Float?)
 
 data class LibraryUiState(
     val loading: Boolean = true,
     val errorMessage: String? = null,
     val publications: List<PublicationYears> = emptyList(),
     val selected: PublicationYears? = null,
-    // Sektionerna nedan har ingen data förrän FAS 4–6 och är dolda så länge de är tomma.
     val continueReading: ContinueReading? = null,
     val recentlyRead: List<IssueEntity> = emptyList(),
+    /** Antal lästa nummer per årgång, med nyckeln (publicationId, year). */
+    val readCounts: Map<Pair<String, Int>, Int> = emptyMap(),
+    // Sektionerna nedan har ingen data förrän FAS 5–6 och är dolda så länge de är tomma.
     val favorites: List<IssueEntity> = emptyList(),
     val downloaded: List<IssueEntity> = emptyList(),
 )
@@ -88,14 +95,21 @@ class LibraryViewModel(
         repository.observeYearCounts(),
         preferences.observeSelectedPublication(),
         inventoryStatus,
-    ) { years, savedPublicationId, status ->
+        repository.observeIssuesWithState(),
+    ) { years, savedPublicationId, status, issues ->
         val publications = groupByPublication(years)
         val result = (status as? InventoryStatus.Done)?.result
+        val continued = continueReadingIssue(issues)
         LibraryUiState(
             loading = status is InventoryStatus.Loading,
             errorMessage = (result as? InventoryLoadResult.Rejected)?.message,
             publications = publications,
             selected = selectPublication(publications, savedPublicationId),
+            continueReading = continued?.let {
+                ContinueReading(it.issue, it.state?.lastPage ?: 1, it.pageCount, it.progress.fraction)
+            },
+            recentlyRead = recentlyReadIssues(issues, continued?.issue?.issueId).map { it.issue },
+            readCounts = readCountsByYear(issues),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), LibraryUiState())
 
@@ -112,6 +126,7 @@ fun LibraryScreen(
     imageLoader: ImageLoader,
     onOpenYear: (publicationId: String, year: Int) -> Unit,
     onOpenIssue: (issueId: String) -> Unit,
+    onContinueReading: (issueId: String) -> Unit,
     onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -160,14 +175,18 @@ fun LibraryScreen(
                 }
 
                 state.continueReading?.let { item ->
-                    fullWidth("continue") { ContinueReadingCard(item, imageLoader, onOpenIssue) }
+                    fullWidth("continue") { ContinueReadingCard(item, imageLoader, onContinueReading) }
                 }
 
                 fullWidth("years-title") {
                     SectionTitle(title = "Årgångar", detail = "${selected.issueCount} nummer")
                 }
                 items(selected.years, key = { "${it.publicationId}-${it.year}" }) { year ->
-                    YearCard(year, onClick = { onOpenYear(year.publicationId, year.year) })
+                    YearCard(
+                        year = year,
+                        readCount = state.readCounts[year.publicationId to year.year] ?: 0,
+                        onClick = { onOpenYear(year.publicationId, year.year) },
+                    )
                 }
 
                 issueRowSection("Senast lästa", state.recentlyRead, imageLoader, onOpenIssue)
@@ -252,8 +271,9 @@ private fun SectionTitle(title: String, detail: String? = null) {
 }
 
 @Composable
-private fun YearCard(year: YearCount, onClick: () -> Unit) {
-    val description = "${year.publicationTitle} ${year.year}, ${year.issueCount} nummer"
+private fun YearCard(year: YearCount, readCount: Int, onClick: () -> Unit) {
+    val description = "${year.publicationTitle} ${year.year}, ${year.issueCount} nummer" +
+        if (readCount > 0) ", $readCount lästa" else ""
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -272,18 +292,25 @@ private fun YearCard(year: YearCount, onClick: () -> Unit) {
             )
             Spacer(Modifier.height(4.dp))
             Text("${year.issueCount} nummer", style = MonoStyles.DataSmall, color = DmzColors.Label)
+            Spacer(Modifier.height(8.dp))
+            // Andelen lästa nummer i årgången.
+            ProgressLine(if (year.issueCount > 0) readCount.toFloat() / year.issueCount else 0f)
         }
     }
 }
 
-/** Stort kort överst i biblioteket. Visas först när det finns en läsposition (FAS 4). */
+/** Stort kort överst i biblioteket. Öppnar läsaren direkt på läspositionen. */
 @Composable
 private fun ContinueReadingCard(
     item: ContinueReading,
     imageLoader: ImageLoader,
-    onOpenIssue: (String) -> Unit,
+    onContinue: (String) -> Unit,
 ) {
-    Panel(modifier = Modifier.clickable(role = Role.Button) { onOpenIssue(item.issue.issueId) }) {
+    Panel(
+        modifier = Modifier
+            .testTag("continue-reading")
+            .clickable(role = Role.Button, onClickLabel = "Fortsätt läsa") { onContinue(item.issue.issueId) },
+    ) {
         MonoLabel("Fortsätt läsa")
         Spacer(Modifier.height(10.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -299,8 +326,14 @@ private fun ContinueReadingCard(
                 Text(
                     text = item.pageCount?.let { "Sida ${item.page} av $it" } ?: "Sida ${item.page}",
                     style = MonoStyles.Data,
-                    color = DmzColors.Accent,
+                    color = DmzColors.TextPrimary,
                 )
+                item.fraction?.let {
+                    Spacer(Modifier.height(8.dp))
+                    ProgressLine(it)
+                }
+                Spacer(Modifier.height(10.dp))
+                Text("Fortsätt →", style = MaterialTheme.typography.titleMedium, color = DmzColors.Accent)
             }
         }
     }

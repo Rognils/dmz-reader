@@ -122,11 +122,22 @@ class SpreadsTest {
         assertEquals(listOf(7, 8), spreadsFor(28, 1)[shifted].pages)
     }
 
+    /**
+     * lastPage är läsarens ankarsida. I ett uppslag är det sidan användaren kom
+     * dit med, eller uppslagets vänstra sida efter ett sidbyte.
+     */
     @Test
-    fun `progress in percent`() {
-        assertEquals(4, progressPercent(1, 28))
-        assertEquals(50, progressPercent(14, 28))
-        assertEquals(100, progressPercent(28, 28))
-        assertEquals(0, progressPercent(1, 0))
+    fun `the anchor page in a spread is the page that is saved`() {
+        val pageCount = 28
+        // Stående sida 7 → uppslag 6–7: ankaret är fortfarande 7.
+        var position = ReaderPosition(7)
+        val spread = position.screenIndex(landscape = true, pageCount = pageCount, offset = 0)
+        position = position.movedTo(spread, landscape = true, pageCount = pageCount, offset = 0)
+        assertEquals(7, position.page)
+        // Nästa uppslag, 8–9: ankaret blir vänstersidan.
+        position = position.movedTo(spread + 1, landscape = true, pageCount = pageCount, offset = 0)
+        assertEquals(8, position.page)
+        // Tillbaka till stående: sidan som öppnas är ankaret.
+        assertEquals(7, position.screenIndex(landscape = false, pageCount = pageCount, offset = 0))
     }
 }
