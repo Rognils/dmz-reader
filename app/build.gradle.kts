@@ -14,8 +14,9 @@ android {
         applicationId = "se.c64.dmzreader"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
-        versionName = "0.1.0"
+        // Följer taggarna (planens G4): 0.6.1 ger 601, 0.7.0 ger 700, 1.0.0 ger 10000.
+        versionCode = 601
+        versionName = "0.6.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -38,6 +39,8 @@ android {
 
     buildFeatures {
         compose = true
+        // BuildConfig.VERSION_NAME skrivs in i säkerhetskopior.
+        buildConfig = true
     }
 }
 
