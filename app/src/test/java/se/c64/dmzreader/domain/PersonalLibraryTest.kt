@@ -70,8 +70,19 @@ class PersonalLibraryTest {
 
         val library = personalLibrary(issues, allStates, bookmarks)
 
-        // Favoriten finns kvar, men bland de saknade. Ett nummer som inte är favorit visas inte.
+        // Favoriten finns kvar, men bland de saknade, med sin läsdata.
         assertEquals(listOf(ghost), library.missingFavorites)
+        assertEquals(listOf(MissingIssue(ghost, isFavorite = true, lastPage = 4, pagesRead = 0)), library.missingIssues)
+        assertEquals("Favorit · läsdata sparad: sida 4", library.missingIssues.single().description)
+        // Ett saknat nummer utan vare sig favoritmarkering eller läsdata visas inte.
+        assertTrue(library.missingIssues.none { it.issueId == "datormagazin-1998-01" })
+        // Läsdata utan favoritmarkering visas också.
+        val readOnly = personalLibrary(
+            issues, states + IssueUserState(issueId = "datormagazin-1997-03", lastPage = 12, seenPages = SeenPages.of(10, 11, 12).encode(), updatedAt = 1),
+            emptyList(),
+        ).missingIssues.single()
+        assertEquals("Läsdata sparad: sida 12, 3 lästa sidor", readOnly.description)
+        assertFalse(readOnly.isFavorite)
         assertEquals(listOf("datormagazin-1989-06", "datormagazin-1990-01"), library.favorites.map { it.issue.issueId })
         // Bokmärkena finns kvar, i en grupp utan nummer, sist i listan trots att de är nyast.
         val group = library.bookmarkGroups.last()

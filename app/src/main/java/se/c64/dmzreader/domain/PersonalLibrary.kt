@@ -38,14 +38,40 @@ data class BookmarkGroup(
     val missingFromInventory: Boolean get() = issue == null
 }
 
+/**
+ * Ett nummer som saknas i arkivindexet men har favoritmarkering eller läsdata
+ * (planens D6). Datan finns kvar och kopplas ihop med numret om det kommer tillbaka.
+ */
+data class MissingIssue(
+    val issueId: String,
+    val isFavorite: Boolean,
+    val lastPage: Int?,
+    val pagesRead: Int,
+) {
+    /** "Favorit · läsdata sparad: sida 3, 3 lästa sidor". */
+    val description: String
+        get() = listOfNotNull(
+            "Favorit".takeIf { isFavorite },
+            when {
+                lastPage != null && pagesRead > 0 -> "läsdata sparad: sida $lastPage, $pagesRead lästa sidor"
+                lastPage != null -> "läsdata sparad: sida $lastPage"
+                pagesRead > 0 -> "läsdata sparad: $pagesRead lästa sidor"
+                else -> null
+            },
+        ).joinToString(" · ").replaceFirstChar { it.uppercase() }
+}
+
 data class PersonalLibrary(
     /** Favoritnummer som finns i arkivindexet, i tidningens ordning. */
     val favorites: List<IssueWithState> = emptyList(),
-    /** issueId för favoriter som saknas i arkivindexet. */
-    val missingFavorites: List<String> = emptyList(),
+    /** Nummer med favoritmarkering eller läsdata som saknas i arkivindexet. */
+    val missingIssues: List<MissingIssue> = emptyList(),
     val bookmarkGroups: List<BookmarkGroup> = emptyList(),
 ) {
-    val isEmpty: Boolean get() = favorites.isEmpty() && missingFavorites.isEmpty() && bookmarkGroups.isEmpty()
+    /** issueId för favoriter som saknas i arkivindexet. */
+    val missingFavorites: List<String> get() = missingIssues.filter { it.isFavorite }.map { it.issueId }
+
+    val isEmpty: Boolean get() = favorites.isEmpty() && missingIssues.isEmpty() && bookmarkGroups.isEmpty()
 }
 
 /** Bokmärken i visningsordning: nyast först. */
@@ -73,7 +99,10 @@ fun personalLibrary(
     }
     return PersonalLibrary(
         favorites = issues.filter { it.state?.isFavorite == true },
-        missingFavorites = userStates.filter { it.isFavorite && it.issueId !in byId }.map { it.issueId }.sorted(),
+        missingIssues = userStates
+            .filter { it.issueId !in byId && (it.isFavorite || it.lastPage != null || it.seenPages != null) }
+            .map { MissingIssue(it.issueId, it.isFavorite, it.lastPage, SeenPages.decode(it.seenPages).count) }
+            .sortedBy { it.issueId },
         // Nummer som finns först, det med nyast bokmärke överst. Saknade nummer sist.
         bookmarkGroups = groups.sortedWith(
             compareBy<BookmarkGroup> { it.missingFromInventory }
