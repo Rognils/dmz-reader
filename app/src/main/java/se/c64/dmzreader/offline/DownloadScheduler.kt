@@ -11,6 +11,9 @@ import kotlinx.coroutines.launch
 import se.c64.dmzreader.data.offline.OfflineRepository
 import se.c64.dmzreader.data.settings.DownloadPreferences
 
+/** Loggtaggen för nedladdningar. */
+const val LOG_TAG = "DmzOffline"
+
 /** Ser till att nedladdningskön betas av. */
 interface DownloadScheduler {
     /** Sant om nedladdningar fortsätter när appen har lämnats. */
@@ -67,7 +70,6 @@ class UidtDownloadScheduler(
 
     companion object {
         const val JOB_ID = 5001
-        const val LOG_TAG = "DmzOffline"
     }
 }
 

@@ -2,6 +2,7 @@ package se.c64.dmzreader
 
 import android.content.Context
 import android.os.Build
+import android.system.Os
 import android.util.Log
 import coil3.ImageLoader
 import kotlinx.coroutines.CoroutineScope
@@ -71,8 +72,22 @@ class AppContainer(private val context: Context) {
             files = files,
             cache = pdfCache,
             downloader = PdfDownloader(pdfHttpClient, files),
+            onMoved = ::leaveCacheGroup,
             log = { Log.i("DmzOffline", it) },
         )
+    }
+
+    /**
+     * Filer i cacheDir tillhör en särskild grupp, som systemet använder för att
+     * räkna appens cache. En fil som flyttas därifrån behåller gruppen och skulle
+     * fortsätta räknas som cache. Den får därför appens vanliga grupp.
+     */
+    private fun leaveCacheGroup(file: File) {
+        try {
+            Os.chown(file.path, -1, Os.getgid())
+        } catch (e: Exception) {
+            Log.w("DmzOffline", "${file.name}: gruppen kunde inte ändras", e)
+        }
     }
 
     /** UIDT-jobb på Android 14 och senare. Äldre versioner laddar bara ned medan appen är öppen. */
@@ -91,7 +106,14 @@ class AppContainer(private val context: Context) {
 
     /** Fortsätter med kön om något väntar. Anropas när appen syns, eftersom ett UIDT-jobb bara får startas då. */
     fun resumeDownloads() {
-        scope.launch { if (offlineRepository.hasQueued()) downloadScheduler.start() }
+        scope.launch {
+            // Pågår ingen nedladdning kan jobbet ligga och vänta, till exempel efter
+            // att nätet försvunnit: systemet väntar då allt längre mellan försöken.
+            // När användaren öppnar appen startas jobbet om, så att kön börjar direkt.
+            if (offlineRepository.hasQueued()) {
+                downloadScheduler.start(restart = offlineRepository.active.value == null)
+            }
+        }
     }
 
     /** Miniatyrer av PDF-sidor för läsarens miniatyrremsa. */

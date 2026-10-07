@@ -71,6 +71,8 @@ class OfflineRepository(
     private val downloader: PdfDownloader,
     private val now: () -> Long = System::currentTimeMillis,
     private val move: (source: File, target: File, part: File) -> Boolean = { s, t, p -> movePdf(s, t, p) },
+    /** Anropas när en fil har flyttats in från läs-cachen. */
+    private val onMoved: (File) -> Unit = {},
     private val log: (String) -> Unit = {},
 ) {
     private val runLock = Mutex()
@@ -167,6 +169,7 @@ class OfflineRepository(
             val size = cached.length()
             if (move(cached, files.file(issueId), files.partFile(issueId))) {
                 files.removePart(issueId)
+                onMoved(files.file(issueId))
                 localState.update(issueId) { it.downloaded(files.file(issueId), size, now()) }
                 log("$issueId: flyttad från läs-cachen, $size byte, ingen nätverkstrafik")
                 return@withContext DownloadRequest.MOVED_FROM_CACHE
@@ -299,7 +302,10 @@ class OfflineRepository(
                     activeJob = null
                 }
 
-                if (result == null || cancelledByUser.remove(issueId)) {
+                // Markeringen tas alltid bort här. Ligger den kvar skulle nästa
+                // nedladdning av samma nummer räknas som avbruten när den blir klar.
+                val cancelled = cancelledByUser.remove(issueId)
+                if (result == null || cancelled) {
                     files.remove(issueId)
                     localState.update(issueId) { it.cleared() }
                     log("$issueId: nedladdningen avbröts av användaren")

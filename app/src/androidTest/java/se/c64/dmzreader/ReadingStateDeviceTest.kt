@@ -92,7 +92,7 @@ class ReadingStateDeviceTest {
     }
 
     private fun requireCachedPdf() {
-        assumeTrue("1986 nr 1 finns inte i PDF-cachen", File(context.cacheDir, "pdf/$issueId.pdf").isFile)
+        assumeTrue("1986 nr 1 finns inte på telefonen", hasLocalPdf(context, issueId))
     }
 
     /**
@@ -203,7 +203,7 @@ class ReadingStateDeviceTest {
     @Test
     fun verifyPrerender199514() {
         assumeTrue(arguments.getString("dmzVerify") == "true")
-        assumeTrue(File(context.cacheDir, "pdf/datormagazin-1995-14.pdf").isFile)
+        assumeTrue(hasLocalPdf(context, "datormagazin-1995-14"))
         resetReadingState(context, "datormagazin-1995-14")
         openIssueView("Datormagazin", 1995, 14, "Nr 14")
         rule.onNodeWithText("Läs").performClick()

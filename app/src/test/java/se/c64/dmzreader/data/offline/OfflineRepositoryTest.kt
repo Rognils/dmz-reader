@@ -401,6 +401,13 @@ class OfflineRepositoryTest {
         assertFalse(files.file(ids[0]).exists())
         // Nästa nummer i kön hämtades ändå.
         assertEquals(DownloadState.DOWNLOADED, downloadState(ids[1]))
+
+        // Avbrottet gäller bara den gången: samma nummer kan laddas ned igen.
+        responses.remove(ids[0])
+        assertEquals(DownloadRequest.QUEUED, repository.requestDownload(ids[0]))
+        assertEquals(QueueOutcome.EMPTY, repository.runQueue())
+        assertEquals(DownloadState.DOWNLOADED, downloadState(ids[0]))
+        assertArrayEquals(content(ids[0]), files.file(ids[0]).readBytes())
     }
 
     @Test

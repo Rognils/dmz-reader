@@ -1,6 +1,5 @@
 package se.c64.dmzreader.ui.issue
 
-import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -364,7 +363,7 @@ private fun DownloadSection(
     fun startDownload() {
         scope.launch {
             val needsPermission = Build.VERSION.SDK_INT >= 33 &&
-                context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+                context.checkSelfPermission(POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
             if (needsPermission && shouldAskAboutNotifications()) explainNotifications = true else onDownload()
         }
     }
@@ -472,7 +471,7 @@ private fun DownloadSection(
                 TextButton(onClick = {
                     explainNotifications = false
                     onNotificationQuestionShown()
-                    permission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    permission.launch(POST_NOTIFICATIONS)
                 }) { Text("Fortsätt") }
             },
             dismissButton = {
@@ -500,3 +499,6 @@ private fun DownloadSection(
         )
     }
 }
+
+// Behörigheten finns från Android 13. Frågan ställs bara där.
+private const val POST_NOTIFICATIONS = "android.permission.POST_NOTIFICATIONS"

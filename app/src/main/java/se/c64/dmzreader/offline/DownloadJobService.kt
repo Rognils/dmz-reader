@@ -10,7 +10,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.annotation.RequiresApi
+import android.os.Build
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,13 +27,15 @@ import se.c64.dmzreader.domain.downloadProgressText
 /**
  * Det användarinitierade dataöverföringsjobbet som betar av nedladdningskön,
  * en fil i taget (planens FAS 5).
+ *
+ * Tjänsten schemaläggs bara på Android 14 och senare (UidtDownloadScheduler).
  */
-@RequiresApi(34)
 class DownloadJobService : JobService() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var running: Job? = null
 
     override fun onStartJob(params: JobParameters): Boolean {
+        if (Build.VERSION.SDK_INT < 34) return false
         val offline = (application as DmzReaderApp).container.offlineRepository
         createDownloadChannel(this)
         // Ett UIDT-jobb måste visa en notis så fort det startar.
@@ -74,11 +76,16 @@ class DownloadJobService : JobService() {
     }
 
     override fun onStopJob(params: JobParameters): Boolean {
+        if (Build.VERSION.SDK_INT < 34) return false
         Log.i(LOG_TAG, "UIDT-jobbet stoppas av systemet, skäl=${params.stopReason}")
         running?.cancel()
         // Det som återstår står kvar i kön. Jobbet körs igen när villkoren är
         // uppfyllda, utom när användaren själv har stoppat det.
         return params.stopReason != JobParameters.STOP_REASON_USER
+    }
+
+    override fun onNetworkChanged(params: JobParameters) {
+        // Nedladdningen märker själv om anslutningen bryts, och fortsätter då på sin .part-fil.
     }
 
     override fun onDestroy() {
@@ -89,7 +96,6 @@ class DownloadJobService : JobService() {
     companion object {
         const val NOTIFICATION_ID = 5001
         private const val NOTIFICATION_INTERVAL_MILLIS = 700L
-        private const val LOG_TAG = UidtDownloadScheduler.LOG_TAG
     }
 }
 
@@ -146,7 +152,7 @@ class DownloadCancelReceiver : BroadcastReceiver() {
         container.applicationScope.launch {
             try {
                 val issueId = intent.getStringExtra(EXTRA_ISSUE_ID) ?: container.offlineRepository.active.value?.issueId
-                Log.i(UidtDownloadScheduler.LOG_TAG, "Avbryt från notisen: $issueId")
+                Log.i(LOG_TAG, "Avbryt från notisen: $issueId")
                 if (issueId != null) container.offlineRepository.cancel(issueId)
             } finally {
                 pending.finish()
