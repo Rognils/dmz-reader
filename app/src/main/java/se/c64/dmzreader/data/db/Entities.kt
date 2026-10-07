@@ -3,6 +3,7 @@ package se.c64.dmzreader.data.db
 import androidx.room3.Entity
 import androidx.room3.Index
 import androidx.room3.PrimaryKey
+import java.util.UUID
 
 /**
  * Katalogdata (planens C2). Speglar inventory utom sourceNames och ersätts helt
@@ -80,9 +81,14 @@ data class IssueUserState(
 )
 
 /** Sparad sida (planens C5). pageNumber är PDF-sidindex med start på 1. */
-@Entity(tableName = "Bookmark", indices = [Index("issueId")])
+@Entity(tableName = "Bookmark", indices = [Index("issueId"), Index(value = ["bookmarkId"], unique = true)])
 data class Bookmark(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    /**
+     * Bokmärkets identitet över telefoner och säkerhetskopior: ett UUID som skapas
+     * en gång och aldrig ändras (ADR 0012). Radens [id] gäller bara i den här databasen.
+     */
+    val bookmarkId: String = newBookmarkId(),
     val issueId: String,
     val pageNumber: Int,
     val title: String? = null,
@@ -94,7 +100,16 @@ data class Bookmark(
     val pdfSize: Long? = null,
     val pdfEtag: String? = null,
     val pdfLastModified: String? = null,
-)
+    /**
+     * När bokmärket togs bort, eller null. Ett borttaget bokmärke visas aldrig,
+     * men raden finns kvar så att en äldre säkerhetskopia inte kan återuppliva det.
+     */
+    val deletedAt: Long? = null,
+) {
+    val isDeleted: Boolean get() = deletedAt != null
+}
+
+fun newBookmarkId(): String = UUID.randomUUID().toString()
 
 /** En lässession (planens C6). */
 @Entity(tableName = "ReadingSession", indices = [Index("issueId")])

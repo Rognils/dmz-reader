@@ -149,7 +149,7 @@ class AppContainer(private val context: Context) {
             database.bookmarkDao(),
             database.readingSessionDao(),
             database.backupDao(),
-            appVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "okänd",
+            appVersion = BuildConfig.VERSION_NAME,
         )
     }
     val backupPreferences: BackupPreferences by lazy { DataStoreBackupPreferences(context) }

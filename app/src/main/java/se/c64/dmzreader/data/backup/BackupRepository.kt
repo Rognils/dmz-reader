@@ -54,6 +54,7 @@ class BackupRepository(
             userStatesToInsert = plan.userStatesToInsert,
             userStatesToUpdate = plan.userStatesToUpdate,
             bookmarksToInsert = plan.bookmarksToInsert,
+            bookmarksToUpdate = plan.bookmarksToUpdate,
             sessionsToInsert = plan.sessionsToInsert,
             verify = {
                 afterWrite()

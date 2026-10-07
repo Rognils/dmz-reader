@@ -52,6 +52,12 @@ class BackupMergeTest {
 
     private val empty = UserData(emptyList(), emptyList(), emptyList())
 
+    /** Samma fil som den hade sett ut i format 1 (FAS 6): bokmärkena saknar bookmarkId och deletedAt. */
+    private fun BackupFile.asFormat1() = copy(
+        backupFormat = 1,
+        bookmarks = bookmarks.filter { it.deletedAt == null }.map { it.copy(bookmarkId = null, deletedAt = null) },
+    )
+
     // --- IssueUserState ---
 
     @Test
@@ -165,7 +171,7 @@ class BackupMergeTest {
     }
 
     @Test
-    fun `duplicate bookmarks are skipped`() {
+    fun `format 1 - duplicate bookmarks are skipped by issue, page and title`() {
         val current = UserData(emptyList(), listOf(bookmark(14, "Annons"), bookmark(20, null)), emptyList())
         val plan = planImport(
             current,
@@ -178,7 +184,7 @@ class BackupMergeTest {
                     bookmark(14, "Annons", issueId = "datormagazin-1989-07"), // annat nummer: nytt
                     bookmark(14, "Test"), // dubblett inom filen
                 ),
-            ),
+            ).asFormat1(),
         )
         assertEquals(
             listOf("$id/14/Test", "$id/20/Sida 20", "datormagazin-1989-07/14/Annons"),
@@ -186,9 +192,131 @@ class BackupMergeTest {
         )
         assertEquals(6, plan.summary.bookmarks)
         assertEquals(3, plan.summary.newBookmarks)
-        // Nya bokmärken får sitt id av databasen.
+        // Nya bokmärken får sitt rad-id av databasen, och var sitt nya UUID.
         assertTrue(plan.bookmarksToInsert.all { it.id == 0L })
+        assertEquals(3, plan.bookmarksToInsert.map { it.bookmarkId }.toSet().size)
+        assertTrue(plan.bookmarksToInsert.none { it.bookmarkId in current.bookmarks.map { b -> b.bookmarkId } })
+        assertTrue(plan.bookmarksToUpdate.isEmpty())
     }
+
+    // --- Format 2: bokmärken matchas på bookmarkId ---
+
+    @Test
+    fun `format 2 - a changed title does not give a duplicate when an old backup is imported`() {
+        val original = bookmark(7, "Sida 7", at = 100)
+        val old = backup(bookmarks = listOf(original))
+        // På telefonen har bokmärket sedan fått en ny titel och en anteckning.
+        val renamed = original.copy(id = 5, title = "Ledare", note = "läs igen", updatedAt = 900)
+        val current = UserData(emptyList(), listOf(renamed), emptyList())
+
+        val plan = planImport(current, old)
+
+        assertTrue(plan.bookmarksToInsert.isEmpty())
+        assertTrue(plan.bookmarksToUpdate.isEmpty())
+        assertTrue(plan.summary.nothingToDo)
+        assertEquals(listOf(renamed), current.after(plan).bookmarks)
+    }
+
+    @Test
+    fun `format 2 - the newest title and note win in both directions`() {
+        val local = bookmark(7, "Gammal", note = "gammal anteckning", at = 100).copy(id = 5)
+        val newer = local.copy(id = 0, title = "Ny", note = null, updatedAt = 900)
+
+        val plan = planImport(UserData(emptyList(), listOf(local), emptyList()), backup(bookmarks = listOf(newer)))
+        val updated = plan.bookmarksToUpdate.single()
+        assertEquals("Ny", updated.title)
+        assertNull(updated.note)
+        assertEquals(900L, updated.updatedAt)
+        // Raden på telefonen behålls: samma rad-id och samma identitet.
+        assertEquals(5L, updated.id)
+        assertEquals(local.bookmarkId, updated.bookmarkId)
+        assertEquals(1, plan.summary.updatedBookmarks)
+        assertEquals(0, plan.summary.newBookmarks)
+        assertTrue(plan.bookmarksToInsert.isEmpty())
+
+        // Åt andra hållet: telefonen har den nyare versionen och ändras inte.
+        val reverse = planImport(UserData(emptyList(), listOf(newer.copy(id = 5)), emptyList()), backup(bookmarks = listOf(local)))
+        assertTrue(reverse.summary.nothingToDo)
+        // Lika tid: telefonens värden gäller.
+        val tie = mergeBookmark(local, local.copy(title = "Annan"))
+        assertEquals("Gammal", tie.title)
+    }
+
+    @Test
+    fun `format 2 - a deleted bookmark is never brought back by an old backup`() {
+        val original = bookmark(7, "Ledare", at = 100)
+        val oldBackup = backup(bookmarks = listOf(original))
+        // Bokmärket togs bort på telefonen efter att backupen gjordes.
+        val deleted = original.copy(id = 5, deletedAt = 500, updatedAt = 500)
+        val current = UserData(emptyList(), listOf(deleted), emptyList())
+
+        val plan = planImport(current, oldBackup)
+
+        assertTrue(plan.bookmarksToInsert.isEmpty())
+        assertTrue(plan.bookmarksToUpdate.isEmpty())
+        assertTrue(plan.summary.nothingToDo)
+        assertEquals(500L, current.after(plan).bookmarks.single().deletedAt)
+
+        // Även om backupens rad är nyare än borttagningen förblir bokmärket borttaget.
+        val newerButAlive = backup(bookmarks = listOf(original.copy(title = "Ny titel", updatedAt = 9_000)))
+        val second = planImport(current, newerButAlive)
+        val merged = second.bookmarksToUpdate.single()
+        assertEquals(500L, merged.deletedAt)
+        assertEquals("Ny titel", merged.title)
+        assertEquals(0, second.summary.newBookmarks)
+        assertEquals(0, second.summary.updatedBookmarks)
+        assertTrue(current.after(second).bookmarks.all { it.isDeleted })
+    }
+
+    @Test
+    fun `format 2 - a deletion in the backup removes the bookmark on the phone`() {
+        val local = bookmark(7, "Ledare", at = 100).copy(id = 5)
+        val deletedElsewhere = local.copy(id = 0, deletedAt = 700, updatedAt = 700)
+        val plan = planImport(UserData(emptyList(), listOf(local), emptyList()), backup(bookmarks = listOf(deletedElsewhere)))
+        assertEquals(700L, plan.bookmarksToUpdate.single().deletedAt)
+        assertEquals(1, plan.summary.updatedBookmarks)
+        // Filens borttagna bokmärken räknas inte som bokmärken i sammanfattningen.
+        assertEquals(0, plan.summary.bookmarks)
+
+        // Ett borttaget bokmärke som telefonen aldrig har haft följer med som borttaget, utan att synas.
+        val unknown = planImport(empty, backup(bookmarks = listOf(deletedElsewhere)))
+        assertTrue(unknown.bookmarksToInsert.single().isDeleted)
+        assertEquals(0, unknown.summary.newBookmarks)
+        assertEquals(1, unknown.summary.hiddenChanges)
+        assertFalse(unknown.summary.nothingToDo)
+    }
+
+    @Test
+    fun `format 2 - the duplicate rule for issue, page and title is not used`() {
+        // Två olika bokmärken på samma sida med samma titel, skapade på två telefoner.
+        val onPhone = bookmark(7, "Ledare").copy(id = 5)
+        val fromOtherPhone = bookmark(7, "Ledare")
+        val plan = planImport(UserData(emptyList(), listOf(onPhone), emptyList()), backup(bookmarks = listOf(fromOtherPhone)))
+        assertEquals(listOf(fromOtherPhone.bookmarkId), plan.bookmarksToInsert.map { it.bookmarkId })
+        assertEquals(1, plan.summary.newBookmarks)
+    }
+
+    @Test
+    fun `format 1 - still imports, with new uuids, and never revives a deleted bookmark`() {
+        val file = backup(bookmarks = listOf(bookmark(7, "Ledare"), bookmark(9, "Test"))).asFormat1()
+        assertEquals(1, parseBackup(encodeBackup(file)).backupFormat)
+        var counter = 0
+        val plan = planImport(empty, file) { "ny-${counter++}" }
+        assertEquals(listOf("ny-0", "ny-1"), plan.bookmarksToInsert.map { it.bookmarkId })
+        assertEquals(listOf("Ledare", "Test"), plan.bookmarksToInsert.map { it.title })
+        assertTrue(plan.bookmarksToInsert.none { it.isDeleted })
+
+        // Samma fil igen: dubblettregeln för format 1 hoppar över båda.
+        val after = empty.after(plan)
+        assertTrue(planImport(after, file).summary.nothingToDo)
+
+        // Ett bokmärke som har tagits bort på telefonen återuppstår inte ur format 1 heller.
+        val deleted = after.copy(bookmarks = after.bookmarks.map { if (it.pageNumber == 7) it.copy(deletedAt = 500) else it })
+        val again = planImport(deleted, file)
+        assertTrue(again.summary.nothingToDo)
+        assertEquals(1, deleted.after(again).bookmarks.count { it.isDeleted })
+    }
+
 
     @Test
     fun `duplicate sessions are skipped`() {
@@ -223,6 +351,7 @@ class BackupMergeTest {
         assertTrue(second.userStatesToUpdate.isEmpty())
         assertTrue(second.bookmarksToInsert.isEmpty())
         assertTrue(second.sessionsToInsert.isEmpty())
+        assertTrue(second.bookmarksToUpdate.isEmpty())
         assertEquals(afterFirst, afterFirst.after(second))
         assertEquals(3, afterFirst.bookmarks.size)
         assertEquals(3, afterFirst.sessions.size)
@@ -269,7 +398,9 @@ class BackupMergeTest {
             sessions = listOf(session(1_000)),
         )
         val text = encodeBackup(file)
-        assertTrue(text.contains("\"backupFormat\": 1"))
+        assertTrue(text.contains("\"backupFormat\": 2"))
+        assertTrue(text.contains("\"bookmarkId\": \"${file.bookmarks.single().bookmarkId}\""))
+        assertTrue(text.contains("\"deletedAt\": null"))
         assertTrue(text.contains("\"seenPages\": \"AwAAAQ==\""))
         assertTrue(text.contains("\"readStatusOverride\": \"UNREAD\""))
         assertEquals(file, parseBackup(text))
@@ -287,17 +418,23 @@ class BackupMergeTest {
 
     @Test
     fun `the backup format is validated`() {
-        val valid = encodeBackup(backup(states = listOf(state(1, 1))))
-        assertEquals(1, parseBackup(valid).backupFormat)
+        val valid = encodeBackup(backup(states = listOf(state(1, 1)), bookmarks = listOf(bookmark(3))))
+        assertEquals(2, parseBackup(valid).backupFormat)
+        // Format 1 går fortfarande att läsa.
+        assertEquals(1, parseBackup(encodeBackup(backup(states = listOf(state(1, 1)), bookmarks = listOf(bookmark(3))).asFormat1())).backupFormat)
 
-        assertTrue(rejected(valid.replace("\"backupFormat\": 1", "\"backupFormat\": 2")).contains("format 2"))
-        assertTrue(rejected(valid.replace("\"backupFormat\": 1", "\"backupFormat\": 0")).contains("format 0"))
-        assertTrue(rejected(valid.replace("\"backupFormat\": 1,", "")).contains("backupFormat saknas"))
-        assertTrue(rejected(valid.replace("\"backupFormat\": 1", "\"backupFormat\": \"ett\"")).contains("backupFormat saknas"))
+        assertTrue(rejected(valid.replace("\"backupFormat\": 2", "\"backupFormat\": 3")).contains("format 3"))
+        assertTrue(rejected(valid.replace("\"backupFormat\": 2", "\"backupFormat\": 0")).contains("format 0"))
+        assertTrue(rejected(valid.replace("\"backupFormat\": 2,", "")).contains("backupFormat saknas"))
+        assertTrue(rejected(valid.replace("\"backupFormat\": 2", "\"backupFormat\": \"ett\"")).contains("backupFormat saknas"))
         assertTrue(rejected("").contains("inte en säkerhetskopia"))
         assertTrue(rejected("hej").contains("inte en säkerhetskopia"))
         assertTrue(rejected("[1, 2]").contains("inte en säkerhetskopia"))
         assertTrue(rejected("{\"schemaVersion\": 1, \"issues\": []}").contains("backupFormat saknas"))
+        // I format 2 måste varje bokmärke ha sitt bookmarkId.
+        val withoutId = valid.replace(Regex("\"bookmarkId\": \"[^\"]+\","), "")
+        assertTrue(rejected(withoutId).contains("saknar bookmarkId"))
+        assertEquals(1, parseBackup(withoutId.replace("\"backupFormat\": 2", "\"backupFormat\": 1")).bookmarks.size)
     }
 
     @Test

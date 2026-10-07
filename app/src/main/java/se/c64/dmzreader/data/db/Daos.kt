@@ -137,22 +137,30 @@ interface BookmarkDao {
     @Update
     suspend fun update(bookmark: Bookmark): Int
 
-    @Query("DELETE FROM Bookmark WHERE id = :id")
-    suspend fun delete(id: Long): Int
+    /** Mjuk radering: raden finns kvar men visas aldrig (ADR 0012). */
+    @Query("UPDATE Bookmark SET deletedAt = :at, updatedAt = :at WHERE id = :id AND deletedAt IS NULL")
+    suspend fun markDeleted(id: Long, at: Long): Int
 
-    @Query("DELETE FROM Bookmark WHERE issueId = :issueId")
-    suspend fun deleteForIssue(issueId: String): Int
+    /** Ångrar en mjuk radering. */
+    @Query("UPDATE Bookmark SET deletedAt = NULL, updatedAt = :at WHERE id = :id AND deletedAt IS NOT NULL")
+    suspend fun restore(id: Long, at: Long): Int
+
+    /** Tar bort raden helt. Bara för tester och rensning; appen raderar mjukt. */
+    @Query("DELETE FROM Bookmark WHERE id = :id")
+    suspend fun purge(id: Long): Int
 
     @Query("SELECT * FROM Bookmark WHERE id = :id")
     suspend fun get(id: Long): Bookmark?
 
+    /** Alla rader, även borttagna bokmärken. För säkerhetskopior. */
     @Query("SELECT * FROM Bookmark ORDER BY id")
     suspend fun getAll(): List<Bookmark>
 
-    @Query("SELECT * FROM Bookmark WHERE issueId = :issueId AND pageNumber = :pageNumber ORDER BY id")
+    @Query("SELECT * FROM Bookmark WHERE issueId = :issueId AND pageNumber = :pageNumber AND deletedAt IS NULL ORDER BY id")
     suspend fun getForPage(issueId: String, pageNumber: Int): List<Bookmark>
 
-    @Query("SELECT * FROM Bookmark ORDER BY id")
+    /** Bokmärkena som visas: borttagna ingår aldrig. */
+    @Query("SELECT * FROM Bookmark WHERE deletedAt IS NULL ORDER BY id")
     fun observeAll(): Flow<List<Bookmark>>
 }
 
@@ -171,6 +179,9 @@ abstract class BackupDao {
     @Insert
     protected abstract suspend fun insertBookmarks(bookmarks: List<Bookmark>)
 
+    @Update
+    protected abstract suspend fun updateBookmarks(bookmarks: List<Bookmark>): Int
+
     @Insert
     protected abstract suspend fun insertSessions(sessions: List<ReadingSession>)
 
@@ -183,6 +194,7 @@ abstract class BackupDao {
         userStatesToInsert: List<IssueUserState>,
         userStatesToUpdate: List<IssueUserState>,
         bookmarksToInsert: List<Bookmark>,
+        bookmarksToUpdate: List<Bookmark>,
         sessionsToInsert: List<ReadingSession>,
         verify: suspend () -> Unit,
     ) {
@@ -192,6 +204,10 @@ abstract class BackupDao {
             "$updated av ${userStatesToUpdate.size} rader gick att uppdatera"
         }
         insertBookmarks(bookmarksToInsert)
+        val updatedBookmarks = updateBookmarks(bookmarksToUpdate)
+        check(updatedBookmarks == bookmarksToUpdate.size) {
+            "$updatedBookmarks av ${bookmarksToUpdate.size} bokmärken gick att uppdatera"
+        }
         insertSessions(sessionsToInsert)
         verify()
     }

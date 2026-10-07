@@ -26,7 +26,7 @@ class BookmarkRepositoryTest {
         db.issueDao().replaceAll(
             listOf(issueEntity(issueId).copy(ocrPdfSize = 25_672_804, ocrPdfEtag = "\"katalog\"", ocrPdfLastModified = "Sat, 09 Sep 2017")),
         )
-        repository = BookmarkRepository(db.bookmarkDao(), db.issueDao(), db.issueLocalStateDao()) { clock }
+        repository = BookmarkRepository(db.bookmarkDao(), db.issueDao(), db.issueLocalStateDao(), now = { clock })
     }
 
     @After
@@ -72,13 +72,37 @@ class BookmarkRepositoryTest {
         assertEquals(listOf(edited), removed)
         assertEquals(listOf(9), all().map { it.pageNumber })
 
-        // Ångra: samma id, titel, anteckning och tider som förut.
+        // Borttagningen är mjuk: raden finns kvar med deletedAt, men syns inte.
+        val hidden = db.bookmarkDao().get(added.id)!!
+        assertEquals(2_000L, hidden.deletedAt)
+        assertEquals(added.bookmarkId, hidden.bookmarkId)
+        assertNull(repository.get(added.id))
+        assertNull(repository.edit(added.id, "x", "y"))
+
+        // Ångra: samma rad och identitet, titel och anteckning som förut, och inte längre borttagen.
+        clock = 3_000
         repository.restore(removed)
-        assertEquals(edited, repository.get(added.id))
+        val restored = repository.get(added.id)!!
+        assertEquals(edited.copy(updatedAt = 3_000), restored)
+        assertNull(restored.deletedAt)
         assertEquals(2, all().size)
         // Att ångra två gånger ger ingen dubblett.
         repository.restore(removed)
         assertEquals(2, all().size)
+        assertEquals(2, db.bookmarkDao().getAll().size)
+    }
+
+    @Test
+    fun `a new bookmark on a page where one was deleted is a new bookmark`() = runBlocking {
+        val first = (repository.toggle(issueId, 7) as BookmarkToggle.Added).bookmark
+        repository.toggle(issueId, 7)
+        val second = (repository.toggle(issueId, 7) as BookmarkToggle.Added).bookmark
+        assertTrue(first.bookmarkId != second.bookmarkId)
+        assertEquals(listOf(second), all())
+        // Den borttagna raden ligger kvar.
+        assertEquals(2, db.bookmarkDao().getAll().size)
+        // Varje bokmärke har ett riktigt UUID.
+        assertEquals(java.util.UUID.fromString(second.bookmarkId).toString(), second.bookmarkId)
     }
 
     @Test
@@ -119,6 +143,7 @@ class BookmarkRepositoryTest {
         assertTrue(all().isEmpty())
         assertNull(repository.delete(added.id))
         repository.restore(listOf(added))
-        assertEquals(listOf(added), all())
+        assertEquals(listOf(added.bookmarkId), all().map { it.bookmarkId })
+        assertNull(all().single().deletedAt)
     }
 }

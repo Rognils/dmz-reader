@@ -130,8 +130,8 @@ fun importSummaryLines(summary: ImportSummary): List<String> = listOf(
         "Allt i filen finns redan på telefonen. Ingenting ändras."
     } else {
         "Importen lägger till ${summary.newIssues} nya nummer och uppdaterar ${summary.updatedIssues}, " +
-            "och lägger till ${summary.newBookmarks} bokmärken och ${summary.newSessions} sessioner. " +
-            "Ingenting tas bort."
+            "lägger till ${summary.newBookmarks} bokmärken och uppdaterar ${summary.updatedBookmarks}, " +
+            "och lägger till ${summary.newSessions} sessioner. Ingen läsdata tas bort."
     },
 )
 
@@ -169,7 +169,7 @@ class SettingsViewModel(
                 backupDialog.update {
                     it.copy(
                         message = "Säkerhetskopian är sparad: ${data.userStates.size} nummer med data, " +
-                            "${data.bookmarks.size} bokmärken och ${data.sessions.size} lässessioner.",
+                            "${data.bookmarks.count { !it.isDeleted }} bokmärken och ${data.sessions.size} lässessioner.",
                     )
                 }
             } catch (e: Exception) {
@@ -205,7 +205,8 @@ class SettingsViewModel(
                             "Allt i säkerhetskopian fanns redan. Ingenting ändrades."
                         } else {
                             "Importen är klar: ${summary.newIssues} nya nummer, ${summary.updatedIssues} uppdaterade, " +
-                                "${summary.newBookmarks} nya bokmärken och ${summary.newSessions} nya sessioner."
+                                "${summary.newBookmarks} nya bokmärken, ${summary.updatedBookmarks} uppdaterade " +
+                                "och ${summary.newSessions} nya sessioner."
                         },
                     )
                 }

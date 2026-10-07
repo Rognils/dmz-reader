@@ -19,7 +19,7 @@ class SettingsTextTest {
         val lines = importSummaryLines(
             ImportSummary(
                 favorites = 2, bookmarks = 4, sessions = 9, issuesWithReadingData = 3,
-                newIssues = 1, updatedIssues = 2, newBookmarks = 3, newSessions = 5,
+                newIssues = 1, updatedIssues = 2, newBookmarks = 3, updatedBookmarks = 4, newSessions = 5,
             ),
         )
         assertTrue("2 favoritnummer" in lines)
@@ -27,7 +27,8 @@ class SettingsTextTest {
         assertTrue("9 lässessioner" in lines)
         assertTrue("3 nummer med läsdata" in lines)
         assertEquals(
-            "Importen lägger till 1 nya nummer och uppdaterar 2, och lägger till 3 bokmärken och 5 sessioner. Ingenting tas bort.",
+            "Importen lägger till 1 nya nummer och uppdaterar 2, lägger till 3 bokmärken och uppdaterar 4, " +
+                "och lägger till 5 sessioner. Ingen läsdata tas bort.",
             lines.last(),
         )
     }

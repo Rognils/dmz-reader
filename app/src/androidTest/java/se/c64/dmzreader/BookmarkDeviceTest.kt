@@ -73,7 +73,8 @@ class BookmarkDeviceTest {
 
     @After
     fun removeTestBookmark() {
-        if (created) runBlocking { bookmarksOnPage().forEach { bookmarkDao.delete(it.id) } }
+        // Rensar hela raden, även om bokmärket har tagits bort mjukt.
+        if (created) runBlocking { bookmarkDao.getAll().filter { it.issueId == issueId && it.pageNumber == page }.forEach { bookmarkDao.purge(it.id) } }
     }
 
     @Test
@@ -145,7 +146,12 @@ class BookmarkDeviceTest {
         assertTrue(bookmarksOnPage().isEmpty())
         rule.onNodeWithText("Ångra").performClick()
         waitFor { bookmarksOnPage().isNotEmpty() }
-        assertEquals(before, bookmarksOnPage().single())
+        // Samma bokmärke som förut: samma identitet, titel och anteckning.
+        val restored = bookmarksOnPage().single()
+        assertEquals(before.bookmarkId, restored.bookmarkId)
+        assertEquals(before.id, restored.id)
+        assertEquals("Testbokmärke", restored.title)
+        assertEquals("Skapat av ett test", restored.note)
     }
 
     /**

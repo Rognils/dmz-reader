@@ -6,7 +6,10 @@ import androidx.room3.Room
 import androidx.room3.RoomDatabase
 import androidx.room3.AutoMigration
 import androidx.room3.ColumnTypeConverters
+import androidx.room3.migration.Migration
 import androidx.room3.useReaderConnection
+import androidx.sqlite.SQLiteConnection
+import androidx.sqlite.execSQL
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.coroutines.Dispatchers
 
@@ -22,12 +25,13 @@ import kotlinx.coroutines.Dispatchers
         Bookmark::class,
         ReadingSession::class,
     ],
-    version = 6,
+    version = 7,
     exportSchema = true,
     // Version 2 lägger till Issue.coverAsset. Version 3 lägger till ETag och
     // Last-Modified i IssueLocalState. Version 4 lägger till IssueUserState.seenPages.
     // Version 5 lägger till IssueLocalState.downloadQueuedAt. Version 6 lägger till
-    // PDF-versionen i Bookmark.
+    // PDF-versionen i Bookmark. Version 7 (MIGRATION_6_7) ger bokmärkena ett UUID och
+    // mjuk radering.
     // Migreringarna lägger bara till kolumner; befintlig användardata rörs inte.
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
@@ -49,8 +53,29 @@ abstract class DmzDatabase : RoomDatabase() {
     companion object {
         const val FILE_NAME = "dmz-reader.db"
 
+        /**
+         * Version 6 till 7: Bookmark får bookmarkId (UUID) och deletedAt. Befintliga
+         * bokmärken får var sitt slumpat UUID (version 4), genererat i SQL.
+         */
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override suspend fun migrate(connection: SQLiteConnection) {
+                connection.execSQL("ALTER TABLE Bookmark ADD COLUMN bookmarkId TEXT NOT NULL DEFAULT ''")
+                connection.execSQL("ALTER TABLE Bookmark ADD COLUMN deletedAt INTEGER")
+                connection.execSQL(
+                    "UPDATE Bookmark SET bookmarkId = lower(" +
+                        "hex(randomblob(4)) || '-' || hex(randomblob(2)) || '-4' || substr(hex(randomblob(2)), 2) || '-' || " +
+                        "substr('89ab', abs(random()) % 4 + 1, 1) || substr(hex(randomblob(2)), 2) || '-' || hex(randomblob(6)))",
+                )
+                connection.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_Bookmark_bookmarkId ON Bookmark (bookmarkId)")
+            }
+        }
+
+        /** Migreringar som inte kan göras automatiskt. Ska läggas till varje gång databasen byggs. */
+        val MIGRATIONS = arrayOf<Migration>(MIGRATION_6_7)
+
         fun create(context: Context): DmzDatabase =
             Room.databaseBuilder<DmzDatabase>(context.applicationContext, FILE_NAME)
+                .addMigrations(*MIGRATIONS)
                 .setDriver(BundledSQLiteDriver())
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()

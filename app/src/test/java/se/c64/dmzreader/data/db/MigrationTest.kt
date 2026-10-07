@@ -17,7 +17,8 @@ import java.io.File
 /**
  * Migreringen från databasversion 1 (FAS 1) via 2 (Issue.coverAsset), 3
  * (ETag och Last-Modified i IssueLocalState), 4 (IssueUserState.seenPages) och 5
- * (IssueLocalState.downloadQueuedAt) till 6 (PDF-versionen i Bookmark).
+ * (IssueLocalState.downloadQueuedAt), 6 (PDF-versionen i Bookmark) och
+ * till 7 (bookmarkId och deletedAt i Bookmark).
  * Den gamla versionen byggs upp ur det exporterade schemat, precis som den såg ut.
  */
 class MigrationTest {
@@ -75,6 +76,7 @@ class MigrationTest {
             createVersion(file, 1)
 
             val db = Room.databaseBuilder<DmzDatabase>(file.path)
+                .addMigrations(*DmzDatabase.MIGRATIONS)
                 .setDriver(BundledSQLiteDriver())
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()
@@ -111,6 +113,61 @@ class MigrationTest {
         }
     }
 
+    /**
+     * Version 6 (FAS 6) till 7: bokmärken får bookmarkId och deletedAt. Varje
+     * befintligt bokmärke får ett eget UUID, och inget av dem räknas som borttaget.
+     */
+    @Test
+    fun `migration from version 6 gives every bookmark its own uuid`() = runTest {
+        val file = File.createTempFile("dmz-migration", ".db").apply { delete() }
+        try {
+            createVersion(file, 6)
+            BundledSQLiteDriver().open(file.path).use { connection ->
+                for (page in 20..24) {
+                    connection.execSQL(
+                        "INSERT INTO Bookmark (issueId, pageNumber, title, note, createdAt, updatedAt, pdfSize) " +
+                            "VALUES ('datormagazin-1989-06', $page, 'Sida $page', 'anteckning', 1600, 1700, 25672804)",
+                    )
+                }
+            }
+            val db = Room.databaseBuilder<DmzDatabase>(file.path)
+                .addMigrations(*DmzDatabase.MIGRATIONS)
+                .setDriver(BundledSQLiteDriver())
+                .setQueryCoroutineContext(Dispatchers.IO)
+                .build()
+            try {
+                val bookmarks = db.bookmarkDao().getAll()
+                assertEquals(6, bookmarks.size)
+                // Allt som fanns är kvar.
+                assertEquals(listOf(14, 20, 21, 22, 23, 24), bookmarks.map { it.pageNumber })
+                assertEquals("Annons", bookmarks.first().title)
+                assertEquals("anteckning", bookmarks.last().note)
+                assertEquals(25_672_804L, bookmarks.last().pdfSize)
+                // Varje bokmärke har ett eget UUID i standardformen, och inget är borttaget.
+                val uuid = Regex("[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")
+                assertEquals(emptyList<String>(), bookmarks.map { it.bookmarkId }.filterNot(uuid::matches))
+                assertEquals(6, bookmarks.map { it.bookmarkId }.toSet().size)
+                assertEquals(6, db.bookmarkDao().getAll().count { it.deletedAt == null })
+                assertEquals(java.util.UUID.fromString(bookmarks.first().bookmarkId).toString(), bookmarks.first().bookmarkId)
+                // Användardata i övrigt är orörd.
+                assertEquals(12, db.issueUserStateDao().get("datormagazin-1989-06")!!.lastPage)
+                assertEquals(1, db.readingSessionDao().getAll().size)
+
+                // De nya kolumnerna fungerar: mjuk radering döljer bokmärket men behåller raden.
+                assertEquals(1, db.bookmarkDao().markDeleted(bookmarks.first().id, 9_000))
+                assertEquals(6, db.bookmarkDao().getAll().size)
+                assertEquals(9_000L, db.bookmarkDao().get(bookmarks.first().id)!!.deletedAt)
+                assertEquals(0, db.bookmarkDao().getForPage("datormagazin-1989-06", 14).size)
+            } finally {
+                db.close()
+            }
+        } finally {
+            file.delete()
+            File(file.path + "-wal").delete()
+            File(file.path + "-shm").delete()
+        }
+    }
+
     /** Version 5 (FAS 5) till 6: Bookmark får PDF-versionen. Befintliga bokmärken finns kvar. */
     @Test
     fun `migration from version 5 adds the pdf version to bookmarks and keeps existing data`() = runTest {
@@ -118,6 +175,7 @@ class MigrationTest {
         try {
             createVersion(file, 5)
             val db = Room.databaseBuilder<DmzDatabase>(file.path)
+                .addMigrations(*DmzDatabase.MIGRATIONS)
                 .setDriver(BundledSQLiteDriver())
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()
@@ -152,6 +210,7 @@ class MigrationTest {
         try {
             createVersion(file, 4)
             val db = Room.databaseBuilder<DmzDatabase>(file.path)
+                .addMigrations(*DmzDatabase.MIGRATIONS)
                 .setDriver(BundledSQLiteDriver())
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()
@@ -185,6 +244,7 @@ class MigrationTest {
             createVersion(file, 3)
 
             val db = Room.databaseBuilder<DmzDatabase>(file.path)
+                .addMigrations(*DmzDatabase.MIGRATIONS)
                 .setDriver(BundledSQLiteDriver())
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()

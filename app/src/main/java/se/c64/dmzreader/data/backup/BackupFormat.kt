@@ -10,13 +10,20 @@ import se.c64.dmzreader.data.db.Bookmark
 import se.c64.dmzreader.data.db.IssueUserState
 import se.c64.dmzreader.data.db.ReadStatusOverride
 import se.c64.dmzreader.data.db.ReadingSession
+import se.c64.dmzreader.data.db.newBookmarkId
 
 /**
  * Backupfilens format (planens E11, ADR 0012). Formatet är skilt från
  * databasens tabeller, så att databasen kan ändras utan att gamla backuper
  * slutar gå att läsa.
  */
-const val BACKUP_FORMAT = 1
+const val BACKUP_FORMAT = 2
+
+/**
+ * Format som går att läsa in. Format 1 (FAS 6) saknar bokmärkenas bookmarkId
+ * och deletedAt; övrigt är lika.
+ */
+val SUPPORTED_BACKUP_FORMATS = 1..2
 
 @Serializable
 data class BackupFile(
@@ -46,6 +53,8 @@ data class BackupUserState(
 
 @Serializable
 data class BackupBookmark(
+    /** Bokmärkets UUID. Finns från format 2; null i format 1. */
+    val bookmarkId: String? = null,
     val issueId: String,
     val pageNumber: Int,
     val title: String? = null,
@@ -56,6 +65,8 @@ data class BackupBookmark(
     val pdfSize: Long? = null,
     val pdfEtag: String? = null,
     val pdfLastModified: String? = null,
+    /** När bokmärket togs bort, eller null. Finns från format 2. */
+    val deletedAt: Long? = null,
 )
 
 @Serializable
@@ -98,9 +109,10 @@ fun parseBackup(text: String): BackupFile {
     } catch (e: Exception) {
         null
     } ?: throw BackupFormatException("Filen är inte en säkerhetskopia från DMZ Reader: backupFormat saknas.")
-    if (format != BACKUP_FORMAT) {
+    if (format !in SUPPORTED_BACKUP_FORMATS) {
         throw BackupFormatException(
-            "Säkerhetskopian har format $format. Den här versionen av appen kan bara läsa format $BACKUP_FORMAT.",
+            "Säkerhetskopian har format $format. Den här versionen av appen kan läsa format " +
+                "${SUPPORTED_BACKUP_FORMATS.first}–${SUPPORTED_BACKUP_FORMATS.last}.",
         )
     }
 
@@ -123,6 +135,11 @@ fun parseBackup(text: String): BackupFile {
     for (bookmark in backup.bookmarks) {
         require(bookmark.issueId.isNotBlank(), "ett bokmärke saknar issueId")
         require(bookmark.pageNumber >= 1, "ogiltig sida ${bookmark.pageNumber} i ett bokmärke för ${bookmark.issueId}")
+        // Från format 2 identifieras bokmärken av sitt UUID. Utan det går de inte att matcha.
+        require(
+            format < 2 || !bookmark.bookmarkId.isNullOrBlank(),
+            "ett bokmärke för ${bookmark.issueId} saknar bookmarkId",
+        )
     }
     for (session in backup.readingSessions) {
         require(session.issueId.isNotBlank(), "en session saknar issueId")
@@ -149,14 +166,21 @@ fun BackupUserState.toEntity() = IssueUserState(
 )
 
 fun Bookmark.toBackup() = BackupBookmark(
+    bookmarkId = bookmarkId,
     issueId = issueId, pageNumber = pageNumber, title = title, note = note, createdAt = createdAt,
     updatedAt = updatedAt, pdfSize = pdfSize, pdfEtag = pdfEtag, pdfLastModified = pdfLastModified,
+    deletedAt = deletedAt,
 )
 
-/** Radens id sätts av databasen. Backupens bokmärken har inget. */
-fun BackupBookmark.toEntity() = Bookmark(
+/**
+ * Radens id sätts av databasen. Ett bokmärke ur format 1 har inget UUID och får
+ * ett nytt från [newId].
+ */
+fun BackupBookmark.toEntity(newId: () -> String = ::newBookmarkId) = Bookmark(
+    bookmarkId = bookmarkId ?: newId(),
     issueId = issueId, pageNumber = pageNumber, title = title, note = note, createdAt = createdAt,
     updatedAt = updatedAt, pdfSize = pdfSize, pdfEtag = pdfEtag, pdfLastModified = pdfLastModified,
+    deletedAt = deletedAt,
 )
 
 fun ReadingSession.toBackup() = BackupSession(

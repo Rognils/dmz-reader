@@ -5,6 +5,7 @@ import se.c64.dmzreader.data.db.Bookmark
 import se.c64.dmzreader.data.db.BookmarkDao
 import se.c64.dmzreader.data.db.IssueDao
 import se.c64.dmzreader.data.db.IssueLocalStateDao
+import se.c64.dmzreader.data.db.newBookmarkId
 import se.c64.dmzreader.domain.defaultBookmarkTitle
 import se.c64.dmzreader.domain.normalizedBookmarkNote
 import se.c64.dmzreader.domain.normalizedBookmarkTitle
@@ -24,10 +25,12 @@ class BookmarkRepository(
     private val issueDao: IssueDao,
     private val localStateDao: IssueLocalStateDao,
     private val now: () -> Long = System::currentTimeMillis,
+    private val newId: () -> String = ::newBookmarkId,
 ) {
     fun observeAll(): Flow<List<Bookmark>> = bookmarkDao.observeAll()
 
-    suspend fun get(id: Long): Bookmark? = bookmarkDao.get(id)
+    /** Bokmärket, eller null om det inte finns eller är borttaget. */
+    suspend fun get(id: Long): Bookmark? = bookmarkDao.get(id)?.takeUnless { it.isDeleted }
 
     /**
      * Stjärnan i läsaren: har sidan inget bokmärke skapas ett med titeln "Sida X".
@@ -36,7 +39,8 @@ class BookmarkRepository(
     suspend fun toggle(issueId: String, pageNumber: Int): BookmarkToggle {
         val existing = bookmarkDao.getForPage(issueId, pageNumber)
         if (existing.isNotEmpty()) {
-            existing.forEach { bookmarkDao.delete(it.id) }
+            val timestamp = now()
+            existing.forEach { bookmarkDao.markDeleted(it.id, timestamp) }
             return BookmarkToggle.Removed(existing)
         }
         return BookmarkToggle.Added(add(issueId, pageNumber))
@@ -47,6 +51,7 @@ class BookmarkRepository(
         // PDF-versionen sparas, så att ett senare byte av filen i arkivet går att upptäcka (C7).
         val version = pdfVersionForNewBookmark(issueDao.get(issueId), localStateDao.get(issueId))
         val bookmark = Bookmark(
+            bookmarkId = newId(),
             issueId = issueId,
             pageNumber = pageNumber,
             title = defaultBookmarkTitle(pageNumber),
@@ -59,16 +64,18 @@ class BookmarkRepository(
         return bookmark.copy(id = bookmarkDao.insert(bookmark))
     }
 
-    /** Ångrar en borttagning: bokmärkena läggs tillbaka precis som de var. */
+    /**
+     * Ångrar en borttagning: raderingen nollställs, och bokmärkena visas igen med
+     * samma identitet, titel och anteckning som förut.
+     */
     suspend fun restore(bookmarks: List<Bookmark>) {
-        for (bookmark in bookmarks) {
-            if (bookmarkDao.get(bookmark.id) == null) bookmarkDao.insert(bookmark)
-        }
+        val timestamp = now()
+        bookmarks.forEach { bookmarkDao.restore(it.id, timestamp) }
     }
 
     /** Ändrar titel och anteckning. En tom titel blir "Sida X", en tom anteckning tas bort. */
     suspend fun edit(id: Long, title: String, note: String): Bookmark? {
-        val current = bookmarkDao.get(id) ?: return null
+        val current = bookmarkDao.get(id)?.takeUnless { it.isDeleted } ?: return null
         val changed = current.copy(
             title = normalizedBookmarkTitle(title, current.pageNumber),
             note = normalizedBookmarkNote(note),
@@ -77,10 +84,14 @@ class BookmarkRepository(
         return changed.copy(updatedAt = now()).also { bookmarkDao.update(it) }
     }
 
-    /** Tar bort ett bokmärke och ger tillbaka det, så att borttagningen kan ångras. */
+    /**
+     * Tar bort ett bokmärke och ger tillbaka det, så att borttagningen kan ångras.
+     * Raderingen är mjuk: raden finns kvar med deletedAt satt, så att en äldre
+     * säkerhetskopia inte kan återuppliva bokmärket.
+     */
     suspend fun delete(id: Long): Bookmark? {
-        val current = bookmarkDao.get(id) ?: return null
-        bookmarkDao.delete(id)
+        val current = bookmarkDao.get(id)?.takeUnless { it.isDeleted } ?: return null
+        bookmarkDao.markDeleted(id, now())
         return current
     }
 }

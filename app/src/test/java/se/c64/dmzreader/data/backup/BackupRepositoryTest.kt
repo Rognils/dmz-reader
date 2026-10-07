@@ -87,7 +87,7 @@ class BackupRepositoryTest {
         source.issueLocalStateDao().insert(IssueLocalState(issueId = a, observedPageCount = 48))
 
         val text = repository(source).export()
-        assertTrue(text.contains("\"backupFormat\": 1"))
+        assertTrue(text.contains("\"backupFormat\": 2"))
         assertTrue(text.contains("\"exportedAt\": \"2026-10-07T"))
         assertTrue(text.contains("\"appVersion\": \"0.1.0\""))
         assertTrue(!text.contains("observedPageCount") && !text.contains("publicationTitle"))
@@ -134,7 +134,9 @@ class BackupRepositoryTest {
         // Telefonen har redan egen data, delvis för samma nummer.
         target.issueUserStateDao().insert(state(a, 900, 30, 31, favorite = false, lastPage = 31))
         target.issueUserStateDao().insert(state("datormagazin-1990-01", 50, 4, lastPage = 4))
-        target.bookmarkDao().insert(bookmark(a, 7, "Ledare")) // dubblett av ett i backupen
+        // Samma bokmärke som i backupen (samma bookmarkId), med en nyare titel på telefonen.
+        val shared = source.bookmarkDao().getAll().first { it.pageNumber == 7 }
+        target.bookmarkDao().insert(shared.copy(id = 0, title = "Ledare, omdöpt", updatedAt = 5_000))
         target.bookmarkDao().insert(bookmark(a, 31, "Eget"))
         target.readingSessionDao().insert(session(a, 1_000)) // dubblett
         target.readingSessionDao().insert(session(a, 99_000))
@@ -156,7 +158,9 @@ class BackupRepositoryTest {
         assertEquals(150L, merged.completedAt)
         // Det som bara fanns på telefonen är orört.
         assertEquals(state("datormagazin-1990-01", 50, 4, lastPage = 4), target.issueUserStateDao().get("datormagazin-1990-01"))
-        assertEquals(listOf("Eget", "Ledare", "Saknat nummer", "Sida 25"), target.bookmarkDao().getAll().map { it.title!! }.sorted())
+        // Det delade bokmärket blev inte en dubblett, och den nyare titeln på telefonen gäller.
+        assertEquals(listOf("Eget", "Ledare, omdöpt", "Saknat nummer", "Sida 25"), target.bookmarkDao().getAll().map { it.title!! }.sorted())
+        assertEquals(0, summary.updatedBookmarks)
         assertEquals(listOf(1_000L, 5_000L, 99_000L), target.readingSessionDao().getAll().map { it.startedAt }.sorted())
     }
 
@@ -189,6 +193,51 @@ class BackupRepositoryTest {
         // Samma import går bra när felet är borta.
         repository(target).import(backup)
         assertEquals(4, target.bookmarkDao().getAll().size)
+    }
+
+    @Test
+    fun `a backup in format 1 is imported and a second import gives no duplicates`() = runBlocking {
+        fill(source)
+        val format1 = parseBackup(repository(source).export()).let { file ->
+            encodeBackup(file.copy(backupFormat = 1, bookmarks = file.bookmarks.map { it.copy(bookmarkId = null, deletedAt = null) }))
+        }
+        val backup = parseBackup(format1)
+        assertEquals(1, backup.backupFormat)
+
+        val first = repository(target).import(backup)
+        assertEquals(3, first.newBookmarks)
+        val imported = target.bookmarkDao().getAll()
+        assertEquals(listOf("Ledare", "Saknat nummer", "Sida 25"), imported.map { it.title!! }.sorted())
+        // Varje bokmärke fick ett eget nytt UUID.
+        assertEquals(3, imported.map { it.bookmarkId }.toSet().size)
+        assertTrue(imported.none { it.bookmarkId in source.bookmarkDao().getAll().map { b -> b.bookmarkId } })
+        assertEquals("rad 1\nrad 2", imported.first { it.title == "Ledare" }.note)
+
+        assertTrue(repository(target).import(backup).nothingToDo)
+        assertEquals(3, target.bookmarkDao().getAll().size)
+        // Nästa export är i format 2 och går runt utan förändring.
+        val exported = parseBackup(repository(target).export())
+        assertEquals(2, exported.backupFormat)
+        assertTrue(repository(target).import(exported).nothingToDo)
+    }
+
+    @Test
+    fun `a bookmark deleted on the phone stays deleted after importing an older backup`() = runBlocking {
+        fill(source)
+        val older = parseBackup(repository(source).export())
+        repository(target).import(older)
+        val ledare = target.bookmarkDao().getAll().first { it.title == "Ledare" }
+        assertEquals(1, target.bookmarkDao().markDeleted(ledare.id, 9_000))
+
+        assertTrue(repository(target).import(older).nothingToDo)
+        assertEquals(9_000L, target.bookmarkDao().get(ledare.id)!!.deletedAt)
+        assertEquals(3, target.bookmarkDao().getAll().size)
+        // Borttagningen följer med i nästa export, så att den gäller även på en annan telefon.
+        val newer = parseBackup(repository(target).export())
+        assertEquals(9_000L, newer.bookmarks.first { it.bookmarkId == ledare.bookmarkId }.deletedAt)
+        val summary = repository(source).import(newer)
+        assertEquals(1, summary.updatedBookmarks)
+        assertEquals(9_000L, source.bookmarkDao().getAll().first { it.bookmarkId == ledare.bookmarkId }.deletedAt)
     }
 
     @Test
