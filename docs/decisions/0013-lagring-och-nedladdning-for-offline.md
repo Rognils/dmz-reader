@@ -28,6 +28,15 @@ En pågående nedladdning heter `{issueId}.pdf.part` och döps om till `.pdf` f�
 ### En nedladdning åt gången
 Numren ställs i en kö (`downloadState = QUEUED`, ordnade efter `downloadQueuedAt`). Ett enda jobb betar av kön, en fil i taget, så att arkivservern aldrig får mer än en nedladdning åt gången härifrån.
 
+### En överföring åt gången i hela appen (v0.5.1)
+All PDF-trafik går genom en gemensam `TransferCoordinator`, både "Läs" och kön.
+
+- **"Läs" på ett annat nummer** medan kön laddar ned: köns förfrågan avbryts och `.part` ligger kvar. Läsningen körs, och kön fortsätter sedan med Range där den slutade.
+- **"Läs" på samma nummer** som laddas ned: läsaren visar den pågående nedladdningens förlopp och öppnar den permanenta filen när den är klar. Numret hämtas inte en gång till.
+- **"Läs" på ett nummer som står längre bak i kön** hämtar det till läs-cachen. När kön kommer fram till numret flyttas filen därifrån, utan en andra hämtning.
+
+Ett JVM-test mäter antalet samtidiga förfrågningar i HTTP-klienten och visar att det aldrig är fler än en.
+
 ### Nätverkskrav
 Inställningen "Ladda ned endast via wifi" (standard på) gör att jobbet kräver ett nät som inte debiteras per mängd. Avstängd tillåter den valfritt nät. "Läs" påverkas inte.
 
@@ -58,6 +67,6 @@ En permanent fil används alltid före läs-cachen och före nätet.
 - **Vägen för Android 8–13 är inte körd på en riktig enhet.** Köhanteringen är densamma och testas på JVM, men själva beteendet (nedladdning bara medan appen är öppen) är overifierat.
 - App-specifik lagring raderas när appen avinstalleras. Nedladdningarna går att hämta igen; läsdata skyddas av backup i FAS 6.
 - Ett UIDT-jobb får bara startas medan appen syns. Kön startas därför från nummervyn och när appen öppnas, aldrig från bakgrunden.
-- "Läs" och en bakgrundsnedladdning kan pågå samtidigt, och då har servern två anslutningar härifrån. "En åt gången" gäller kön.
+- Medan en läsning hämtar ett nummer står kön still. UIDT-jobbet ligger kvar och väntar.
 - Utan notisbehörighet körs nedladdningen ändå, men utan notis. Den syns då bara i appen och i systemets lista över aktiva appar.
 - Efter nätbortfall kan det dröja några minuter innan systemet kör jobbet igen, om appen inte öppnas.
