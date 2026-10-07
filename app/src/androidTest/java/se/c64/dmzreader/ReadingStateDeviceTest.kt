@@ -224,6 +224,19 @@ class ReadingStateDeviceTest {
         assertEquals(20, turns.size)
     }
 
+    /**
+     * Verktyg för verifiering på telefonen: nollställer läsdata för numren i
+     * argumentet dmzReset (kommaseparerade issueId), så att ett scenario kan
+     * göras om från början. Körs aldrig utan argumentet.
+     */
+    @Test
+    fun resetReadingStateOnRequest() {
+        val issueIds = arguments.getString("dmzReset")?.split(",")?.filter { it.isNotBlank() }
+        assumeTrue(issueIds != null)
+        resetReadingState(context, *issueIds!!.toTypedArray())
+        Log.i(TAG, "RESET $issueIds")
+    }
+
     private companion object {
         const val TAG = "DmzVerify"
     }
