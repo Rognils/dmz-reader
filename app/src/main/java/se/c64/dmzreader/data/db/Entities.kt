@@ -65,7 +65,10 @@ data class IssueUserState(
     @PrimaryKey val issueId: String,
     val isFavorite: Boolean = false,
     val lastPage: Int? = null,
+    /** Högsta sidan i [seenPages]. */
     val maxPageReached: Int? = null,
+    /** Lästa sidor som bitmängd i Base64, se domain.SeenPages. null när ingen sida är läst. */
+    val seenPages: String? = null,
     val firstOpenedAt: Long? = null,
     val lastOpenedAt: Long? = null,
     val completedAt: Long? = null,

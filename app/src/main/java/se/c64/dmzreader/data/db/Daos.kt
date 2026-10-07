@@ -4,6 +4,7 @@ import androidx.room3.Dao
 import androidx.room3.Insert
 import androidx.room3.Query
 import androidx.room3.Transaction
+import androidx.room3.Update
 import androidx.room3.Upsert
 import kotlinx.coroutines.flow.Flow
 
@@ -27,6 +28,9 @@ abstract class IssueDao {
 
     @Query("SELECT * FROM Issue ORDER BY publicationId, sortKey")
     abstract suspend fun getAll(): List<IssueEntity>
+
+    @Query("SELECT * FROM Issue ORDER BY publicationId, sortKey")
+    abstract fun observeAll(): Flow<List<IssueEntity>>
 
     @Query("SELECT * FROM Issue WHERE issueId = :issueId")
     abstract suspend fun get(issueId: String): IssueEntity?
@@ -81,6 +85,9 @@ interface IssueLocalStateDao {
 
     @Query("SELECT * FROM IssueLocalState ORDER BY issueId")
     suspend fun getAll(): List<IssueLocalState>
+
+    @Query("SELECT * FROM IssueLocalState ORDER BY issueId")
+    fun observeAll(): Flow<List<IssueLocalState>>
 }
 
 @Dao
@@ -88,11 +95,21 @@ interface IssueUserStateDao {
     @Upsert
     suspend fun upsert(state: IssueUserState)
 
+    @Insert
+    suspend fun insert(state: IssueUserState)
+
+    /** Ger antalet ändrade rader: 0 om numret inte har någon rad. */
+    @Update
+    suspend fun update(state: IssueUserState): Int
+
     @Query("SELECT * FROM IssueUserState WHERE issueId = :issueId")
     suspend fun get(issueId: String): IssueUserState?
 
     @Query("SELECT * FROM IssueUserState ORDER BY issueId")
     suspend fun getAll(): List<IssueUserState>
+
+    @Query("SELECT * FROM IssueUserState ORDER BY issueId")
+    fun observeAll(): Flow<List<IssueUserState>>
 }
 
 @Dao
