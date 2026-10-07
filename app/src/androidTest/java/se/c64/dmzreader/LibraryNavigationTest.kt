@@ -40,6 +40,13 @@ class LibraryNavigationTest {
         }
     }
 
+    // Knappen heter "Läs", eller "Fortsätt på sida X" om numret har lästs på telefonen.
+    private val readButton = hasText("Läs") or hasText("Fortsätt på sida", substring = true)
+
+    private fun waitForReadButton() {
+        rule.waitUntil(timeoutMillis = 10_000) { rule.onAllNodes(readButton).fetchSemanticsNodes().isNotEmpty() }
+    }
+
     private fun pressBack() {
         rule.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
         rule.waitForIdle()
@@ -64,8 +71,8 @@ class LibraryNavigationTest {
         // Årgång → Nummer. Omslaget har en beskrivning för skärmläsare.
         waitForDescription("Datormagazin 1989 Nr 6")
         rule.onNodeWithContentDescription("Datormagazin 1989 Nr 6").performClick()
-        waitForText("Läs")
-        rule.onNodeWithText("Läs").assertIsEnabled()
+        waitForReadButton()
+        rule.onNode(readButton).assertIsEnabled()
         rule.onNodeWithText("DATORMAGAZIN 1989").assertIsDisplayed()
         // "≈ 48 sidor" från katalogen, eller det uppmätta "48 sidor" om numret har öppnats på telefonen.
         rule.onNodeWithText("48 sidor", substring = true).assertIsDisplayed()
@@ -92,7 +99,7 @@ class LibraryNavigationTest {
             .performScrollToNode(hasContentDescription("Datormagazin 1993 Nr 22"))
         rule.onNodeWithContentDescription("Datormagazin 1993 Nr 22").assertIsDisplayed()
         rule.onNodeWithContentDescription("Datormagazin 1993 Nr 22").performClick()
-        waitForText("Läs")
+        waitForReadButton()
 
         pressBack()
         // Utan bevarad position hade rutnätet börjat om från början. Då hade rubriken
