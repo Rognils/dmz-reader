@@ -68,9 +68,15 @@ class OfflineDeviceTest {
     private fun waitForNetwork() {
         val connectivity = context.getSystemService(ConnectivityManager::class.java)
         val deadline = System.currentTimeMillis() + 40_000
+        // Wifi kan ansluta, tappa och ansluta igen de första sekunderna. Nätet räknas
+        // som tillbaka först när det har varit bekräftat i fem sekunder i följd.
+        var validatedSince: Long? = null
         while (System.currentTimeMillis() < deadline) {
             val capabilities = connectivity.getNetworkCapabilities(connectivity.activeNetwork)
-            if (capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true) return
+            val validated = capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
+            val now = System.currentTimeMillis()
+            validatedSince = if (validated) validatedSince ?: now else null
+            if (validatedSince != null && now - validatedSince >= 5_000) return
             Thread.sleep(500)
         }
     }

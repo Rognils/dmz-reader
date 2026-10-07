@@ -165,11 +165,12 @@ class ReadingStateDeviceTest {
     @Test
     fun restartPhase1ReadPages() {
         assumeTrue(arguments.getString("dmzPhase") == "1")
-        requireCachedPdf()
         resetReadingState(context, issueId)
         openIssueView("Datormagazin", 1986, 4, "Nr 1")
         rule.onNodeWithText("Läs").performClick()
-        waitFor { readerShown() }
+        // Numret hämtas om det inte finns på telefonen. Delen får inte hoppas över
+        // tyst: då hade den andra delen misslyckats utan att säga varför.
+        waitFor(180_000) { readerShown() }
         for (page in 1..4) {
             readPage(page)
             if (page < 4) tapZone(0.85f)
