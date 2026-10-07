@@ -106,9 +106,10 @@ fun ZoomablePages(
     pages: List<Int>,
     document: PdfDocument,
     isCurrent: Boolean,
-    acquirePage: suspend (pageNumber: Int, width: Int, height: Int) -> Bitmap,
+    acquirePage: suspend (pageNumber: Int, width: Int, height: Int, preview: Boolean) -> Bitmap,
     releasePage: (pageNumber: Int, width: Int, height: Int, bitmap: Bitmap) -> Unit,
     recycleLater: (Bitmap) -> Unit,
+    onPageShown: (pageNumber: Int, quality: PageQuality?) -> Unit,
     onTap: (fractionX: Float) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -254,7 +255,7 @@ fun ZoomablePages(
                         },
                 ) {
                     pages.forEachIndexed { index, pageNumber ->
-                        PageImage(pageNumber, currentRects[index], acquirePage, releasePage)
+                        PageImage(pageNumber, currentRects[index], acquirePage, releasePage, onPageShown)
                     }
                 }
             }
@@ -278,8 +279,9 @@ fun ZoomablePages(
 private fun PageImage(
     pageNumber: Int,
     rect: Rect,
-    acquirePage: suspend (pageNumber: Int, width: Int, height: Int) -> Bitmap,
+    acquirePage: suspend (pageNumber: Int, width: Int, height: Int, preview: Boolean) -> Bitmap,
     releasePage: (pageNumber: Int, width: Int, height: Int, bitmap: Bitmap) -> Unit,
+    onPageShown: (pageNumber: Int, quality: PageQuality?) -> Unit,
 ) {
     val width = rect.width.roundToInt().coerceAtLeast(1)
     val height = rect.height.roundToInt().coerceAtLeast(1)
@@ -289,7 +291,7 @@ private fun PageImage(
     val previewWidth = (width / PREVIEW_DIVISOR).coerceAtLeast(1)
     val previewHeight = (height / PREVIEW_DIVISOR).coerceAtLeast(1)
     val preview by produceState<Bitmap?>(null, pageNumber, width, height) {
-        val acquired = acquirePage(pageNumber, previewWidth, previewHeight)
+        val acquired = acquirePage(pageNumber, previewWidth, previewHeight, true)
         value = acquired
         awaitDispose {
             value = null
@@ -298,7 +300,7 @@ private fun PageImage(
     }
     // Bilden lånas ur cachen så länge den visas och lämnas tillbaka efteråt.
     val bitmap by produceState<Bitmap?>(null, pageNumber, width, height) {
-        val acquired = acquirePage(pageNumber, width, height)
+        val acquired = acquirePage(pageNumber, width, height, false)
         value = acquired
         awaitDispose {
             value = null
@@ -313,6 +315,18 @@ private fun PageImage(
     }
     val loaded = bitmap?.takeIf { !it.isRecycled }
     val loadedPreview = preview?.takeIf { !it.isRecycled }
+    // Läsaren får veta vad som faktiskt visas: tidtagningen för läsning startar
+    // först när sidan är färdigrenderad.
+    val quality = when {
+        loaded != null -> PageQuality.FULL
+        loadedPreview != null -> PageQuality.PREVIEW
+        else -> null
+    }
+    val latestOnPageShown by rememberUpdatedState(onPageShown)
+    LaunchedEffect(pageNumber, quality) { latestOnPageShown(pageNumber, quality) }
+    DisposableEffect(pageNumber) {
+        onDispose { latestOnPageShown(pageNumber, null) }
+    }
     when {
         loaded != null -> Image(
             bitmap = loaded.asImageBitmap(),

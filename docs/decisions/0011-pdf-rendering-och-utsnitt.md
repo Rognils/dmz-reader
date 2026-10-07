@@ -34,7 +34,7 @@ En sida i 400 dpi är över 100 MB som okomprimerad bild. Den får aldrig render
 Sidan fylls med vitt före rendering, eftersom `PdfRenderer` ritar på genomskinlig botten.
 
 ### Ordning och avbrott
-- Sidor renderas före miniatyrer (`RenderPriority`).
+- Kön är en prioritetskö (ändrat i FAS 4). Ordningen är: aktuell sida (förhandsbild, sedan grundbild), förhandsbild för nästa och föregående sida, grundbild för nästa sida, grundbild för föregående sida, och sist miniatyrer. Hur bråttom en rendering har avgörs när den ska köras, inte när den begärdes, så en sida som var granne när den köades går först om läsaren har hunnit bläddra fram till den. Läsaren meddelar målet redan när sidbytet börjar.
 - En rendering som ingen längre väntar på hoppas över, så att kön inte fylls av sidor som användaren har bläddrat förbi.
 - En påbörjad rendering körs alltid klart; `PdfRenderer` får inte rita i en bild som har frigjorts.
 - Sidornas storlek läses in när PDF:en öppnas, så att layout och gester aldrig väntar bakom en rendering.
@@ -43,7 +43,7 @@ Sidan fylls med vitt före rendering, eftersom `PdfRenderer` ritar på genomskin
 - **Bitmaps frigörs uttryckligen.** Pixlarna ligger utanför Java-heapen, så skräpsamlaren märker inte att minnet tar slut. `PageBitmapCache` räknar användare per bild och anropar `recycle()` när en bild har fallit ur cachen och inte visas. Utsnitt frigörs så fort de byts ut. En avbruten rendering frigör sin bild.
 - **Cachen** för grundbilder är en åttondel av appens minnesgräns (32 MB av 256 MB på testtelefonen).
 - **PDF-filen öppnas om var fjärde renderad sida.** PDF-motorn sparar avkodade bilder för varje sida den ritat så länge dokumentet är öppet. Att öppna om filen tar 11–116 ms och släpper det.
-- ±1 sida eller uppslag förrenderas (`beyondViewportPageCount = 1`).
+- ±1 sida eller uppslag förrenderas (`beyondViewportPageCount = 1`). Djupet är oförändrat efter mätningen i FAS 4: vid 20 sidbyten framåt i 1995 nr 14 med cirka 3 s mellanrum var nästa sida färdigrenderad i full skärmupplösning 20 gånger av 20. Den blir klar 1,1–1,3 s efter ett sidbyte.
 
 ### Miniatyrer
 Miniatyrremsan visar de faktiska PDF-sidorna, renderade 160 px breda. De sparas som JPEG i `cacheDir/thumbs/{issueId}-{filstorlek}/`, och bara de som syns renderas. Omslagsrättningar (`coverFlags`) används aldrig i läsaren.
@@ -82,9 +82,9 @@ Före åtgärderna ovan låg native heap på 660–815 MB och PSS på cirka 1 GB
 - Förhandsbilden gör att ett sidbyte i den äldre generationen visar något efter 0,2 s i stället för 0,8 s.
 
 ## Consequences
-- **Sidbyten i den äldre generationen är långsamma.** Grundbilden tar 0,8 s i median och 1,9 s för 1995 nr 15. JPEG 2000 är dyrt att avkoda. Förhandsbilden och förrenderingen av nästa sida döljer en del av det, men planens mål "sidbyte känns omedelbart" (G7) nås bara för v2-generationen.
+- **Sidbyten i den äldre generationen är långsamma.** Grundbilden tar 0,8 s i median och 1,9 s för 1995 nr 15. JPEG 2000 är dyrt att avkoda. Förhandsbilden och förrenderingen av nästa sida döljer en del av det, men planens ursprungliga mål "sidbyte känns omedelbart" (G7) nåddes bara för v2-generationen. G7 ändrades därför före FAS 4: äldre PDF:er ska visa en förhandsbild inom 0,5 s och därefter full rendering.
 - Att öppna ett nummer ur den äldre generationen tar upp till 1,1 s extra för sidstorlekarna.
 - Vid 8 gångers zoom syns skanningens upplösning, särskilt i v2-generationen (150 dpi). Det är HQ-läget (FAS 11) till för.
 - `PdfRenderer` är telefonens egen PDF-motor. Rendering och hastighet kan skilja mellan Android-versioner.
 - Appen måste hålla reda på vem som använder varje bitmap. En bild som frigörs för tidigt ger en krasch. Frigörandet fördröjs därför 150 ms.
-- Mätningarna är gjorda på en telefon och i ett debug-bygge.
+- Mätningarna är gjorda på en telefon och i ett debug-bygge. En jämförelse i FAS 4 visade ingen skillnad mot en release-variant med R8: renderingen sker i telefonens egen PDF-motor, inte i appens kod.

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -77,6 +78,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.ImageLoader
 import kotlinx.coroutines.launch
@@ -85,7 +88,8 @@ import se.c64.dmzreader.data.pdf.DownloadProgress
 import se.c64.dmzreader.data.pdf.PdfDocument
 import se.c64.dmzreader.domain.fileSizeText
 import se.c64.dmzreader.domain.fullTitle
-import se.c64.dmzreader.domain.progressPercent
+import se.c64.dmzreader.domain.ReadStatus
+import se.c64.dmzreader.domain.ReadingProgress
 import se.c64.dmzreader.domain.spreadsFor
 import se.c64.dmzreader.ui.components.IssueCover
 import se.c64.dmzreader.ui.components.MonoLabel
@@ -232,10 +236,14 @@ private fun StatusLayout(
     }
 }
 
-/** Sidangivelsen i toppraden: "Sida 7 av 28 · 25 %", eller "Sida 6–7 av 28 · 25 %" för ett uppslag. */
-fun pageIndicatorText(pages: List<Int>, currentPage: Int, pageCount: Int): String {
+/**
+ * Sidangivelsen i toppraden: "Sida 7 av 28 · 25 % läst", eller "Sida 6–7 av 28 · 25 % läst"
+ * för ett uppslag. Procenttalet är andelen lästa sidor (planens C10), inte läget i numret.
+ */
+fun pageIndicatorText(pages: List<Int>, currentPage: Int, pageCount: Int, pagesRead: Int): String {
     val label = if (pages.size == 2) "${pages[0]}–${pages[1]}" else "${pages.firstOrNull() ?: currentPage}"
-    return "Sida $label av $pageCount · ${progressPercent(pages.lastOrNull() ?: currentPage, pageCount)} %"
+    val percent = ReadingProgress(ReadStatus.STARTED, ReadStatus.STARTED, null, pagesRead, pageCount).percent ?: 0
+    return "Sida $label av $pageCount · $percent % läst"
 }
 
 @Composable
@@ -250,6 +258,14 @@ private fun ReaderScreen(
 
     ImmersiveMode()
     BackHandler(onBack = onClose)
+
+    // Läspositionen skrivs när läsaren lämnar skärmen: vid stängning, när appen
+    // går i bakgrunden och när skärmen släcks. Vid rotation fortsätter sessionen.
+    val activity = LocalActivity.current
+    LifecycleStartEffect(viewModel) {
+        viewModel.onForeground()
+        onStopOrDispose { viewModel.onBackground(activity?.isChangingConfigurations == true) }
+    }
 
     val screens = remember(landscape, state.pageCount, state.spreadOffset) {
         if (landscape) {
@@ -267,7 +283,19 @@ private fun ReaderScreen(
             ) { screens.size }
 
             LaunchedEffect(pagerState) {
-                snapshotFlow { pagerState.settledPage }.collect { viewModel.onScreenShown(it, landscape) }
+                snapshotFlow { pagerState.settledPage }.collect { index ->
+                    viewModel.onScreenShown(index, landscape, screens.getOrNull(index).orEmpty())
+                }
+            }
+            // Renderingskön får veta vart läsaren är på väg redan när sidbytet börjar.
+            LaunchedEffect(pagerState) {
+                snapshotFlow { pagerState.targetPage }.collect { index ->
+                    viewModel.onScreenTargeted(
+                        current = screens.getOrNull(index).orEmpty(),
+                        next = screens.getOrNull(index + 1).orEmpty(),
+                        previous = screens.getOrNull(index - 1).orEmpty(),
+                    )
+                }
             }
             // Snabbhopp och miniatyrer ändrar positionen utifrån.
             val target = state.position.screenIndex(landscape, state.pageCount, state.spreadOffset)
@@ -287,13 +315,14 @@ private fun ReaderScreen(
                     pages = screens[index],
                     document = state.document,
                     isCurrent = pagerState.settledPage == index,
-                    acquirePage = { page, width, height ->
-                        viewModel.acquirePageBitmap(state.document, page, width, height)
+                    acquirePage = { page, width, height, preview ->
+                        viewModel.acquirePageBitmap(state.document, page, width, height, preview)
                     },
                     releasePage = { page, width, height, bitmap ->
                         viewModel.pageBitmaps.release(viewModel.pageKey(page, width, height), bitmap)
                     },
                     recycleLater = viewModel.pageBitmaps::recycleLater,
+                    onPageShown = viewModel::onPageShown,
                     onTap = { fractionX ->
                         when {
                             fractionX < 0.3f -> scope.launch {
@@ -320,7 +349,7 @@ private fun ReaderScreen(
         ) {
             ReaderTopBar(
                 title = state.issue.fullTitle(),
-                indicator = pageIndicatorText(shownPages, state.position.page, state.pageCount),
+                indicator = pageIndicatorText(shownPages, state.position.page, state.pageCount, state.pagesRead),
                 showSpreadShift = landscape && state.canShiftSpread,
                 onShiftSpread = viewModel::shiftSpread,
                 onClose = onClose,
@@ -357,6 +386,13 @@ private fun ImmersiveMode() {
             controller?.show(WindowInsetsCompat.Type.systemBars())
             view.keepScreenOn = false
         }
+    }
+    // Systemet kan visa fälten igen när appen har legat i bakgrunden. Dölj dem
+    // på nytt varje gång läsaren kommer tillbaka.
+    LifecycleResumeEffect(view) {
+        val window = (view.context as? Activity)?.window
+        window?.let { WindowCompat.getInsetsController(it, view).hide(WindowInsetsCompat.Type.systemBars()) }
+        onPauseOrDispose { }
     }
 }
 

@@ -147,6 +147,7 @@ fun DmzReaderRoot(container: AppContainer) {
                         imageLoader = container.imageLoader,
                         onOpenYear = { publicationId, year -> navController.navigate(Routes.year(publicationId, year)) },
                         onOpenIssue = { navController.navigate(Routes.issue(it)) },
+                        onContinueReading = { navController.navigate(Routes.reader(it)) },
                         onOpenSettings = { navController.navigate(Routes.SETTINGS) },
                     )
                 }
@@ -178,7 +179,7 @@ fun DmzReaderRoot(container: AppContainer) {
                     val issueId = requireNotNull(entry.arguments?.getString("issueId"))
                     val viewModel: IssueViewModel = viewModel(
                         factory = viewModelFactory {
-                            initializer { IssueViewModel(container.libraryRepository, issueId) }
+                            initializer { IssueViewModel(container.libraryRepository, container.readingRepository, issueId) }
                         },
                     )
                     IssueScreen(
@@ -202,7 +203,9 @@ fun DmzReaderRoot(container: AppContainer) {
                                 issueId,
                                 container.libraryRepository,
                                 container.pdfRepository,
+                                container.readingRepository,
                                 container.thumbnailRoot,
+                                container.applicationScope,
                             )
                         }
                     },

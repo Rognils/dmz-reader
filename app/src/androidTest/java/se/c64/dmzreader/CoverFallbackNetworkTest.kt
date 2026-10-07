@@ -93,6 +93,8 @@ class CoverFallbackNetworkTest {
         val loader = CoverImageLoader.create(context, client)
         // En miniatyr som inte finns, så att även felvägen prövas: assets först, sedan nätet.
         val issue = issuesWithoutThumbnail().first().copy(coverAsset = "covers/finns-inte.webp")
+        // Bilden kan ligga i diskcachen från en tidigare körning. Då görs inget anrop alls.
+        loader.diskCache?.remove(issue.coverUrl!!)
 
         composeRule.setContent {
             DmzReaderTheme { IssueCover(issue, loader, modifier = Modifier.width(140.dp)) }

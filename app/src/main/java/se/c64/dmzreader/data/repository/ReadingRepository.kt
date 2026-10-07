@@ -1,0 +1,53 @@
+package se.c64.dmzreader.data.repository
+
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import se.c64.dmzreader.data.db.IssueUserState
+import se.c64.dmzreader.data.db.IssueUserStateDao
+import se.c64.dmzreader.data.db.ReadStatusOverride
+import se.c64.dmzreader.data.db.ReadingSession
+import se.c64.dmzreader.data.db.ReadingSessionDao
+import se.c64.dmzreader.domain.withOverride
+
+/**
+ * Användarens läsdata: läsposition, lästa sidor, manuell status och sessioner
+ * (planens C4, C6 och C10).
+ *
+ * Alla ändringar av IssueUserState går genom [update], som läser raden, ändrar
+ * den och skriver tillbaka under ett lås. Då kan läsaren och nummervyn aldrig
+ * skriva över varandras fält.
+ */
+class ReadingRepository(
+    private val userStateDao: IssueUserStateDao,
+    private val sessionDao: ReadingSessionDao,
+    private val now: () -> Long = System::currentTimeMillis,
+) {
+    private val lock = Mutex()
+
+    suspend fun get(issueId: String): IssueUserState? = userStateDao.get(issueId)
+
+    /** Ändrar numrets rad. Ingenting skrivs om [transform] lämnar raden oförändrad. */
+    suspend fun update(issueId: String, transform: (IssueUserState) -> IssueUserState): IssueUserState =
+        lock.withLock {
+            val timestamp = now()
+            val stored = userStateDao.get(issueId)
+            val current = stored ?: IssueUserState(issueId = issueId, updatedAt = timestamp)
+            val changed = transform(current)
+            if (changed == current) {
+                current
+            } else {
+                changed.copy(issueId = issueId, updatedAt = timestamp).also {
+                    if (stored == null) userStateDao.insert(it) else userStateDao.update(it)
+                }
+            }
+        }
+
+    /** Markera som läst, som oläst, eller återställ till automatisk status (null). */
+    suspend fun setOverride(issueId: String, override: ReadStatusOverride?, pageCount: Int?) {
+        update(issueId) { it.withOverride(override, pageCount, now()) }
+    }
+
+    suspend fun saveSession(session: ReadingSession) {
+        sessionDao.insert(session)
+    }
+}

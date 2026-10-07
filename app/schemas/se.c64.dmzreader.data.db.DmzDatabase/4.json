@@ -1,0 +1,424 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "f825d1ac622222b9646e49c6399b84a5",
+    "entities": [
+      {
+        "tableName": "Issue",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`issueId` TEXT NOT NULL, `publicationId` TEXT NOT NULL, `publicationTitle` TEXT NOT NULL, `year` INTEGER NOT NULL, `issueLabel` TEXT NOT NULL, `sortKey` TEXT NOT NULL, `sourceKey` TEXT NOT NULL, `relatedIssueId` TEXT, `coverUrl` TEXT, `coverFlags` TEXT NOT NULL, `coverAsset` TEXT, `ocrPdfUrl` TEXT, `ocrPdfSize` INTEGER, `ocrPdfEtag` TEXT, `ocrPdfLastModified` TEXT, `largePdfUrl` TEXT, `largePdfSize` INTEGER, `hqSource` TEXT, `scanPagePattern` TEXT, `scanPageCount` INTEGER, `pageCount` INTEGER, `spreadOffset` INTEGER, `flags` TEXT NOT NULL, PRIMARY KEY(`issueId`))",
+        "fields": [
+          {
+            "fieldPath": "issueId",
+            "columnName": "issueId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicationId",
+            "columnName": "publicationId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicationTitle",
+            "columnName": "publicationTitle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "year",
+            "columnName": "year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "issueLabel",
+            "columnName": "issueLabel",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sortKey",
+            "columnName": "sortKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceKey",
+            "columnName": "sourceKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "relatedIssueId",
+            "columnName": "relatedIssueId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "coverUrl",
+            "columnName": "coverUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "coverFlags",
+            "columnName": "coverFlags",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coverAsset",
+            "columnName": "coverAsset",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "ocrPdfUrl",
+            "columnName": "ocrPdfUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "ocrPdfSize",
+            "columnName": "ocrPdfSize",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "ocrPdfEtag",
+            "columnName": "ocrPdfEtag",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "ocrPdfLastModified",
+            "columnName": "ocrPdfLastModified",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "largePdfUrl",
+            "columnName": "largePdfUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "largePdfSize",
+            "columnName": "largePdfSize",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "hqSource",
+            "columnName": "hqSource",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "scanPagePattern",
+            "columnName": "scanPagePattern",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "scanPageCount",
+            "columnName": "scanPageCount",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "pageCount",
+            "columnName": "pageCount",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "spreadOffset",
+            "columnName": "spreadOffset",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "flags",
+            "columnName": "flags",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "issueId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Issue_publicationId_year",
+            "unique": false,
+            "columnNames": [
+              "publicationId",
+              "year"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Issue_publicationId_year` ON `${TABLE_NAME}` (`publicationId`, `year`)"
+          }
+        ]
+      },
+      {
+        "tableName": "IssueLocalState",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`issueId` TEXT NOT NULL, `observedPageCount` INTEGER, `observedPdfSize` INTEGER, `observedPdfEtag` TEXT, `observedPdfLastModified` TEXT, `downloadState` TEXT NOT NULL, `downloadedPath` TEXT, `downloadedBytes` INTEGER, `downloadedAt` INTEGER, `detectedSpreadOffset` INTEGER, PRIMARY KEY(`issueId`))",
+        "fields": [
+          {
+            "fieldPath": "issueId",
+            "columnName": "issueId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "observedPageCount",
+            "columnName": "observedPageCount",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "observedPdfSize",
+            "columnName": "observedPdfSize",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "observedPdfEtag",
+            "columnName": "observedPdfEtag",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "observedPdfLastModified",
+            "columnName": "observedPdfLastModified",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "downloadState",
+            "columnName": "downloadState",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "downloadedPath",
+            "columnName": "downloadedPath",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "downloadedBytes",
+            "columnName": "downloadedBytes",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "downloadedAt",
+            "columnName": "downloadedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "detectedSpreadOffset",
+            "columnName": "detectedSpreadOffset",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "issueId"
+          ]
+        }
+      },
+      {
+        "tableName": "IssueUserState",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`issueId` TEXT NOT NULL, `isFavorite` INTEGER NOT NULL, `lastPage` INTEGER, `maxPageReached` INTEGER, `seenPages` TEXT, `firstOpenedAt` INTEGER, `lastOpenedAt` INTEGER, `completedAt` INTEGER, `readStatusOverride` TEXT, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`issueId`))",
+        "fields": [
+          {
+            "fieldPath": "issueId",
+            "columnName": "issueId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFavorite",
+            "columnName": "isFavorite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastPage",
+            "columnName": "lastPage",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "maxPageReached",
+            "columnName": "maxPageReached",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "seenPages",
+            "columnName": "seenPages",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "firstOpenedAt",
+            "columnName": "firstOpenedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lastOpenedAt",
+            "columnName": "lastOpenedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "completedAt",
+            "columnName": "completedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "readStatusOverride",
+            "columnName": "readStatusOverride",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "issueId"
+          ]
+        }
+      },
+      {
+        "tableName": "Bookmark",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `issueId` TEXT NOT NULL, `pageNumber` INTEGER NOT NULL, `title` TEXT, `note` TEXT, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "issueId",
+            "columnName": "issueId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pageNumber",
+            "columnName": "pageNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Bookmark_issueId",
+            "unique": false,
+            "columnNames": [
+              "issueId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Bookmark_issueId` ON `${TABLE_NAME}` (`issueId`)"
+          }
+        ]
+      },
+      {
+        "tableName": "ReadingSession",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `issueId` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, `endedAt` INTEGER NOT NULL, `startPage` INTEGER NOT NULL, `endPage` INTEGER NOT NULL, `pagesViewed` INTEGER NOT NULL, `durationSeconds` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "issueId",
+            "columnName": "issueId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startedAt",
+            "columnName": "startedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endedAt",
+            "columnName": "endedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startPage",
+            "columnName": "startPage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endPage",
+            "columnName": "endPage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pagesViewed",
+            "columnName": "pagesViewed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "durationSeconds",
+            "columnName": "durationSeconds",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ReadingSession_issueId",
+            "unique": false,
+            "columnNames": [
+              "issueId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ReadingSession_issueId` ON `${TABLE_NAME}` (`issueId`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f825d1ac622222b9646e49c6399b84a5')"
+    ]
+  }
+}

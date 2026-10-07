@@ -18,6 +18,7 @@ import se.c64.dmzreader.data.pdf.PdfDownloader
 import se.c64.dmzreader.data.pdf.PdfRepository
 import se.c64.dmzreader.data.repository.DiagnosticsRepository
 import se.c64.dmzreader.data.repository.LibraryRepository
+import se.c64.dmzreader.data.repository.ReadingRepository
 import se.c64.dmzreader.data.settings.ActiveInventoryStore
 import se.c64.dmzreader.data.settings.DataStoreActiveInventoryStore
 import se.c64.dmzreader.data.settings.DataStoreLibraryPreferences
@@ -32,6 +33,9 @@ sealed interface InventoryStatus {
 /** Appens beroenden, skapade en gång. Ingen DI-ram behövs för en app av den här storleken. */
 class AppContainer(private val context: Context) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    /** Lever lika länge som appen. Används för skrivningar som ska bli klara även när en vy stängs. */
+    val applicationScope: CoroutineScope get() = scope
 
     val database: DmzDatabase by lazy { DmzDatabase.create(context) }
     val activeInventory: ActiveInventoryStore by lazy { DataStoreActiveInventoryStore(context) }
@@ -48,7 +52,12 @@ class AppContainer(private val context: Context) {
 
     /** En enda bildladdare för hela appen, så att cache och samtidighetsgräns delas. */
     val imageLoader: ImageLoader by lazy { CoverImageLoader.create(context) }
-    val libraryRepository by lazy { LibraryRepository(database.issueDao()) }
+    val libraryRepository by lazy {
+        LibraryRepository(database.issueDao(), database.issueUserStateDao(), database.issueLocalStateDao())
+    }
+    val readingRepository by lazy {
+        ReadingRepository(database.issueUserStateDao(), database.readingSessionDao())
+    }
     val diagnosticsRepository by lazy { DiagnosticsRepository(context, database) }
 
     private val _inventoryStatus = MutableStateFlow<InventoryStatus>(InventoryStatus.Loading)
