@@ -22,17 +22,19 @@ import kotlinx.coroutines.Dispatchers
         Bookmark::class,
         ReadingSession::class,
     ],
-    version = 5,
+    version = 6,
     exportSchema = true,
     // Version 2 lägger till Issue.coverAsset. Version 3 lägger till ETag och
     // Last-Modified i IssueLocalState. Version 4 lägger till IssueUserState.seenPages.
-    // Version 5 lägger till IssueLocalState.downloadQueuedAt.
+    // Version 5 lägger till IssueLocalState.downloadQueuedAt. Version 6 lägger till
+    // PDF-versionen i Bookmark.
     // Migreringarna lägger bara till kolumner; befintlig användardata rörs inte.
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5),
+        AutoMigration(from = 5, to = 6),
     ],
 )
 @ColumnTypeConverters(Converters::class)
@@ -42,6 +44,7 @@ abstract class DmzDatabase : RoomDatabase() {
     abstract fun issueUserStateDao(): IssueUserStateDao
     abstract fun bookmarkDao(): BookmarkDao
     abstract fun readingSessionDao(): ReadingSessionDao
+    abstract fun backupDao(): BackupDao
 
     companion object {
         const val FILE_NAME = "dmz-reader.db"

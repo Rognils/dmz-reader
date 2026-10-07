@@ -89,6 +89,11 @@ data class Bookmark(
     val note: String? = null,
     val createdAt: Long,
     val updatedAt: Long,
+    // Numrets PDF-version när bokmärket skapades (planens C7). Skiljer den sig
+    // från den som gäller nu kan filen ha bytts i arkivet, och sidan kan peka fel.
+    val pdfSize: Long? = null,
+    val pdfEtag: String? = null,
+    val pdfLastModified: String? = null,
 )
 
 /** En lässession (planens C6). */

@@ -47,6 +47,11 @@ class ReadingRepository(
         update(issueId) { it.withOverride(override, pageCount, now()) }
     }
 
+    /** Favoritmarkeringen. Den uppdaterar updatedAt, som avgör vilken sida som vinner vid import av backup. */
+    suspend fun setFavorite(issueId: String, favorite: Boolean) {
+        update(issueId) { it.copy(isFavorite = favorite) }
+    }
+
     suspend fun saveSession(session: ReadingSession) {
         sessionDao.insert(session)
     }

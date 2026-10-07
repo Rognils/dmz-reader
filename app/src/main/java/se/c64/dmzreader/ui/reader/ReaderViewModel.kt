@@ -10,13 +10,17 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import se.c64.dmzreader.data.db.Bookmark
 import se.c64.dmzreader.data.db.IssueEntity
 import se.c64.dmzreader.data.pdf.DownloadProgress
 import se.c64.dmzreader.data.pdf.DownloadResult
@@ -24,6 +28,8 @@ import se.c64.dmzreader.data.pdf.PdfDocument
 import se.c64.dmzreader.data.pdf.PdfRepository
 import se.c64.dmzreader.data.db.ReadStatusOverride
 import se.c64.dmzreader.data.offline.OfflineRepository
+import se.c64.dmzreader.data.repository.BookmarkRepository
+import se.c64.dmzreader.data.repository.BookmarkToggle
 import se.c64.dmzreader.data.repository.LibraryRepository
 import se.c64.dmzreader.data.repository.ReadingRecorder
 import se.c64.dmzreader.data.repository.ReadingRepository
@@ -58,9 +64,23 @@ sealed interface ReaderUiState {
         val canShiftSpread: Boolean,
         /** Antal sidor som räknas som lästa (planens C10). */
         val pagesRead: Int = 0,
+        /** Sidor i numret som har bokmärke. */
+        val bookmarkedPages: Set<Int> = emptySet(),
     ) : ReaderUiState {
         val pageCount: Int get() = document.pageCount
+
+        /** Sant om ankarsidan har ett bokmärke: då är stjärnan fylld. */
+        val pageIsBookmarked: Boolean get() = position.page in bookmarkedPages
     }
+}
+
+/** Något läsaren vill berätta med en snackbar. */
+sealed interface ReaderMessage {
+    /** "Bokmärke sparat", med åtgärden "Lägg till titel". */
+    data class BookmarkAdded(val bookmark: Bookmark) : ReaderMessage
+
+    /** "Bokmärket borttaget", med åtgärden "Ångra". */
+    data class BookmarkRemoved(val bookmarks: List<Bookmark>) : ReaderMessage
 }
 
 /** Hur en sida visas just nu: som förhandsbild eller i full skärmupplösning. */
@@ -88,9 +108,12 @@ class ReaderViewModel(
     private val pdfRepository: PdfRepository,
     private val readingRepository: ReadingRepository,
     private val offlineRepository: OfflineRepository,
+    private val bookmarkRepository: BookmarkRepository,
     private val thumbnailRoot: File,
     /** Lever längre än läsaren, så att skrivningar vid stängning hinner bli klara. */
     writeScope: CoroutineScope,
+    /** Sidan läsaren ska öppnas på, till exempel från ett bokmärke. null betyder läspositionen. */
+    private val requestedPage: Int? = null,
 ) : ViewModel() {
     private val _state = MutableStateFlow<ReaderUiState>(ReaderUiState.Loading)
     val state: StateFlow<ReaderUiState> = _state
@@ -118,6 +141,13 @@ class ReaderViewModel(
     @Volatile
     private var renderFocus = RenderFocus()
 
+    private val _messages = Channel<ReaderMessage>(Channel.BUFFERED)
+
+    /** Händelser som visas en gång, som snackbar. */
+    val messages: Flow<ReaderMessage> = _messages.receiveAsFlow()
+
+    private var bookmarkedPages: Set<Int> = emptySet()
+
     private var downloadJob: Job? = null
     private var document: PdfDocument? = null
     private var thumbnailDirectory: File = thumbnailRoot
@@ -135,6 +165,14 @@ class ReaderViewModel(
 
     init {
         start()
+        viewModelScope.launch {
+            bookmarkRepository.observeAll().collect { all ->
+                bookmarkedPages = all.filter { it.issueId == issueId }.mapTo(HashSet()) { it.pageNumber }
+                _state.update { current ->
+                    if (current is ReaderUiState.Reading) current.copy(bookmarkedPages = bookmarkedPages) else current
+                }
+            }
+        }
     }
 
     private fun start() {
@@ -200,10 +238,12 @@ class ReaderViewModel(
         val saved = readingRepository.get(issueId)
         seen = SeenPages.decode(saved?.seenPages)
         unreadMarked = saved?.readStatusOverride == ReadStatusOverride.UNREAD
-        // Läsaren öppnas där användaren senast var.
-        val startPage = (saved?.lastPage ?: 1).coerceIn(1, opened.pageCount.coerceAtLeast(1))
+        // Läsaren öppnas på den begärda sidan (ett bokmärke), annars där användaren senast var.
+        val startPage = (requestedPage ?: saved?.lastPage ?: 1).coerceIn(1, opened.pageCount.coerceAtLeast(1))
         openingPage = startPage
         recorder.opened()
+        // En sida som öppnas via ett bokmärke blir den nya läspositionen.
+        if (requestedPage != null && startPage != saved?.lastPage) recorder.anchorPage(startPage)
         _state.value = ReaderUiState.Reading(
             issue = issue,
             document = opened,
@@ -211,6 +251,7 @@ class ReaderViewModel(
             spreadOffset = effectiveSpreadOffset(issue.spreadOffset, local?.detectedSpreadOffset),
             canShiftSpread = issue.spreadOffset == null,
             pagesRead = seen.countUpTo(opened.pageCount),
+            bookmarkedPages = bookmarkedPages,
         )
         startSessionIfReading()
         updateReadTimer()
@@ -350,6 +391,29 @@ class ReaderViewModel(
         if (clearUnread) unreadMarked = false
         recorder.pagesRead(pages, current.pageCount, clearUnread)
         _state.value = current.copy(pagesRead = seen.countUpTo(current.pageCount))
+    }
+
+    /**
+     * Stjärnan i toppraden: skapar ett bokmärke på ankarsidan, eller tar bort det
+     * som finns där. Resultatet kommer som ett meddelande i [messages].
+     */
+    fun toggleBookmark() {
+        val current = _state.value as? ReaderUiState.Reading ?: return
+        viewModelScope.launch {
+            when (val result = bookmarkRepository.toggle(issueId, current.position.page)) {
+                is BookmarkToggle.Added -> _messages.send(ReaderMessage.BookmarkAdded(result.bookmark))
+                is BookmarkToggle.Removed -> _messages.send(ReaderMessage.BookmarkRemoved(result.bookmarks))
+            }
+        }
+    }
+
+    /** Ångrar en borttagning. */
+    fun restoreBookmarks(bookmarks: List<Bookmark>) {
+        viewModelScope.launch { bookmarkRepository.restore(bookmarks) }
+    }
+
+    fun editBookmark(id: Long, title: String, note: String) {
+        viewModelScope.launch { bookmarkRepository.edit(id, title, note) }
     }
 
     /** Förskjuter uppslagsparningen ett steg och sparar valet för numret. */

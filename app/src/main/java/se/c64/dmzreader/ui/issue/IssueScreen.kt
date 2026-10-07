@@ -7,12 +7,22 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import se.c64.dmzreader.data.db.Bookmark
 import se.c64.dmzreader.data.db.DownloadState
+import se.c64.dmzreader.data.repository.BookmarkRepository
+import se.c64.dmzreader.domain.ARCHIVE_FILE_CHANGED_TEXT
+import se.c64.dmzreader.domain.archiveFileChanged
+import se.c64.dmzreader.domain.newestFirst
+import se.c64.dmzreader.ui.components.BookmarkEditDialog
+import se.c64.dmzreader.ui.components.BookmarkRow
+import se.c64.dmzreader.ui.components.MonoLabel
+import se.c64.dmzreader.ui.components.Notice
 import se.c64.dmzreader.data.offline.DownloadRequest
 import se.c64.dmzreader.data.offline.OfflineRepository
 import se.c64.dmzreader.data.pdf.DownloadProgress
@@ -39,6 +49,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -88,7 +100,15 @@ data class IssueUiState(
     val reading: IssueWithState? = null,
     /** Förloppet, om det är det här numret som laddas ned just nu. */
     val downloadProgress: DownloadProgress? = null,
-)
+    /** Numrets bokmärken, nyast först. */
+    val bookmarks: List<Bookmark> = emptyList(),
+) {
+    val isFavorite: Boolean get() = reading?.state?.isFavorite == true
+
+    /** Sant om numrets PDF kan ha bytts i arkivet (planens C7). */
+    val archiveFileChanged: Boolean
+        get() = details?.issue?.let { archiveFileChanged(it, reading?.local, bookmarks) } == true
+}
 
 class IssueViewModel(
     repository: LibraryRepository,
@@ -96,18 +116,21 @@ class IssueViewModel(
     private val offlineRepository: OfflineRepository,
     private val downloadScheduler: DownloadScheduler,
     private val downloadPreferences: DownloadPreferences,
+    private val bookmarkRepository: BookmarkRepository,
     private val issueId: String,
 ) : ViewModel() {
     val state: StateFlow<IssueUiState> = combine(
         repository.observeIssueDetails(issueId),
         repository.observeIssueWithState(issueId),
         offlineRepository.active,
-    ) { details, reading, active ->
+        bookmarkRepository.observeAll(),
+    ) { details, reading, active, bookmarks ->
         IssueUiState(
             loading = false,
             details = details,
             reading = reading,
             downloadProgress = active?.takeIf { it.issueId == issueId }?.progress,
+            bookmarks = newestFirst(bookmarks.filter { it.issueId == issueId }),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), IssueUiState())
 
@@ -119,6 +142,20 @@ class IssueViewModel(
 
     fun notificationQuestionShown() {
         viewModelScope.launch { downloadPreferences.setNotificationQuestionShown() }
+    }
+
+    /** Hjärtat: lägger till eller tar bort numret som favorit. */
+    fun toggleFavorite() {
+        val favorite = !state.value.isFavorite
+        viewModelScope.launch { readingRepository.setFavorite(issueId, favorite) }
+    }
+
+    fun editBookmark(id: Long, title: String, note: String) {
+        viewModelScope.launch { bookmarkRepository.edit(id, title, note) }
+    }
+
+    fun deleteBookmark(id: Long) {
+        viewModelScope.launch { bookmarkRepository.delete(id) }
     }
 
     /** Laddar ned numret för läsning utan nät. Finns det i läs-cachen flyttas det, utan nätverkstrafik. */
@@ -153,19 +190,33 @@ fun IssueScreen(
     imageLoader: ImageLoader,
     onOpenIssue: (issueId: String) -> Unit,
     onRead: (issueId: String) -> Unit,
+    onReadPage: (issueId: String, pageNumber: Int) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val details = state.details
+    var editing by remember { mutableStateOf<Bookmark?>(null) }
 
     Column(modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        IconButton(onClick = onBack, modifier = Modifier.padding(start = 8.dp, top = 8.dp).size(48.dp)) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Tillbaka",
-                tint = DmzColors.TextPrimary,
-            )
+        Row(modifier = Modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp, top = 8.dp)) {
+            IconButton(onClick = onBack, modifier = Modifier.size(48.dp)) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Tillbaka",
+                    tint = DmzColors.TextPrimary,
+                )
+            }
+            Spacer(Modifier.weight(1f))
+            if (details != null) {
+                IconButton(onClick = viewModel::toggleFavorite, modifier = Modifier.size(48.dp).testTag("favorite-toggle")) {
+                    Icon(
+                        imageVector = if (state.isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = if (state.isFavorite) "Ta bort som favorit" else "Lägg till som favorit",
+                        tint = if (state.isFavorite) DmzColors.Accent else DmzColors.TextPrimary,
+                    )
+                }
+            }
         }
         when {
             details != null -> IssueContent(
@@ -176,6 +227,14 @@ fun IssueScreen(
                 onOpenIssue = onOpenIssue,
                 onRead = onRead,
                 onSetReadStatus = viewModel::setReadStatus,
+                bookmarks = {
+                    IssueBookmarks(
+                        bookmarks = state.bookmarks,
+                        archiveFileChanged = state.archiveFileChanged,
+                        onOpen = { onReadPage(details.issue.issueId, it.pageNumber) },
+                        onEdit = { editing = it },
+                    )
+                },
                 download = {
                     if (details.issue.readAction() == ReadAction.READ) {
                         DownloadSection(
@@ -201,6 +260,45 @@ fun IssueScreen(
             )
         }
     }
+
+    editing?.let { bookmark ->
+        BookmarkEditDialog(
+            bookmark = bookmark,
+            onSave = { title, note ->
+                viewModel.editBookmark(bookmark.id, title, note)
+                editing = null
+            },
+            onDelete = {
+                viewModel.deleteBookmark(bookmark.id)
+                editing = null
+            },
+            onDismiss = { editing = null },
+        )
+    }
+}
+
+/** Numrets bokmärken, och markeringen om att arkivfilen kan ha bytts (planens C7). */
+@Composable
+private fun IssueBookmarks(
+    bookmarks: List<Bookmark>,
+    archiveFileChanged: Boolean,
+    onOpen: (Bookmark) -> Unit,
+    onEdit: (Bookmark) -> Unit,
+) {
+    if (bookmarks.isEmpty() && !archiveFileChanged) return
+    Spacer(Modifier.height(12.dp))
+    Panel(modifier = Modifier.testTag("issue-bookmarks")) {
+        if (bookmarks.isNotEmpty()) {
+            MonoLabel("Bokmärken")
+            Spacer(Modifier.height(4.dp))
+        }
+        if (archiveFileChanged) {
+            Notice(ARCHIVE_FILE_CHANGED_TEXT, modifier = Modifier.padding(vertical = 4.dp))
+        }
+        bookmarks.forEach { bookmark ->
+            BookmarkRow(bookmark, onOpen = { onOpen(bookmark) }, onEdit = { onEdit(bookmark) })
+        }
+    }
 }
 
 @Composable
@@ -212,6 +310,7 @@ private fun IssueContent(
     onOpenIssue: (String) -> Unit,
     onRead: (String) -> Unit,
     onSetReadStatus: (ReadStatusOverride?) -> Unit,
+    bookmarks: @Composable () -> Unit,
     download: @Composable () -> Unit,
 ) {
     val progress = reading?.progress ?: readingProgress(null, null)
@@ -255,6 +354,7 @@ private fun IssueContent(
         }
 
         download()
+        bookmarks()
 
         val pages = pageCountText(reading?.pageCount ?: issue.pageCount, issue.scanPageCount)
         val size = fileSizeText(issue.ocrPdfSize)
