@@ -1,8 +1,6 @@
 package se.c64.dmzreader.data.pdf
 
 import android.util.Log
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import se.c64.dmzreader.data.db.IssueEntity
 import se.c64.dmzreader.data.db.IssueLocalState
 import se.c64.dmzreader.data.offline.LocalStateStore
@@ -25,10 +23,10 @@ class PdfRepository(
     private val cache: PdfCache,
     private val downloader: PdfDownloader,
     private val localState: LocalStateStore,
+    /** Delas med nedladdningskön: bara en PDF-överföring åt gången i hela appen. */
+    private val transfers: TransferCoordinator = TransferCoordinator(),
+    private val log: (String) -> Unit = { Log.i(LOG_TAG, it) },
 ) {
-    // En PDF-nedladdning åt gången. Nästa väntar tills den förra är klar eller avbruten.
-    private val downloadLock = Mutex()
-
     fun cachedFile(issueId: String): File? = cache.file(issueId).takeIf { it.isFile }
 
     /** Storleken på läs-cachen i byte. */
@@ -45,16 +43,17 @@ class PdfRepository(
 
     suspend fun download(issue: IssueEntity, onProgress: (DownloadProgress) -> Unit): DownloadResult {
         val url = issue.ocrPdfUrl ?: return DownloadResult.HttpError(404)
-        return downloadLock.withLock {
+        // En läsning går före nedladdningskön, som pausas så länge.
+        return transfers.reading {
             // Gör plats i cachen innan nedladdningen börjar.
             cache.trim(keepIssueId = issue.issueId, reserveBytes = issue.ocrPdfSize ?: 0)
             val result = downloader.download(issue.issueId, url, issue.ocrPdfSize, onProgress)
             if (result is DownloadResult.Success) {
-                Log.i(LOG_TAG, "${issue.issueId}: nedladdad, ${result.size} byte, återupptagen=${result.resumed}")
+                log("${issue.issueId}: nedladdad, ${result.size} byte, återupptagen=${result.resumed}")
                 recordDownload(issue, result)
                 cache.touch(issue.issueId)
             } else {
-                Log.i(LOG_TAG, "${issue.issueId}: nedladdningen avslutades med $result")
+                log("${issue.issueId}: nedladdningen avslutades med $result")
             }
             result
         }
@@ -71,8 +70,8 @@ class PdfRepository(
             )
         }
         if (pdfDiffersFromInventory(issue, result.size, result.etag, result.lastModified)) {
-            Log.w(
-                LOG_TAG,
+            log(
+                "VARNING: " +
                 "${issue.issueId}: filen i arkivet skiljer sig från inventory " +
                     "(storlek ${result.size} mot ${issue.ocrPdfSize}, ETag ${result.etag} mot ${issue.ocrPdfEtag})",
             )

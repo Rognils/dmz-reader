@@ -156,6 +156,17 @@ class ReaderViewModel(
                 return@launch
             }
             _state.value = ReaderUiState.Downloading(issue, null)
+            // Laddas numret redan ned permanent visas den nedladdningens förlopp, och
+            // läsaren öppnar den färdiga filen. Numret hämtas inte en gång till.
+            val downloaded = offlineRepository.awaitActiveDownload(issueId) { progress ->
+                _state.update { current ->
+                    if (current is ReaderUiState.Downloading) current.copy(progress = progress) else current
+                }
+            }
+            if (downloaded != null) {
+                open(issue, downloaded)
+                return@launch
+            }
             val result = pdfRepository.download(issue) { progress ->
                 _state.update { current ->
                     if (current is ReaderUiState.Downloading) current.copy(progress = progress) else current
@@ -207,7 +218,10 @@ class ReaderViewModel(
 
     fun retry() = start()
 
-    /** Avbryter en pågående nedladdning. Den påbörjade filen ligger kvar för återupptagning. */
+    /**
+     * Avbryter läsarens nedladdning. Den påbörjade filen ligger kvar för återupptagning.
+     * En permanent nedladdning av numret som läsaren bara väntade på fortsätter.
+     */
     fun cancelDownload() {
         downloadJob?.cancel()
     }

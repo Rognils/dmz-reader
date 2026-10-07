@@ -21,6 +21,7 @@ import se.c64.dmzreader.data.offline.OfflineRepository
 import se.c64.dmzreader.data.pdf.PdfCache
 import se.c64.dmzreader.data.pdf.PdfDownloader
 import se.c64.dmzreader.data.pdf.PdfFiles
+import se.c64.dmzreader.data.pdf.TransferCoordinator
 import se.c64.dmzreader.data.pdf.PdfRepository
 import se.c64.dmzreader.data.repository.DiagnosticsRepository
 import se.c64.dmzreader.data.repository.LibraryRepository
@@ -54,11 +55,14 @@ class AppContainer(private val context: Context) {
 
     /** Läs-PDF:er: egen HTTP-klient, skild från bildladdarens (ADR 0017). */
     val pdfRepository: PdfRepository by lazy {
-        PdfRepository(pdfCache, PdfDownloader(pdfHttpClient, pdfCache), localStateStore)
+        PdfRepository(pdfCache, PdfDownloader(pdfHttpClient, pdfCache), localStateStore, transferCoordinator)
     }
 
     private val pdfCache by lazy { PdfCache(File(context.cacheDir, "pdf")) }
     private val pdfHttpClient by lazy { PdfDownloader.createHttpClient() }
+
+    /** En PDF-överföring åt gången i hela appen: "Läs" och nedladdningskön delar på den. */
+    private val transferCoordinator = TransferCoordinator()
     private val localStateStore by lazy { LocalStateStore(database.issueLocalStateDao()) }
 
     val downloadPreferences: DownloadPreferences by lazy { DataStoreDownloadPreferences(context) }
@@ -72,6 +76,7 @@ class AppContainer(private val context: Context) {
             files = files,
             cache = pdfCache,
             downloader = PdfDownloader(pdfHttpClient, files),
+            transfers = transferCoordinator,
             onMoved = ::leaveCacheGroup,
             log = { Log.i("DmzOffline", it) },
         )

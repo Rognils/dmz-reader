@@ -11,6 +11,7 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
 import se.c64.dmzreader.data.db.DownloadState
@@ -22,6 +23,7 @@ import se.c64.dmzreader.data.pdf.DownloadResult
 import se.c64.dmzreader.data.pdf.PdfCache
 import se.c64.dmzreader.data.pdf.PdfDownloader
 import se.c64.dmzreader.data.pdf.PdfFiles
+import se.c64.dmzreader.data.pdf.TransferCoordinator
 import java.io.File
 import java.util.Collections
 
@@ -69,6 +71,8 @@ class OfflineRepository(
     private val files: PdfFiles,
     private val cache: PdfCache,
     private val downloader: PdfDownloader,
+    /** Delas med "Läs": bara en PDF-överföring åt gången i hela appen. */
+    private val transfers: TransferCoordinator = TransferCoordinator(),
     private val now: () -> Long = System::currentTimeMillis,
     private val move: (source: File, target: File, part: File) -> Boolean = { s, t, p -> movePdf(s, t, p) },
     /** Anropas när en fil har flyttats in från läs-cachen. */
@@ -80,7 +84,7 @@ class OfflineRepository(
     private val cancelledByUser: MutableSet<String> = Collections.synchronizedSet(HashSet())
 
     @Volatile
-    private var activeJob: Pair<String, Deferred<DownloadResult>>? = null
+    private var activeJob: Pair<String, Deferred<DownloadResult?>>? = null
 
     private val _active = MutableStateFlow<ActiveDownload?>(null)
 
@@ -164,24 +168,49 @@ class OfflineRepository(
             else -> Unit
         }
 
-        val cached = cache.file(issueId)
-        if (cached.isFile && isVerifiedCacheFile(cached, issue, state)) {
-            val size = cached.length()
-            if (move(cached, files.file(issueId), files.partFile(issueId))) {
-                files.removePart(issueId)
-                onMoved(files.file(issueId))
-                localState.update(issueId) { it.downloaded(files.file(issueId), size, now()) }
-                log("$issueId: flyttad från läs-cachen, $size byte, ingen nätverkstrafik")
-                return@withContext DownloadRequest.MOVED_FROM_CACHE
-            }
-            log("$issueId: flytten från läs-cachen misslyckades, numret hämtas i stället")
-        }
+        if (moveFromCache(issue, state)) return@withContext DownloadRequest.MOVED_FROM_CACHE
 
         val queuedAt = now()
         localState.update(issueId) {
             it.copy(downloadState = DownloadState.QUEUED, downloadQueuedAt = queuedAt)
         }
         DownloadRequest.QUEUED
+    }
+
+    /**
+     * Flyttar numret från läs-cachen om det finns där, komplett och verifierat.
+     * Ingen nätverkstrafik. Ger falskt om filen inte finns eller inte gick att flytta.
+     */
+    private suspend fun moveFromCache(issue: IssueEntity, state: IssueLocalState?): Boolean {
+        val issueId = issue.issueId
+        val cached = cache.file(issueId)
+        if (!cached.isFile || !isVerifiedCacheFile(cached, issue, state)) return false
+        val size = cached.length()
+        if (!move(cached, files.file(issueId), files.partFile(issueId))) {
+            log("$issueId: flytten från läs-cachen misslyckades, numret hämtas i stället")
+            return false
+        }
+        files.removePart(issueId)
+        onMoved(files.file(issueId))
+        localState.update(issueId) { it.downloaded(files.file(issueId), size, now()) }
+        log("$issueId: flyttad från läs-cachen, $size byte, ingen nätverkstrafik")
+        return true
+    }
+
+    /**
+     * Väntar på den permanenta nedladdning av numret som pågår just nu och ger
+     * den färdiga filen. Används när användaren trycker "Läs" på ett nummer som
+     * håller på att laddas ned: det hämtas då inte en gång till.
+     *
+     * Ger null om numret inte laddas ned just nu, eller om nedladdningen inte
+     * blev klar (avbruten, misslyckad eller pausad).
+     */
+    suspend fun awaitActiveDownload(issueId: String, onProgress: (DownloadProgress?) -> Unit): File? {
+        if (active.value?.issueId != issueId) return null
+        // Status skrivs innan nästa nummer blir det aktiva, så när flödet lämnar
+        // det här numret står resultatet redan i databasen.
+        active.takeWhile { it?.issueId == issueId }.collect { onProgress(it?.progress) }
+        return verifiedFile(issueId)
     }
 
     /**
@@ -263,6 +292,8 @@ class OfflineRepository(
             reconciled.await()
             while (true) {
                 currentCoroutineContext().ensureActive()
+                // En läsning går före kön. Ingenting nytt påbörjas medan den pågår.
+                transfers.awaitNoReading()
                 val next = localState.nextQueued() ?: return QueueOutcome.EMPTY
                 val issueId = next.issueId
                 val issue = issueDao.get(issueId)
@@ -271,28 +302,35 @@ class OfflineRepository(
                     localState.update(issueId) { it.copy(downloadState = DownloadState.FAILED) }
                     continue
                 }
+                // Numret kan ha hämtats till läs-cachen med "Läs" medan det stod i kön.
+                if (moveFromCache(issue, next)) continue
+
                 current = issueId
                 localState.update(issueId) { it.copy(downloadState = DownloadState.DOWNLOADING) }
                 val title = "${issue.publicationTitle} ${issue.year} ${issue.issueLabel}"
                 _active.value = ActiveDownload(issueId, title, null)
 
+                // null betyder att användaren avbröt just den här filen.
+                var paused = false
                 val result = try {
                     coroutineScope {
                         val download = async {
-                            var lastReport = 0L
-                            downloader.download(issueId, url, issue.ocrPdfSize) { progress ->
-                                // Förloppet rapporteras för varje 64 kB. Gränssnittet och notisen
-                                // behöver inte mer än några uppdateringar i sekunden.
-                                val tick = System.nanoTime()
-                                val done = progress.totalBytes == progress.bytesDownloaded
-                                if (done || tick - lastReport >= PROGRESS_INTERVAL_NANOS) {
-                                    lastReport = tick
-                                    _active.value = ActiveDownload(issueId, title, progress)
+                            transfers.background {
+                                var lastReport = 0L
+                                downloader.download(issueId, url, issue.ocrPdfSize) { progress ->
+                                    // Förloppet rapporteras för varje 64 kB. Gränssnittet och notisen
+                                    // behöver inte mer än några uppdateringar i sekunden.
+                                    val tick = System.nanoTime()
+                                    val done = progress.totalBytes == progress.bytesDownloaded
+                                    if (done || tick - lastReport >= PROGRESS_INTERVAL_NANOS) {
+                                        lastReport = tick
+                                        _active.value = ActiveDownload(issueId, title, progress)
+                                    }
                                 }
                             }
                         }
                         activeJob = issueId to download
-                        download.await()
+                        download.await().also { paused = it == null }
                     }
                 } catch (e: CancellationException) {
                     // Avbröts hela körningen, eller bara den här filen av användaren?
@@ -305,6 +343,14 @@ class OfflineRepository(
                 // Markeringen tas alltid bort här. Ligger den kvar skulle nästa
                 // nedladdning av samma nummer räknas som avbruten när den blir klar.
                 val cancelled = cancelledByUser.remove(issueId)
+                if (paused && !cancelled) {
+                    // Pausad för en läsning: numret står kvar först i kön med sin .part-fil.
+                    localState.update(issueId) { it.copy(downloadState = DownloadState.QUEUED) }
+                    _active.value = null
+                    log("$issueId: pausad för en läsning, fortsätter efteråt")
+                    current = null
+                    continue
+                }
                 if (result == null || cancelled) {
                     files.remove(issueId)
                     localState.update(issueId) { it.cleared() }
