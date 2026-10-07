@@ -267,6 +267,7 @@ IssueLocalState
 ├── downloadedPath         String?, permanent kopia i filesDir
 ├── downloadedBytes        Long?
 ├── downloadedAt           Long?
+├── downloadQueuedAt       Long?, när nedladdningen begärdes; bestämmer ordningen i kön
 └── detectedSpreadOffset   Int?, om appen själv upptäcker parningen
 ```
 
@@ -675,6 +676,7 @@ Observera: app-specifik lagring raderas när appen avinstalleras. Därför finns
 - FTP används bara för HQ (Original Scans) och Large PDF, via en FTP-klient (t.ex. Apache Commons Net)
 - om filer bara finns via FTP betyder "Läs nu": ladda ned till cache och öppna lokalt
 - högst en FTP-anslutning åt gången, och nedladdningar köas
+- **en PDF-överföring åt gången i hela appen.** All PDF-trafik, både "Läs" och nedladdningskön, går genom en gemensam `TransferCoordinator`. "Läs" går före: kön pausas (den aktuella förfrågan avbryts och `.part` ligger kvar) och återupptas när läsningens nedladdning är klar. "Läs" på ett nummer som redan laddas ned väntar på den nedladdningen i stället för att hämta numret en gång till.
 - en egen HTTP-spegel i hemmalabbet är en dokumenterad reservlösning, inte ett beslut. Den byggs bara om FAS 0 eller verklig användning visar att den behövs.
 
 ## E10. Sökning
@@ -1476,3 +1478,5 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-07 | Före FAS 5: A5, E8 och FAS 5: permanent nedladdning sker på API 34+ via JobScheduler User-Initiated Data Transfer (UIDT). På API 26–33 finns ingen bakgrundsnedladdning: nedladdningen sker medan appen är öppen, med en tydlig text om det. Ingen WorkManager-reserv byggs, eftersom den inte kan testas på någon tillgänglig enhet. | 0013 |
 | 2026-10-07 | Före FAS 5: FAS 10: sessioner som pågår vid tvångsstopp går förlorade. Löpande sparning utreds i FAS 10. | 0018 |
 | 2026-10-07 | Före FAS 5: E8: permanenta PDF:er lagras i `filesDir/issues/` | 0013 |
+| 2026-10-07 | Efter FAS 5 (v0.5.1): C3: nytt fält `downloadQueuedAt` i `IssueLocalState`, som bestämmer ordningen i nedladdningskön | 0013 |
+| 2026-10-07 | Efter FAS 5 (v0.5.1): E9: en PDF-överföring åt gången i hela appen, genom en gemensam `TransferCoordinator`. "Läs" går före kön, som pausas och återupptas. "Läs" på ett nummer som laddas ned väntar på den nedladdningen. | 0013 |
