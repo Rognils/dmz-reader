@@ -21,7 +21,13 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // R8 krymper och optimerar koden. Varianten signeras tills vidare med
+            // debug-nyckeln, så att den kan installeras på telefonen för mätning.
+            // En riktig releasenyckel beslutas när appen ska distribueras.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
