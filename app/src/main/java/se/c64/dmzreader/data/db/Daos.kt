@@ -87,14 +87,21 @@ interface IssueLocalStateDao {
     @Update
     suspend fun update(state: IssueLocalState): Int
 
-    /** Nästa nummer i nedladdningskön: det som begärdes först. */
+    /**
+     * Nästa nummer i nedladdningskön: det som begärdes först. Ett nedladdat
+     * nummer med downloadQueuedAt satt väntar på att uppdateras (planens C7).
+     */
     @Query(
         "SELECT * FROM IssueLocalState WHERE downloadState = 'QUEUED' " +
+            "OR (downloadState = 'DOWNLOADED' AND downloadQueuedAt IS NOT NULL) " +
             "ORDER BY downloadQueuedAt IS NULL, downloadQueuedAt, issueId LIMIT 1"
     )
     suspend fun nextQueued(): IssueLocalState?
 
-    @Query("SELECT COUNT(*) FROM IssueLocalState WHERE downloadState = 'QUEUED'")
+    @Query(
+        "SELECT COUNT(*) FROM IssueLocalState WHERE downloadState = 'QUEUED' " +
+            "OR (downloadState = 'DOWNLOADED' AND downloadQueuedAt IS NOT NULL)"
+    )
     suspend fun queuedCount(): Int
 
     @Query("SELECT * FROM IssueLocalState WHERE issueId = :issueId")

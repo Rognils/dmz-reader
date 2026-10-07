@@ -188,7 +188,7 @@ class ReaderViewModel(
                 return@launch
             }
             // En permanent nedladdning används alltid före läs-cachen och före nätet.
-            val local = offlineRepository.verifiedFile(issueId) ?: pdfRepository.cachedFile(issueId)
+            val local = offlineRepository.verifiedFile(issueId) ?: pdfRepository.usableCachedFile(issue)
             if (local != null) {
                 open(issue, local)
                 return@launch

@@ -21,8 +21,13 @@ sealed interface CoverSource {
  * Källorna för ett nummers omslag, i den ordning de ska prövas (ADR 0016):
  * inbyggd miniatyr, sedan coverUrl. Är listan tom, eller misslyckas alla,
  * visas platshållaren.
+ *
+ * coverAsset i ett arkivindex är bara en ledtråd: ett importerat index kan
+ * peka på en miniatyr som inte följer med den här appversionen. Med
+ * [bundledCovers] (miniatyrerna som finns i assets) används coverAsset bara om
+ * filen finns. null betyder att det inte är känt, och då prövas den.
  */
-fun coverSources(issue: IssueEntity): List<CoverSource> = buildList {
-    issue.coverAsset?.let { add(CoverSource.Asset(it)) }
+fun coverSources(issue: IssueEntity, bundledCovers: Set<String>? = null): List<CoverSource> = buildList {
+    issue.coverAsset?.takeIf { bundledCovers == null || it in bundledCovers }?.let { add(CoverSource.Asset(it)) }
     issue.coverUrl?.let { add(CoverSource.Remote(it, CoverTransform.fromFlags(issue.coverFlags))) }
 }

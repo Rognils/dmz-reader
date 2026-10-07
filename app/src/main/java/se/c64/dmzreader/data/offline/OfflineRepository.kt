@@ -91,6 +91,11 @@ class OfflineRepository(
     /** Nedladdningen som pågår, med förlopp. null när ingenting hämtas. */
     val active: StateFlow<ActiveDownload?> = _active
 
+    private val _failedUpdates = MutableStateFlow<Set<String>>(emptySet())
+
+    /** Nummer där en uppdatering av den nedladdade kopian misslyckades. Den gamla kopian finns kvar. */
+    val failedUpdates: StateFlow<Set<String>> = _failedUpdates
+
     val directory: File get() = files.directory
 
     /**
@@ -107,7 +112,14 @@ class OfflineRepository(
             val states = localState.getAll()
             for (state in states) {
                 when (state.downloadState) {
-                    DownloadState.DOWNLOADED -> if (!isIntact(state)) {
+                    DownloadState.DOWNLOADED -> if (state.downloadQueuedAt != null && files.file(state.issueId).isFile) {
+                        // En uppdatering var på gång. Hann den nya filen läggas på plats innan
+                        // appen stoppades gäller dess storlek; annars är den gamla kopian orörd.
+                        val size = files.file(state.issueId).length()
+                        if (size != state.downloadedBytes) {
+                            localState.update(state.issueId) { it.copy(downloadedBytes = size, downloadQueuedAt = null) }
+                        }
+                    } else if (!isIntact(state)) {
                         log("${state.issueId}: nedladdad fil saknas eller har fel storlek, status nollställs")
                         files.file(state.issueId).delete()
                         localState.update(state.issueId) { it.cleared() }
@@ -120,7 +132,7 @@ class OfflineRepository(
                 }
             }
             val waiting = localState.getAll()
-                .filter { it.downloadState == DownloadState.QUEUED || it.downloadState == DownloadState.DOWNLOADING }
+                .filter { it.downloadState == DownloadState.QUEUED || it.downloadState == DownloadState.DOWNLOADING || it.isUpdating() }
                 .map { it.issueId }
                 .toSet()
             for (issueId in files.issueIdsWithParts() - waiting) {
@@ -175,6 +187,22 @@ class OfflineRepository(
             it.copy(downloadState = DownloadState.QUEUED, downloadQueuedAt = queuedAt)
         }
         DownloadRequest.QUEUED
+    }
+
+    /**
+     * "Uppdatera nedladdning" (planens C7): hämtar den aktuella filen ur arkivet
+     * och ersätter den nedladdade kopian först när den nya är komplett. Den gamla
+     * kopian finns kvar under tiden, och om uppdateringen misslyckas eller avbryts.
+     *
+     * Ger falskt om numret inte är nedladdat.
+     */
+    suspend fun requestUpdate(issueId: String): Boolean = withContext(Dispatchers.IO) {
+        val state = localState.get(issueId)
+        if (state?.downloadState != DownloadState.DOWNLOADED) return@withContext false
+        _failedUpdates.value -= issueId
+        val queuedAt = now()
+        localState.update(issueId) { it.copy(downloadQueuedAt = it.downloadQueuedAt ?: queuedAt) }
+        true
     }
 
     /**
@@ -235,6 +263,12 @@ class OfflineRepository(
             return@withContext
         }
         val state = localState.get(issueId) ?: return@withContext
+        if (state.isUpdating()) {
+            // En väntande uppdatering avbryts. Den nedladdade kopian rörs inte.
+            files.removePart(issueId)
+            localState.update(issueId) { it.copy(downloadQueuedAt = null) }
+            return@withContext
+        }
         if (state.downloadState == DownloadState.QUEUED || state.downloadState == DownloadState.FAILED ||
             state.downloadState == DownloadState.DOWNLOADING
         ) {
@@ -273,7 +307,7 @@ class OfflineRepository(
 
     /** Antal byte som återstår att hämta för kön, enligt inventory. Okända storlekar räknas inte. */
     suspend fun estimatedQueueBytes(): Long = localState.getAll()
-        .filter { it.downloadState == DownloadState.QUEUED }
+        .filter { it.downloadState == DownloadState.QUEUED || it.isUpdating() }
         .sumOf { state ->
             val size = issueDao.get(state.issueId)?.ocrPdfSize ?: 0L
             (size - files.partFile(state.issueId).length()).coerceAtLeast(0)
@@ -288,6 +322,7 @@ class OfflineRepository(
     suspend fun runQueue(): QueueOutcome {
         if (!runLock.tryLock()) return QueueOutcome.ALREADY_RUNNING
         var current: String? = null
+        var currentIsUpdate = false
         try {
             reconciled.await()
             while (true) {
@@ -302,11 +337,15 @@ class OfflineRepository(
                     localState.update(issueId) { it.copy(downloadState = DownloadState.FAILED) }
                     continue
                 }
+                // En uppdatering av ett redan nedladdat nummer: status förblir DOWNLOADED,
+                // och den gamla kopian går att läsa tills den nya ligger på plats.
+                val updating = next.isUpdating()
                 // Numret kan ha hämtats till läs-cachen med "Läs" medan det stod i kön.
-                if (moveFromCache(issue, next)) continue
+                if (!updating && moveFromCache(issue, next)) continue
 
                 current = issueId
-                localState.update(issueId) { it.copy(downloadState = DownloadState.DOWNLOADING) }
+                currentIsUpdate = updating
+                if (!updating) localState.update(issueId) { it.copy(downloadState = DownloadState.DOWNLOADING) }
                 val title = "${issue.publicationTitle} ${issue.year} ${issue.issueLabel}"
                 _active.value = ActiveDownload(issueId, title, null)
 
@@ -345,18 +384,27 @@ class OfflineRepository(
                 val cancelled = cancelledByUser.remove(issueId)
                 if (paused && !cancelled) {
                     // Pausad för en läsning: numret står kvar först i kön med sin .part-fil.
-                    localState.update(issueId) { it.copy(downloadState = DownloadState.QUEUED) }
+                    if (!updating) localState.update(issueId) { it.copy(downloadState = DownloadState.QUEUED) }
                     _active.value = null
                     log("$issueId: pausad för en läsning, fortsätter efteråt")
                     current = null
                     continue
                 }
                 if (result == null || cancelled) {
-                    files.remove(issueId)
-                    localState.update(issueId) { it.cleared() }
-                    log("$issueId: nedladdningen avbröts av användaren")
-                    current = null
-                    continue
+                    if (updating && result !is DownloadResult.Success) {
+                        // Bara den påbörjade filen tas bort. Den nedladdade kopian finns kvar.
+                        files.removePart(issueId)
+                        localState.update(issueId) { it.copy(downloadQueuedAt = null) }
+                        log("$issueId: uppdateringen avbröts av användaren, den gamla kopian finns kvar")
+                    } else if (!updating) {
+                        files.remove(issueId)
+                        localState.update(issueId) { it.cleared() }
+                        log("$issueId: nedladdningen avbröts av användaren")
+                    }
+                    if (!(updating && result is DownloadResult.Success)) {
+                        current = null
+                        continue
+                    }
                 }
                 when (result) {
                     is DownloadResult.Success -> {
@@ -375,13 +423,19 @@ class OfflineRepository(
                     }
 
                     is DownloadResult.NetworkError -> {
-                        localState.update(issueId) { it.copy(downloadState = DownloadState.QUEUED) }
+                        if (!updating) localState.update(issueId) { it.copy(downloadState = DownloadState.QUEUED) }
                         log("$issueId: nätet försvann (${result.message}), numret står kvar i kön")
                         current = null
                         return QueueOutcome.NETWORK_LOST
                     }
 
-                    else -> {
+                    else -> if (updating) {
+                        // Den gamla kopian är orörd: en ny fil läggs bara på plats när den är komplett.
+                        files.removePart(issueId)
+                        localState.update(issueId) { it.copy(downloadQueuedAt = null) }
+                        _failedUpdates.value += issueId
+                        log("$issueId: uppdateringen misslyckades med $result, den gamla kopian finns kvar")
+                    } else {
                         localState.update(issueId) { it.copy(downloadState = DownloadState.FAILED) }
                         log("$issueId: nedladdningen misslyckades med $result")
                     }
@@ -393,8 +447,13 @@ class OfflineRepository(
             withContext(NonCancellable) {
                 if (interrupted != null) {
                     if (cancelledByUser.remove(interrupted)) {
-                        files.remove(interrupted)
-                        localState.update(interrupted) { it.cleared() }
+                        if (currentIsUpdate) {
+                            files.removePart(interrupted)
+                            localState.update(interrupted) { it.copy(downloadQueuedAt = null) }
+                        } else {
+                            files.remove(interrupted)
+                            localState.update(interrupted) { it.cleared() }
+                        }
                     } else {
                         localState.update(interrupted) {
                             if (it.downloadState == DownloadState.DOWNLOADING) it.copy(downloadState = DownloadState.QUEUED) else it
@@ -414,6 +473,10 @@ class OfflineRepository(
         const val PROGRESS_INTERVAL_NANOS = 250_000_000L
     }
 }
+
+/** Sant när numret är nedladdat och väntar på, eller håller på med, en uppdatering av kopian. */
+private fun IssueLocalState.isUpdating(): Boolean =
+    downloadState == DownloadState.DOWNLOADED && downloadQueuedAt != null
 
 private fun IssueLocalState.cleared(): IssueLocalState = copy(
     downloadState = DownloadState.NONE,
