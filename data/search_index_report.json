@@ -563,5 +563,27 @@
     1
    ]
   }
- ]
+ ],
+ "sizes": {
+  "file": 148877312,
+  "ftsIndex": 26955776,
+  "gzip": 55008219,
+  "other": 36864,
+  "pages": 11293,
+  "pagesTable": 121884672,
+  "rawTextBytes": 56795807,
+  "searchTextBytes": 56393313,
+  "xz": 39249372
+ },
+ "sizes-withoutRawText": {
+  "file": 91594752,
+  "ftsIndex": 26955776,
+  "gzip": 45634046,
+  "other": 36864,
+  "pages": 11293,
+  "pagesTable": 64602112,
+  "rawTextBytes": 0,
+  "searchTextBytes": 56393313,
+  "xz": 34151636
+ }
 }

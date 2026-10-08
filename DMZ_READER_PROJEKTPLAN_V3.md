@@ -467,7 +467,7 @@ Genereras av toolchainen i FAS 8 och importeras separat. Den följer inte med AP
 
 ```text
 meta        (key, value)
-            searchSchemaVersion, inventoryDatasetVersion, normalizerVersion,
+            searchSchemaVersion, inventoryDatasetVersion, normalizerVersion, lexiconVersion,
             tokenizer, builtAt, generator, sqliteVersion, pdftotextMode,
             issueCount, pageCount
 
@@ -1542,3 +1542,5 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-08 | Efter FAS 8A: `pageCount` är PDF:ens sidantal (C7), även när det skiljer sig från antalet skannade sidor | — |
 | 2026-10-08 | Efter FAS 8A: "C64" mot "C-64" hanteras i frågelagret i FAS 9, inte i indexet | 0010 |
 | 2026-10-08 | Före FAS 8B: normaliseringen får inte bero på vilka andra nummer som byggs. Ordlistan fryses i `tools/data/normalizer_lexicon_v1.txt` med `normalizerVersion` 1. | 0004 |
+| 2026-10-08 | FAS 8B: `normalizerVersion` 2 efter granskat stickprov; `meta` har också `lexiconVersion`. Ordlistan är fortsatt version 1. | 0004 |
+| 2026-10-08 | FAS 8B: inventory 2026-10-06-005 har uppmätt `pageCount` för alla 185 nummer | — |
