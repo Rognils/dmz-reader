@@ -36,6 +36,7 @@ CACHE = REPO_ROOT / "cache"
 SEARCH_DIR = CACHE / "search"
 GOLDEN_PATH = REPO_ROOT / "tools" / "testdata" / "search_golden.json"
 RESULT_PATH = REPO_ROOT / "data" / "search_pilot.json"
+FULL_RESULT_PATH = REPO_ROOT / "data" / "search_index_report.json"
 PILOT_BUILT_AT = "2026-10-08T00:00:00Z"
 VARIANTS = (0, 2)
 
@@ -66,10 +67,11 @@ def load_inventory() -> dict:
     return json.loads(bsi.INVENTORY_PATH.read_text(encoding="utf-8"))
 
 
-def save_result(section: str, value) -> None:
-    result = json.loads(RESULT_PATH.read_text(encoding="utf-8")) if RESULT_PATH.exists() else {}
+def save_result(section: str, value, path: Path | None = None) -> None:
+    path = path or RESULT_PATH
+    result = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
     result[section] = value
-    RESULT_PATH.write_text(json.dumps(result, indent=1, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(result, indent=1, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
 
 
 # ---------------------------------------------------------------- compare
@@ -210,7 +212,25 @@ def evaluate_variant(db_path: Path, golden: dict) -> list[dict]:
     return rows
 
 
-def evaluate(_arguments) -> int:
+def evaluate_one(db_path: Path) -> int:
+    """Facit mot en enda databas, till exempel den fullständiga i dist/."""
+    golden = json.loads(GOLDEN_PATH.read_text(encoding="utf-8"))
+    rows = evaluate_variant(db_path, golden)
+    print(f"{'sökord':<24}{'typ':<13}{'träffar':>8}  {'plats':<8}{'irrelevanta':>11}")
+    for row in rows:
+        ranks = ",".join("–" if rank is None else str(rank) for rank in row["ranks"])
+        print(f"{row['query']:<24}{row['kind']:<13}{row['hits']:>8}  {ranks:<8}{row['irrelevant']:>11}"
+              f"{'' if row['found'] else '  MISS'}")
+    found = sum(row["found"] for row in rows)
+    print(f"{found} av {len(rows)} sökord hittar alla förväntade sidor, "
+          f"{sum(row['irrelevant'] for row in rows)} irrelevanta träffar")
+    save_result("golden", rows, FULL_RESULT_PATH)
+    return 0 if found == len(rows) else 1
+
+
+def evaluate(arguments) -> int:
+    if arguments.db:
+        return evaluate_one(arguments.db)
     golden = json.loads(GOLDEN_PATH.read_text(encoding="utf-8"))
     results = {f"rd{d}": evaluate_variant(variant_path(d), golden) for d in VARIANTS}
     print(f"{'sökord':<22}{'typ':<12}{'rd0: träffar/fel/rang':<26}{'rd2: träffar/fel/rang':<26}")
@@ -248,7 +268,12 @@ def table_sizes(db_path: Path) -> dict:
             "gzip": len(gzip.compress(data, 9)), "xz": len(lzma.compress(data, preset=6))}
 
 
-def measure(_arguments) -> int:
+def measure(arguments) -> int:
+    if arguments.db:
+        sizes = table_sizes(arguments.db)
+        print(json.dumps(sizes, indent=1))
+        save_result("sizes" if not arguments.label else f"sizes-{arguments.label}", sizes, FULL_RESULT_PATH)
+        return 0
     inventory = load_inventory()
     by_id = {issue["issueId"]: issue for issue in inventory["issues"]}
     archive = Counter(generation(issue) for issue in inventory["issues"] if issue.get("ocrPdfUrl"))
@@ -344,7 +369,11 @@ def main(argv=None) -> int:
     commands = parser.add_subparsers(dest="command", required=True)
     for name, function in (("compare", compare), ("build", build), ("evaluate", evaluate), ("measure", measure),
                            ("pages", pages), ("plan", plan)):
-        commands.add_parser(name).set_defaults(function=function)
+        command = commands.add_parser(name)
+        command.set_defaults(function=function)
+        if name in ("evaluate", "measure"):
+            command.add_argument("--db", type=Path, help="en enda databas, till exempel dist/search.db")
+            command.add_argument("--label", help="namn på mätningen i data/search_index_report.json")
     render_parser = commands.add_parser("render")
     render_parser.add_argument("issue")
     render_parser.add_argument("page", type=int)

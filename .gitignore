@@ -35,3 +35,6 @@ captures/
 cache/
 # Kopieras från data/covers/ av byggsteget syncInventory
 /app/src/main/assets/covers/
+
+# Färdigt sökindex (FAS 8B)
+dist/

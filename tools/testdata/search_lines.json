@@ -1,5 +1,5 @@
 {
-"comment": "Verkliga rader ur pilotens PDF:er (pdftotext -raw -bbox): ordbitar med läge i punkter, och den del av pilotens ordlista som raderna berör. Används av tools/tests/test_search_index.py.",
+"comment": "Verkliga rader ur pilotens PDF:er (pdftotext -raw -bbox): ordbitar med läge i punkter. Används av tools/tests/test_search_index.py tillsammans med den frysta ordlistan.",
 "examples": {
 "spaced_intro": {
 "issueId": "datormagazin-1995-14",
@@ -1027,42 +1027,7 @@
 745.74,
 "r."
 ]
-],
-"vocabulary": {
-"att": 7685,
-"attfå": 1,
-"bra": 867,
-"bättre": 230,
-"datorspel": 44,
-"dessutom": 261,
-"det": 6568,
-"deär": 1,
-"ett": 3531,
-"för": 4784,
-"har": 3044,
-"högtalare": 45,
-"inlevelse": 2,
-"låter": 103,
-"mer": 661,
-"musikskivor": 1,
-"mycket": 952,
-"nya": 458,
-"när": 999,
-"och": 9289,
-"reklamen": 11,
-"ryggsäck": 3,
-"sju": 33,
-"som": 6412,
-"spelar": 126,
-"stämmer": 21,
-"sätt": 308,
-"testat": 55,
-"tlo": 1,
-"ttre": 1,
-"utlovar": 3,
-"vad": 639,
-"åtminstone": 21
-}
+]
 },
 "spaced_headline": {
 "issueId": "datormagazin-1995-14",
@@ -1390,38 +1355,7 @@
 528.56,
 "konfigurationer."
 ]
-],
-"vocabulary": {
-"1200": 174,
-"amiga": 1461,
-"amiga1200": 3,
-"antal": 194,
-"bara": 779,
-"ett": 3531,
-"fabrikat": 5,
-"finns": 1213,
-"inför": 20,
-"inte": 2657,
-"kai": 2,
-"kat": 5,
-"konfigurationer": 4,
-"kort": 178,
-"lyckades": 15,
-"många": 492,
-"olika": 743,
-"sju": 33,
-"sverige": 168,
-"tag": 147,
-"tai": 3,
-"testet": 15,
-"till": 4499,
-"tillamiga": 3,
-"tip": 1,
-"tips": 94,
-"turbokort": 44,
-"två": 584,
-"tyvärr": 135
-}
+]
 },
 "hard_hyphen_v2": {
 "issueId": "datormagazin-1986-01",
@@ -1483,17 +1417,7 @@
 371.33,
 "bodar."
 ]
-],
-"vocabulary": {
-"att": 7685,
-"bodar": 1,
-"fylla": 13,
-"kött": 1,
-"och": 9289,
-"sina": 246,
-"stjäla": 7,
-"vatten": 16
-}
+]
 },
 "hard_hyphen_v2_b": {
 "issueId": "datormagazin-1986-01",
@@ -1590,22 +1514,7 @@
 371.36,
 "kom-"
 ]
-],
-"vocabulary": {
-"att": 7685,
-"central": 6,
-"centraldatorn": 1,
-"datorn": 240,
-"det": 6568,
-"garet": 1,
-"givetvis": 65,
-"gäller": 254,
-"han": 468,
-"kom": 110,
-"kärnreaktorn": 1,
-"luftreningsanläggningen": 1,
-"samt": 305
-}
+]
 },
 "soft_hyphen": {
 "issueId": "highscore-1993-17",
@@ -1716,19 +1625,7 @@
 409.9,
 "I"
 ]
-],
-"vocabulary": {
-"deltog": 3,
-"den": 2928,
-"finalen": 5,
-"hölls": 4,
-"lördagen": 3,
-"museum": 1,
-"september": 27,
-"som": 6412,
-"tekniska": 16,
-"wiens": 1
-}
+]
 },
 "digit_hyphen": {
 "issueId": "highscore-1993-17",
@@ -1832,21 +1729,7 @@
 482.05,
 "Hills"
 ]
-],
-"vocabulary": {
-"damon": 2,
-"formel": 6,
-"första": 334,
-"förstapris": 1,
-"hills": 3,
-"mega": 40,
-"och": 9289,
-"pris": 1041,
-"prisen": 1,
-"prisutdelaren": 1,
-"samt": 305,
-"stjärnan": 2
-}
+]
 },
 "real_hyphen": {
 "issueId": "datormagazin-1995-14",
@@ -1950,23 +1833,7 @@
 346.24,
 "64:an?"
 ]
-],
-"vocabulary": {
-"4400": 4,
-"64:an": 68,
-"cd-rom": 88,
-"cdrom": 20,
-"eller": 1463,
-"hem": 49,
-"inte": 2657,
-"köpa": 168,
-"med": 4871,
-"rom": 79,
-"spel": 1496,
-"till": 4499,
-"varför": 86,
-"över": 548
-}
+]
 },
 "real_hyphen_lower": {
 "issueId": "highscore-1993-17",
@@ -2070,21 +1937,7 @@
 277.45,
 "vinter."
 ]
-],
-"vocabulary": {
-"att": 7685,
-"cd-rom": 88,
-"cdrom": 20,
-"det": 6568,
-"endast": 251,
-"kommer": 795,
-"pcd": 1,
-"pci": 23,
-"ras": 32,
-"rom": 79,
-"till": 4499,
-"vinter": 2
-}
+]
 },
 "tight_normal": {
 "issueId": "datormagazin-1987-10b",
@@ -2160,18 +2013,7 @@
 493.79,
 "det"
 ]
-],
-"vocabulary": {
-"den": 2928,
-"det": 6568,
-"får": 871,
-"gratis": 101,
-"iden": 21,
-"runt": 297,
-"runtom": 1,
-"står": 176,
-"världen": 79
-}
+]
 },
 "tight_normal_b": {
 "issueId": "datormagazin-1987-10b",
@@ -2205,14 +2047,7 @@
 804.56,
 "199:-"
 ]
-],
-"vocabulary": {
-"149": 402,
-"199": 420,
-"last": 58,
-"lastninja": 2,
-"ninja": 71
-}
+]
 }
 }
 }

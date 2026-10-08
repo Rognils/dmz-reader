@@ -693,6 +693,12 @@ def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: di
         "publications": [{"publicationId": p, "publicationTitle": PUBLICATIONS[p]} for p in used],
         "issues": issues_out,
     }
+    # PDF:ens sidantal mot antalet skannade sidor i huvuddelen. Underlag för HQ-mappningen (FAS 11).
+    page_count_differs = [
+        {"issueId": issue["issueId"], "pageCount": issue["pageCount"], "scanPageCount": issue["scanPageCount"],
+         "scanParts": diagnostics_issues[issue["issueId"]].get("scanParts")}
+        for issue in issues_out
+        if issue["pageCount"] is not None and issue["pageCount"] != issue["scanPageCount"]]
     diagnostics = {
         "datasetVersion": dataset_version,
         "generator": inventory["generator"],
@@ -702,6 +708,7 @@ def build_inventory(listing: dict, analysis: dict, probe: dict, measurements: di
         "specialCases": analysis["specialCases"],
         "resolvedByRule": analysis["resolved"],
         "outsideRoots": analysis["outsideRoots"],
+        "pageCountDiffersFromScans": page_count_differs,
         "problems": problems,
         "warnings": warnings,
     }

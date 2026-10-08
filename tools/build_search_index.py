@@ -15,6 +15,11 @@ För varje nummer som finns i cache/pdf/ och stämmer med inventory:
      Riktiga bindestreck (CD-ROM, C-64) behålls.
   3. Sidorna läggs i SQLite med ett FTS5-index över `searchText` (plan D2).
 
+Normaliseringen läser bara det aktuella numret och den frysta ordlistan
+tools/data/normalizer_lexicon_v{N}.txt. Samma PDF och samma NORMALIZER_VERSION
+ger därför samma searchText, oavsett vilka andra nummer som byggs. Ändras en
+regel eller ordlistan ska NORMALIZER_VERSION höjas.
+
 Bygget är reproducerbart: samma PDF:er och samma `--built-at` ger en
 identisk fil.
 
@@ -36,7 +41,7 @@ from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable, NamedTuple
+from typing import Container, Iterable, NamedTuple
 
 import fetch_pdfs
 
@@ -44,8 +49,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 INVENTORY_PATH = REPO_ROOT / "data" / "archive_inventory.json"
 CACHE_DIR = REPO_ROOT / "cache" / "pdf"
 
-GENERATOR = "build_search_index.py 0.8.0"
+GENERATOR = "build_search_index.py 0.8.1"
 SEARCH_SCHEMA_VERSION = 1
+NORMALIZER_VERSION = 1
+LEXICON_PATH = REPO_ROOT / "tools" / "data" / f"normalizer_lexicon_v{NORMALIZER_VERSION}.txt"
 PDFTOTEXT_MODE = "-raw"
 SOFT_HYPHEN = "­"
 
@@ -54,7 +61,7 @@ JOIN_FRACTION = 0.5     # en lucka är "inne i ett ord" om den är mindre än h�
 MAX_JOIN_GAP = 0.3      # ... och mindre än så här
 MAX_WORD_GAP = 1.5      # större luckor är spaltmellanrum eller tabeller och räknas inte som ordmellanrum
 SHORT_FRAGMENT = 2      # en bit med högst så här många tecken talar för utspärrad text
-MIN_VOCABULARY_COUNT = 2
+MIN_VOCABULARY_COUNT = 2  # används bara när ordlistan byggs (tools/build_lexicon.py)
 
 # Korta ord som står för sig själva i vanlig text. De saknas i ordlistan, som bara har ord
 # med minst tre tecken, men ska ändå räknas som hela ord.
@@ -190,33 +197,45 @@ def split_line(line: list[Word]) -> list[str | Run]:
     return parts
 
 
-def _is_word(fragment: str, vocabulary: Counter) -> bool:
+def load_lexicon(path: Path = LEXICON_PATH) -> frozenset[str]:
+    """Den frysta ordlistan: en term per rad, små bokstäver."""
+    return frozenset(line for line in path.read_text(encoding="utf-8").split("\n") if line)
+
+
+def _is_word(fragment: str, lexicon: Container[str]) -> bool:
     word = bare(fragment)
-    return word in SHORT_WORDS or (len(word) >= 3 and vocabulary.get(word, 0) >= MIN_VOCABULARY_COUNT)
+    return word in SHORT_WORDS or (len(word) >= 3 and word in lexicon)
 
 
-def resolve_run(run: Run, vocabulary: Counter) -> list[str]:
+def _is_number(fragment: str) -> bool:
+    return any(char.isdigit() for char in fragment) and not any(char.isalpha() for char in fragment)
+
+
+def resolve_run(run: Run, lexicon: Container[str]) -> list[str]:
     """Sätter ihop bitarna om det är säkert nog, annars lämnas de som de är.
 
     Tätt satt vanlig text får aldrig klistras ihop. Därför:
       - en följd där varje bit redan är ett helt ord lämnas orörd ("I den", "Last Ninja")
       - annars sätts den ihop om resultatet är ett känt ord ("m ycket", "a t t")
-      - ett okänt resultat godtas bara om följden är tydligt utspärrad och inte
-        innehåller något helt ord ("a n v ä n d n in g s rå d")
+      - ett okänt resultat godtas bara om följden är tydligt utspärrad, inte innehåller
+        något helt ord och inte blandar tal med bokstäver ("a n v ä n d n in g s rå d",
+        men inte "4 av Bour-")
     """
     words = [fragment for fragment in run.fragments if bare(fragment)]
-    if words and all(_is_word(fragment, vocabulary) for fragment in words):
+    if words and all(_is_word(fragment, lexicon) for fragment in words):
         return list(run.fragments)
     joined = bare(run.joined)
-    if joined in SHORT_WORDS or vocabulary.get(joined, 0) >= MIN_VOCABULARY_COUNT:
+    if joined in SHORT_WORDS or joined in lexicon:
         return [run.joined]
-    has_long_word = any(len(bare(fragment)) >= 3 and _is_word(fragment, vocabulary) for fragment in words)
-    if run.is_strong() and not run.uniform and not has_long_word:
+    has_long_word = any(len(bare(fragment)) >= 3 and _is_word(fragment, lexicon) for fragment in words)
+    mixes_numbers = any(_is_number(fragment) for fragment in words) and \
+        any(fragment[0].isalpha() for fragment in words)
+    if run.is_strong() and not run.uniform and not has_long_word and not mixes_numbers:
         return [run.joined]
     return list(run.fragments)
 
 
-def _join_line_break(last: str, first: str, vocabulary: Counter) -> str | None:
+def _join_line_break(last: str, first: str, lexicon: Container[str]) -> str | None:
     """Sätter ihop ett ord som delats vid radbrytning. None betyder att orden inte hör ihop."""
     if last.endswith(SOFT_HYPHEN):
         return last[:-1] + first
@@ -229,7 +248,7 @@ def _join_line_break(last: str, first: str, vocabulary: Counter) -> str | None:
     if not first[0].islower() or left_core.isupper() or left_core[-1].isdigit():
         return last + first  # CD-ROM, C-64, Amiga-500: riktigt bindestreck
     joined, hyphenated = bare(left + first), bare(last + first)
-    if vocabulary.get(hyphenated, 0) > vocabulary.get(joined, 0):
+    if hyphenated in lexicon and joined not in lexicon:
         return last + first
     return left + first
 
@@ -238,19 +257,32 @@ def page_parts(words: Iterable[Word]) -> list[list[str | Run]]:
     return [split_line(line) for line in group_lines(words)]
 
 
-def assemble(lines: list[list[str | Run]], vocabulary: Counter) -> str:
-    """Bygger sidans searchText av raderna."""
+def assemble(lines: list[list[str | Run]], lexicon: Container[str], changes: list | None = None) -> str:
+    """Bygger sidans searchText av raderna.
+
+    Om `changes` ges fylls den med (slag, före, efter) för varje ändring, för granskning.
+    """
     tokens: list[str] = []
     for line in lines:
         resolved: list[str] = []
         for part in line:
-            resolved.extend(resolve_run(part, vocabulary) if isinstance(part, Run) else [part])
+            if isinstance(part, Run):
+                result = resolve_run(part, lexicon)
+                if changes is not None and len(result) == 1:
+                    changes.append(("utspärrat", " ".join(part.fragments), result[0]))
+                resolved.extend(result)
+            else:
+                resolved.append(part)
         resolved = [token for token in resolved if token]
         if not resolved:
             continue
         if tokens:
-            joined = _join_line_break(tokens[-1], resolved[0], vocabulary)
+            joined = _join_line_break(tokens[-1], resolved[0], lexicon)
             if joined is not None:
+                if changes is not None:
+                    kind = "mjukt bindestreck" if tokens[-1].endswith(SOFT_HYPHEN) else \
+                        ("bindestreck behållet" if joined == tokens[-1] + resolved[0] else "avstavning")
+                    changes.append((kind, f"{tokens[-1]} / {resolved[0]}", joined))
                 tokens[-1] = joined
                 resolved = resolved[1:]
         tokens.extend(resolved)
@@ -274,9 +306,9 @@ def count_vocabulary(pages: Iterable[list[list[str | Run]]], vocabulary: Counter
     return vocabulary
 
 
-def normalize_page(words: Iterable[Word], vocabulary: Counter | None = None) -> str:
-    """searchText för en sida. `vocabulary` avgör tveksamma fall; utan den sätts bara säkra fall ihop."""
-    return assemble(page_parts(words), vocabulary or Counter())
+def normalize_page(words: Iterable[Word], lexicon: Container[str] = frozenset()) -> str:
+    """searchText för en sida. Ordlistan avgör tveksamma fall; utan den sätts bara säkra fall ihop."""
+    return assemble(page_parts(words), lexicon)
 
 
 # ---------------------------------------------------------------- nummer och databas
@@ -313,7 +345,8 @@ CREATE TABLE issues (
     issueId TEXT PRIMARY KEY,
     pageCount INTEGER NOT NULL,
     ocrPdfSize INTEGER,
-    ocrPdfEtag TEXT
+    ocrPdfEtag TEXT,
+    ocrPdfSha256 TEXT
 ) WITHOUT ROWID;
 CREATE TABLE pages (
     id INTEGER PRIMARY KEY,
@@ -331,7 +364,7 @@ def tokenizer_spec(diacritics: int) -> str:
 
 
 def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], *, diacritics: int,
-                   dataset_version: str, built_at: str, vocabulary: Counter,
+                   dataset_version: str, built_at: str, lexicon: Container[str],
                    store_raw: bool = True) -> dict:
     """Skriver search.db. `issues` är (inventorypost, manifestpost, utvunnen text) i den ordning de ska in."""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -345,10 +378,11 @@ def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], 
     total_pages = 0
     for issue, file, extracted in sorted(issues, key=lambda item: item[0]["issueId"]):
         started = time.monotonic()
-        db.execute("INSERT INTO issues (issueId, pageCount, ocrPdfSize, ocrPdfEtag) VALUES (?, ?, ?, ?)",
-                   (extracted.issue_id, extracted.page_count, file["size"], file["etag"]))
+        db.execute("INSERT INTO issues (issueId, pageCount, ocrPdfSize, ocrPdfEtag, ocrPdfSha256) "
+                   "VALUES (?, ?, ?, ?, ?)",
+                   (extracted.issue_id, extracted.page_count, file["size"], file["etag"], file.get("sha256")))
         for number, (raw, parts) in enumerate(zip(extracted.raw_pages, extracted.parts), 1):
-            search_text = assemble(parts, vocabulary)
+            search_text = assemble(parts, lexicon)
             cursor = db.execute(
                 "INSERT INTO pages (issueId, pageNumber, rawText, searchText) VALUES (?, ?, ?, ?)",
                 (extracted.issue_id, number, raw if store_raw else "", search_text))
@@ -358,6 +392,7 @@ def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], 
     db.executemany("INSERT INTO meta (key, value) VALUES (?, ?)", sorted({
         "searchSchemaVersion": str(SEARCH_SCHEMA_VERSION),
         "inventoryDatasetVersion": dataset_version,
+        "normalizerVersion": str(NORMALIZER_VERSION),
         "tokenizer": tokenizer,
         "builtAt": built_at,
         "generator": GENERATOR,
@@ -401,11 +436,8 @@ def build(wanted: list[str], output: Path, *, diacritics: int, built_at: str, ca
         if item.mismatched_pages:
             log(f"  {item.issue_id}: text och lägen skiljer sig på sidorna {item.mismatched_pages}")
         extracted.append((issue, file, item))
-    vocabulary = Counter()
-    for _, _, item in extracted:
-        count_vocabulary(item.parts, vocabulary)
     result = build_database(output, extracted, diacritics=diacritics, dataset_version=inventory["datasetVersion"],
-                            built_at=built_at, vocabulary=vocabulary, store_raw=store_raw)
+                            built_at=built_at, lexicon=load_lexicon(), store_raw=store_raw)
     result["pageCounts"] = {item.issue_id: item.page_count for _, _, item in extracted}
     result["mismatchedPages"] = {item.issue_id: item.mismatched_pages for _, _, item in extracted
                                  if item.mismatched_pages}
@@ -416,18 +448,25 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("issues", nargs="*", help="issueId att ta med")
     parser.add_argument("--pilot", action="store_true", help="urvalet för FAS 8A")
-    parser.add_argument("--diacritics", type=int, choices=(0, 1, 2), required=True,
+    parser.add_argument("--all", action="store_true", help="alla nummer i inventory som har en PDF")
+    parser.add_argument("--inventory", type=Path, default=INVENTORY_PATH)
+    parser.add_argument("--diacritics", type=int, choices=(0, 1, 2), default=0,
                         help="värdet på remove_diacritics i tokenizern unicode61")
     parser.add_argument("-o", "--output", type=Path, required=True)
     parser.add_argument("--built-at", help="tidsstämpel i meta (standard: nu). Ange för ett reproducerbart bygge.")
     parser.add_argument("--without-raw-text", action="store_true", help="lämna rawText tom (för storleksmätning)")
     arguments = parser.parse_args(argv)
     wanted = list(arguments.issues) + (fetch_pdfs.PILOT_ISSUES if arguments.pilot else [])
+    if arguments.all:
+        inventory = json.loads(arguments.inventory.read_text(encoding="utf-8"))
+        wanted = [issue["issueId"] for issue in inventory["issues"] if issue.get("ocrPdfUrl")]
     if not wanted:
-        parser.error("ange issueId eller --pilot")
+        parser.error("ange issueId, --pilot eller --all")
     built_at = arguments.built_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     result = build(wanted, arguments.output, diacritics=arguments.diacritics, built_at=built_at,
-                   store_raw=not arguments.without_raw_text)
+                   inventory_path=arguments.inventory, store_raw=not arguments.without_raw_text)
+    if len(result["pageCounts"]) != len(wanted):
+        print(f"VARNING: {len(wanted) - len(result['pageCounts'])} nummer hoppades över", file=sys.stderr)
     print(f"{result['path']}: {result['issues']} nummer, {result['pages']} sidor, {result['tokenizer']}, "
           f"{Path(result['path']).stat().st_size / 1e6:.2f} MB")
     return 0

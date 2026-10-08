@@ -38,6 +38,7 @@ MANIFEST_NAME = "manifest.json"
 
 MAX_BYTES_PER_SECOND = 5_000_000
 PAUSE_BETWEEN_FILES = 3.0
+MAX_RESUMES = 10
 MIN_FREE_BYTES_AFTER = 20 * 10**9  # så här mycket ska vara ledigt även efter hämtningen
 CHUNK_SIZE = 256 * 1024
 TIMEOUT_SECONDS = 60
@@ -173,8 +174,32 @@ def download(url: str, target: Path, *, rate: float = MAX_BYTES_PER_SECOND,
     return {"size": total, "etag": etag, "lastModified": last_modified, "resumedFrom": offset}
 
 
+def download_with_resume(url: str, target: Path, *, rate: float = MAX_BYTES_PER_SECOND,
+                         pause: float = PAUSE_BETWEEN_FILES, log=print) -> dict:
+    """Som `download`, men fortsätter efter ett avbrott så länge varje försök ger nya byte.
+
+    Servern bryter långa överföringar efter omkring 200 MB. Då återupptas filen
+    med Range efter en paus, i stället för att hela körningen måste startas om.
+    """
+    part = target.with_name(target.name + ".part")
+    first_offset = part.stat().st_size if part.exists() else 0
+    for _ in range(MAX_RESUMES + 1):
+        before = part.stat().st_size if part.exists() else 0
+        try:
+            result = download(url, target, rate=rate)
+            result["resumedFrom"] = first_offset
+            return result
+        except (FetchError, OSError) as error:
+            after = part.stat().st_size if part.exists() else 0
+            if after <= before:
+                raise
+            log(f"    avbrott vid {after / 1e6:.1f} MB ({error}); återupptar")
+            time.sleep(pause)
+    raise FetchError(f"gav upp efter {MAX_RESUMES} återupptagningar")
+
+
 def fetch_issue(issue: dict, cache_dir: Path, manifest: dict, *, rate: float = MAX_BYTES_PER_SECOND,
-                log=print) -> dict:
+                pause: float = PAUSE_BETWEEN_FILES, log=print) -> dict:
     """Ser till att numrets PDF finns i cachen och är kontrollerad. Returnerar manifestposten."""
     issue_id = issue["issueId"]
     target = cache_dir / f"{issue_id}.pdf"
@@ -185,7 +210,7 @@ def fetch_issue(issue: dict, cache_dir: Path, manifest: dict, *, rate: float = M
             return entry
 
     started = time.monotonic()
-    result = download(issue["ocrPdfUrl"], target, rate=rate)
+    result = download_with_resume(issue["ocrPdfUrl"], target, rate=rate, pause=pause, log=log)
     seconds = time.monotonic() - started
     entry = {
         "size": result["size"],

@@ -1,8 +1,9 @@
 """Tester för tools/build_search_index.py och tools/search_pilot.py.
 
 Normaliseringen prövas mot verkliga rader ur pilotens PDF:er, sparade med
-ordbitarnas lägen i tools/testdata/search_lines.json. Inga PDF:er behövs.
-De två sista testklasserna körs bara om piloten är byggd i cache/search/.
+ordbitarnas lägen i tools/testdata/search_lines.json, och mot den frysta
+ordlistan. Inga PDF:er behövs. Testklasserna sist i filen körs bara när
+PDF-cachen respektive den färdiga databasen finns på datorn.
 """
 
 import json
@@ -21,18 +22,19 @@ import search_pilot as sp  # noqa: E402
 LINES = json.loads((bsi.REPO_ROOT / "tools" / "testdata" / "search_lines.json").read_text(encoding="utf-8"))["examples"]
 
 
-def example(name: str) -> tuple[list[bsi.Word], Counter]:
-    item = LINES[name]
-    return [bsi.Word(*word) for word in item["words"]], Counter(item["vocabulary"])
+LEXICON = bsi.load_lexicon()
 
 
-def normalized(name: str) -> str:
-    words, vocabulary = example(name)
-    return bsi.normalize_page(words, vocabulary)
+def example(name: str) -> list[bsi.Word]:
+    return [bsi.Word(*word) for word in LINES[name]["words"]]
+
+
+def normalized(name: str, lexicon=LEXICON) -> str:
+    return bsi.normalize_page(example(name), lexicon)
 
 
 def raw(name: str) -> str:
-    return " ".join(word.text for word in example(name)[0])
+    return " ".join(word.text for word in example(name))
 
 
 class SpacedText(unittest.TestCase):
@@ -51,9 +53,7 @@ class SpacedText(unittest.TestCase):
         self.assertTrue(normalized("spaced_headline").startswith("Sju tips inför turboköpet Till Amiga 1200 finns"))
 
     def test_unknown_word_is_joined_when_clearly_spaced(self):
-        words, vocabulary = example("spaced_headline")
-        del vocabulary["turboköpet"]
-        self.assertIn("turboköpet", bsi.normalize_page(words, vocabulary))
+        self.assertIn("turboköpet", normalized("spaced_headline", LEXICON - {"turboköpet"}))
 
     def test_tightly_set_ordinary_text_is_left_alone(self):
         # 1987 nr 10b: luckorna är små, men varje bit är redan ett helt ord.
@@ -61,15 +61,22 @@ class SpacedText(unittest.TestCase):
         self.assertEqual(normalized("tight_normal_b"), "Last Ninja 149:- 199:-")
 
     def test_run_of_whole_words_is_never_joined(self):
-        vocabulary = Counter({"last": 10, "ninja": 10, "lastninja": 5})
-        self.assertEqual(bsi.resolve_run(bsi.Run(["Last", "Ninja"]), vocabulary), ["Last", "Ninja"])
-        self.assertEqual(bsi.resolve_run(bsi.Run(["I", "den"]), Counter({"den": 50, "iden": 3})), ["I", "den"])
+        lexicon = {"last", "ninja", "lastninja"}
+        self.assertEqual(bsi.resolve_run(bsi.Run(["Last", "Ninja"]), lexicon), ["Last", "Ninja"])
+        self.assertEqual(bsi.resolve_run(bsi.Run(["I", "den"]), {"den", "iden"}), ["I", "den"])
 
     def test_split_word_is_joined_when_the_result_is_known(self):
-        vocabulary = Counter({"mycket": 40, "reklamen": 3})
-        self.assertEqual(bsi.resolve_run(bsi.Run(["m", "ycket"]), vocabulary), ["mycket"])
-        self.assertEqual(bsi.resolve_run(bsi.Run(["reklam", "en"]), vocabulary), ["reklamen"])
-        self.assertEqual(bsi.resolve_run(bsi.Run(["p", "roffsen"]), vocabulary), ["p", "roffsen"])
+        lexicon = {"mycket", "reklamen"}
+        self.assertEqual(bsi.resolve_run(bsi.Run(["m", "ycket"]), lexicon), ["mycket"])
+        self.assertEqual(bsi.resolve_run(bsi.Run(["reklam", "en"]), lexicon), ["reklamen"])
+        self.assertEqual(bsi.resolve_run(bsi.Run(["p", "roffsen"]), lexicon), ["p", "roffsen"])
+
+    def test_numbers_and_letters_are_not_merged_into_an_unknown_word(self):
+        # Fel i piloten: "4 av Bour-" blev ett ord.
+        self.assertEqual(bsi.resolve_run(bsi.Run(["4", "av", "Bour-"]), set()), ["4", "av", "Bour-"])
+        self.assertEqual(bsi.resolve_run(bsi.Run(["1", "6", "M", "B"]), set()), ["1", "6", "M", "B"])
+        self.assertEqual(bsi.resolve_run(bsi.Run(["6", "8", "0", "3", "0"]), set()), ["68030"])
+        self.assertEqual(bsi.resolve_run(bsi.Run(["A", "1", "2", "0", "0"]), {"a1200"}), ["A1200"])
 
 
 class Hyphens(unittest.TestCase):
@@ -94,7 +101,7 @@ class Hyphens(unittest.TestCase):
         self.assertIn("Formel 1-stjärnan och", normalized("digit_hyphen"))
 
     def test_line_break_rules(self):
-        empty = Counter()
+        empty = frozenset()
         join = bsi._join_line_break
         self.assertEqual(join("data-", "program", empty), "dataprogram")
         self.assertEqual(join("CD-", "ROM", empty), "CD-ROM")
@@ -104,8 +111,8 @@ class Hyphens(unittest.TestCase):
         self.assertIsNone(join("hård-", "och", empty))        # "hård- och mjukvara"
         self.assertIsNone(join("-", "Idag", empty))           # tankstreck
         self.assertIsNone(join("spel", "som", empty))
-        self.assertEqual(join("Amiga-", "ägare", Counter({"amiga-ägare": 4, "amigaägare": 1})), "Amiga-ägare")
-        self.assertEqual(join("Amiga-", "ägare", Counter({"amiga-ägare": 1, "amigaägare": 4})), "Amigaägare")
+        self.assertEqual(join("Amiga-", "ägare", {"amiga-ägare"}), "Amiga-ägare")
+        self.assertEqual(join("Amiga-", "ägare", {"amiga-ägare", "amigaägare"}), "Amigaägare")
 
     def test_hyphens_inside_a_line_are_untouched(self):
         words = [bsi.Word(0, 0, 30, 10, "CD-ROM"), bsi.Word(34, 0, 60, 10, "och"), bsi.Word(64, 0, 90, 10, "C-64")]
@@ -129,7 +136,7 @@ class Whitespace(unittest.TestCase):
 
 def fake_issue(issue_id: str, pages: list[str]) -> tuple[dict, dict, bsi.ExtractedIssue]:
     parts = [[[word for word in page.split()]] for page in pages]
-    return ({"issueId": issue_id}, {"size": 1000 + len(pages), "etag": f'"etag-{issue_id}"'},
+    return ({"issueId": issue_id}, {"size": 1000 + len(pages), "etag": f'"etag-{issue_id}"', "sha256": "ab" * 32},
             bsi.ExtractedIssue(issue_id, [page + "\n" for page in pages], parts, len(pages), 0.0, []))
 
 
@@ -143,11 +150,11 @@ class Database(unittest.TestCase):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
 
-    def build(self, diacritics: int, name: str = "search.db") -> Path:
+    def build(self, diacritics: int, name: str = "search.db", only: str | None = None) -> Path:
         path = Path(self.directory.name) / name
-        issues = [fake_issue(issue_id, pages) for issue_id, pages in self.PAGES.items()]
+        issues = [fake_issue(issue_id, pages) for issue_id, pages in self.PAGES.items() if only in (None, issue_id)]
         bsi.build_database(path, issues, diacritics=diacritics, dataset_version="2026-10-06-004",
-                           built_at="2026-10-08T00:00:00Z", vocabulary=Counter())
+                           built_at="2026-10-08T00:00:00Z", lexicon=LEXICON)
         return path
 
     def hits(self, path: Path, query: str) -> list[str]:
@@ -161,13 +168,14 @@ class Database(unittest.TestCase):
         meta = dict(db.execute("SELECT key, value FROM meta"))
         self.assertEqual(meta["searchSchemaVersion"], "1")
         self.assertEqual(meta["inventoryDatasetVersion"], "2026-10-06-004")
+        self.assertEqual(meta["normalizerVersion"], str(bsi.NORMALIZER_VERSION))
         self.assertEqual(meta["tokenizer"], "unicode61 remove_diacritics 0")
         self.assertEqual(meta["builtAt"], "2026-10-08T00:00:00Z")
         self.assertEqual(meta["generator"], bsi.GENERATOR)
         self.assertEqual(meta["sqliteVersion"], sqlite3.sqlite_version)
         self.assertEqual(db.execute("SELECT * FROM issues ORDER BY issueId").fetchall(), [
-            ("datormagazin-1989-06", 2, 1002, '"etag-datormagazin-1989-06"'),
-            ("highscore-1993-17", 2, 1002, '"etag-highscore-1993-17"')])
+            ("datormagazin-1989-06", 2, 1002, '"etag-datormagazin-1989-06"', "ab" * 32),
+            ("highscore-1993-17", 2, 1002, '"etag-highscore-1993-17"', "ab" * 32)])
         self.assertEqual(
             db.execute("SELECT issueId, pageNumber, rawText, searchText FROM pages ORDER BY id LIMIT 1").fetchall(),
             [("datormagazin-1989-06", 1, "Du får en joystick till din C64.\n", "Du får en joystick till din C64.")])
@@ -218,39 +226,103 @@ class Helpers(unittest.TestCase):
         self.assertEqual(sp.generation(issue("highscore", "1993-17")), "highscore")
 
 
-PILOT_BUILT = all(sp.variant_path(d).exists() for d in sp.VARIANTS)
+class FrozenLexicon(unittest.TestCase):
+    """Normaliseringen läser bara ordlistan och det aktuella numret."""
+
+    def test_lexicon_file_is_sorted_unique_and_lower_case(self):
+        self.assertEqual(bsi.LEXICON_PATH.name, f"normalizer_lexicon_v{bsi.NORMALIZER_VERSION}.txt")
+        lines = bsi.LEXICON_PATH.read_text(encoding="utf-8").split("\n")
+        self.assertEqual(lines[-1], "")
+        terms = lines[:-1]
+        self.assertEqual(terms, sorted(set(terms)))
+        self.assertTrue(all(term == term.lower() and len(term) >= 3 and " " not in term for term in terms))
+        self.assertGreater(len(terms), 50_000)
+
+    def test_normalization_takes_no_statistics_from_other_issues(self):
+        # Ingen funktion i kedjan tar emot något annat än sidans ordbitar och ordlistan.
+        import inspect
+        for function in (bsi.normalize_page, bsi.assemble, bsi.resolve_run, bsi._join_line_break):
+            self.assertIn("lexicon", inspect.signature(function).parameters, function.__name__)
+        self.assertNotIn("count_vocabulary", inspect.getsource(bsi.build))
+        self.assertNotIn("count_vocabulary", inspect.getsource(bsi.build_database))
+
+    def test_same_search_text_alone_and_together(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        words = {name: example(name) for name in ("spaced_intro", "hard_hyphen_v2", "soft_hyphen")}
+
+        def texts(names):
+            path = Path(directory.name) / ("-".join(names) + ".db")
+            issues = [({"issueId": name}, {"size": 1, "etag": None, "sha256": None},
+                       bsi.ExtractedIssue(name, ["x"], [bsi.page_parts(words[name])], 1, 0.0, [])) for name in names]
+            bsi.build_database(path, issues, diacritics=0, dataset_version="x", built_at="x", lexicon=LEXICON)
+            db = sqlite3.connect(path)
+            self.addCleanup(db.close)
+            return dict(db.execute("SELECT issueId, CAST(searchText AS BLOB) FROM pages"))
+
+        together = texts(list(words))
+        for name in words:
+            self.assertEqual(texts([name])[name], together[name], name)
 
 
-@unittest.skipUnless(PILOT_BUILT, "piloten är inte byggd (cache/search/ saknas)")
+ALL_PDFS = all((bsi.CACHE_DIR / f"{issue_id}.pdf").exists() for issue_id in sp.fetch_pdfs.PILOT_ISSUES)
+FULL_DB = bsi.REPO_ROOT / "dist" / "search.db"
+
+
+@unittest.skipUnless(ALL_PDFS and FULL_DB.exists(), "PDF-cachen eller dist/search.db saknas")
+class RealIssueAloneAndInFullBuild(unittest.TestCase):
+    """Ett nummer som byggs ensamt får byte-identisk searchText med samma nummer i hela bygget."""
+
+    def test_byte_identical_search_text(self):
+        full = sqlite3.connect(f"file:{FULL_DB}?mode=ro", uri=True)
+        self.addCleanup(full.close)
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        for issue_id in ("datormagazin-1995-14", "datormagazin-1986-04", "highscore-1993-17"):
+            alone = Path(directory.name) / f"{issue_id}.db"
+            bsi.build([issue_id], alone, diacritics=0, built_at="x", log=lambda _: None)
+            db = sqlite3.connect(alone)
+            self.addCleanup(db.close)
+            query = "SELECT pageNumber, CAST(searchText AS BLOB) FROM pages WHERE issueId = ? ORDER BY pageNumber"
+            ours, theirs = db.execute(query, (issue_id,)).fetchall(), full.execute(query, (issue_id,)).fetchall()
+            self.assertGreater(len(ours), 20)
+            self.assertEqual(ours, theirs, issue_id)
+
+
+GOLDEN_DB = FULL_DB
+PILOT_BUILT = GOLDEN_DB.exists()
+
+
+@unittest.skipUnless(PILOT_BUILT, "dist/search.db saknas")
 class Golden(unittest.TestCase):
-    """Facit mot pilotens search.db. Båda varianterna ska hitta alla förväntade sidor."""
+    """Facit mot den fullständiga search.db. Alla förväntade sidor ska hittas."""
 
     @classmethod
     def setUpClass(cls):
         cls.golden = json.loads(sp.GOLDEN_PATH.read_text(encoding="utf-8"))
-        cls.results = {d: sp.evaluate_variant(sp.variant_path(d), cls.golden) for d in sp.VARIANTS}
+        cls.rows = sp.evaluate_variant(GOLDEN_DB, cls.golden)
 
     def test_every_expected_page_is_found(self):
-        for diacritics, rows in self.results.items():
-            missing = [row["query"] for row in rows if not row["found"]]
-            self.assertEqual(missing, [], f"remove_diacritics {diacritics}")
+        self.assertEqual([row["query"] for row in self.rows if not row["found"]], [])
 
     def test_spaced_words_in_1995_14(self):
-        rows = {(row["query"], row["kind"]): row for row in self.results[0]}
+        rows = {(row["query"], row["kind"]): row for row in self.rows}
         self.assertEqual(rows[("högtalare", "utspärrat")]["expected"],
                          ["datormagazin-1995-14 s. 26", "datormagazin-1995-14 s. 27"])
         self.assertTrue(rows[("högtalare", "utspärrat")]["found"])
         self.assertTrue(rows[("Amiga", "utspärrat")]["found"])
 
-    def test_diacritics_0_gives_no_irrelevant_hits(self):
-        self.assertEqual(sum(row["irrelevant"] for row in self.results[0]), 0)
-        by_query = {row["query"]: row["irrelevant"] for row in self.results[2]}
-        self.assertGreater(by_query["här"], 100)
+    def test_no_irrelevant_hits(self):
+        self.assertEqual(sum(row["irrelevant"] for row in self.rows), 0)
 
+
+class GoldenFile(unittest.TestCase):
     def test_golden_file_is_well_formed(self):
-        self.assertGreaterEqual(len(self.golden["queries"]), 25)
-        for entry in self.golden["queries"]:
-            self.assertIn(entry["kind"], self.golden["kinds"])
+        golden = json.loads(sp.GOLDEN_PATH.read_text(encoding="utf-8"))
+        self.assertGreaterEqual(len(golden["queries"]), 38)
+        for entry in golden["queries"]:
+            self.assertIn(entry["kind"], golden["kinds"])
+            self.assertTrue(entry["expected"])
             for expected in entry["expected"]:
                 self.assertGreaterEqual(expected["pageNumber"], 1)
 

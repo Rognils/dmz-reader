@@ -80,7 +80,7 @@ class FetchTest(unittest.TestCase):
         self.directory.cleanup()
 
     def fast(self, **kwargs):
-        return fp.fetch_issue(self.issue, self.cache, kwargs.pop("manifest"), rate=1e12,
+        return fp.fetch_issue(self.issue, self.cache, kwargs.pop("manifest"), rate=1e12, pause=0,
                               log=lambda _: None, **kwargs)
 
     def test_download_records_size_etag_and_hash(self):
@@ -101,27 +101,29 @@ class FetchTest(unittest.TestCase):
 
     def test_interrupted_download_is_resumed_with_range(self):
         Handler.cut_after = 300_000
-        manifest = {"files": {}}
-        with self.assertRaises((fp.FetchError, OSError)):
-            self.fast(manifest=manifest)
-        part = self.cache / "test-1.pdf.part"
-        self.assertFalse((self.cache / "test-1.pdf").exists())
-        kept = part.stat().st_size
-        self.assertGreater(kept, 0)
-        entry = self.fast(manifest=manifest)
-        self.assertEqual(Handler.requests[-1]["Range"], f"bytes={kept}-")
+        entry = self.fast(manifest={"files": {}})
+        # Samma körning fortsätter efter avbrottet, med Range från det som redan hämtats.
+        self.assertEqual(len(Handler.requests), 2)
         self.assertEqual(Handler.requests[-1]["If-Range"], ETAG)
+        kept = int(Handler.requests[-1]["Range"].split("=")[1].rstrip("-"))
+        self.assertGreater(kept, 0)
+        self.assertLessEqual(kept, 300_000)
         self.assertEqual((self.cache / "test-1.pdf").read_bytes(), CONTENT)
         self.assertEqual(entry["problems"], [])
-        self.assertFalse(part.exists())
+        self.assertFalse((self.cache / "test-1.pdf.part").exists())
+
+    def test_part_file_from_an_earlier_run_is_resumed(self):
+        (self.cache / "test-1.pdf.part").write_bytes(CONTENT[:123_456])
+        (self.cache / "test-1.pdf.part.etag").write_text(ETAG, encoding="utf-8")
+        self.fast(manifest={"files": {}})
+        self.assertEqual(Handler.requests[-1]["Range"], "bytes=123456-")
+        self.assertEqual((self.cache / "test-1.pdf").read_bytes(), CONTENT)
 
     def test_file_changed_on_server_during_resume_starts_over(self):
-        Handler.cut_after = 300_000
-        manifest = {"files": {}}
-        with self.assertRaises((fp.FetchError, OSError)):
-            self.fast(manifest=manifest)
+        (self.cache / "test-1.pdf.part").write_bytes(CONTENT[:123_456])
+        (self.cache / "test-1.pdf.part.etag").write_text(ETAG, encoding="utf-8")
         Handler.content, Handler.etag = CONTENT[::-1], '"v2-etag"'
-        entry = self.fast(manifest=manifest)
+        entry = self.fast(manifest={"files": {}})
         # Filen är den nya, hel. Den stämmer inte med inventory, och det syns.
         self.assertEqual((self.cache / "test-1.pdf").read_bytes(), CONTENT[::-1])
         self.assertEqual(len(entry["problems"]), 1)
