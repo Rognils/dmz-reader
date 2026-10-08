@@ -16,9 +16,9 @@ För varje nummer som finns i cache/pdf/ och stämmer med inventory:
   3. Sidorna läggs i SQLite med ett FTS5-index över `searchText` (plan D2).
 
 Normaliseringen läser bara det aktuella numret och den frysta ordlistan
-tools/data/normalizer_lexicon_v{N}.txt. Samma PDF och samma NORMALIZER_VERSION
-ger därför samma searchText, oavsett vilka andra nummer som byggs. Ändras en
-regel eller ordlistan ska NORMALIZER_VERSION höjas.
+tools/data/normalizer_lexicon_v{LEXICON_VERSION}.txt. Samma PDF och samma
+NORMALIZER_VERSION ger därför samma searchText, oavsett vilka andra nummer som
+byggs. Ändras en regel eller ordlistan ska NORMALIZER_VERSION höjas.
 
 Bygget är reproducerbart: samma PDF:er och samma `--built-at` ger en
 identisk fil.
@@ -51,8 +51,12 @@ CACHE_DIR = REPO_ROOT / "cache" / "pdf"
 
 GENERATOR = "build_search_index.py 0.8.1"
 SEARCH_SCHEMA_VERSION = 1
-NORMALIZER_VERSION = 1
-LEXICON_PATH = REPO_ROOT / "tools" / "data" / f"normalizer_lexicon_v{NORMALIZER_VERSION}.txt"
+# Höjs när en regel i normaliseringen eller ordlistan ändras, eftersom searchText då blir en annan.
+#   1: första frysta versionen
+#   2: bindestreck vid radslut i versaler och efter korta förled; tal och hela ord klistras inte ihop
+NORMALIZER_VERSION = 2
+LEXICON_VERSION = 1
+LEXICON_PATH = REPO_ROOT / "tools" / "data" / f"normalizer_lexicon_v{LEXICON_VERSION}.txt"
 PDFTOTEXT_MODE = "-raw"
 SOFT_HYPHEN = "­"
 
@@ -215,15 +219,17 @@ def resolve_run(run: Run, lexicon: Container[str]) -> list[str]:
     """Sätter ihop bitarna om det är säkert nog, annars lämnas de som de är.
 
     Tätt satt vanlig text får aldrig klistras ihop. Därför:
-      - en följd där varje bit redan är ett helt ord lämnas orörd ("I den", "Last Ninja")
+      - en följd där varje bit redan är ett helt ord eller ett tal lämnas orörd
+        ("I den", "Last Ninja", "Tips 1")
       - annars sätts den ihop om resultatet är ett känt ord ("m ycket", "a t t")
       - ett okänt resultat godtas bara om följden är tydligt utspärrad, inte innehåller
         något helt ord och inte blandar tal med bokstäver ("a n v ä n d n in g s rå d",
         men inte "4 av Bour-")
     """
     words = [fragment for fragment in run.fragments if bare(fragment)]
-    if words and all(_is_word(fragment, lexicon) for fragment in words):
-        return list(run.fragments)
+    whole = [_is_word(fragment, lexicon) for fragment in words]
+    if words and any(whole) and all(is_whole or _is_number(fragment) for is_whole, fragment in zip(whole, words)):
+        return list(run.fragments)  # hela ord, eventuellt med tal emellan ("Tips 1", "1 Mb")
     joined = bare(run.joined)
     if joined in SHORT_WORDS or joined in lexicon:
         return [run.joined]
@@ -244,12 +250,28 @@ def _join_line_break(last: str, first: str, lexicon: Container[str]) -> str | No
     left = last[:-1]
     if bare(first) in KEEP_HYPHEN_BEFORE:
         return None  # "hård- och mjukvara"
-    left_core = bare(left) and left.strip("\"'”“’‘«»([{")
-    if not first[0].islower() or left_core.isupper() or left_core[-1].isdigit():
-        return last + first  # CD-ROM, C-64, Amiga-500: riktigt bindestreck
+    left_core = left.strip("\"'”“’‘«»([{")
     joined, hyphenated = bare(left + first), bare(last + first)
+    if not left_core or left_core[-1].isdigit() or first[0].isdigit():
+        return last + first  # C-64, Amiga-500, Formel 1-stjärnan
+    if len(left_core) == 1:
+        return last + first  # en ensam bokstav är inget avstavat led: x-minne, C-kod
+    if left_core.isupper() and len(left_core) <= 2:
+        return last + first  # kort förkortning: CD-ROM, PC-spel
     if hyphenated in lexicon and joined not in lexicon:
-        return last + first
+        return last + first  # ordet skrivs med bindestreck på andra ställen i arkivet
+    if joined in lexicon:
+        return left + first
+    if left_core.isupper():
+        if first[0].islower():
+            return last + first  # förkortning med svenskt efterled: SCSI-kort, RAM-minne
+        if _is_word(left_core, lexicon) and _is_word(first, lexicon):
+            return last + first  # två egna ord i versaler: SUPERCARS-THE
+        return left + first  # avstavat ord i versal text: AGG-RAVAIN, CELI-CA
+    if not first[0].islower():
+        return last + first  # Commodore-Knappen
+    if len(left_core) <= 2 and _is_word(first, lexicon):
+        return last + first  # x-minne, up-spel
     return left + first
 
 
@@ -393,6 +415,7 @@ def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], 
         "searchSchemaVersion": str(SEARCH_SCHEMA_VERSION),
         "inventoryDatasetVersion": dataset_version,
         "normalizerVersion": str(NORMALIZER_VERSION),
+        "lexiconVersion": str(LEXICON_VERSION),
         "tokenizer": tokenizer,
         "builtAt": built_at,
         "generator": GENERATOR,

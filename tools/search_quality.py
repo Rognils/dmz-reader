@@ -66,10 +66,20 @@ def sample(arguments) -> int:
             pools[(search_pilot.generation(issue), change["kind"])].append(change)
         if index % 25 == 0:
             print(f"  {index} av {len(issues)} nummer lästa", file=sys.stderr)
+    if arguments.check:
+        previous = json.loads(arguments.check.read_text(encoding="utf-8"))["sample"]
+        current = {(c["issueId"], c["pageNumber"], c["before"]): c["after"] for pool in pools.values() for c in pool}
+        for item in previous:
+            now = current.get((item["issueId"], item["pageNumber"], item["before"]))
+            if now != item["after"]:
+                print(f"  ändrad: {item['id']} ({item['group']}, {item['kind']}, {item['verdict']}): "
+                      f"[{item['before']}] → förr [{item['after']}], nu [{now if now is not None else 'ingen ändring'}]")
     generator = random.Random(arguments.seed)
     chosen = []
     totals = {}
     for (group, kind), count in STRATA.items():
+        if arguments.kinds and kind not in arguments.kinds:
+            continue
         pool = pools[(group, kind)]
         totals[f"{group} / {kind}"] = len(pool)
         for change in generator.sample(pool, min(count, len(pool))):
@@ -139,6 +149,8 @@ def main(argv=None) -> int:
     commands = parser.add_subparsers(dest="command", required=True)
     sample_parser = commands.add_parser("sample")
     sample_parser.add_argument("--seed", type=int, default=SEED)
+    sample_parser.add_argument("--kinds", nargs="+", help="bara dessa slag, till exempel avstavning")
+    sample_parser.add_argument("--check", type=Path, help="tidigare granskning: rapportera vilka av dess ändringar som blivit andra")
     sample_parser.set_defaults(function=sample)
     order_parser = commands.add_parser("order")
     order_parser.add_argument("issue")

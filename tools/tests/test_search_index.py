@@ -77,6 +77,9 @@ class SpacedText(unittest.TestCase):
         self.assertEqual(bsi.resolve_run(bsi.Run(["1", "6", "M", "B"]), set()), ["1", "6", "M", "B"])
         self.assertEqual(bsi.resolve_run(bsi.Run(["6", "8", "0", "3", "0"]), set()), ["68030"])
         self.assertEqual(bsi.resolve_run(bsi.Run(["A", "1", "2", "0", "0"]), {"a1200"}), ["A1200"])
+        self.assertEqual(bsi.resolve_run(bsi.Run(["Tips", "1"]), {"tips", "tips1"}), ["Tips", "1"])
+        self.assertEqual(bsi.resolve_run(bsi.Run(["1", "Mb"]), {"1mb"}), ["1", "Mb"])
+        self.assertEqual(bsi.resolve_run(bsi.Run(["1", "7", "5"]), {"175"}), ["175"])
 
 
 class Hyphens(unittest.TestCase):
@@ -111,6 +114,18 @@ class Hyphens(unittest.TestCase):
         self.assertIsNone(join("hård-", "och", empty))        # "hård- och mjukvara"
         self.assertIsNone(join("-", "Idag", empty))           # tankstreck
         self.assertIsNone(join("spel", "som", empty))
+        # Fel i stickprovet för normalizerVersion 1:
+        self.assertEqual(join("AGG-", "RAURIN,", empty), "AGGRAURIN,")
+        self.assertEqual(join("(REQUESTRES-", "PONSE)", empty), "(REQUESTRESPONSE)")
+        self.assertEqual(join("CELI-", "CA", empty), "CELICA")
+        self.assertEqual(join("SUPERCARS-", "THE", {"supercars", "the"}), "SUPERCARS-THE")
+        self.assertEqual(join("ROD-", "LAND,", {"rod", "land", "rodland"}), "RODLAND,")
+        self.assertEqual(join("SCSI-", "kort", {"scsi"}), "SCSI-kort")
+        self.assertEqual(join("CD-", "ROM", {"cdrom", "cd-rom"}), "CD-ROM")
+        self.assertEqual(join("x-", "min", {"min", "xmin"}), "x-min")
+        self.assertEqual(join("up-", "spel.", {"spel"}), "up-spel.")
+        self.assertEqual(join("an-", "nonstext", {"text"}), "annonstext")
+        self.assertEqual(join("in-", "te", {"inte"}), "inte")
         self.assertEqual(join("Amiga-", "ägare", {"amiga-ägare"}), "Amiga-ägare")
         self.assertEqual(join("Amiga-", "ägare", {"amiga-ägare", "amigaägare"}), "Amigaägare")
 
@@ -230,7 +245,7 @@ class FrozenLexicon(unittest.TestCase):
     """Normaliseringen läser bara ordlistan och det aktuella numret."""
 
     def test_lexicon_file_is_sorted_unique_and_lower_case(self):
-        self.assertEqual(bsi.LEXICON_PATH.name, f"normalizer_lexicon_v{bsi.NORMALIZER_VERSION}.txt")
+        self.assertEqual(bsi.LEXICON_PATH.name, f"normalizer_lexicon_v{bsi.LEXICON_VERSION}.txt")
         lines = bsi.LEXICON_PATH.read_text(encoding="utf-8").split("\n")
         self.assertEqual(lines[-1], "")
         terms = lines[:-1]
