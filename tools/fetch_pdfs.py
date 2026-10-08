@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import shutil
 import sys
 import time
 import urllib.error
@@ -37,6 +38,7 @@ MANIFEST_NAME = "manifest.json"
 
 MAX_BYTES_PER_SECOND = 5_000_000
 PAUSE_BETWEEN_FILES = 3.0
+MIN_FREE_BYTES_AFTER = 20 * 10**9  # så här mycket ska vara ledigt även efter hämtningen
 CHUNK_SIZE = 256 * 1024
 TIMEOUT_SECONDS = 60
 USER_AGENT = "dmz-reader-toolchain/0.8 (privat sökindex; en anslutning, max 5 MB/s)"
@@ -244,21 +246,33 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("issues", nargs="*", help="issueId att hämta")
     parser.add_argument("--pilot", action="store_true", help="hämta urvalet för FAS 8A")
+    parser.add_argument("--all", action="store_true",
+                        help="hämta alla nummer som har en PDF, de minsta filerna först")
     parser.add_argument("--adopt", action="append", default=[], metavar="ISSUEID=FIL",
                         help="använd en PDF som redan finns på datorn om den stämmer med inventory")
     arguments = parser.parse_args(argv)
 
-    wanted = list(arguments.issues) + (PILOT_ISSUES if arguments.pilot else [])
-    if not wanted:
-        parser.error("ange issueId eller --pilot")
     inventory = json.loads(INVENTORY_PATH.read_text(encoding="utf-8"))
     by_id = {issue["issueId"]: issue for issue in inventory["issues"]}
+    wanted = list(arguments.issues) + (PILOT_ISSUES if arguments.pilot else [])
+    if arguments.all:
+        wanted = [issue["issueId"] for issue in sorted(
+            (issue for issue in inventory["issues"] if issue.get("ocrPdfUrl")),
+            key=lambda issue: (issue.get("ocrPdfSize") or 0, issue["issueId"]))]
+    if not wanted:
+        parser.error("ange issueId, --pilot eller --all")
     unknown = [issue_id for issue_id in wanted if issue_id not in by_id]
     if unknown:
         parser.error(f"finns inte i inventory: {', '.join(unknown)}")
 
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     manifest = load_manifest(CACHE_DIR)
+    missing = sum(by_id[i].get("ocrPdfSize") or 0 for i in wanted if i not in manifest["files"])
+    free = shutil.disk_usage(CACHE_DIR).free
+    print(f"att hämta: {missing / 1e9:.2f} GB, ledigt på disken: {free / 1e9:.0f} GB")
+    if free < missing + MIN_FREE_BYTES_AFTER:
+        print("för lite ledigt utrymme, avbryter", file=sys.stderr)
+        return 2
     adopt = dict(item.split("=", 1) for item in arguments.adopt)
     failures = 0
     first = True

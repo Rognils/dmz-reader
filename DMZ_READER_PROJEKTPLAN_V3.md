@@ -465,21 +465,24 @@ Fälten är de som står i C2. Formatet beskrivs formellt i `docs/inventory.sche
 
 Genereras av toolchainen i FAS 8 och importeras separat. Den följer inte med APK:n.
 
-Minsta innehåll:
-
 ```text
 meta        (key, value)
-            schemaVersion, datasetVersion, generatedAt,
-            tokenizer, issueCount, pageCount
+            searchSchemaVersion, inventoryDatasetVersion, normalizerVersion,
+            tokenizer, builtAt, generator, sqliteVersion, pdftotextMode,
+            issueCount, pageCount
 
-pages       (issueId, pageNumber, rawText, searchText)
-pages_fts   FTS-tabell över pages.searchText
-issues      (issueId, pageCount)
+issues      (issueId, pageCount, ocrPdfSize, ocrPdfEtag, ocrPdfSha256)
+
+pages       (id, issueId, pageNumber, rawText, searchText)
+            id är en heltalsnyckel; (issueId, pageNumber) är unik
+pages_fts   FTS5-tabell över pages.searchText, med pages.id som rad-id
 ```
 
-FTS-indexet och textutdragen använder `searchText`.
-
-Exakt FTS-version och tokenizer beslutas i ADR 0006 och ADR 0010.
+- `rawText` är texten som den kom ur PDF:en. `searchText` är normaliserad. FTS-indexet och textutdragen använder `searchText`.
+- `issues` knyter varje nummer till den PDF som indexerades, så att appen kan upptäcka att just ett nummers fil har bytts sedan dess.
+- `pages.id` behövs för att `VACUUM` inte ska kunna numrera om raderna under FTS-indexet.
+- `normalizerVersion` anger vilken version av normaliseringen och dess ordlista som användes. Samma PDF och samma version ger alltid samma `searchText`.
+- Tokenizer: `unicode61 remove_diacritics 0` (ADR 0010). FTS-version enligt ADR 0006.
 
 ## D3. Versioner
 
@@ -1533,3 +1536,9 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-08 | Efter FAS 7: C5: borttagna bokmärken (rader med `deletedAt`) rensas inte automatiskt | 0012 |
 | 2026-10-08 | Efter FAS 7: D4: källa och importdatum för det aktiva indexet sparas och visas. C7: "Uppdatera nedladdning" för ett nedladdat nummer vars arkivfil har ändrats; filen raderas aldrig automatiskt. | 0019 |
 | 2026-10-08 | Före FAS 8: FAS 8 delad i 8A (pilot på 11 nummer, två tokenizer-varianter, facit och mätning) och 8B (fullkörning, efter godkänd pilot) | 0010 |
+| 2026-10-08 | Efter FAS 8A: tokenizer `unicode61 remove_diacritics 0` | 0010 |
+| 2026-10-08 | Efter FAS 8A: `rawText` behålls i search.db, åtminstone genom FAS 9 | — |
+| 2026-10-08 | Efter FAS 8A: D2 uppdaterad till den verifierade designen: `pages.id`, nya `meta`-nycklar (bland dem `normalizerVersion`) och `issues` med `ocrPdfSize`, `ocrPdfEtag` och `ocrPdfSha256` | 0010 |
+| 2026-10-08 | Efter FAS 8A: `pageCount` är PDF:ens sidantal (C7), även när det skiljer sig från antalet skannade sidor | — |
+| 2026-10-08 | Efter FAS 8A: "C64" mot "C-64" hanteras i frågelagret i FAS 9, inte i indexet | 0010 |
+| 2026-10-08 | Före FAS 8B: normaliseringen får inte bero på vilka andra nummer som byggs. Ordlistan fryses i `tools/data/normalizer_lexicon_v1.txt` med `normalizerVersion` 1. | 0004 |
