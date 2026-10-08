@@ -23,7 +23,7 @@ Exemplen nedan skriver `python3`. Använd `.venv/bin/python` om du installerat i
 | `tools/overrides.json` | manuella rättelser | för hand |
 | `data/raw_listing.json` | FTP-listning, cache | `archive_inventory.py` (online) |
 | `data/https_probe.json` | HEAD-svar från webbplatsen, cache | `https_probe.py` (online) |
-| `data/sample_measurements.json` | uppmätta sidantal från stickprov | för hand |
+| `data/sample_measurements.json` | uppmätta sidantal och SHA-256 för alla PDF:er | `measure_page_counts.py` |
 | `data/archive_inventory.json` | **inventory för appen** | `archive_inventory.py` |
 | `data/inventory_diagnostics.json` | härledd data för toolchainen, ingår inte i appen | `archive_inventory.py` |
 | `data/inventory_diff.json` | jämförelse mot ett annat inventory; versionshanteras inte | `archive_inventory.py --compare-to` |
@@ -34,7 +34,12 @@ Exemplen nedan skriver `python3`. Använd `.venv/bin/python` om du installerat i
 | `data/cover_review.json` | visuell granskning av kontaktkartan | för hand |
 | `docs/screenshots/covers/contact_sheet.png` | alla valda omslag som små bilder | `build_covers.py` |
 | `cache/pdf/` | OCR-PDF:er och `manifest.json` (storlek, ETag, SHA-256); versionshanteras inte | `fetch_pdfs.py` |
-| `cache/search/` | `search.db` i olika varianter; versionshanteras inte | `build_search_index.py`, `search_pilot.py` |
+| `cache/search/` | pilotens databaser (FAS 8A); versionshanteras inte | `search_pilot.py` |
+| `dist/search.db` | **det färdiga sökindexet**, cirka 149 MB; versionshanteras inte | `build_search_index.py` |
+| `tools/data/normalizer_lexicon_v1.txt` | normaliseringens frysta ordlista | `build_lexicon.py` (en gång) |
+| `data/normalizer_review_v1.json`, `_v2.json` | granskade stickprov av normaliseringens ändringar | `search_quality.py sample`, bedömning för hand |
+| `data/reading_order_review.json` | visuell kontroll av läsordningen på 28 sidor | för hand |
+| `data/search_index_report.json` | facit och storlek för den fullständiga databasen | `search_pilot.py --db` |
 | `tools/testdata/search_golden.json` | facit för sökindexet, visuellt kontrollerat | för hand |
 | `tools/testdata/search_lines.json` | verkliga rader med ordlägen, för normaliseringstesterna | för hand (ur pilotens PDF:er) |
 | `data/search_pilot.json` | pilotens mätresultat (FAS 8A) | `search_pilot.py` |
@@ -200,42 +205,66 @@ Bygger `app/src/debug/assets/fts_test.db`: ett litet sökindex i samma format so
 
 Kör om skriptet och committa filen om texten eller frågorna ändras.
 
-## Sökindex (`fetch_pdfs.py`, `build_search_index.py`, `search_pilot.py`)
+## Sökindex (`fetch_pdfs.py`, `build_search_index.py`)
 
-Fulltextindexet `search.db` byggs på datorn ur OCR-PDF:erna (plan D2 och FAS 8). Det kräver `pdftotext`, `pdftoppm` och `pdfinfo` (poppler-utils). PDF:erna och databaserna ligger i `cache/` och versionshanteras inte.
+Fulltextindexet `search.db` byggs på datorn ur OCR-PDF:erna (plan D2 och FAS 8). Det kräver `pdftotext`, `pdftoppm` och `pdfinfo` (poppler-utils). PDF:erna ligger i `cache/pdf/` (12,3 GB) och den färdiga databasen i `dist/`. Ingetdera versionshanteras.
+
+### Bygga om search.db
 
 ```bash
-# 1. Hämta PDF:er till cache/pdf/ (en fil i taget, högst 5 MB/s, återupptagbart)
-python3 tools/fetch_pdfs.py --pilot
-python3 tools/fetch_pdfs.py datormagazin-1989-06
+# 1. Hämta det som saknas i cache/pdf/ (en fil i taget, högst 5 MB/s, 3 s paus, återupptagbart)
+python3 tools/fetch_pdfs.py --all
 
-# 2. Bygg search.db
-python3 tools/build_search_index.py --pilot --diacritics 0 -o cache/search/search-rd0.db
+# 2. Bara om arkivet har ändrats: mät sidantal och bygg nytt inventory
+python3 tools/measure_page_counts.py
+python3 tools/archive_inventory.py --offline        # efter att datasetSequence höjts i tools/config.json
 
-# 3. Pilotens mätningar (FAS 8A)
-python3 tools/search_pilot.py build       # båda tokenizer-varianterna och hjälpdatabaser
-python3 tools/search_pilot.py evaluate    # facit: tools/testdata/search_golden.json
-python3 tools/search_pilot.py measure     # storlek, uppräknad till hela arkivet
-python3 tools/search_pilot.py pages       # uppmätt sidantal mot inventory
-python3 tools/search_pilot.py plan        # underlag för fullkörningen
-python3 tools/search_pilot.py compare     # pdftotext-lägen sida vid sida, i cache/compare/
-python3 tools/search_pilot.py render datormagazin-1995-14 26 högtalare   # utsnitt för visuell kontroll
+# 3. Bygg databasen (drygt 3 minuter)
+python3 tools/build_search_index.py --all --built-at 2026-10-08T00:00:00Z -o dist/search.db
+
+# 4. Kontrollera mot facit
+python3 tools/search_pilot.py evaluate --db dist/search.db
+python3 -m unittest discover -s tools/tests
 ```
 
-**Hämtningen** kontrollerar varje fil mot `ocrPdfSize` och `ocrPdfEtag` i inventory och sparar storlek, ETag, Last-Modified och SHA-256 i `cache/pdf/manifest.json`. En fil som inte stämmer behålls men markeras, och indexbygget hoppar över den. En avbruten hämtning fortsätter där den slutade nästa gång kommandot körs.
+Samma PDF:er, samma inventory och samma `--built-at` ger en fil med samma SHA-256. Utan `--built-at` används klockslaget, och då skiljer sig filen i `meta.builtAt`.
+
+**Hämtningen** kontrollerar varje fil mot `ocrPdfSize` och `ocrPdfEtag` i inventory och sparar storlek, ETag, Last-Modified och SHA-256 i `cache/pdf/manifest.json`. En fil som inte stämmer behålls men markeras, och indexbygget hoppar över den. Servern bryter överföringar efter omkring 200 MB; hämtningen fortsätter då själv med Range. Före start kontrolleras att disken rymmer det som ska hämtas.
 
 **Texten** tas ut med `pdftotext -raw`, som följer den ordning OCR-programmet skrev texten i och därför håller ihop spalterna. `rawText` är den texten orörd. `searchText` byggs av samma ordbitar med deras lägen på sidan (`pdftotext -raw -bbox`):
 
 - utspärrad text sätts ihop: bitar som ligger tätare än radens ordmellanrum hör till samma ord
 - mjuka bindestreck tas bort, och avstavning vid radbrytning sätts ihop
-- riktiga bindestreck behålls (CD-ROM, C-64, Formel 1-stjärnan)
+- riktiga bindestreck behålls (CD-ROM, C-64, x-minne, Formel 1-stjärnan)
 - blanksteg blir ett mellanslag
 
-Tveksamma fall avgörs mot en ordlista som byggs av de ord som stod hela i samma körning. Tätt satt vanlig text klistras aldrig ihop.
+**Databasen** (plan D2) har tabellerna `meta`, `issues` (sidantal, storlek, ETag och SHA-256 för den PDF som indexerades), `pages` och FTS5-tabellen `pages_fts` över `searchText`, med tokenizern `unicode61 remove_diacritics 0` (ADR 0010).
 
-**Databasen** har tabellerna `meta`, `issues` (med `pageCount`, `ocrPdfSize` och `ocrPdfEtag` per nummer), `pages` och FTS5-tabellen `pages_fts` över `searchText`. Samma PDF:er och samma `--built-at` ger en identisk fil.
+### Ordlistan och normalizerVersion
 
-**Facit** får bara ändras efter att sidan har kontrollerats mot en rendering (`render`), inte mot OCR-texten.
+Tveksamma fall i normaliseringen avgörs mot en **fryst ordlista**, `tools/data/normalizer_lexicon_v1.txt` (144 377 termer, sorterad, en per rad). Den byggdes en gång med `tools/build_lexicon.py` ur alla 185 nummer: ord med minst tre tecken som står hela i textlagret minst två gånger. Inga ordböcker ingår; ett prov med hunspell sv_SE och en_US ändrade 0,1 procent av fallen och gav lika många fel som rättningar.
+
+Normaliseringen läser bara ordlistan och det aktuella numret. Ett nummer får därför samma `searchText` vare sig det byggs ensamt eller tillsammans med alla andra (testat).
+
+`NORMALIZER_VERSION` i `build_search_index.py` skrivs i `meta.normalizerVersion`. **Höj den** när
+
+- en regel i normaliseringen ändras (konstanterna för avstånd, `resolve_run`, `_join_line_break`, `SHORT_WORDS`)
+- ordlistan byts. Spara då den nya som `normalizer_lexicon_v2.txt`, höj `LEXICON_VERSION` och låt den gamla ligga kvar.
+- `pdftotext`-läget ändras
+
+Den ska inte höjas när bara nya nummer läggs till. Ordlistan byggs inte om för det.
+
+Efter en ändring: dra ett nytt stickprov och granska det.
+
+```bash
+python3 tools/search_quality.py sample --check data/normalizer_review_v1.json   # 200 ändringar, och vilka tidigare bedömda som ändrats
+python3 tools/search_quality.py order datormagazin-1995-15 62                   # läsordningen inritad på sidan
+python3 tools/search_pilot.py render datormagazin-1995-14 26 högtalare          # utsnitt för visuell kontroll av facit
+```
+
+**Facit** (`tools/testdata/search_golden.json`) får bara ändras efter att sidan har kontrollerats mot en rendering, inte mot OCR-texten.
+
+`tools/search_pilot.py` har också kvar pilotens mätningar från FAS 8A (`build`, `measure`, `compare`, `pages`, `plan`).
 
 ## Uppdatera arkivet på telefonen
 

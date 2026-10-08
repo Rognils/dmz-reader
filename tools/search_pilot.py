@@ -189,9 +189,12 @@ def search(db: sqlite3.Connection, query: str) -> list[tuple[str, int, float]]:
 
 
 def exact_pattern(query: str) -> re.Pattern:
-    """Sökordet som det stavas, oavsett skiftläge. Skiljetecken i sökordet får vara vilka skiljetecken som helst."""
-    parts = [re.escape(part) for part in re.split(r"[^\w]+", query) if part]
-    return re.compile(r"(?<!\w)" + r"[^\w]+".join(parts) + r"(?!\w)", re.I)
+    """Sökordet som det stavas, oavsett skiftläge. Skiljetecken i sökordet får vara vilka skiljetecken som helst.
+
+    Understreck räknas som skiljetecken, precis som i tokenizern.
+    """
+    parts = [re.escape(part) for part in re.split(r"[\W_]+", query) if part]
+    return re.compile(r"(?<![^\W_])" + r"[\W_]+".join(parts) + r"(?![^\W_])", re.I)
 
 
 def evaluate_variant(db_path: Path, golden: dict) -> list[dict]:

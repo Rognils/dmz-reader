@@ -1430,13 +1430,13 @@ Domänlogik (progress, status, effektivt sidantal, sammanslagning vid backup) te
 | 0001 | Native Android (Kotlin + Compose) | FAS 1 |
 | 0002 | Separering av katalogdata, lokal data och användardata | FAS 1 |
 | 0003 | Inventory genereras på datorn | FAS 1 |
-| 0004 | Sökindex byggs på datorn | FAS 8 |
+| 0004 | Sökindex byggs på datorn | FAS 8B |
 | 0005 | Versionsmärkning och matchning (D3) | FAS 1 |
 | 0006 | FTS5 med Room 3 och `BundledSQLiteDriver` | FAS 1 |
 | 0007 | Format för issueId | FAS 0 (förslag), FAS 0B (fastställt) |
 | 0008 | HTTPS kontra FTP per materialtyp | FAS 0 |
 | 0009 | HQ-källa | FAS 0 (preliminärt), FAS 11 (fastställt) |
-| 0010 | Tokenizer och diakritiska tecken | FAS 8 |
+| 0010 | Tokenizer och diakritiska tecken | FAS 8A |
 | 0011 | PDF-rendering | FAS 3 |
 | 0012 | Backupformat och regler för sammanslagning | FAS 6 |
 | 0013 | Lagringsplats för permanenta PDF:er | FAS 5 |

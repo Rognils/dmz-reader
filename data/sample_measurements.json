@@ -1,15 +1,930 @@
 {
- "comment": "Mätvärden från FAS 0-stickproven. pageCount används bara om ocrPdfSize fortfarande stämmer med webbplatsens fil. sha256 sparas för spårbarhet och ingår inte i inventory.",
- "measurements": {
-  "datormagazin-1986-01": {
-   "ocrPdfSize": 15105472,
-   "pageCount": 28,
-   "sha256": "01305ec8e90b5fffcbbb9f082eef26f7d1fb2bcbcce96eaf5f2879dca0a03c46"
-  },
-  "datormagazin-1995-14": {
-   "ocrPdfSize": 115605773,
-   "pageCount": 84,
-   "sha256": "45caae2020586325a2390065c72defe91f10f12ca113272e705759c98fdedaa4"
+  "comment": "Uppmätta sidantal ur OCR-PDF:erna i cache/pdf/ (pdfinfo), skrivna av tools/measure_page_counts.py. pageCount används bara om ocrPdfSize fortfarande stämmer med webbplatsens fil. sha256 sparas för spårbarhet och ingår inte i inventory.",
+  "measurements": {
+    "datormagazin-1986-01": {
+      "ocrPdfSize": 15105472,
+      "pageCount": 28,
+      "sha256": "01305ec8e90b5fffcbbb9f082eef26f7d1fb2bcbcce96eaf5f2879dca0a03c46"
+    },
+    "datormagazin-1986-02": {
+      "ocrPdfSize": 18024807,
+      "pageCount": 32,
+      "sha256": "e60afec0184e5da26c3c510af9eb69a4dfacba928de036aab77efcda716c739c"
+    },
+    "datormagazin-1986-03": {
+      "ocrPdfSize": 18478586,
+      "pageCount": 32,
+      "sha256": "227c47e2789e98e74f6c9fe4941b4ba81718673ecd7c17c0c6c9fc7fbb76bb7b"
+    },
+    "datormagazin-1986-04": {
+      "ocrPdfSize": 23329624,
+      "pageCount": 49,
+      "sha256": "e1d08eff1b7525689a6d60e3a7dae713832f8f078a6c82d6e3ebb589aa304c70"
+    },
+    "datormagazin-1987-01": {
+      "ocrPdfSize": 19032390,
+      "pageCount": 36,
+      "sha256": "1b3f25e5aa2cf96290aba043064c02eabb5867573474c30199cc6bc7e0b021a1"
+    },
+    "datormagazin-1987-02": {
+      "ocrPdfSize": 21422879,
+      "pageCount": 40,
+      "sha256": "d3d32cdd4e15217a9102b8e02865b49053c465b6663fa8f70a190fee26153cba"
+    },
+    "datormagazin-1987-03": {
+      "ocrPdfSize": 19358555,
+      "pageCount": 40,
+      "sha256": "5b7ebda3cca8d32eaf9ca0ba822d25b91bc16404386810aa944cd9f21f700f41"
+    },
+    "datormagazin-1987-04-05": {
+      "ocrPdfSize": 33327407,
+      "pageCount": 48,
+      "sha256": "485e847b661364c2174800be55897576c4224e2fd224ac278fc7744aa781257a"
+    },
+    "datormagazin-1987-06": {
+      "ocrPdfSize": 27882487,
+      "pageCount": 48,
+      "sha256": "3f5f3584a6263655f266200d4962720023f8184a1096850eccfaf3481e61614d"
+    },
+    "datormagazin-1987-07": {
+      "ocrPdfSize": 21906862,
+      "pageCount": 48,
+      "sha256": "d330366713bf8eff878aaec9a82395566465ee9573b83c16846e99ca8496963a"
+    },
+    "datormagazin-1987-08": {
+      "ocrPdfSize": 22711805,
+      "pageCount": 48,
+      "sha256": "6feeb6862f11100f8fc56b6786c374a9247bbc4519c26bce74e18e2fda09fe0a"
+    },
+    "datormagazin-1987-09": {
+      "ocrPdfSize": 28193113,
+      "pageCount": 48,
+      "sha256": "f1deeb199a43e3a1e8d01ba045d6962eccba0bc17e93aaff206ba9c790a317f6"
+    },
+    "datormagazin-1987-10": {
+      "ocrPdfSize": 23573588,
+      "pageCount": 44,
+      "sha256": "8b3f890fe46419c32102a1e43e71038264c4d2299c9ac33bcfb532399a83181c"
+    },
+    "datormagazin-1987-10b": {
+      "ocrPdfSize": 22519348,
+      "pageCount": 44,
+      "sha256": "aff44a9b8c362c0206f80a75abb2aa0e22ab5f5979e52e7f490fa199422f3aac"
+    },
+    "datormagazin-1988-01": {
+      "ocrPdfSize": 24474598,
+      "pageCount": 44,
+      "sha256": "b7a62b69ff76d74d6e2039a9d96fcab9e83afc50df015c33011b063e5ee43b84"
+    },
+    "datormagazin-1988-02": {
+      "ocrPdfSize": 20562016,
+      "pageCount": 48,
+      "sha256": "59320e203e3ca341c86c4035169a83f42dab3009739f5a71815744b95b1230f2"
+    },
+    "datormagazin-1988-03": {
+      "ocrPdfSize": 23928187,
+      "pageCount": 48,
+      "sha256": "ac3657ef7e390b5a160df9c20055524cbe9e51d8f47d46a58b64f6cc98647349"
+    },
+    "datormagazin-1988-04": {
+      "ocrPdfSize": 24943062,
+      "pageCount": 48,
+      "sha256": "237aa5d12a23dbb3165cd5fe308c8cde62c1474d51523be8284f7f22b4dd933c"
+    },
+    "datormagazin-1988-05": {
+      "ocrPdfSize": 24362335,
+      "pageCount": 48,
+      "sha256": "2c222fb4bffe1c9e93630ca28e2305df9414b6fb8f6d56364e97f335061bdc8e"
+    },
+    "datormagazin-1988-06": {
+      "ocrPdfSize": 24970770,
+      "pageCount": 48,
+      "sha256": "121f2037d91085138dc9926405f9dfba028df7cac91ee9e55bf44b640aeed203"
+    },
+    "datormagazin-1988-07": {
+      "ocrPdfSize": 22069886,
+      "pageCount": 44,
+      "sha256": "1288e77570a61d955893f33d6bb532a87aff7151b6f73c994a5539176681202b"
+    },
+    "datormagazin-1988-08": {
+      "ocrPdfSize": 20261222,
+      "pageCount": 40,
+      "sha256": "5cd3975800cf81c76af3e5bbd6ca78095d54d3ee516d801a37d20f08a6284ef0"
+    },
+    "datormagazin-1988-09": {
+      "ocrPdfSize": 21732720,
+      "pageCount": 40,
+      "sha256": "2a206735176145c34c6ab0ae29333f619f2cba6e588961a1ed0645e7efbc7937"
+    },
+    "datormagazin-1988-10": {
+      "ocrPdfSize": 22987208,
+      "pageCount": 40,
+      "sha256": "990346ee0600ee4dffc6e9672026a2b5f16210ede723aef305a46058bc8dd4bc"
+    },
+    "datormagazin-1988-11": {
+      "ocrPdfSize": 26011862,
+      "pageCount": 48,
+      "sha256": "75d7fef23762e6139f1a6afacd25f986507de2af82cc4aa83496ca56bbecf4a2"
+    },
+    "datormagazin-1988-12": {
+      "ocrPdfSize": 25647525,
+      "pageCount": 48,
+      "sha256": "ef12d0f708ba31ebb01b2f7034424f4635e6649bb3b2611fa2bbfc26d4b4f988"
+    },
+    "datormagazin-1988-13": {
+      "ocrPdfSize": 26061502,
+      "pageCount": 48,
+      "sha256": "ef9972dd736574c79abed2879206c939a1436060c9ca6daa946e6716e9a9029b"
+    },
+    "datormagazin-1988-14": {
+      "ocrPdfSize": 25274281,
+      "pageCount": 48,
+      "sha256": "5d978ba71f6c2fade3f3df8778742f7d80c6c5e41a7bd1fd2a9c1201a1462c48"
+    },
+    "datormagazin-1988-15": {
+      "ocrPdfSize": 24838919,
+      "pageCount": 48,
+      "sha256": "bc3be4f44ab8601dd956ed4686405a048cb23c10ae8d61522e30bf219b3f201c"
+    },
+    "datormagazin-1988-16-17": {
+      "ocrPdfSize": 25641314,
+      "pageCount": 48,
+      "sha256": "fa7107c292e86284f76127c6e44fc4d49686e7f42dfcccc804e8e2376fc31353"
+    },
+    "datormagazin-1989-01": {
+      "ocrPdfSize": 24108625,
+      "pageCount": 48,
+      "sha256": "854a35e5e17ac33674c52e1ddcda6b1af1e9e22c71f373234294cd557b2bb430"
+    },
+    "datormagazin-1989-02": {
+      "ocrPdfSize": 26026118,
+      "pageCount": 48,
+      "sha256": "fe709a2abbd6543c63743a74fd7d7f5b933d1ae790fe39222ab31aeae7d552a0"
+    },
+    "datormagazin-1989-03": {
+      "ocrPdfSize": 23488554,
+      "pageCount": 48,
+      "sha256": "615c4c58413043edea76a29cc795b593efb8902db573bdf4a5d80f844341ca29"
+    },
+    "datormagazin-1989-04": {
+      "ocrPdfSize": 26283467,
+      "pageCount": 48,
+      "sha256": "3b5535edc8091997b8d1609b59ab56840944d1d693c6681c5bf0fa3684ddde26"
+    },
+    "datormagazin-1989-05": {
+      "ocrPdfSize": 26335898,
+      "pageCount": 48,
+      "sha256": "bab890330d2aaa2a42aa733ae7c88a3c576cb237aecbf8331a399444ccda4747"
+    },
+    "datormagazin-1989-06": {
+      "ocrPdfSize": 25672804,
+      "pageCount": 48,
+      "sha256": "df96cf7e679750c96b3b62fe22dcac50fa9f92d4cd9cf414f3df517a2c77fdd8"
+    },
+    "datormagazin-1989-07": {
+      "ocrPdfSize": 23914949,
+      "pageCount": 48,
+      "sha256": "56275809cdc0f2a1c3bc7664980e9534d31be4e148182b436a90bbc799412104"
+    },
+    "datormagazin-1989-08": {
+      "ocrPdfSize": 27021492,
+      "pageCount": 48,
+      "sha256": "432f9b2062a20880c9d0425fa85b350b78f3fd999cae355d181a602bb2436b3e"
+    },
+    "datormagazin-1989-09": {
+      "ocrPdfSize": 20461113,
+      "pageCount": 40,
+      "sha256": "d99662a6155a6fcd10dd694e59b224667607177268bd554ddb103a36e7c96089"
+    },
+    "datormagazin-1989-10": {
+      "ocrPdfSize": 23352350,
+      "pageCount": 40,
+      "sha256": "154f5fd361e9cb00b21db7b8946f938ba61b0778465a4ea2cd5bea40cc7be441"
+    },
+    "datormagazin-1989-11": {
+      "ocrPdfSize": 26189195,
+      "pageCount": 44,
+      "sha256": "104b52069189ad1302237f84d4e30821fdb86fc469b1b79c92c72d74cabffcc0"
+    },
+    "datormagazin-1989-12": {
+      "ocrPdfSize": 25595148,
+      "pageCount": 48,
+      "sha256": "ba4b149db078ef947ade2c2c72d1365d1680df139a63a2b169c85b091fd47c93"
+    },
+    "datormagazin-1989-13": {
+      "ocrPdfSize": 27678270,
+      "pageCount": 48,
+      "sha256": "019308627a8e7af219d43718cc06d29fdb15175d5faf3553155dbf898a3730da"
+    },
+    "datormagazin-1989-14": {
+      "ocrPdfSize": 26828063,
+      "pageCount": 48,
+      "sha256": "8a8c72811aac8de2b4c782b6d6d07d6497bdd67fc119ce4a86cd86e26736a74e"
+    },
+    "datormagazin-1989-15": {
+      "ocrPdfSize": 24183820,
+      "pageCount": 48,
+      "sha256": "cf83be01785e0e1e7352415f2aef80edebff3c695172625a83f9a7fd7aebf85d"
+    },
+    "datormagazin-1989-16": {
+      "ocrPdfSize": 26082713,
+      "pageCount": 48,
+      "sha256": "2bcb2d62d3529eb9bff5e7e36a237c98b35e0cb7a23e169441d9cd56dcaa72b8"
+    },
+    "datormagazin-1989-16b": {
+      "ocrPdfSize": 23239532,
+      "pageCount": 36,
+      "sha256": "6a8715cf6742fe62c18905c00a9adb41a51ce757df2a4034f669da358fc3b58a"
+    },
+    "datormagazin-1989-17": {
+      "ocrPdfSize": 26816123,
+      "pageCount": 48,
+      "sha256": "3fb85652f30f1cbefbf485e0121cbb62a679f7e28076d8f69b3a70c49947a184"
+    },
+    "datormagazin-1989-18": {
+      "ocrPdfSize": 20209390,
+      "pageCount": 40,
+      "sha256": "9a505a07ed85f201e798e374a2b025aaab34270bb669976985609bf7e7885d4e"
+    },
+    "datormagazin-1990-01": {
+      "ocrPdfSize": 19005747,
+      "pageCount": 36,
+      "sha256": "6853ca5d517fee09d04ce6e0064bb9bf4e22d1ffb540b67b706b3b2a30f4408b"
+    },
+    "datormagazin-1990-02": {
+      "ocrPdfSize": 19974407,
+      "pageCount": 36,
+      "sha256": "bf113d3f718b7256863c0c3206cd164c29566b4d63e937e1e6c9b4d028b8a38f"
+    },
+    "datormagazin-1990-03": {
+      "ocrPdfSize": 25241837,
+      "pageCount": 44,
+      "sha256": "0e6856e3c91bc2f3f7b6391915cb028702d18425040c6f470f5edf378bcb1c94"
+    },
+    "datormagazin-1990-04": {
+      "ocrPdfSize": 25756518,
+      "pageCount": 44,
+      "sha256": "3274fb91d3599b4b7267f6136761e79cff174d0d5bc3cdc3680680c37d436145"
+    },
+    "datormagazin-1990-05": {
+      "ocrPdfSize": 24945142,
+      "pageCount": 44,
+      "sha256": "bdf77ab5c0dae9e3a0010a99e4e09caf815e4007826c7df157e8505586f31660"
+    },
+    "datormagazin-1990-06": {
+      "ocrPdfSize": 23739268,
+      "pageCount": 44,
+      "sha256": "0da294f52267063599258ec939106f6d000d4aca5d513d9a73002732b5a52fed"
+    },
+    "datormagazin-1990-07": {
+      "ocrPdfSize": 24135495,
+      "pageCount": 44,
+      "sha256": "24b865ad39d7024a40c14cf7ef9df484edfb6510ff748b926533be1c4556eda9"
+    },
+    "datormagazin-1990-08": {
+      "ocrPdfSize": 31313861,
+      "pageCount": 48,
+      "sha256": "73827cedce6b08f6ee83e9e2d18bae51dd319a61a8a9b4abdb76f1adda77521a"
+    },
+    "datormagazin-1990-09": {
+      "ocrPdfSize": 26039674,
+      "pageCount": 48,
+      "sha256": "cb228fefe619592a92f323ebb020982ab313fe1781954666960b9b3aac29926c"
+    },
+    "datormagazin-1990-10": {
+      "ocrPdfSize": 29627724,
+      "pageCount": 44,
+      "sha256": "5dc3c11b153d460bde6447828f8d6cdc85bef26ac42b17a7ad79f2e0a394a514"
+    },
+    "datormagazin-1990-11": {
+      "ocrPdfSize": 23870791,
+      "pageCount": 88,
+      "sha256": "f137c558b457e1737943c3c6127ceaa61956d9b2553560af66af543a78165ab9"
+    },
+    "datormagazin-1990-12": {
+      "ocrPdfSize": 23398996,
+      "pageCount": 88,
+      "sha256": "51d053d614e187182b8d3dc1a57dc1f8fb6c6074dd4e3f852e3a788d658747c1"
+    },
+    "datormagazin-1990-13": {
+      "ocrPdfSize": 26565442,
+      "pageCount": 98,
+      "sha256": "80b9df3d389711cc80065be59f3d034905e07d5b8b7b013374afbfdb175d186b"
+    },
+    "datormagazin-1990-14": {
+      "ocrPdfSize": 23617008,
+      "pageCount": 88,
+      "sha256": "e86883e9704c97f7027309ecfa09f3f2dfdb22128e7d20eeeb31308b2d58de92"
+    },
+    "datormagazin-1990-15": {
+      "ocrPdfSize": 23785392,
+      "pageCount": 88,
+      "sha256": "6e65bb09bb625f520e99ba93ba47f5224ab0cf716760ff09c14dd1345faddd75"
+    },
+    "datormagazin-1990-16": {
+      "ocrPdfSize": 22945902,
+      "pageCount": 88,
+      "sha256": "06649bcc1b653422b0fdae3ca47832042a6d0a620548a49ebfd4cb61fdc6418d"
+    },
+    "datormagazin-1990-17": {
+      "ocrPdfSize": 25146449,
+      "pageCount": 96,
+      "sha256": "0f28c5b82440dc47fc7182b7908c2ed084e5c84ec29ea1a155d36a50000a6bd0"
+    },
+    "datormagazin-1990-18": {
+      "ocrPdfSize": 24610286,
+      "pageCount": 104,
+      "sha256": "70388241c80f72ae472d96e5afc96fc8326f5a9bb90a43f226247a29288f6244"
+    },
+    "datormagazin-1990-19": {
+      "ocrPdfSize": 26853787,
+      "pageCount": 104,
+      "sha256": "b54c36abee5662fff01ab31ab601eb8031e83fc7a610866bac8444957dc4fede"
+    },
+    "datormagazin-1990-20": {
+      "ocrPdfSize": 23131052,
+      "pageCount": 88,
+      "sha256": "9904aa87df78273c9f5793b6986b51eb058b2f4088c7981d462b6ad2ed41dd8d"
+    },
+    "datormagazin-1991-01": {
+      "ocrPdfSize": 23667957,
+      "pageCount": 88,
+      "sha256": "edc505593b30d06168da3efb5edab3e62943bbfc84de4bc81a8ef87f865783fb"
+    },
+    "datormagazin-1991-02": {
+      "ocrPdfSize": 23212399,
+      "pageCount": 88,
+      "sha256": "c867d4be71de3c7c7b7e321abc078a97eea911073641eb3ae83440158db1b35d"
+    },
+    "datormagazin-1991-03": {
+      "ocrPdfSize": 23372125,
+      "pageCount": 88,
+      "sha256": "162b8d01055c04449934fa91aa8e962066c6d503e2693eab4ff722ea76157bfa"
+    },
+    "datormagazin-1991-04": {
+      "ocrPdfSize": 24090439,
+      "pageCount": 88,
+      "sha256": "e713dcd11bc06576278a5298a0a9090681378fd15d964d6136b120da510c8f63"
+    },
+    "datormagazin-1991-05": {
+      "ocrPdfSize": 22410233,
+      "pageCount": 88,
+      "sha256": "734f9e85b4032577835bfbe9f6f7b4a7c2157527f4cfbc8eb27210e16fd1f400"
+    },
+    "datormagazin-1991-06": {
+      "ocrPdfSize": 25772685,
+      "pageCount": 80,
+      "sha256": "dc26630c419600cdeb879fb0d13649e44dd568e228a36d27c502e9a07933c5a7"
+    },
+    "datormagazin-1991-07": {
+      "ocrPdfSize": 25886898,
+      "pageCount": 80,
+      "sha256": "6b92d9604ae4a169be981ecedfc7decc5b4db97e6ce68b5b9296e76f06a3ba00"
+    },
+    "datormagazin-1991-08": {
+      "ocrPdfSize": 24823297,
+      "pageCount": 80,
+      "sha256": "0506d1b08a610d4111b16c346759ae174f693fbc407b19eaf58e9eb6c432ce43"
+    },
+    "datormagazin-1991-09": {
+      "ocrPdfSize": 24528234,
+      "pageCount": 80,
+      "sha256": "c8949c066449190ab1ad314693168eed456c74f6a09e7b6992256a87a51d036a"
+    },
+    "datormagazin-1991-10": {
+      "ocrPdfSize": 25133496,
+      "pageCount": 80,
+      "sha256": "c4d8c8debd45b2cd234ce0caf5a4533e93ac90ea24b00561cb5c1d6d65d4d49c"
+    },
+    "datormagazin-1991-11": {
+      "ocrPdfSize": 21907664,
+      "pageCount": 80,
+      "sha256": "62ceeeac41b320aab4a168604e3dab3f4dd817dead9451f723f69adf18708b8f"
+    },
+    "datormagazin-1991-12": {
+      "ocrPdfSize": 22439593,
+      "pageCount": 80,
+      "sha256": "2fac80c6faa68c84c8d01af94b72e23ec620115f66c2bdef9229a0cf2e576824"
+    },
+    "datormagazin-1991-13": {
+      "ocrPdfSize": 24071175,
+      "pageCount": 80,
+      "sha256": "68a4c0737db4c7279b64a90b009fe1a1e2ce985855f504721d1213bb3dcb9dba"
+    },
+    "datormagazin-1991-14": {
+      "ocrPdfSize": 22286147,
+      "pageCount": 80,
+      "sha256": "2d17651557722411df100a69a0f6cd1ad6e2c8e3c2e5b7acf5211a9d5ce84f3c"
+    },
+    "datormagazin-1991-15": {
+      "ocrPdfSize": 25481916,
+      "pageCount": 80,
+      "sha256": "feaff108105dfd9ae424c7260b8fa74fd9a428114f08f51e99e421ad57cf6c1b"
+    },
+    "datormagazin-1991-16": {
+      "ocrPdfSize": 25777191,
+      "pageCount": 80,
+      "sha256": "1ca33384bf2b2f42dd170959390fc9e5e6a42523113516c23298479fdf03ccc0"
+    },
+    "datormagazin-1991-17": {
+      "ocrPdfSize": 25618186,
+      "pageCount": 80,
+      "sha256": "b87f27f120d6604f99363bbcd5d17a4b1446b1676b0982e4a739983b536cf0d3"
+    },
+    "datormagazin-1991-18": {
+      "ocrPdfSize": 25382609,
+      "pageCount": 80,
+      "sha256": "436dafa034af628e0536d024e5f07b74e3c516bfa9297779a4d80339696f8ab8"
+    },
+    "datormagazin-1991-19": {
+      "ocrPdfSize": 23234304,
+      "pageCount": 80,
+      "sha256": "8f6dc4a873c8aa8b781a1fec8c24dbbd78b75c6cabd2363a91293c775bb19142"
+    },
+    "datormagazin-1991-20": {
+      "ocrPdfSize": 24372645,
+      "pageCount": 80,
+      "sha256": "1cceeed9c7c1793e6a3dd218f56ba4a0ea9cfb8f69775fadcee01176394d360b"
+    },
+    "datormagazin-1991-21": {
+      "ocrPdfSize": 23808786,
+      "pageCount": 80,
+      "sha256": "170152d83bcc6450f42e7d6a97e08261e626aac90d83704941080a5b659bc271"
+    },
+    "datormagazin-1991-22": {
+      "ocrPdfSize": 122724692,
+      "pageCount": 80,
+      "sha256": "62b20b7b6ad0f3dae669b8331f0c42cce232362dc6cee6ff94826d092b07f280"
+    },
+    "datormagazin-1992-01": {
+      "ocrPdfSize": 123750468,
+      "pageCount": 80,
+      "sha256": "978b8f87cbb05d7b50d889af296b58c779eac5fc7ba8797fe6b3aedc70738252"
+    },
+    "datormagazin-1992-02": {
+      "ocrPdfSize": 121084901,
+      "pageCount": 72,
+      "sha256": "0a7259d9254ca9367bb1033491499fc50c9428f38fc23d9e5df9859aaa13283b"
+    },
+    "datormagazin-1992-03": {
+      "ocrPdfSize": 114989465,
+      "pageCount": 72,
+      "sha256": "3096499145897f7fcf09f0dfc36907c251daf51d57a2029b1b13290a51eace5d"
+    },
+    "datormagazin-1992-04": {
+      "ocrPdfSize": 115677047,
+      "pageCount": 72,
+      "sha256": "302d5d2968fbf53c3ed90af5141ae060e6f9170644a6e7643c40db6b744e6543"
+    },
+    "datormagazin-1992-05": {
+      "ocrPdfSize": 110705870,
+      "pageCount": 72,
+      "sha256": "92f0fa28b9f7d2422dd8d9ee22e691c1cb9cc167f31a47e2ff8fdc2a8d12468b"
+    },
+    "datormagazin-1992-06": {
+      "ocrPdfSize": 114110422,
+      "pageCount": 72,
+      "sha256": "50a4b95f7d74caaa4b8448fe0a27f51a3a96d2ae36959dc9579e52caeee3324e"
+    },
+    "datormagazin-1992-07": {
+      "ocrPdfSize": 107926004,
+      "pageCount": 72,
+      "sha256": "53bd1b6b226abed0e7051bd2726ce830a23b181aa616e773f2a7aeb9de1a8b63"
+    },
+    "datormagazin-1992-08": {
+      "ocrPdfSize": 115469106,
+      "pageCount": 72,
+      "sha256": "76b69c8285795804b1072c0301911b70114e9afc57e65c45f7cb1c1f54d59cd8"
+    },
+    "datormagazin-1992-09": {
+      "ocrPdfSize": 108723437,
+      "pageCount": 72,
+      "sha256": "fb41aa1b48db7df32308715c94deb004e9ca92d49574652561a97485a929844a"
+    },
+    "datormagazin-1992-10": {
+      "ocrPdfSize": 102238421,
+      "pageCount": 72,
+      "sha256": "748dc819ebcfc80445956405e36bc26dee15bccb5def4c449c5fe2502dae1df8"
+    },
+    "datormagazin-1992-11": {
+      "ocrPdfSize": 107147673,
+      "pageCount": 72,
+      "sha256": "901a86b100230eeb1579938d227bf37174a5fb98ecdc282b5e5ee587e7e44905"
+    },
+    "datormagazin-1992-12": {
+      "ocrPdfSize": 101721728,
+      "pageCount": 72,
+      "sha256": "e3024146d10944fefa37453dfbc1525d906af14134e2dcf61047e34f0351cfda"
+    },
+    "datormagazin-1992-13": {
+      "ocrPdfSize": 121613674,
+      "pageCount": 80,
+      "sha256": "1db9517ea0e8dcade933ff206012f001fe3cbda7ba0a836a92e35893367cb53d"
+    },
+    "datormagazin-1992-14": {
+      "ocrPdfSize": 112753460,
+      "pageCount": 80,
+      "sha256": "d7fd85a96f543fa3685dd58d5bcc7415a921e52097a8c5c6c190f907eca19cb7"
+    },
+    "datormagazin-1992-15": {
+      "ocrPdfSize": 113598543,
+      "pageCount": 80,
+      "sha256": "c70479e861231aff17002a9bf7287bb1a2a640a90ff50bf4cac64b4344e8a02b"
+    },
+    "datormagazin-1992-16": {
+      "ocrPdfSize": 109552123,
+      "pageCount": 80,
+      "sha256": "1b7973fa2efcbd1972e83b5223fe867ff31b21936d308d8399e2e74df1d6377d"
+    },
+    "datormagazin-1992-17": {
+      "ocrPdfSize": 115197958,
+      "pageCount": 80,
+      "sha256": "699479bc1309ccde6b547910dc0614132d71ea0257576b338da1dac558113350"
+    },
+    "datormagazin-1992-18": {
+      "ocrPdfSize": 292206183,
+      "pageCount": 81,
+      "sha256": "a1edb0a2c9f3e62773e4c7340096bd41d21cf490b6af281985076eeb1cc31839"
+    },
+    "datormagazin-1992-19": {
+      "ocrPdfSize": 112163025,
+      "pageCount": 80,
+      "sha256": "b164c3d03c16c79480ba2f1fa21b8aa8952e3decc2172c5fcc4e9d54c65c48a7"
+    },
+    "datormagazin-1992-20": {
+      "ocrPdfSize": 108670892,
+      "pageCount": 80,
+      "sha256": "71a68156174538aaac611ac905b0789517f52ff22bf692ab1965fb8dc91ad6ac"
+    },
+    "datormagazin-1992-21": {
+      "ocrPdfSize": 119790591,
+      "pageCount": 88,
+      "sha256": "faa2f2cad4659a464b44085463123a79c168023fc225c175239b0906501d1f36"
+    },
+    "datormagazin-1992-22": {
+      "ocrPdfSize": 113911764,
+      "pageCount": 80,
+      "sha256": "589d28b87cbbe5edd790a0b4bcfbeadc95c9e9afbb695bad158b63145e0c553e"
+    },
+    "datormagazin-1993-01": {
+      "ocrPdfSize": 68380884,
+      "pageCount": 64,
+      "sha256": "12c2ac9213724c34bee1fad32ee932c47e3a1705a2ca172b4c7e4d20159fbea2"
+    },
+    "datormagazin-1993-02": {
+      "ocrPdfSize": 88429881,
+      "pageCount": 64,
+      "sha256": "68f48b0f3242e22ac13916a1f45bd4a666b7e093a45de2b96ea313bb0856ff2b"
+    },
+    "datormagazin-1993-03": {
+      "ocrPdfSize": 89792864,
+      "pageCount": 68,
+      "sha256": "1516cd31eb982c024ec6cbc29a511f1ac0d4447e6b3c5d6feedb377a065270a9"
+    },
+    "datormagazin-1993-04": {
+      "ocrPdfSize": 79737756,
+      "pageCount": 72,
+      "sha256": "9317bea26aa6e82cace7d435c995e56b27bc578e478794cae2e5c40e181cb329"
+    },
+    "datormagazin-1993-05": {
+      "ocrPdfSize": 81310369,
+      "pageCount": 72,
+      "sha256": "c2817fb1d7a17a372d0924f41e6a8fbeb508c33579803387289d1837d69febf5"
+    },
+    "datormagazin-1993-06": {
+      "ocrPdfSize": 104341762,
+      "pageCount": 72,
+      "sha256": "68eb0f2b5c1a90482de93ccfcb92c92e5769c43e89e41aaaecb88a949b2b772e"
+    },
+    "datormagazin-1993-07": {
+      "ocrPdfSize": 102033030,
+      "pageCount": 72,
+      "sha256": "d6794fb3770bf2f040b202d1090271e46afeca47bd38647db4e0739fc0ad9f94"
+    },
+    "datormagazin-1993-08": {
+      "ocrPdfSize": 98849696,
+      "pageCount": 72,
+      "sha256": "eb61b4b2d2253360d813f20fb591f794d1581b22fd4ba686b3b10ca1ff429abd"
+    },
+    "datormagazin-1993-09": {
+      "ocrPdfSize": 95283629,
+      "pageCount": 72,
+      "sha256": "fa94f7ccf175d5a25f5052e57f70258f67d03b0d28ced6c7e5f2e52faa7e1c31"
+    },
+    "datormagazin-1993-10": {
+      "ocrPdfSize": 82470703,
+      "pageCount": 72,
+      "sha256": "71647d553f77d322ec507de4cca530990944b07583d49bfe4752e9821ea3cc26"
+    },
+    "datormagazin-1993-11": {
+      "ocrPdfSize": 83668248,
+      "pageCount": 72,
+      "sha256": "369585f3d5b9ea97486837bed527936e96d1872cb71dd7efadc2535dac3097ad"
+    },
+    "datormagazin-1993-12": {
+      "ocrPdfSize": 101735935,
+      "pageCount": 72,
+      "sha256": "7202b9357c6340807a7cf97901ea033839e0a35c1a66440d74d0e542900325ed"
+    },
+    "datormagazin-1993-13": {
+      "ocrPdfSize": 80835643,
+      "pageCount": 72,
+      "sha256": "15d56be2454d7536b630b3b39fa4046d3431848cbf82c0f7787db3069546f8b8"
+    },
+    "datormagazin-1993-14": {
+      "ocrPdfSize": 102023382,
+      "pageCount": 72,
+      "sha256": "fbb4a566fea7484c3210d4787d22a1853df2a83d79e3d958e0027466063f0559"
+    },
+    "datormagazin-1993-15": {
+      "ocrPdfSize": 107328425,
+      "pageCount": 72,
+      "sha256": "7d4f357133f52d1fd8261e55245e1878c0b3c83323dced6dbb9180e5ed35579f"
+    },
+    "datormagazin-1993-16": {
+      "ocrPdfSize": 107988451,
+      "pageCount": 72,
+      "sha256": "5445be30f2b64b1c06c63a6b8be27c5573d5ad47f54a51e64dfc3b5334bb8b71"
+    },
+    "datormagazin-1993-17": {
+      "ocrPdfSize": 51740140,
+      "pageCount": 48,
+      "sha256": "b1922d2bff2167e4a1aee9a5d927b10be523bf8b1596a9826ac55e5b2b785fa4"
+    },
+    "datormagazin-1993-18": {
+      "ocrPdfSize": 53050322,
+      "pageCount": 48,
+      "sha256": "2c3c35af8dd7e97f1c8a89a39c8d36797bd30960d0d71458c415f12a2e9f3c44"
+    },
+    "datormagazin-1993-19": {
+      "ocrPdfSize": 52335848,
+      "pageCount": 48,
+      "sha256": "6b195a848503ee33c75cf46d1cd16235bd91ba4de6f69bab928dff611175a932"
+    },
+    "datormagazin-1993-20": {
+      "ocrPdfSize": 58137127,
+      "pageCount": 48,
+      "sha256": "626abef78f353ee40746f45df75497584e6f8c4d37d03a0c7f02e6d8c2fa2fcd"
+    },
+    "datormagazin-1993-21": {
+      "ocrPdfSize": 180233678,
+      "pageCount": 79,
+      "sha256": "6e4a970461e83053f6001f0fa3840fd877b6ff3196636221af5ed5b4ffd1c33e"
+    },
+    "datormagazin-1993-22": {
+      "ocrPdfSize": 50917163,
+      "pageCount": 48,
+      "sha256": "908136e93d3a73f99666b9df4ec89bd87743eefcbb8e9015ac2a2b640af4b9d3"
+    },
+    "datormagazin-1994-01": {
+      "ocrPdfSize": 54898146,
+      "pageCount": 48,
+      "sha256": "abef20953f08cee4ebb1940966984498882f4c768e52d9a9c6cdc602a368fbce"
+    },
+    "datormagazin-1994-02": {
+      "ocrPdfSize": 55260556,
+      "pageCount": 48,
+      "sha256": "d82884d2b4738059aaa95316ebc78c354cba84379cf70bea4adfcb592271fdd9"
+    },
+    "datormagazin-1994-03": {
+      "ocrPdfSize": 54979978,
+      "pageCount": 48,
+      "sha256": "2f7320fc130c8b0d2388f3ebdab5b8ab17d69edd32969606044b051dd0e173d8"
+    },
+    "datormagazin-1994-04": {
+      "ocrPdfSize": 50452127,
+      "pageCount": 46,
+      "sha256": "4a8241fb1ae3eac56245a2a91ec5a799ed83bf3c48786f936a863922ba88f271"
+    },
+    "datormagazin-1994-05": {
+      "ocrPdfSize": 54875439,
+      "pageCount": 48,
+      "sha256": "f3e8907f8a84aff1269021391176fa84506e4ca99f893cc9418e6d32b516d3df"
+    },
+    "datormagazin-1994-06": {
+      "ocrPdfSize": 56443068,
+      "pageCount": 48,
+      "sha256": "fcd427a63e09a2628460f98fdaaf2758d4f247c65b3ddc362b38e0c914ffeadd"
+    },
+    "datormagazin-1994-07": {
+      "ocrPdfSize": 53504202,
+      "pageCount": 46,
+      "sha256": "e23f2457c83b2ae8de533e09571253eeb45b85984f49a50fb639f88e99ac7d6f"
+    },
+    "datormagazin-1994-08": {
+      "ocrPdfSize": 57310882,
+      "pageCount": 48,
+      "sha256": "b8fbb7ba3e85dec3ed00ee23ac76111c85110d863633d6932d2f9a31434e2571"
+    },
+    "datormagazin-1994-09": {
+      "ocrPdfSize": 65198576,
+      "pageCount": 64,
+      "sha256": "9da8a093d4544ab33f0ffed90c6c6caa5b8f4571af94bf8749c4f8c16fd5f8d8"
+    },
+    "datormagazin-1994-10": {
+      "ocrPdfSize": 65812205,
+      "pageCount": 64,
+      "sha256": "5c7d0520d8195388a1d67fa0f80b04027cddbe02e40a5bcf3cd5ae89a2d1daab"
+    },
+    "datormagazin-1994-11": {
+      "ocrPdfSize": 85038182,
+      "pageCount": 64,
+      "sha256": "51d2a4b80b7f13ae392ceecbd353e9d3f392d2b72d0f67747f0ef55a1ee6e4be"
+    },
+    "datormagazin-1994-12": {
+      "ocrPdfSize": 81621160,
+      "pageCount": 64,
+      "sha256": "e097f6c7aeaf6cd6fa3a9a62d3f8b610a5bac2ebe6c9e5ec27296eb3bb4c3aee"
+    },
+    "datormagazin-1994-13": {
+      "ocrPdfSize": 88181264,
+      "pageCount": 64,
+      "sha256": "ce401517d30b187c38c5b0a729358a3f3e17b8f2332b9014d82d0e468f6b80ef"
+    },
+    "datormagazin-1994-14": {
+      "ocrPdfSize": 86026610,
+      "pageCount": 64,
+      "sha256": "923ceaa61c71cd7dc2e210a7ceef2d7786c4c1b21bdf14c5fb3d7ace76ce55eb"
+    },
+    "datormagazin-1994-15": {
+      "ocrPdfSize": 66839823,
+      "pageCount": 64,
+      "sha256": "f2006dbe5aec6518ef99205c84527bef1884b3527910d25aa364317835bf1e3e"
+    },
+    "datormagazin-1994-16": {
+      "ocrPdfSize": 66632030,
+      "pageCount": 64,
+      "sha256": "a40dd0fcc7bb6c701438e1d37dfa3533729eee178664511cf4ece2ff126d57f6"
+    },
+    "datormagazin-1994-17": {
+      "ocrPdfSize": 81736975,
+      "pageCount": 64,
+      "sha256": "cf5371a67961f8d14f1f0a372e8bc84773ebdba714321bd012af41e52f9011a6"
+    },
+    "datormagazin-1994-18": {
+      "ocrPdfSize": 82308034,
+      "pageCount": 64,
+      "sha256": "e24a1856ddc48e8d95e207920402908d4044e57c5b12789193f494859efdc45d"
+    },
+    "datormagazin-1994-19": {
+      "ocrPdfSize": 85952045,
+      "pageCount": 64,
+      "sha256": "51f9368b87e0f3c4983ed8bb9ff55e542e9be7c8a081813845c01770c038f42c"
+    },
+    "datormagazin-1994-20": {
+      "ocrPdfSize": 80849285,
+      "pageCount": 64,
+      "sha256": "081c90cca7fe2b79e60ed7b022ed7b26658ae5e7628e7ee533cfd43095390b41"
+    },
+    "datormagazin-1994-21": {
+      "ocrPdfSize": 85538044,
+      "pageCount": 64,
+      "sha256": "ea0491e798e2e55b000a4d68aae33907664ecb767daaa37460ad3c995e5bf32b"
+    },
+    "datormagazin-1994-22": {
+      "ocrPdfSize": 86854326,
+      "pageCount": 62,
+      "sha256": "945ab0639ac110945e23fe694e53517c1b79a9c4e98c15d29da9cb157b081c9e"
+    },
+    "datormagazin-1995-01": {
+      "ocrPdfSize": 80845990,
+      "pageCount": 64,
+      "sha256": "0709f06b4a02d08dcb8e8d654b60fb864315fccda3f9977f37bac76e7cf752cd"
+    },
+    "datormagazin-1995-02": {
+      "ocrPdfSize": 82874350,
+      "pageCount": 64,
+      "sha256": "b63593cfe99ce84adf0df7eee762d05daa1db6a9ad4c07b3314af21c2bba6cbe"
+    },
+    "datormagazin-1995-03": {
+      "ocrPdfSize": 91881003,
+      "pageCount": 64,
+      "sha256": "fa0d31736d7b2b571347e7f2657f7bc6202d78fd1b4d97c32aa700537f93c92e"
+    },
+    "datormagazin-1995-04": {
+      "ocrPdfSize": 81978871,
+      "pageCount": 64,
+      "sha256": "91685992e35463f807e3d376f8ee9dbd8b05bd2ebb18d67e7808a5d5319648b0"
+    },
+    "datormagazin-1995-05-06": {
+      "ocrPdfSize": 84041639,
+      "pageCount": 64,
+      "sha256": "e7d3740fe05dbbedd1d712f4f5a36ea2fcd13ddd2b22d4d6b3d5539975154c02"
+    },
+    "datormagazin-1995-07": {
+      "ocrPdfSize": 120787819,
+      "pageCount": 84,
+      "sha256": "0b794851f2b57ac8e2600afab20fbab75f7b064fd4b9e32e70f07531f07078cc"
+    },
+    "datormagazin-1995-08": {
+      "ocrPdfSize": 358882364,
+      "pageCount": 84,
+      "sha256": "5cb382397c50a8553d34d5f0b540b4eed8a7b63888c44e2feda3c04c95fce892"
+    },
+    "datormagazin-1995-09": {
+      "ocrPdfSize": 122693287,
+      "pageCount": 84,
+      "sha256": "4ee91bd1e57cb66d34c762b27b2365f573980a512b5d77f61f1beef0459c6c75"
+    },
+    "datormagazin-1995-10": {
+      "ocrPdfSize": 117261799,
+      "pageCount": 84,
+      "sha256": "111fa53d2e52338c08188e1343a9a5d57fff711fd52e6220beeb0e0293dba5fa"
+    },
+    "datormagazin-1995-11": {
+      "ocrPdfSize": 120044394,
+      "pageCount": 84,
+      "sha256": "dc09ba048d3d5b1225c648baf6d5f28595df60bdb9fad2116f2af45dab2f2dac"
+    },
+    "datormagazin-1995-12": {
+      "ocrPdfSize": 114445559,
+      "pageCount": 84,
+      "sha256": "ef46f2a0a39b75efdbdefee59870568d85e5654914c19abe21a5298d4eaece38"
+    },
+    "datormagazin-1995-13": {
+      "ocrPdfSize": 110885579,
+      "pageCount": 84,
+      "sha256": "da790065e2538d4944990afc8e6651950f80c642746557a3e84c4257cb540a7e"
+    },
+    "datormagazin-1995-14": {
+      "ocrPdfSize": 115605773,
+      "pageCount": 84,
+      "sha256": "45caae2020586325a2390065c72defe91f10f12ca113272e705759c98fdedaa4"
+    },
+    "datormagazin-1995-15": {
+      "ocrPdfSize": 563123977,
+      "pageCount": 92,
+      "sha256": "9b24e04d37bd13ae5d9f8cc744536a7e15be0f02d7f8fc209efece9f5025c6f9"
+    },
+    "highscore-1993-17": {
+      "ocrPdfSize": 90700078,
+      "pageCount": 32,
+      "sha256": "b1933a9b2bd6ed7572fbf7b7e0c8dbf21dfff3831b83b013562a13ded92d6c27"
+    },
+    "highscore-1993-18": {
+      "ocrPdfSize": 85506354,
+      "pageCount": 32,
+      "sha256": "c20d46073f1b6d1bb5fbd2277b205c85b4abd11bd38aa09d532aab475a1810ed"
+    },
+    "highscore-1993-19": {
+      "ocrPdfSize": 86812684,
+      "pageCount": 32,
+      "sha256": "878ec866ddef5ba297817de6ed3ed7f438a87c3af7311e3b901ab2796ce8e3c0"
+    },
+    "highscore-1993-20": {
+      "ocrPdfSize": 136874488,
+      "pageCount": 32,
+      "sha256": "dee9250b5aba30233cf7e0bdc541b96e583ccb026d1245dbea90861147766be0"
+    },
+    "highscore-1993-21": {
+      "ocrPdfSize": 84892950,
+      "pageCount": 32,
+      "sha256": "05635c3a2abd2c3f6bedfeabda80081d256a6438bc07eb59ab1e4c5d516dee4c"
+    },
+    "highscore-1993-22": {
+      "ocrPdfSize": 86371089,
+      "pageCount": 32,
+      "sha256": "166444a377a066424cee8144e53eda134b92bb03d39b46d1dbe8d9b76b5dacb9"
+    },
+    "highscore-1994-01": {
+      "ocrPdfSize": 142195791,
+      "pageCount": 32,
+      "sha256": "cee03279bb75734f1744a73bb0d81ca8d6b2b462a23ac9dbf2363511da15f248"
+    },
+    "highscore-1994-02": {
+      "ocrPdfSize": 141150412,
+      "pageCount": 32,
+      "sha256": "bd07256ce54fe9111c93a054f52776253dc9fa2fd70bf97b27b20397130471e3"
+    },
+    "highscore-1994-03": {
+      "ocrPdfSize": 144171492,
+      "pageCount": 32,
+      "sha256": "83011b691e23eac9c8da4acf7e40413428fa5b46f505cc3ac87ca88203fd8a31"
+    },
+    "highscore-1994-04": {
+      "ocrPdfSize": 140048778,
+      "pageCount": 32,
+      "sha256": "6e296840712d4492e18f63d4538b9e3a9308819cfe102772187de03c64935188"
+    },
+    "highscore-1994-05": {
+      "ocrPdfSize": 122786233,
+      "pageCount": 32,
+      "sha256": "ac7f45acda287dbcb3feb5d99210634ebc41d97d04166017f3182752bc8036a1"
+    },
+    "highscore-1994-06": {
+      "ocrPdfSize": 139795323,
+      "pageCount": 32,
+      "sha256": "b17ff46dac75b1466105c911f88ee1208da465e2c710e400ccd1d750d149d86a"
+    },
+    "highscore-1994-07": {
+      "ocrPdfSize": 132723355,
+      "pageCount": 32,
+      "sha256": "a019a6f540e18a97adf882909c4bf950b216082886d14490a01062d906d914b0"
+    },
+    "highscore-1994-08": {
+      "ocrPdfSize": 140407039,
+      "pageCount": 32,
+      "sha256": "b85511a9d20dd7bb6db8bade5a77b8a910e116340006778da8b22908ec5d442f"
+    }
   }
- }
 }

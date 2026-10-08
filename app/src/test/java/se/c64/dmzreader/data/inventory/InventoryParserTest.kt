@@ -35,7 +35,8 @@ class InventoryParserTest {
         val highScore = inventory.issues.first { it.issueId == "highscore-1993-17" }
         assertEquals("datormagazin-1993-17", highScore.relatedIssueId)
         assertEquals(listOf("supplement"), highScore.flags)
-        assertNull(highScore.pageCount)
+        assertEquals(32, highScore.pageCount)  // uppmätt ur PDF:en sedan FAS 8B
+        assertTrue(inventory.issues.all { it.pageCount != null })
     }
 
     @Test

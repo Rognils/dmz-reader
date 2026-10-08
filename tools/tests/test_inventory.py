@@ -103,10 +103,19 @@ class InventoryContent(Generated):
         with_flag = [i for i, issue in self.issues.items() if "scan_supplement" in issue["flags"]]
         self.assertEqual(with_flag, ["datormagazin-1986-04"])
 
-    def test_page_count_only_for_samples(self):
-        known = {i: issue["pageCount"] for i, issue in self.issues.items()
-                 if issue["pageCount"] is not None}
-        self.assertEqual(known, {"datormagazin-1986-01": 28, "datormagazin-1995-14": 84})
+    def test_page_count_is_measured_for_every_issue(self):
+        # Sedan FAS 8B är sidantalet uppmätt ur varje PDF (plan C7).
+        for issue_id, issue in self.issues.items():
+            self.assertIsInstance(issue["pageCount"], int, issue_id)
+        self.assertEqual(self.issues["datormagazin-1986-01"]["pageCount"], 28)
+        self.assertEqual(self.issues["datormagazin-1995-14"]["pageCount"], 84)
+        self.assertEqual(sum(issue["pageCount"] for issue in self.issues.values()), 11293)
+
+    def test_page_count_that_differs_from_scans_is_listed(self):
+        differs = {item["issueId"]: (item["pageCount"], item["scanPageCount"])
+                   for item in self.diagnostics["pageCountDiffersFromScans"]}
+        self.assertEqual(differs, {"datormagazin-1986-04": (49, 33),    # PDF:en innehåller spelbilagan, 16 sidor
+                                   "datormagazin-1993-03": (68, 72)})
 
     def test_related_issue_id(self):
         self.assertEqual(self.issues["highscore-1993-17"]["relatedIssueId"], "datormagazin-1993-17")
