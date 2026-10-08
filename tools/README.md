@@ -33,6 +33,11 @@ Exemplen nedan skriver `python3`. Använd `.venv/bin/python` om du installerat i
 | `data/covers_manifest.json` | källa, storlek och kontrollsumma per miniatyr | `build_covers.py` |
 | `data/cover_review.json` | visuell granskning av kontaktkartan | för hand |
 | `docs/screenshots/covers/contact_sheet.png` | alla valda omslag som små bilder | `build_covers.py` |
+| `cache/pdf/` | OCR-PDF:er och `manifest.json` (storlek, ETag, SHA-256); versionshanteras inte | `fetch_pdfs.py` |
+| `cache/search/` | `search.db` i olika varianter; versionshanteras inte | `build_search_index.py`, `search_pilot.py` |
+| `tools/testdata/search_golden.json` | facit för sökindexet, visuellt kontrollerat | för hand |
+| `tools/testdata/search_lines.json` | verkliga rader med ordlägen, för normaliseringstesterna | för hand (ur pilotens PDF:er) |
+| `data/search_pilot.json` | pilotens mätresultat (FAS 8A) | `search_pilot.py` |
 
 ## Köra inventeringen
 
@@ -194,6 +199,43 @@ python3 tools/build_fts_testdb.py
 Bygger `app/src/debug/assets/fts_test.db`: ett litet sökindex i samma format som det riktiga ska få (planens D2), med 8 sidor påhittad svensk text och 11 sökfrågor med förväntade träffar i tabellen `selftest`. Skriptet kontrollerar förväntningarna mot datorns SQLite innan filen skrivs, och ger samma fil varje gång. Appen kör samma frågor på telefonen, i Inställningar → Diagnostik (ADR 0006).
 
 Kör om skriptet och committa filen om texten eller frågorna ändras.
+
+## Sökindex (`fetch_pdfs.py`, `build_search_index.py`, `search_pilot.py`)
+
+Fulltextindexet `search.db` byggs på datorn ur OCR-PDF:erna (plan D2 och FAS 8). Det kräver `pdftotext`, `pdftoppm` och `pdfinfo` (poppler-utils). PDF:erna och databaserna ligger i `cache/` och versionshanteras inte.
+
+```bash
+# 1. Hämta PDF:er till cache/pdf/ (en fil i taget, högst 5 MB/s, återupptagbart)
+python3 tools/fetch_pdfs.py --pilot
+python3 tools/fetch_pdfs.py datormagazin-1989-06
+
+# 2. Bygg search.db
+python3 tools/build_search_index.py --pilot --diacritics 0 -o cache/search/search-rd0.db
+
+# 3. Pilotens mätningar (FAS 8A)
+python3 tools/search_pilot.py build       # båda tokenizer-varianterna och hjälpdatabaser
+python3 tools/search_pilot.py evaluate    # facit: tools/testdata/search_golden.json
+python3 tools/search_pilot.py measure     # storlek, uppräknad till hela arkivet
+python3 tools/search_pilot.py pages       # uppmätt sidantal mot inventory
+python3 tools/search_pilot.py plan        # underlag för fullkörningen
+python3 tools/search_pilot.py compare     # pdftotext-lägen sida vid sida, i cache/compare/
+python3 tools/search_pilot.py render datormagazin-1995-14 26 högtalare   # utsnitt för visuell kontroll
+```
+
+**Hämtningen** kontrollerar varje fil mot `ocrPdfSize` och `ocrPdfEtag` i inventory och sparar storlek, ETag, Last-Modified och SHA-256 i `cache/pdf/manifest.json`. En fil som inte stämmer behålls men markeras, och indexbygget hoppar över den. En avbruten hämtning fortsätter där den slutade nästa gång kommandot körs.
+
+**Texten** tas ut med `pdftotext -raw`, som följer den ordning OCR-programmet skrev texten i och därför håller ihop spalterna. `rawText` är den texten orörd. `searchText` byggs av samma ordbitar med deras lägen på sidan (`pdftotext -raw -bbox`):
+
+- utspärrad text sätts ihop: bitar som ligger tätare än radens ordmellanrum hör till samma ord
+- mjuka bindestreck tas bort, och avstavning vid radbrytning sätts ihop
+- riktiga bindestreck behålls (CD-ROM, C-64, Formel 1-stjärnan)
+- blanksteg blir ett mellanslag
+
+Tveksamma fall avgörs mot en ordlista som byggs av de ord som stod hela i samma körning. Tätt satt vanlig text klistras aldrig ihop.
+
+**Databasen** har tabellerna `meta`, `issues` (med `pageCount`, `ocrPdfSize` och `ocrPdfEtag` per nummer), `pages` och FTS5-tabellen `pages_fts` över `searchText`. Samma PDF:er och samma `--built-at` ger en identisk fil.
+
+**Facit** får bara ändras efter att sidan har kontrollerats mot en rendering (`render`), inte mot OCR-texten.
 
 ## Uppdatera arkivet på telefonen
 
