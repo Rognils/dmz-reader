@@ -1,0 +1,494 @@
+{
+ "comment": "Facit för sökindexet (FAS 8A och 8B). Varje förväntad sida är kontrollerad visuellt mot en rendering av PDF-sidan (tools/search_pilot.py render), inte mot OCR-texten. pageNumber är PDF-sidindex med start på 1. De första 29 sökorden gäller pilotens nummer, de övriga nummer utanför piloten.",
+ "kinds": {
+  "vanligt": "vanligt svenskt ord, flera med å, ä eller ö",
+  "term": "namn eller term",
+  "bindestreck": "riktigt bindestreck som ska behållas",
+  "fras": "frassökning",
+  "utspärrat": "ordet är delat i bitar i PDF:ens textlager",
+  "avstavat": "ordet är avstavat vid radbrytning"
+ },
+ "queries": [
+  {
+   "query": "får",
+   "kind": "vanligt",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-05-06",
+     "pageNumber": 24
+    }
+   ],
+   "seen": "alltid får nya, moderna program"
+  },
+  {
+   "query": "för",
+   "kind": "vanligt",
+   "expected": [
+    {
+     "issueId": "datormagazin-1989-12",
+     "pageNumber": 45
+    }
+   ],
+   "seen": "För info ring"
+  },
+  {
+   "query": "här",
+   "kind": "vanligt",
+   "expected": [
+    {
+     "issueId": "highscore-1994-08",
+     "pageNumber": 11
+    }
+   ],
+   "seen": "Här är de två huvudpersonerna"
+  },
+  {
+   "query": "skärm",
+   "kind": "vanligt",
+   "expected": [
+    {
+     "issueId": "datormagazin-1991-02",
+     "pageNumber": 32
+    }
+   ],
+   "seen": "rubrik: … i skärm för …"
+  },
+  {
+   "query": "ljud",
+   "kind": "vanligt",
+   "expected": [
+    {
+     "issueId": "datormagazin-1987-10b",
+     "pageNumber": 17
+    }
+   ],
+   "seen": "snygg grafik eller snyggt ljud"
+  },
+  {
+   "query": "hårddisk",
+   "kind": "vanligt",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-05-06",
+     "pageNumber": 64
+    },
+    {
+     "issueId": "datormagazin-1993-03",
+     "pageNumber": 12
+    }
+   ],
+   "seen": "med 80Mb hårddisk; Sveriges mest prisvärda hårddisk"
+  },
+  {
+   "query": "Amiga",
+   "kind": "term",
+   "expected": [
+    {
+     "issueId": "datormagazin-1989-12",
+     "pageNumber": 25
+    }
+   ],
+   "seen": "C64, Amiga, ST"
+  },
+  {
+   "query": "C64",
+   "kind": "term",
+   "expected": [
+    {
+     "issueId": "datormagazin-1989-06",
+     "pageNumber": 46
+    }
+   ],
+   "seen": "radannons: C64, bandsp, joyst"
+  },
+  {
+   "query": "C-64",
+   "kind": "bindestreck",
+   "expected": [
+    {
+     "issueId": "datormagazin-1986-01",
+     "pageNumber": 25
+    }
+   ],
+   "seen": "The Anatomy of the C-64"
+  },
+  {
+   "query": "Commodore 128",
+   "kind": "fras",
+   "expected": [
+    {
+     "issueId": "datormagazin-1986-01",
+     "pageNumber": 4
+    }
+   ],
+   "seen": "introducerades Commodore 128 personal computer"
+  },
+  {
+   "query": "Fairlight",
+   "kind": "term",
+   "expected": [
+    {
+     "issueId": "datormagazin-1986-01",
+     "pageNumber": 7
+    }
+   ],
+   "seen": "prislista: FAIRLIGHT 129:—"
+  },
+  {
+   "query": "joystick",
+   "kind": "term",
+   "expected": [
+    {
+     "issueId": "highscore-1993-17",
+     "pageNumber": 17
+    }
+   ],
+   "seen": "JOYSTICK TOP STAR"
+  },
+  {
+   "query": "CD-ROM",
+   "kind": "bindestreck",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-14",
+     "pageNumber": 25
+    }
+   ],
+   "seen": "rubrik: kompletta CD-ROM"
+  },
+  {
+   "query": "piratkopiering",
+   "kind": "avstavat",
+   "expected": [
+    {
+     "issueId": "datormagazin-1986-01",
+     "pageNumber": 16
+    }
+   ],
+   "seen": "piratko- / piering av dataspel"
+  },
+  {
+   "query": "Infiltrator",
+   "kind": "term",
+   "expected": [
+    {
+     "issueId": "datormagazin-1986-01",
+     "pageNumber": 6
+    }
+   ],
+   "seen": "rubrik: INFILTRATOR"
+  },
+  {
+   "query": "Trumpcard",
+   "kind": "term",
+   "expected": [
+    {
+     "issueId": "datormagazin-1993-03",
+     "pageNumber": 12
+    }
+   ],
+   "seen": "Trumpcard 500 AT"
+  },
+  {
+   "query": "Newsroom",
+   "kind": "term",
+   "expected": [
+    {
+     "issueId": "datormagazin-1986-04",
+     "pageNumber": 19
+    }
+   ],
+   "seen": "Newsroom är här:"
+  },
+  {
+   "query": "högtalare",
+   "kind": "utspärrat",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-14",
+     "pageNumber": 26
+    },
+    {
+     "issueId": "datormagazin-1995-14",
+     "pageNumber": 27
+    }
+   ],
+   "seen": "Nya högtalare är ett bra sätt; textlagret har \"h ö g ta la re\""
+  },
+  {
+   "query": "Amiga",
+   "kind": "utspärrat",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-14",
+     "pageNumber": 3
+    }
+   ],
+   "seen": "AMIGA 1200 SPEL; textlagret har ordet delat i flera bitar"
+  },
+  {
+   "query": "turboköpet",
+   "kind": "utspärrat",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-14",
+     "pageNumber": 20
+    }
+   ],
+   "seen": "rubrik: Sju tips inför turboköpet; textlagret har \"tu r b o k ö p e t\""
+  },
+  {
+   "query": "ryggsäck",
+   "kind": "utspärrat",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-14",
+     "pageNumber": 26
+    }
+   ],
+   "seen": "sju högtalare och en ryggsäck"
+  },
+  {
+   "query": "köttbodar",
+   "kind": "avstavat",
+   "expected": [
+    {
+     "issueId": "datormagazin-1986-01",
+     "pageNumber": 6
+    }
+   ],
+   "seen": "fylla sina kött- / bodar"
+  },
+  {
+   "query": "centraldatorn",
+   "kind": "avstavat",
+   "expected": [
+    {
+     "issueId": "datormagazin-1986-01",
+     "pageNumber": 6
+    }
+   ],
+   "seen": "central- / datorn"
+  },
+  {
+   "query": "tekniska",
+   "kind": "avstavat",
+   "expected": [
+    {
+     "issueId": "highscore-1993-17",
+     "pageNumber": 6
+    }
+   ],
+   "seen": "Wiens teknis- / ka museum (mjukt bindestreck i textlagret)"
+  },
+  {
+   "query": "turbokort",
+   "kind": "avstavat",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-14",
+     "pageNumber": 20
+    }
+   ],
+   "seen": "olika turbo- / kort (mjukt bindestreck i textlagret)"
+  },
+  {
+   "query": "Mikael Roth",
+   "kind": "fras",
+   "expected": [
+    {
+     "issueId": "highscore-1993-17",
+     "pageNumber": 6
+    }
+   ],
+   "seen": "Mikael Roth från Stockholm"
+  },
+  {
+   "query": "Amiga 1200",
+   "kind": "fras",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-14",
+     "pageNumber": 20
+    }
+   ],
+   "seen": "Till Amiga 1200 finns ett antal"
+  },
+  {
+   "query": "Last Ninja",
+   "kind": "fras",
+   "expected": [
+    {
+     "issueId": "datormagazin-1987-10b",
+     "pageNumber": 19
+    }
+   ],
+   "seen": "prislista: LAST NINJA"
+  },
+  {
+   "query": "Mutant League Football",
+   "kind": "fras",
+   "expected": [
+    {
+     "issueId": "highscore-1994-08",
+     "pageNumber": 18
+    }
+   ],
+   "seen": "Mutant League Football kan bäst beskrivas"
+  },
+  {
+   "query": "Miami Vice",
+   "kind": "fras",
+   "expected": [
+    {
+     "issueId": "datormagazin-1986-03",
+     "pageNumber": 20
+    }
+   ],
+   "seen": "rubrik: MIAMI VICE kartlagd (tidig Datormagazin, v2)"
+  },
+  {
+   "query": "Decision in the Desert",
+   "kind": "fras",
+   "expected": [
+    {
+     "issueId": "datormagazin-1988-12",
+     "pageNumber": 19
+    }
+   ],
+   "seen": "Decision in the desert har, liksom flera andra strategispel (två recensioner bredvid varandra)"
+  },
+  {
+   "query": "starköl",
+   "kind": "vanligt",
+   "expected": [
+    {
+     "issueId": "datormagazin-1988-12",
+     "pageNumber": 22
+    }
+   ],
+   "seen": "rubrik: ”Tio starköl och en 64:a, tack”"
+  },
+  {
+   "query": "Anders Limpar",
+   "kind": "fras",
+   "expected": [
+    {
+     "issueId": "datormagazin-1989-15",
+     "pageNumber": 6
+    }
+   ],
+   "seen": "Italienproffset i fotboll Anders Limpar"
+  },
+  {
+   "query": "Canon ION",
+   "kind": "fras",
+   "expected": [
+    {
+     "issueId": "datormagazin-1990-05",
+     "pageNumber": 22
+    }
+   ],
+   "seen": "rubrik: Bra bilder med Canon ION"
+  },
+  {
+   "query": "hårddisksystem",
+   "kind": "vanligt",
+   "expected": [
+    {
+     "issueId": "datormagazin-1991-10",
+     "pageNumber": 38
+    }
+   ],
+   "seen": "rubrik över tre spalter: ”ALF-3 ett komplett och bra hårddisksystem”"
+  },
+  {
+   "query": "Autobootar",
+   "kind": "term",
+   "expected": [
+    {
+     "issueId": "datormagazin-1992-05",
+     "pageNumber": 21
+    }
+   ],
+   "seen": "rubrik: Autobootar under kick 1.2 (äldre generationen, test med diagram)"
+  },
+  {
+   "query": "vinjett",
+   "kind": "vanligt",
+   "expected": [
+    {
+     "issueId": "datormagazin-1993-10",
+     "pageNumber": 23
+    }
+   ],
+   "seen": "rubrik: En animerad vinjett blir till"
+  },
+  {
+   "query": "Street Fighter",
+   "kind": "fras",
+   "expected": [
+    {
+     "issueId": "datormagazin-1994-20",
+     "pageNumber": 35
+    }
+   ],
+   "seen": "rubrik: Street Fighter blir serie (fyra artiklar och en krönika på sidan)"
+  },
+  {
+   "query": "Visionärer",
+   "kind": "utspärrat",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-15",
+     "pageNumber": 10
+    }
+   ],
+   "seen": "annonsrubrik med utspärrade bokstäver: Vi är Data Visionärer! (1995 nr 15)"
+  },
+  {
+   "query": "Wolfenstein",
+   "kind": "term",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-15",
+     "pageNumber": 62
+    }
+   ],
+   "seen": "faktaruta: Castle Wolfenstein (Apple II) (1995 nr 15)"
+  },
+  {
+   "query": "Gretzky",
+   "kind": "term",
+   "expected": [
+    {
+     "issueId": "datormagazin-1995-15",
+     "pageNumber": 67
+    }
+   ],
+   "seen": "med Wayne Gretzky Hockey kom en ny sorts rollspelsliknande hockey"
+  },
+  {
+   "query": "Combat Air Patrol",
+   "kind": "fras",
+   "expected": [
+    {
+     "issueId": "highscore-1993-20",
+     "pageNumber": 13
+    }
+   ],
+   "seen": "bildtext: Grafiken i Combat Air Patrol är klart godkänd (HighScore)"
+  },
+  {
+   "query": "terminatorn",
+   "kind": "term",
+   "expected": [
+    {
+     "issueId": "highscore-1993-20",
+     "pageNumber": 21
+    }
+   ],
+   "seen": "spellösning: ta kål på ”terminatorn” (HighScore)"
+  }
+ ]
+}

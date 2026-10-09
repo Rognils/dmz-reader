@@ -327,7 +327,7 @@ Bookmark
 └── deletedAt         Long?, mjuk radering
 ```
 
-Att ta bort ett bokmärke sätter `deletedAt`. Ett bokmärke med `deletedAt` visas aldrig, men raden finns kvar så att en äldre backup inte kan återuppliva det. "Ångra" nollställer `deletedAt`.
+Att ta bort ett bokmärke sätter `deletedAt`. Ett bokmärke med `deletedAt` visas aldrig, men raden finns kvar så att en äldre backup inte kan återuppliva det. "Ångra" nollställer `deletedAt`. Borttagna bokmärken rensas inte automatiskt.
 
 I UI:t kan bokmärken visas under Favoriter tillsammans med favoritnummer.
 
@@ -360,6 +360,8 @@ Tidningens tryckta sidnummer är något annat. De kan visas som extra informatio
 - behålla alla bokmärken
 - visa en diskret markering på numret: "Arkivfilen har uppdaterats – bokmärken kan peka fel"
 - inte försöka flytta bokmärken automatiskt
+
+Detsamma gäller ett permanent nedladdat nummer: filen raderas aldrig automatiskt. Nummervyn visar "Din nedladdade kopia är äldre" och knappen **"Uppdatera nedladdning"**. Den gamla kopian ligger kvar och går att läsa tills den nya är komplett hämtad.
 
 ## C8. issueId
 
@@ -463,21 +465,24 @@ Fälten är de som står i C2. Formatet beskrivs formellt i `docs/inventory.sche
 
 Genereras av toolchainen i FAS 8 och importeras separat. Den följer inte med APK:n.
 
-Minsta innehåll:
-
 ```text
 meta        (key, value)
-            schemaVersion, datasetVersion, generatedAt,
-            tokenizer, issueCount, pageCount
+            searchSchemaVersion, inventoryDatasetVersion, normalizerVersion, lexiconVersion,
+            tokenizer, builtAt, generator, sqliteVersion, pdftotextMode,
+            issueCount, pageCount
 
-pages       (issueId, pageNumber, rawText, searchText)
-pages_fts   FTS-tabell över pages.searchText
-issues      (issueId, pageCount)
+issues      (issueId, pageCount, ocrPdfSize, ocrPdfEtag, ocrPdfSha256)
+
+pages       (id, issueId, pageNumber, rawText, searchText)
+            id är en heltalsnyckel; (issueId, pageNumber) är unik
+pages_fts   FTS5-tabell över pages.searchText, med pages.id som rad-id
 ```
 
-FTS-indexet och textutdragen använder `searchText`.
-
-Exakt FTS-version och tokenizer beslutas i ADR 0006 och ADR 0010.
+- `rawText` är texten som den kom ur PDF:en. `searchText` är normaliserad. FTS-indexet och textutdragen använder `searchText`.
+- `issues` knyter varje nummer till den PDF som indexerades, så att appen kan upptäcka att just ett nummers fil har bytts sedan dess.
+- `pages.id` behövs för att `VACUUM` inte ska kunna numrera om raderna under FTS-indexet.
+- `normalizerVersion` anger vilken version av normaliseringen och dess ordlista som användes. Samma PDF och samma version ger alltid samma `searchText`.
+- Tokenizer: `unicode61 remove_diacritics 0` (ADR 0010). FTS-version enligt ADR 0006.
 
 ## D3. Versioner
 
@@ -503,6 +508,8 @@ Finns giltigt importerat inventory i privat lagring?
 ```
 
 Det ska gå att återgå till baseline från inställningarna.
+
+Appen sparar **källa** (inbyggt eller importerat) och **importdatum** för det aktiva indexet och visar dem i inställningarna tillsammans med `datasetVersion`.
 
 ## D5. Importflöde
 
@@ -790,7 +797,8 @@ Varje fas har samma struktur:
 | 5 | Offline | App | Bygg |
 | 6 | Personligt bibliotek + backup | App | Bygg |
 | 7 | Import av inventory + metadata-sökning | App | Bygg |
-| 8 | Sökindex på datorn | Toolchain | Bygg |
+| 8A | Sökindex på datorn – pilot | Toolchain | Undersökning + bygg |
+| 8B | Sökindex på datorn – fullkörning | Toolchain | Bygg |
 | 9 | Fulltextsökning i appen | App | Bygg |
 | 10 | Statistik | App | Bygg |
 | 11 | HQ | App + Toolchain | Bygg |
@@ -1119,33 +1127,62 @@ Varje fas har samma struktur:
 
 **Förutsätter:** FAS 0B och ADR 0006 från FAS 1.
 
+Fasen är delad i två. **8A** prövar hela kedjan på ett urval och ger mätdata för besluten. **8B** kör alla nummer och påbörjas först när piloten är godkänd.
+
+**Inte i någon av delarna:** Android-kod eller ändringar i appens gränssnitt.
+
+### FAS 8A – Pilot
+
 **Bygg:**
 
-- `tools/build_search_index.py` med:
-  - nedladdning av OCR-PDF:er till en lokal cache på datorn, försiktigt (paus och en anslutning) och återupptagbart
-  - `pdftotext` på hela filen, uppdelad på `\f` till text per sida
-  - två texter per sida i search.db: `rawText` (som den kom ur PDF:en) och `searchText` (normaliserad)
-  - normalisering till `searchText`: radbrytningar, avstavning, mellanslag, **ihopsättning av utspärrade ord** och **borttagning av mjuka bindestreck** (U+00AD)
-  - FTS-indexet och textutdragen använder `searchText`. `rawText` sparas för spårbarhet och får tas bort om storleksmätningen motiverar det.
-  - SQLite med FTS-version enligt ADR 0006 och format enligt D2
-  - tokenizer-test på verklig svensk text
-- uppmätt `pageCount` för alla nummer skrivs tillbaka till inventory, med ny `datasetVersion`
-- mätning:
-  - rå textstorlek, data i SQLite, FTS-index
-  - total storlek på search.db och komprimerad storlek
-  - körtid
-
-**Inte i denna fas:** någon Android-kod.
+- urval om 11 nummer (cirka 0,7 GB) som täcker båda PDF-generationerna, HighScore, ett b-nummer, ett dubbelnummer och 1995 nr 14 med utspärrad text. 1995 nr 15 (563 MB) hämtas inte.
+- hämtning via HTTPS från `ocrPdfUrl` till `cache/pdf/`: en fil i taget, återupptagbar, högst 5 MB/s, verifierad mot `ocrPdfSize` och ETag. Storlek och ETag sparas per fil.
+- `tools/build_search_index.py`:
+  - jämförelse av `pdftotext` i standardläge, `-layout` och `-raw` på flerspaltiga sidor; det läge som håller ihop spalterna väljs
+  - uppdelning på `\f` till text per PDF-sida (C7)
+  - två texter per sida: `rawText` (orörd) och `searchText` (normaliserad)
+  - normalisering till `searchText`: **ihopsättning av utspärrade ord**, **borttagning av mjuka bindestreck** (U+00AD), ihopsättning av avstavning vid radbrytning och normaliserade blanksteg. Riktiga bindestreck (CD-ROM, C-64) bevaras.
+- search.db enligt D2 med FTS5, i två varianter: `unicode61 remove_diacritics 0` och `unicode61 remove_diacritics 2`
+  - `meta`: `searchSchemaVersion`, `inventoryDatasetVersion`, `tokenizer`, `builtAt`, `generator`, `sqliteVersion`
+  - `issues(issueId, pageCount, ocrPdfSize, ocrPdfEtag)`, så att appen kan upptäcka att just ett nummers PDF har bytts sedan indexeringen
+- facit i `tools/testdata/search_golden.json`: cirka 25 sökord med förväntat nummer och sida, där sidan är kontrollerad visuellt mot en rendering
+- mätning för båda varianterna: träffsäkerhet mot facit, storlek (rå text, SQLite, FTS-index, total och komprimerad, uppräknad till 185 nummer per generation) och byggtid per nummer
+- uppmätt `pageCount` per pilotnummer jämförs med inventory. Inventory ändras inte i 8A.
+- piloten prövas i appens motor (`BundledSQLiteDriver`) på telefonen
+- underlag för 8B: diskutrymme, total nedladdning, tid och ordning
 
 **Klart när:**
 
-- [ ] search.db byggs reproducerbart från den lokala PDF-cachen
-- [ ] testsökningar på kända ord ger rätt nummer och sida
+- [ ] search.db byggs reproducerbart från den lokala PDF-cachen, i båda varianterna
+- [ ] facit finns, med visuellt kontrollerade sidor
 - [ ] test mot 1995 nr 14: sökningen hittar "Amiga" och "högtalare" på de sidor där texten är utspärrad
+- [ ] träffsäkerhet, storlek och byggtid är uppmätta för båda varianterna
+- [ ] pilotens search.db går att öppna och söka i med appens motor på telefonen
+- [ ] ADR 0010 finns som Proposed, med mätdata och rekommendation
+
+**ADR:** 0010 (tokenizer och diakritiska tecken), Proposed.
+
+### FAS 8B – Fullkörning
+
+**Förutsätter:** att piloten i 8A är godkänd och att tokenizer är vald.
+
+**Bygg:**
+
+- hämtning av alla OCR-PDF:er till den lokala cachen, på samma försiktiga sätt som i piloten, de minsta filerna först
+- search.db för hela arkivet med vald tokenizer
+- uppmätt `pageCount` för alla nummer skrivs tillbaka till inventory, med ny `datasetVersion`
+- slutlig mätning av storlek och körtid
+- `rawText` får tas bort om storleksmätningen motiverar det
+
+**Klart när:**
+
+- [ ] search.db för hela arkivet byggs reproducerbart från den lokala PDF-cachen
+- [ ] facit från piloten ger samma resultat mot det fullständiga indexet
+- [ ] `pageCount` är infört i inventory för alla nummer som har en PDF
 - [ ] storleken är uppmätt och dokumenterad
 - [ ] om storleken är problematisk finns ett förslag (uppdelning per publikation eller årsspann, eller FTS utan lagrad text). Ingen uppdelning görs utan mätdata.
 
-**ADR:** 0010 (tokenizer och diakritiska tecken).
+**ADR:** 0004 (sökindex byggs på datorn), 0010 fastställs.
 
 ---
 
@@ -1230,6 +1267,8 @@ Byggs inte förrän fulltextsökningen är stabil.
 - ett tryck på en källhänvisning öppnar exakt sida
 - AI får aldrig ersätta källan
 - en lokal modell (t.ex. LM Studio i hemmalabbet) kan vara ett alternativ till moln och kräver då ett uttryckligt beslut
+
+**Not från FAS 8B (blockordning):** texten i search.db följer den ordning OCR-programmet skrev den i. Spalterna hålls ihop, men på sidor med flera artiklar kan blocken komma i annan ordning än artiklarna (4 av 28 granskade sidor, `data/reading_order_review.json`). Det påverkar inte sökningen per sida. Den som delar texten i stycken eller artiklar för RAG kan däremot inte utgå från att texten följer artiklarna, och behöver ordbitarnas lägen på sidan (`pdftotext -raw -bbox`) för att dela rätt.
 
 ---
 
@@ -1393,13 +1432,13 @@ Domänlogik (progress, status, effektivt sidantal, sammanslagning vid backup) te
 | 0001 | Native Android (Kotlin + Compose) | FAS 1 |
 | 0002 | Separering av katalogdata, lokal data och användardata | FAS 1 |
 | 0003 | Inventory genereras på datorn | FAS 1 |
-| 0004 | Sökindex byggs på datorn | FAS 8 |
+| 0004 | Sökindex byggs på datorn | FAS 8B |
 | 0005 | Versionsmärkning och matchning (D3) | FAS 1 |
 | 0006 | FTS5 med Room 3 och `BundledSQLiteDriver` | FAS 1 |
 | 0007 | Format för issueId | FAS 0 (förslag), FAS 0B (fastställt) |
 | 0008 | HTTPS kontra FTP per materialtyp | FAS 0 |
 | 0009 | HQ-källa | FAS 0 (preliminärt), FAS 11 (fastställt) |
-| 0010 | Tokenizer och diakritiska tecken | FAS 8 |
+| 0010 | Tokenizer och diakritiska tecken | FAS 8A |
 | 0011 | PDF-rendering | FAS 3 |
 | 0012 | Backupformat och regler för sammanslagning | FAS 6 |
 | 0013 | Lagringsplats för permanenta PDF:er | FAS 5 |
@@ -1496,3 +1535,15 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-07 | v0.6.1: G4: appens `versionName` och `versionCode` följer taggarna och läses från `BuildConfig` | — |
 | 2026-10-07 | v0.6.1: C5 och E11: `backupFormat` 2. `Bookmark` får `bookmarkId` (UUID) och `deletedAt` (mjuk radering). Import matchar bokmärken på `bookmarkId`, och ett borttaget bokmärke förblir borttaget. Format 1 går fortfarande att importera. | 0012 |
 | 2026-10-07 | v0.6.1: C5 och E11: `seenPages` och bokmärkenas PDF-versionsfält (`pdfSize`, `pdfEtag`, `pdfLastModified`) tillagda, så att planen stämmer med koden | 0012, 0018 |
+| 2026-10-08 | Efter FAS 7: C5: borttagna bokmärken (rader med `deletedAt`) rensas inte automatiskt | 0012 |
+| 2026-10-08 | Efter FAS 7: D4: källa och importdatum för det aktiva indexet sparas och visas. C7: "Uppdatera nedladdning" för ett nedladdat nummer vars arkivfil har ändrats; filen raderas aldrig automatiskt. | 0019 |
+| 2026-10-08 | Före FAS 8: FAS 8 delad i 8A (pilot på 11 nummer, två tokenizer-varianter, facit och mätning) och 8B (fullkörning, efter godkänd pilot) | 0010 |
+| 2026-10-08 | Efter FAS 8A: tokenizer `unicode61 remove_diacritics 0` | 0010 |
+| 2026-10-08 | Efter FAS 8A: `rawText` behålls i search.db, åtminstone genom FAS 9 | — |
+| 2026-10-08 | Efter FAS 8A: D2 uppdaterad till den verifierade designen: `pages.id`, nya `meta`-nycklar (bland dem `normalizerVersion`) och `issues` med `ocrPdfSize`, `ocrPdfEtag` och `ocrPdfSha256` | 0010 |
+| 2026-10-08 | Efter FAS 8A: `pageCount` är PDF:ens sidantal (C7), även när det skiljer sig från antalet skannade sidor | — |
+| 2026-10-08 | Efter FAS 8A: "C64" mot "C-64" hanteras i frågelagret i FAS 9, inte i indexet | 0010 |
+| 2026-10-08 | Före FAS 8B: normaliseringen får inte bero på vilka andra nummer som byggs. Ordlistan fryses i `tools/data/normalizer_lexicon_v1.txt` med `normalizerVersion` 1. | 0004 |
+| 2026-10-08 | FAS 8B: `normalizerVersion` 2 efter granskat stickprov; `meta` har också `lexiconVersion`. Ordlistan är fortsatt version 1. | 0004 |
+| 2026-10-08 | FAS 8B: inventory 2026-10-06-005 har uppmätt `pageCount` för alla 185 nummer | — |
+| 2026-10-09 | FAS 8B: not under "Senare – innehållsanalys och AI/RAG" om att blockordningen i search.db inte alltid följer artiklarna | 0004 |

@@ -1,0 +1,229 @@
+{
+ "comment": "Visuell kontroll av läsordningen i pdftotext -raw (FAS 8B). Varje sida renderades med läsordningen inritad som numrerade block (tools/search_quality.py order). columnsIntact: raderna i en spalt kommer i följd och blandas inte med grannspalten.",
+ "pages": [
+  {
+   "issueId": "datormagazin-1986-03",
+   "pageNumber": 20,
+   "generation": "v2",
+   "layout": "fyra spalter, tabell, karta och flera artiklar",
+   "columnsIntact": true,
+   "note": "spalterna hela; artikelns fjärde spalt kommer efter en annan artikel"
+  },
+  {
+   "issueId": "datormagazin-1987-08",
+   "pageNumber": 28,
+   "generation": "v2",
+   "layout": "två recensioner, betygsrutor, annons",
+   "columnsIntact": true,
+   "note": "spalterna hela; den andra recensionens början kommer före den förstas andra spalt"
+  },
+  {
+   "issueId": "datormagazin-1988-08",
+   "pageNumber": 38,
+   "generation": "v2",
+   "layout": "radannonser i fem spalter och en annons",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1988-12",
+   "pageNumber": 19,
+   "generation": "v2",
+   "layout": "två recensioner bredvid varandra, betygsrutor, annons",
+   "columnsIntact": true,
+   "note": "spalterna hela; blocken från de två recensionerna kommer omväxlande"
+  },
+  {
+   "issueId": "datormagazin-1988-12",
+   "pageNumber": 22,
+   "generation": "v2",
+   "layout": "reportage med rubrik över alla spalter, bildtext, faktarutor, annons",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1989-15",
+   "pageNumber": 20,
+   "generation": "v2",
+   "layout": "tre recensioner, betygsrutor, två annonser",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1989-15",
+   "pageNumber": 6,
+   "generation": "v2",
+   "layout": "reportage, två artiklar, annons över halva sidan",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1990-05",
+   "pageNumber": 22,
+   "generation": "v2",
+   "layout": "artikel i fem spalter, faktarutor, diagram, bildtext",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1990-05",
+   "pageNumber": 15,
+   "generation": "v2",
+   "layout": "två recensioner, betygsrutor, två annonser",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1990-16",
+   "pageNumber": 36,
+   "generation": "v2",
+   "layout": "frågespalt i fyra spalter med ingress över tre",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1991-10",
+   "pageNumber": 21,
+   "generation": "v2",
+   "layout": "diagram med etiketter, två artiklar",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1991-10",
+   "pageNumber": 38,
+   "generation": "v2",
+   "layout": "test med rubrik över tre spalter, diagram",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1992-05",
+   "pageNumber": 21,
+   "generation": "äldre",
+   "layout": "test med tre delar, diagram, checklista, ordlista",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1992-05",
+   "pageNumber": 52,
+   "generation": "äldre",
+   "layout": "recension med bildtexter i bilderna, betygsruta",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1993-10",
+   "pageNumber": 23,
+   "generation": "äldre",
+   "layout": "reportage, rubrik över tre spalter, mellanrubriker",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1993-10",
+   "pageNumber": 5,
+   "generation": "äldre",
+   "layout": "helsidesannons med många rutor",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1994-12",
+   "pageNumber": 9,
+   "generation": "äldre",
+   "layout": "nyhetsnotiser, annons med tre prislistor",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1994-12",
+   "pageNumber": 17,
+   "generation": "äldre",
+   "layout": "artikel med rubrik över uppslaget, faktaruta, bildtexter",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1994-20",
+   "pageNumber": 30,
+   "generation": "äldre",
+   "layout": "frågespalt med expertlista, sju frågor och svar",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1994-20",
+   "pageNumber": 35,
+   "generation": "äldre",
+   "layout": "fyra nyhetsartiklar, krönika i smal spalt, faktaruta",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1995-15",
+   "pageNumber": 10,
+   "generation": "äldre",
+   "layout": "helsidesannons med ett trettiotal rutor",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1995-15",
+   "pageNumber": 62,
+   "generation": "äldre",
+   "layout": "krönika i tre spalter runt en bild, tre notiser, faktaruta",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1995-15",
+   "pageNumber": 67,
+   "generation": "äldre",
+   "layout": "artikel med inlagd recension, lista med tio stycken",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1995-03",
+   "pageNumber": 8,
+   "generation": "äldre",
+   "layout": "nyhetsnotiser i tre spalter, annons i annan färg",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "datormagazin-1995-03",
+   "pageNumber": 46,
+   "generation": "äldre",
+   "layout": "frågespalt, sidan delad med annan artikel på uppslaget",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "highscore-1993-20",
+   "pageNumber": 13,
+   "generation": "highscore",
+   "layout": "recension, bildtexter, nyhetsruta, betygsruta",
+   "columnsIntact": true,
+   "note": ""
+  },
+  {
+   "issueId": "highscore-1994-04",
+   "pageNumber": 17,
+   "generation": "highscore",
+   "layout": "annons med prislistor i många spalter",
+   "columnsIntact": true,
+   "note": "spalterna hela; enstaka priser står skilda från sin titel"
+  },
+  {
+   "issueId": "highscore-1993-20",
+   "pageNumber": 21,
+   "generation": "highscore",
+   "layout": "spellösning i två spalter med numrerade steg",
+   "columnsIntact": true,
+   "note": ""
+  }
+ ]
+}

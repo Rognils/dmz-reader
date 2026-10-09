@@ -1,0 +1,589 @@
+{
+ "golden": [
+  {
+   "expected": [
+    "datormagazin-1995-05-06 s. 24"
+   ],
+   "found": true,
+   "hits": 6202,
+   "irrelevant": 0,
+   "kind": "vanligt",
+   "query": "får",
+   "ranks": [
+    35
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1989-12 s. 45"
+   ],
+   "found": true,
+   "hits": 10296,
+   "irrelevant": 0,
+   "kind": "vanligt",
+   "query": "för",
+   "ranks": [
+    32
+   ]
+  },
+  {
+   "expected": [
+    "highscore-1994-08 s. 11"
+   ],
+   "found": true,
+   "hits": 6210,
+   "irrelevant": 0,
+   "kind": "vanligt",
+   "query": "här",
+   "ranks": [
+    14
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1991-02 s. 32"
+   ],
+   "found": true,
+   "hits": 1057,
+   "irrelevant": 0,
+   "kind": "vanligt",
+   "query": "skärm",
+   "ranks": [
+    19
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1987-10b s. 17"
+   ],
+   "found": true,
+   "hits": 2113,
+   "irrelevant": 0,
+   "kind": "vanligt",
+   "query": "ljud",
+   "ranks": [
+    15
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1995-05-06 s. 64",
+    "datormagazin-1993-03 s. 12"
+   ],
+   "found": true,
+   "hits": 2440,
+   "irrelevant": 0,
+   "kind": "vanligt",
+   "query": "hårddisk",
+   "ranks": [
+    205,
+    620
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1989-12 s. 25"
+   ],
+   "found": true,
+   "hits": 7289,
+   "irrelevant": 0,
+   "kind": "term",
+   "query": "Amiga",
+   "ranks": [
+    6
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1989-06 s. 46"
+   ],
+   "found": true,
+   "hits": 2749,
+   "irrelevant": 0,
+   "kind": "term",
+   "query": "C64",
+   "ranks": [
+    60
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1986-01 s. 25"
+   ],
+   "found": true,
+   "hits": 555,
+   "irrelevant": 0,
+   "kind": "bindestreck",
+   "query": "C-64",
+   "ranks": [
+    4
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1986-01 s. 4"
+   ],
+   "found": true,
+   "hits": 168,
+   "irrelevant": 0,
+   "kind": "fras",
+   "query": "Commodore 128",
+   "ranks": [
+    1
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1986-01 s. 7"
+   ],
+   "found": true,
+   "hits": 55,
+   "irrelevant": 0,
+   "kind": "term",
+   "query": "Fairlight",
+   "ranks": [
+    32
+   ]
+  },
+  {
+   "expected": [
+    "highscore-1993-17 s. 17"
+   ],
+   "found": true,
+   "hits": 1451,
+   "irrelevant": 0,
+   "kind": "term",
+   "query": "joystick",
+   "ranks": [
+    17
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1995-14 s. 25"
+   ],
+   "found": true,
+   "hits": 837,
+   "irrelevant": 0,
+   "kind": "bindestreck",
+   "query": "CD-ROM",
+   "ranks": [
+    5
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1986-01 s. 16"
+   ],
+   "found": true,
+   "hits": 157,
+   "irrelevant": 0,
+   "kind": "avstavat",
+   "query": "piratkopiering",
+   "ranks": [
+    6
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1986-01 s. 6"
+   ],
+   "found": true,
+   "hits": 57,
+   "irrelevant": 0,
+   "kind": "term",
+   "query": "Infiltrator",
+   "ranks": [
+    2
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1993-03 s. 12"
+   ],
+   "found": true,
+   "hits": 117,
+   "irrelevant": 0,
+   "kind": "term",
+   "query": "Trumpcard",
+   "ranks": [
+    21
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1986-04 s. 19"
+   ],
+   "found": true,
+   "hits": 40,
+   "irrelevant": 0,
+   "kind": "term",
+   "query": "Newsroom",
+   "ranks": [
+    1
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1995-14 s. 26",
+    "datormagazin-1995-14 s. 27"
+   ],
+   "found": true,
+   "hits": 230,
+   "irrelevant": 0,
+   "kind": "utspärrat",
+   "query": "högtalare",
+   "ranks": [
+    5,
+    1
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1995-14 s. 3"
+   ],
+   "found": true,
+   "hits": 7289,
+   "irrelevant": 0,
+   "kind": "utspärrat",
+   "query": "Amiga",
+   "ranks": [
+    701
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1995-14 s. 20"
+   ],
+   "found": true,
+   "hits": 1,
+   "irrelevant": 0,
+   "kind": "utspärrat",
+   "query": "turboköpet",
+   "ranks": [
+    1
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1995-14 s. 26"
+   ],
+   "found": true,
+   "hits": 10,
+   "irrelevant": 0,
+   "kind": "utspärrat",
+   "query": "ryggsäck",
+   "ranks": [
+    1
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1986-01 s. 6"
+   ],
+   "found": true,
+   "hits": 1,
+   "irrelevant": 0,
+   "kind": "avstavat",
+   "query": "köttbodar",
+   "ranks": [
+    1
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1986-01 s. 6"
+   ],
+   "found": true,
+   "hits": 7,
+   "irrelevant": 0,
+   "kind": "avstavat",
+   "query": "centraldatorn",
+   "ranks": [
+    4
+   ]
+  },
+  {
+   "expected": [
+    "highscore-1993-17 s. 6"
+   ],
+   "found": true,
+   "hits": 356,
+   "irrelevant": 0,
+   "kind": "avstavat",
+   "query": "tekniska",
+   "ranks": [
+    75
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1995-14 s. 20"
+   ],
+   "found": true,
+   "hits": 377,
+   "irrelevant": 0,
+   "kind": "avstavat",
+   "query": "turbokort",
+   "ranks": [
+    36
+   ]
+  },
+  {
+   "expected": [
+    "highscore-1993-17 s. 6"
+   ],
+   "found": true,
+   "hits": 2,
+   "irrelevant": 0,
+   "kind": "fras",
+   "query": "Mikael Roth",
+   "ranks": [
+    1
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1995-14 s. 20"
+   ],
+   "found": true,
+   "hits": 603,
+   "irrelevant": 0,
+   "kind": "fras",
+   "query": "Amiga 1200",
+   "ranks": [
+    6
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1987-10b s. 19"
+   ],
+   "found": true,
+   "hits": 553,
+   "irrelevant": 0,
+   "kind": "fras",
+   "query": "Last Ninja",
+   "ranks": [
+    195
+   ]
+  },
+  {
+   "expected": [
+    "highscore-1994-08 s. 18"
+   ],
+   "found": true,
+   "hits": 3,
+   "irrelevant": 0,
+   "kind": "fras",
+   "query": "Mutant League Football",
+   "ranks": [
+    1
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1986-03 s. 20"
+   ],
+   "found": true,
+   "hits": 43,
+   "irrelevant": 0,
+   "kind": "fras",
+   "query": "Miami Vice",
+   "ranks": [
+    3
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1988-12 s. 19"
+   ],
+   "found": true,
+   "hits": 9,
+   "irrelevant": 0,
+   "kind": "fras",
+   "query": "Decision in the Desert",
+   "ranks": [
+    1
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1988-12 s. 22"
+   ],
+   "found": true,
+   "hits": 2,
+   "irrelevant": 0,
+   "kind": "vanligt",
+   "query": "starköl",
+   "ranks": [
+    2
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1989-15 s. 6"
+   ],
+   "found": true,
+   "hits": 3,
+   "irrelevant": 0,
+   "kind": "fras",
+   "query": "Anders Limpar",
+   "ranks": [
+    1
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1990-05 s. 22"
+   ],
+   "found": true,
+   "hits": 16,
+   "irrelevant": 0,
+   "kind": "fras",
+   "query": "Canon ION",
+   "ranks": [
+    3
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1991-10 s. 38"
+   ],
+   "found": true,
+   "hits": 65,
+   "irrelevant": 0,
+   "kind": "vanligt",
+   "query": "hårddisksystem",
+   "ranks": [
+    29
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1992-05 s. 21"
+   ],
+   "found": true,
+   "hits": 48,
+   "irrelevant": 0,
+   "kind": "term",
+   "query": "Autobootar",
+   "ranks": [
+    5
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1993-10 s. 23"
+   ],
+   "found": true,
+   "hits": 18,
+   "irrelevant": 0,
+   "kind": "vanligt",
+   "query": "vinjett",
+   "ranks": [
+    12
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1994-20 s. 35"
+   ],
+   "found": true,
+   "hits": 256,
+   "irrelevant": 0,
+   "kind": "fras",
+   "query": "Street Fighter",
+   "ranks": [
+    6
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1995-15 s. 10"
+   ],
+   "found": true,
+   "hits": 3,
+   "irrelevant": 0,
+   "kind": "utspärrat",
+   "query": "Visionärer",
+   "ranks": [
+    3
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1995-15 s. 62"
+   ],
+   "found": true,
+   "hits": 36,
+   "irrelevant": 0,
+   "kind": "term",
+   "query": "Wolfenstein",
+   "ranks": [
+    13
+   ]
+  },
+  {
+   "expected": [
+    "datormagazin-1995-15 s. 67"
+   ],
+   "found": true,
+   "hits": 215,
+   "irrelevant": 0,
+   "kind": "term",
+   "query": "Gretzky",
+   "ranks": [
+    6
+   ]
+  },
+  {
+   "expected": [
+    "highscore-1993-20 s. 13"
+   ],
+   "found": true,
+   "hits": 61,
+   "irrelevant": 0,
+   "kind": "fras",
+   "query": "Combat Air Patrol",
+   "ranks": [
+    1
+   ]
+  },
+  {
+   "expected": [
+    "highscore-1993-20 s. 21"
+   ],
+   "found": true,
+   "hits": 7,
+   "irrelevant": 0,
+   "kind": "term",
+   "query": "terminatorn",
+   "ranks": [
+    1
+   ]
+  }
+ ],
+ "sizes": {
+  "file": 148877312,
+  "ftsIndex": 26955776,
+  "gzip": 55008219,
+  "other": 36864,
+  "pages": 11293,
+  "pagesTable": 121884672,
+  "rawTextBytes": 56795807,
+  "searchTextBytes": 56393313,
+  "xz": 39249372
+ },
+ "sizes-withoutRawText": {
+  "file": 91594752,
+  "ftsIndex": 26955776,
+  "gzip": 45634046,
+  "other": 36864,
+  "pages": 11293,
+  "pagesTable": 64602112,
+  "rawTextBytes": 0,
+  "searchTextBytes": 56393313,
+  "xz": 34151636
+ }
+}

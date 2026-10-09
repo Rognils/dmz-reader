@@ -1,0 +1,1481 @@
+{
+ "buildSecondsPerIssue": {
+  "rd0": {
+   "datormagazin-1986-01": 0.25272697501350194,
+   "datormagazin-1986-04": 0.4694464730564505,
+   "datormagazin-1987-10b": 0.34214341797633097,
+   "datormagazin-1989-06": 0.550923764007166,
+   "datormagazin-1989-12": 0.5092881610034965,
+   "datormagazin-1991-02": 0.422164466988761,
+   "datormagazin-1993-03": 1.7304120599874295,
+   "datormagazin-1995-05-06": 1.6699960139230825,
+   "datormagazin-1995-14": 2.2348523939726874,
+   "highscore-1993-17": 0.5325812920345925,
+   "highscore-1994-08": 0.3458409710437991
+  },
+  "rd2": {
+   "datormagazin-1986-01": 0.25936487200669944,
+   "datormagazin-1986-04": 0.451172778964974,
+   "datormagazin-1987-10b": 0.33719586598454043,
+   "datormagazin-1989-06": 0.5220393110066652,
+   "datormagazin-1989-12": 0.49952729599317536,
+   "datormagazin-1991-02": 0.43305384198902175,
+   "datormagazin-1993-03": 1.7196789510198869,
+   "datormagazin-1995-05-06": 1.6635094030061737,
+   "datormagazin-1995-14": 2.2642255750251934,
+   "highscore-1993-17": 0.5164399079512805,
+   "highscore-1994-08": 0.34134558599907905
+  }
+ },
+ "golden": {
+  "rd0": [
+   {
+    "expected": [
+     "datormagazin-1995-05-06 s. 24"
+    ],
+    "found": true,
+    "hits": 349,
+    "irrelevant": 0,
+    "kind": "vanligt",
+    "query": "får",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1989-12 s. 45"
+    ],
+    "found": true,
+    "hits": 542,
+    "irrelevant": 0,
+    "kind": "vanligt",
+    "query": "för",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "highscore-1994-08 s. 11"
+    ],
+    "found": true,
+    "hits": 357,
+    "irrelevant": 0,
+    "kind": "vanligt",
+    "query": "här",
+    "ranks": [
+     3
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1991-02 s. 32"
+    ],
+    "found": true,
+    "hits": 68,
+    "irrelevant": 0,
+    "kind": "vanligt",
+    "query": "skärm",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1987-10b s. 17"
+    ],
+    "found": true,
+    "hits": 140,
+    "irrelevant": 0,
+    "kind": "vanligt",
+    "query": "ljud",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-05-06 s. 64",
+     "datormagazin-1993-03 s. 12"
+    ],
+    "found": true,
+    "hits": 105,
+    "irrelevant": 0,
+    "kind": "vanligt",
+    "query": "hårddisk",
+    "ranks": [
+     6,
+     24
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1989-12 s. 25"
+    ],
+    "found": true,
+    "hits": 336,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "Amiga",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1989-06 s. 46"
+    ],
+    "found": true,
+    "hits": 149,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "C64",
+    "ranks": [
+     2
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 25"
+    ],
+    "found": true,
+    "hits": 39,
+    "irrelevant": 0,
+    "kind": "bindestreck",
+    "query": "C-64",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 4"
+    ],
+    "found": true,
+    "hits": 19,
+    "irrelevant": 0,
+    "kind": "fras",
+    "query": "Commodore 128",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 7"
+    ],
+    "found": true,
+    "hits": 5,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "Fairlight",
+    "ranks": [
+     2
+    ]
+   },
+   {
+    "expected": [
+     "highscore-1993-17 s. 17"
+    ],
+    "found": true,
+    "hits": 85,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "joystick",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 25"
+    ],
+    "found": true,
+    "hits": 63,
+    "irrelevant": 0,
+    "kind": "bindestreck",
+    "query": "CD-ROM",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 16"
+    ],
+    "found": true,
+    "hits": 9,
+    "irrelevant": 0,
+    "kind": "avstavat",
+    "query": "piratkopiering",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 6"
+    ],
+    "found": true,
+    "hits": 5,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "Infiltrator",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1993-03 s. 12"
+    ],
+    "found": true,
+    "hits": 3,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "Trumpcard",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-04 s. 19"
+    ],
+    "found": true,
+    "hits": 5,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "Newsroom",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 26",
+     "datormagazin-1995-14 s. 27"
+    ],
+    "found": true,
+    "hits": 20,
+    "irrelevant": 0,
+    "kind": "utspärrat",
+    "query": "högtalare",
+    "ranks": [
+     4,
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 3"
+    ],
+    "found": true,
+    "hits": 336,
+    "irrelevant": 0,
+    "kind": "utspärrat",
+    "query": "Amiga",
+    "ranks": [
+     23
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 20"
+    ],
+    "found": true,
+    "hits": 1,
+    "irrelevant": 0,
+    "kind": "utspärrat",
+    "query": "turboköpet",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 26"
+    ],
+    "found": true,
+    "hits": 4,
+    "irrelevant": 0,
+    "kind": "utspärrat",
+    "query": "ryggsäck",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 6"
+    ],
+    "found": true,
+    "hits": 1,
+    "irrelevant": 0,
+    "kind": "avstavat",
+    "query": "köttbodar",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 6"
+    ],
+    "found": true,
+    "hits": 1,
+    "irrelevant": 0,
+    "kind": "avstavat",
+    "query": "centraldatorn",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "highscore-1993-17 s. 6"
+    ],
+    "found": true,
+    "hits": 19,
+    "irrelevant": 0,
+    "kind": "avstavat",
+    "query": "tekniska",
+    "ranks": [
+     3
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 20"
+    ],
+    "found": true,
+    "hits": 21,
+    "irrelevant": 0,
+    "kind": "avstavat",
+    "query": "turbokort",
+    "ranks": [
+     6
+    ]
+   },
+   {
+    "expected": [
+     "highscore-1993-17 s. 6"
+    ],
+    "found": true,
+    "hits": 1,
+    "irrelevant": 0,
+    "kind": "fras",
+    "query": "Mikael Roth",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 20"
+    ],
+    "found": true,
+    "hits": 34,
+    "irrelevant": 0,
+    "kind": "fras",
+    "query": "Amiga 1200",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1987-10b s. 19"
+    ],
+    "found": true,
+    "hits": 27,
+    "irrelevant": 0,
+    "kind": "fras",
+    "query": "Last Ninja",
+    "ranks": [
+     6
+    ]
+   },
+   {
+    "expected": [
+     "highscore-1994-08 s. 18"
+    ],
+    "found": true,
+    "hits": 3,
+    "irrelevant": 0,
+    "kind": "fras",
+    "query": "Mutant League Football",
+    "ranks": [
+     1
+    ]
+   }
+  ],
+  "rd2": [
+   {
+    "expected": [
+     "datormagazin-1995-05-06 s. 24"
+    ],
+    "found": true,
+    "hits": 356,
+    "irrelevant": 7,
+    "kind": "vanligt",
+    "query": "får",
+    "ranks": [
+     3
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1989-12 s. 45"
+    ],
+    "found": true,
+    "hits": 549,
+    "irrelevant": 7,
+    "kind": "vanligt",
+    "query": "för",
+    "ranks": [
+     2
+    ]
+   },
+   {
+    "expected": [
+     "highscore-1994-08 s. 11"
+    ],
+    "found": true,
+    "hits": 495,
+    "irrelevant": 138,
+    "kind": "vanligt",
+    "query": "här",
+    "ranks": [
+     5
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1991-02 s. 32"
+    ],
+    "found": true,
+    "hits": 68,
+    "irrelevant": 0,
+    "kind": "vanligt",
+    "query": "skärm",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1987-10b s. 17"
+    ],
+    "found": true,
+    "hits": 140,
+    "irrelevant": 0,
+    "kind": "vanligt",
+    "query": "ljud",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-05-06 s. 64",
+     "datormagazin-1993-03 s. 12"
+    ],
+    "found": true,
+    "hits": 107,
+    "irrelevant": 2,
+    "kind": "vanligt",
+    "query": "hårddisk",
+    "ranks": [
+     6,
+     24
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1989-12 s. 25"
+    ],
+    "found": true,
+    "hits": 336,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "Amiga",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1989-06 s. 46"
+    ],
+    "found": true,
+    "hits": 149,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "C64",
+    "ranks": [
+     2
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 25"
+    ],
+    "found": true,
+    "hits": 39,
+    "irrelevant": 0,
+    "kind": "bindestreck",
+    "query": "C-64",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 4"
+    ],
+    "found": true,
+    "hits": 19,
+    "irrelevant": 0,
+    "kind": "fras",
+    "query": "Commodore 128",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 7"
+    ],
+    "found": true,
+    "hits": 5,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "Fairlight",
+    "ranks": [
+     2
+    ]
+   },
+   {
+    "expected": [
+     "highscore-1993-17 s. 17"
+    ],
+    "found": true,
+    "hits": 85,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "joystick",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 25"
+    ],
+    "found": true,
+    "hits": 63,
+    "irrelevant": 0,
+    "kind": "bindestreck",
+    "query": "CD-ROM",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 16"
+    ],
+    "found": true,
+    "hits": 9,
+    "irrelevant": 0,
+    "kind": "avstavat",
+    "query": "piratkopiering",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 6"
+    ],
+    "found": true,
+    "hits": 5,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "Infiltrator",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1993-03 s. 12"
+    ],
+    "found": true,
+    "hits": 3,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "Trumpcard",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-04 s. 19"
+    ],
+    "found": true,
+    "hits": 5,
+    "irrelevant": 0,
+    "kind": "term",
+    "query": "Newsroom",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 26",
+     "datormagazin-1995-14 s. 27"
+    ],
+    "found": true,
+    "hits": 20,
+    "irrelevant": 0,
+    "kind": "utspärrat",
+    "query": "högtalare",
+    "ranks": [
+     4,
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 3"
+    ],
+    "found": true,
+    "hits": 336,
+    "irrelevant": 0,
+    "kind": "utspärrat",
+    "query": "Amiga",
+    "ranks": [
+     23
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 20"
+    ],
+    "found": true,
+    "hits": 1,
+    "irrelevant": 0,
+    "kind": "utspärrat",
+    "query": "turboköpet",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 26"
+    ],
+    "found": true,
+    "hits": 4,
+    "irrelevant": 0,
+    "kind": "utspärrat",
+    "query": "ryggsäck",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 6"
+    ],
+    "found": true,
+    "hits": 1,
+    "irrelevant": 0,
+    "kind": "avstavat",
+    "query": "köttbodar",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1986-01 s. 6"
+    ],
+    "found": true,
+    "hits": 1,
+    "irrelevant": 0,
+    "kind": "avstavat",
+    "query": "centraldatorn",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "highscore-1993-17 s. 6"
+    ],
+    "found": true,
+    "hits": 19,
+    "irrelevant": 0,
+    "kind": "avstavat",
+    "query": "tekniska",
+    "ranks": [
+     3
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 20"
+    ],
+    "found": true,
+    "hits": 21,
+    "irrelevant": 0,
+    "kind": "avstavat",
+    "query": "turbokort",
+    "ranks": [
+     6
+    ]
+   },
+   {
+    "expected": [
+     "highscore-1993-17 s. 6"
+    ],
+    "found": true,
+    "hits": 1,
+    "irrelevant": 0,
+    "kind": "fras",
+    "query": "Mikael Roth",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1995-14 s. 20"
+    ],
+    "found": true,
+    "hits": 34,
+    "irrelevant": 0,
+    "kind": "fras",
+    "query": "Amiga 1200",
+    "ranks": [
+     1
+    ]
+   },
+   {
+    "expected": [
+     "datormagazin-1987-10b s. 19"
+    ],
+    "found": true,
+    "hits": 28,
+    "irrelevant": 1,
+    "kind": "fras",
+    "query": "Last Ninja",
+    "ranks": [
+     6
+    ]
+   },
+   {
+    "expected": [
+     "highscore-1994-08 s. 18"
+    ],
+    "found": true,
+    "hits": 3,
+    "irrelevant": 0,
+    "kind": "fras",
+    "query": "Mutant League Football",
+    "ranks": [
+     1
+    ]
+   }
+  ]
+ },
+ "pageCounts": [
+  {
+   "inventory": 28,
+   "issueId": "datormagazin-1986-01",
+   "measured": 28,
+   "scanPageCount": 28,
+   "status": "stämmer"
+  },
+  {
+   "inventory": null,
+   "issueId": "datormagazin-1986-04",
+   "measured": 49,
+   "scanPageCount": 33,
+   "status": "saknas i inventory, ska föras in"
+  },
+  {
+   "inventory": null,
+   "issueId": "datormagazin-1987-10b",
+   "measured": 44,
+   "scanPageCount": 44,
+   "status": "saknas i inventory, ska föras in"
+  },
+  {
+   "inventory": null,
+   "issueId": "datormagazin-1989-06",
+   "measured": 48,
+   "scanPageCount": 48,
+   "status": "saknas i inventory, ska föras in"
+  },
+  {
+   "inventory": null,
+   "issueId": "datormagazin-1989-12",
+   "measured": 48,
+   "scanPageCount": 48,
+   "status": "saknas i inventory, ska föras in"
+  },
+  {
+   "inventory": null,
+   "issueId": "datormagazin-1991-02",
+   "measured": 88,
+   "scanPageCount": 88,
+   "status": "saknas i inventory, ska föras in"
+  },
+  {
+   "inventory": null,
+   "issueId": "datormagazin-1993-03",
+   "measured": 68,
+   "scanPageCount": 72,
+   "status": "saknas i inventory, ska föras in"
+  },
+  {
+   "inventory": null,
+   "issueId": "datormagazin-1995-05-06",
+   "measured": 64,
+   "scanPageCount": 64,
+   "status": "saknas i inventory, ska föras in"
+  },
+  {
+   "inventory": 84,
+   "issueId": "datormagazin-1995-14",
+   "measured": 84,
+   "scanPageCount": 84,
+   "status": "stämmer"
+  },
+  {
+   "inventory": null,
+   "issueId": "highscore-1993-17",
+   "measured": 32,
+   "scanPageCount": 32,
+   "status": "saknas i inventory, ska föras in"
+  },
+  {
+   "inventory": null,
+   "issueId": "highscore-1994-08",
+   "measured": 32,
+   "scanPageCount": 32,
+   "status": "saknas i inventory, ska föras in"
+  }
+ ],
+ "plan8b": {
+  "cachedBytes": 655982188,
+  "cachedFiles": 11,
+  "estimatedSeconds": 2844,
+  "freeDiskBytes": 685975687168,
+  "maxBytesPerSecond": 5000000,
+  "order": [
+   "datormagazin-1986-02",
+   "datormagazin-1986-03",
+   "datormagazin-1990-01",
+   "datormagazin-1987-01",
+   "datormagazin-1987-03",
+   "datormagazin-1990-02",
+   "datormagazin-1989-18",
+   "datormagazin-1988-08",
+   "datormagazin-1989-09",
+   "datormagazin-1988-02",
+   "datormagazin-1987-02",
+   "datormagazin-1988-09",
+   "datormagazin-1987-07",
+   "datormagazin-1991-11",
+   "datormagazin-1988-07",
+   "datormagazin-1991-14",
+   "datormagazin-1991-05",
+   "datormagazin-1991-12",
+   "datormagazin-1987-08",
+   "datormagazin-1990-16",
+   "datormagazin-1988-10",
+   "datormagazin-1990-20",
+   "datormagazin-1991-19",
+   "datormagazin-1989-16b",
+   "datormagazin-1989-10",
+   "datormagazin-1991-03",
+   "datormagazin-1990-12",
+   "datormagazin-1989-03",
+   "datormagazin-1987-10",
+   "datormagazin-1990-14",
+   "datormagazin-1991-01",
+   "datormagazin-1990-06",
+   "datormagazin-1990-15",
+   "datormagazin-1991-21",
+   "datormagazin-1990-11",
+   "datormagazin-1989-07",
+   "datormagazin-1988-03",
+   "datormagazin-1991-13",
+   "datormagazin-1991-04",
+   "datormagazin-1989-01",
+   "datormagazin-1990-07",
+   "datormagazin-1989-15",
+   "datormagazin-1988-05",
+   "datormagazin-1991-20",
+   "datormagazin-1988-01",
+   "datormagazin-1991-09",
+   "datormagazin-1990-18",
+   "datormagazin-1991-08",
+   "datormagazin-1988-15",
+   "datormagazin-1988-04",
+   "datormagazin-1990-05",
+   "datormagazin-1988-06",
+   "datormagazin-1991-10",
+   "datormagazin-1990-17",
+   "datormagazin-1990-03",
+   "datormagazin-1988-14",
+   "datormagazin-1991-18",
+   "datormagazin-1991-15",
+   "datormagazin-1991-17",
+   "datormagazin-1988-16-17",
+   "datormagazin-1988-12",
+   "datormagazin-1990-04",
+   "datormagazin-1991-06",
+   "datormagazin-1991-16",
+   "datormagazin-1991-07",
+   "datormagazin-1988-11",
+   "datormagazin-1989-02",
+   "datormagazin-1990-09",
+   "datormagazin-1988-13",
+   "datormagazin-1989-16",
+   "datormagazin-1989-11",
+   "datormagazin-1989-04",
+   "datormagazin-1989-05",
+   "datormagazin-1990-13",
+   "datormagazin-1989-17",
+   "datormagazin-1989-14",
+   "datormagazin-1990-19",
+   "datormagazin-1989-08",
+   "datormagazin-1989-13",
+   "datormagazin-1987-06",
+   "datormagazin-1987-09",
+   "datormagazin-1990-10",
+   "datormagazin-1990-08",
+   "datormagazin-1987-04-05",
+   "datormagazin-1994-04",
+   "datormagazin-1993-22",
+   "datormagazin-1993-17",
+   "datormagazin-1993-19",
+   "datormagazin-1993-18",
+   "datormagazin-1994-07",
+   "datormagazin-1994-05",
+   "datormagazin-1994-01",
+   "datormagazin-1994-03",
+   "datormagazin-1994-02",
+   "datormagazin-1994-06",
+   "datormagazin-1994-08",
+   "datormagazin-1993-20",
+   "datormagazin-1994-09",
+   "datormagazin-1994-10",
+   "datormagazin-1994-16",
+   "datormagazin-1994-15",
+   "datormagazin-1993-01",
+   "datormagazin-1993-04",
+   "datormagazin-1993-13",
+   "datormagazin-1995-01",
+   "datormagazin-1994-20",
+   "datormagazin-1993-05",
+   "datormagazin-1994-12",
+   "datormagazin-1994-17",
+   "datormagazin-1995-04",
+   "datormagazin-1994-18",
+   "datormagazin-1993-10",
+   "datormagazin-1995-02",
+   "datormagazin-1993-11",
+   "highscore-1993-21",
+   "datormagazin-1994-11",
+   "highscore-1993-18",
+   "datormagazin-1994-21",
+   "datormagazin-1994-19",
+   "datormagazin-1994-14",
+   "highscore-1993-22",
+   "highscore-1993-19",
+   "datormagazin-1994-22",
+   "datormagazin-1994-13",
+   "datormagazin-1993-02",
+   "datormagazin-1995-03",
+   "datormagazin-1993-09",
+   "datormagazin-1993-08",
+   "datormagazin-1992-12",
+   "datormagazin-1993-12",
+   "datormagazin-1993-14",
+   "datormagazin-1993-07",
+   "datormagazin-1992-10",
+   "datormagazin-1993-06",
+   "datormagazin-1992-11",
+   "datormagazin-1993-15",
+   "datormagazin-1992-07",
+   "datormagazin-1993-16",
+   "datormagazin-1992-20",
+   "datormagazin-1992-09",
+   "datormagazin-1992-16",
+   "datormagazin-1992-05",
+   "datormagazin-1995-13",
+   "datormagazin-1992-19",
+   "datormagazin-1992-14",
+   "datormagazin-1992-15",
+   "datormagazin-1992-22",
+   "datormagazin-1992-06",
+   "datormagazin-1995-12",
+   "datormagazin-1992-03",
+   "datormagazin-1992-17",
+   "datormagazin-1992-08",
+   "datormagazin-1992-04",
+   "datormagazin-1995-10",
+   "datormagazin-1992-21",
+   "datormagazin-1995-11",
+   "datormagazin-1995-07",
+   "datormagazin-1992-02",
+   "datormagazin-1992-13",
+   "datormagazin-1995-09",
+   "datormagazin-1991-22",
+   "highscore-1994-05",
+   "datormagazin-1992-01",
+   "highscore-1994-07",
+   "highscore-1993-20",
+   "highscore-1994-06",
+   "highscore-1994-04",
+   "highscore-1994-02",
+   "highscore-1994-01",
+   "highscore-1994-03",
+   "datormagazin-1993-21",
+   "datormagazin-1992-18",
+   "datormagazin-1995-08",
+   "datormagazin-1995-15"
+  ],
+  "remainingBytes": 11609576333,
+  "remainingFiles": 174,
+  "withoutPdf": []
+ },
+ "sizes": {
+  "archiveIssues": {
+   "highscore": 14,
+   "v2": 90,
+   "äldre": 81
+  },
+  "perIssue": {
+   "datormagazin-1986-01": {
+    "generation": "v2",
+    "rd0": {
+     "file": 565248,
+     "ftsIndex": 147456,
+     "gzip": 216013,
+     "other": 12288,
+     "pages": 28,
+     "pagesTable": 405504,
+     "rawTextBytes": 190257,
+     "searchTextBytes": 190523,
+     "xz": 182016
+    },
+    "rd2": {
+     "file": 565248,
+     "ftsIndex": 147456,
+     "gzip": 214569,
+     "other": 12288,
+     "pages": 28,
+     "pagesTable": 405504,
+     "rawTextBytes": 190257,
+     "searchTextBytes": 190523,
+     "xz": 181224
+    }
+   },
+   "datormagazin-1986-04": {
+    "generation": "v2",
+    "rd0": {
+     "file": 1044480,
+     "ftsIndex": 237568,
+     "gzip": 380900,
+     "other": 12288,
+     "pages": 49,
+     "pagesTable": 794624,
+     "rawTextBytes": 375525,
+     "searchTextBytes": 374492,
+     "xz": 318240
+    },
+    "rd2": {
+     "file": 1044480,
+     "ftsIndex": 237568,
+     "gzip": 378460,
+     "other": 12288,
+     "pages": 49,
+     "pagesTable": 794624,
+     "rawTextBytes": 375525,
+     "searchTextBytes": 374492,
+     "xz": 316768
+    }
+   },
+   "datormagazin-1987-10b": {
+    "generation": "v2",
+    "rd0": {
+     "file": 753664,
+     "ftsIndex": 188416,
+     "gzip": 280326,
+     "other": 12288,
+     "pages": 44,
+     "pagesTable": 552960,
+     "rawTextBytes": 259506,
+     "searchTextBytes": 259717,
+     "xz": 233656
+    },
+    "rd2": {
+     "file": 749568,
+     "ftsIndex": 184320,
+     "gzip": 278285,
+     "other": 12288,
+     "pages": 44,
+     "pagesTable": 552960,
+     "rawTextBytes": 259506,
+     "searchTextBytes": 259717,
+     "xz": 232472
+    }
+   },
+   "datormagazin-1989-06": {
+    "generation": "v2",
+    "rd0": {
+     "file": 1142784,
+     "ftsIndex": 270336,
+     "gzip": 432976,
+     "other": 12288,
+     "pages": 48,
+     "pagesTable": 860160,
+     "rawTextBytes": 410350,
+     "searchTextBytes": 408574,
+     "xz": 358416
+    },
+    "rd2": {
+     "file": 1138688,
+     "ftsIndex": 266240,
+     "gzip": 430278,
+     "other": 12288,
+     "pages": 48,
+     "pagesTable": 860160,
+     "rawTextBytes": 410350,
+     "searchTextBytes": 408574,
+     "xz": 356972
+    }
+   },
+   "datormagazin-1989-12": {
+    "generation": "v2",
+    "rd0": {
+     "file": 1114112,
+     "ftsIndex": 266240,
+     "gzip": 419247,
+     "other": 12288,
+     "pages": 48,
+     "pagesTable": 835584,
+     "rawTextBytes": 394092,
+     "searchTextBytes": 392522,
+     "xz": 346072
+    },
+    "rd2": {
+     "file": 1110016,
+     "ftsIndex": 262144,
+     "gzip": 416857,
+     "other": 12288,
+     "pages": 48,
+     "pagesTable": 835584,
+     "rawTextBytes": 394092,
+     "searchTextBytes": 392522,
+     "xz": 344568
+    }
+   },
+   "datormagazin-1991-02": {
+    "generation": "v2",
+    "rd0": {
+     "file": 925696,
+     "ftsIndex": 229376,
+     "gzip": 352574,
+     "other": 12288,
+     "pages": 88,
+     "pagesTable": 684032,
+     "rawTextBytes": 308349,
+     "searchTextBytes": 308442,
+     "xz": 292912
+    },
+    "rd2": {
+     "file": 921600,
+     "ftsIndex": 225280,
+     "gzip": 350020,
+     "other": 12288,
+     "pages": 88,
+     "pagesTable": 684032,
+     "rawTextBytes": 308349,
+     "searchTextBytes": 308442,
+     "xz": 291316
+    }
+   },
+   "datormagazin-1993-03": {
+    "generation": "äldre",
+    "rd0": {
+     "file": 884736,
+     "ftsIndex": 212992,
+     "gzip": 329877,
+     "other": 12288,
+     "pages": 68,
+     "pagesTable": 659456,
+     "rawTextBytes": 300550,
+     "searchTextBytes": 296916,
+     "xz": 274248
+    },
+    "rd2": {
+     "file": 880640,
+     "ftsIndex": 208896,
+     "gzip": 327817,
+     "other": 12288,
+     "pages": 68,
+     "pagesTable": 659456,
+     "rawTextBytes": 300550,
+     "searchTextBytes": 296916,
+     "xz": 273212
+    }
+   },
+   "datormagazin-1995-05-06": {
+    "generation": "äldre",
+    "rd0": {
+     "file": 974848,
+     "ftsIndex": 229376,
+     "gzip": 352650,
+     "other": 12288,
+     "pages": 64,
+     "pagesTable": 733184,
+     "rawTextBytes": 332687,
+     "searchTextBytes": 329668,
+     "xz": 295104
+    },
+    "rd2": {
+     "file": 974848,
+     "ftsIndex": 229376,
+     "gzip": 350924,
+     "other": 12288,
+     "pages": 64,
+     "pagesTable": 733184,
+     "rawTextBytes": 332687,
+     "searchTextBytes": 329668,
+     "xz": 294180
+    }
+   },
+   "datormagazin-1995-14": {
+    "generation": "äldre",
+    "rd0": {
+     "file": 1077248,
+     "ftsIndex": 249856,
+     "gzip": 392614,
+     "other": 12288,
+     "pages": 84,
+     "pagesTable": 815104,
+     "rawTextBytes": 374316,
+     "searchTextBytes": 366266,
+     "xz": 330216
+    },
+    "rd2": {
+     "file": 1073152,
+     "ftsIndex": 245760,
+     "gzip": 390324,
+     "other": 12288,
+     "pages": 84,
+     "pagesTable": 815104,
+     "rawTextBytes": 374316,
+     "searchTextBytes": 366266,
+     "xz": 329040
+    }
+   },
+   "highscore-1993-17": {
+    "generation": "highscore",
+    "rd0": {
+     "file": 462848,
+     "ftsIndex": 122880,
+     "gzip": 164964,
+     "other": 12288,
+     "pages": 32,
+     "pagesTable": 327680,
+     "rawTextBytes": 147098,
+     "searchTextBytes": 145834,
+     "xz": 138084
+    },
+    "rd2": {
+     "file": 462848,
+     "ftsIndex": 122880,
+     "gzip": 163710,
+     "other": 12288,
+     "pages": 32,
+     "pagesTable": 327680,
+     "rawTextBytes": 147098,
+     "searchTextBytes": 145834,
+     "xz": 137380
+    }
+   },
+   "highscore-1994-08": {
+    "generation": "highscore",
+    "rd0": {
+     "file": 421888,
+     "ftsIndex": 114688,
+     "gzip": 146332,
+     "other": 12288,
+     "pages": 32,
+     "pagesTable": 294912,
+     "rawTextBytes": 128767,
+     "searchTextBytes": 127437,
+     "xz": 122412
+    },
+    "rd2": {
+     "file": 417792,
+     "ftsIndex": 110592,
+     "gzip": 145204,
+     "other": 12288,
+     "pages": 32,
+     "pagesTable": 294912,
+     "rawTextBytes": 128767,
+     "searchTextBytes": 127437,
+     "xz": 121884
+    }
+   }
+  },
+  "pilotIssues": {
+   "highscore": 2,
+   "v2": 6,
+   "äldre": 3
+  },
+  "variants": {
+   "rd0": {
+    "estimate185": {
+     "file": 159252480.0,
+     "ftsIndex": 33632256.0,
+     "gzip": 59741049.0,
+     "pages": 10855.0,
+     "pagesTable": 125018112.0,
+     "rawTextBytes": 58206171.0,
+     "searchTextBytes": 57727193.0,
+     "xz": 48181332.0
+    },
+    "generations": {
+     "highscore": {
+      "file": 823296,
+      "ftsIndex": 196608,
+      "gzip": 300216,
+      "other": 12288,
+      "pages": 64,
+      "pagesTable": 614400,
+      "rawTextBytes": 275865,
+      "searchTextBytes": 273218,
+      "xz": 244164
+     },
+     "v2": {
+      "file": 5189632,
+      "ftsIndex": 1081344,
+      "gzip": 1976115,
+      "other": 12288,
+      "pages": 305,
+      "pagesTable": 4096000,
+      "rawTextBytes": 1938079,
+      "searchTextBytes": 1934062,
+      "xz": 1578708
+     },
+     "äldre": {
+      "file": 2801664,
+      "ftsIndex": 593920,
+      "gzip": 1036956,
+      "other": 12288,
+      "pages": 216,
+      "pagesTable": 2195456,
+      "rawTextBytes": 1007553,
+      "searchTextBytes": 992731,
+      "xz": 844132
+     }
+    },
+    "pilot": {
+     "file": 8650752,
+     "ftsIndex": 1757184,
+     "gzip": 3251196,
+     "other": 12288,
+     "pages": 585,
+     "pagesTable": 6881280,
+     "rawTextBytes": 3221497,
+     "searchTextBytes": 3199686,
+     "xz": 2573412
+    }
+   },
+   "rd2": {
+    "estimate185": {
+     "file": 158846976.0,
+     "ftsIndex": 33226752.0,
+     "gzip": 59447121.0,
+     "pages": 10855.0,
+     "pagesTable": 125018112.0,
+     "rawTextBytes": 58206171.0,
+     "searchTextBytes": 57727193.0,
+     "xz": 48003032.0
+    },
+    "generations": {
+     "highscore": {
+      "file": 823296,
+      "ftsIndex": 196608,
+      "gzip": 298401,
+      "other": 12288,
+      "pages": 64,
+      "pagesTable": 614400,
+      "rawTextBytes": 275865,
+      "searchTextBytes": 273218,
+      "xz": 243188
+     },
+     "v2": {
+      "file": 5177344,
+      "ftsIndex": 1069056,
+      "gzip": 1966068,
+      "other": 12288,
+      "pages": 305,
+      "pagesTable": 4096000,
+      "rawTextBytes": 1938079,
+      "searchTextBytes": 1934062,
+      "xz": 1572288
+     },
+     "äldre": {
+      "file": 2793472,
+      "ftsIndex": 585728,
+      "gzip": 1032122,
+      "other": 12288,
+      "pages": 216,
+      "pagesTable": 2195456,
+      "rawTextBytes": 1007553,
+      "searchTextBytes": 992731,
+      "xz": 841348
+     }
+    },
+    "pilot": {
+     "file": 8634368,
+     "ftsIndex": 1740800,
+     "gzip": 3235953,
+     "other": 12288,
+     "pages": 585,
+     "pagesTable": 6881280,
+     "rawTextBytes": 3221497,
+     "searchTextBytes": 3199686,
+     "xz": 2563944
+    }
+   }
+  },
+  "withoutRawText": {
+   "file": 5386240,
+   "ftsIndex": 1757184,
+   "gzip": 2722908,
+   "other": 12288,
+   "pages": 585,
+   "pagesTable": 3616768,
+   "rawTextBytes": 0,
+   "searchTextBytes": 3199686,
+   "xz": 2284512
+  }
+ }
+}
