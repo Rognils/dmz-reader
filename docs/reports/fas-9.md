@@ -25,7 +25,7 @@ Användardatan är oförändrad: 1 rad i `IssueUserState`, 0 i `Bookmark` och 1 
 | `ui/reader/ReaderScreen.kt`, `ui/issue/IssueScreen.kt`, `ui/DmzReaderRoot.kt`, `AppContainer.kt`, `DmzReaderApp.kt` | inkoppling |
 | `app/build.gradle.kts` | version 0.9.0 / 900 |
 | `tools/build_search_testdb.py`, `app/src/debug/assets/search_test.db` | litet sökindex i det riktiga formatet, för testerna |
-| `app/src/test/…`: `FullTextQueryTest`, `FullTextResultsTest`, `SearchIndexManagerTest` | 40 nya JVM-tester |
+| `app/src/test/…`: `FullTextQueryTest`, `FullTextResultsTest`, `SearchIndexManagerTest` | 41 nya JVM-tester |
 | `app/src/androidTest/…`: `FullTextDeviceTest`, `RealIndexDeviceTest` | instrumenterade tester |
 | `tools/README.md` | "Uppdatera sökindexet på telefonen" |
 | `docs/decisions/0020-fulltextsokning-i-appen.md` | ADR |
@@ -122,10 +122,10 @@ Kopian från fasens början ligger i `~/dmz-backup-före-fas9/appdata.tar`. Inge
 
 | Test | Resultat |
 |---|---|
-| JVM-tester | 360 av 360 (320 före fasen) |
+| JVM-tester | 361 av 361 (320 före fasen) |
 | Python-tester | 172 av 172 |
 | Lint | 0 fel, 8 varningar |
-| `FullTextDeviceTest` (importera, sök, öppna träff, rätt sida, nästa träff; filter, sortering, bytt PDF) | 2 av 2 |
+| `FullTextDeviceTest` (importera, sök, öppna träff, rätt sida, nästa träff; filter, sortering, bytt PDF; annan arkivversion) | 3 av 3 |
 | `RealIndexDeviceTest` mot det riktiga indexet | 1 av 1 |
 | `LibraryNavigationTest`, `FtsInstrumentedTest` | 4 av 4, 2 av 2 |
 | Release-bygge | bygger, 24,3 MB; inte kört på telefonen |
@@ -138,12 +138,15 @@ Ett slumptest matar 4 000 skräptexter genom frågelagret och kör resultatet mo
 
 ## 7. Acceptanskriterier
 
-- [x] search.db importeras och valideras
-- [x] en sökning ger rankade träffar med textutdrag och markerat sökord
-- [x] ett tryck på en träff öppnar rätt nummer på rätt sida
-- [x] "Sök i numret" fungerar, i nummervyn och i läsaren
-- [x] versionsavvikelse mellan inventory och search.db ger en notis och ingen spärr (prövat i JVM-test och med testindexet; det riktiga indexet har samma version som appens arkivindex)
-- [x] utan sökindex fungerar metadata-sökningen som förut
+Planens kriterier för FAS 9:
+
+- [x] **En sökning ger rätt nummer, rätt sida och rätt utdrag.** Antalen för sex sökningar stämmer med datorns, och den bästa träffen för "Commodore 128" är 1986 nr 1 sida 4 med utdraget kring frasen.
+- [x] **Ett tryck öppnar exakt rätt sida.** Läsaren visade "Sida 4 av 28", och träffraden stegade till sidorna 2, 13 och 18 för "Amiga".
+- [x] **Sökningen svarar på under 1 sekund på telefonen.** Rangordningen tar 4–96 ms. Från inmatning till visat resultat gick det 0,67–0,93 s i testet, inräknat 0,3 s väntan på paus. Marginalen till en sekund är alltså liten i den mätningen, se kända begränsningar.
+- [x] **En search.db med annan `datasetVersion` fungerar och visar en notis.** Ett testindex med arkivversion 2020-01-01-001 importerades på telefonen: sökningen gav rätt träff, och sökvyn visade "Sökindexet är från en annan arkivversion."
+- [x] **En trasig search.db avvisas utan att den tidigare påverkas.** Prövat i JVM-tester med en textfil, en avklippt fil, fel `searchSchemaVersion`, saknade tabeller och ett tomt index. Den aktiva filen var byte för byte densamma efteråt, och gick att söka i.
+
+Utöver planens kriterier: utan sökindex fungerar metadata-sökningen som förut, och "Sök i numret" finns i nummervyn och i läsaren.
 
 ## 8. Kända begränsningar
 

@@ -16,6 +16,8 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.room3.useWriterConnection
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import androidx.sqlite.execSQL
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.runBlocking
@@ -169,6 +171,28 @@ class FullTextDeviceTest {
         rule.onNodeWithContentDescription("Stäng träffraden").performClick()
         waitFor { !tagged("hit-bar") }
         assertNotNull(indicator())
+    }
+
+    /** Planens D3: ett sökindex från en annan arkivversion fungerar, och sökvyn visar en diskret notis. */
+    @Test
+    fun indexFromAnotherArchiveVersionWorksAndShowsANotice() {
+        val other = File(context.cacheDir, "search-other-version.db")
+        context.assets.open("search_test.db").use { input -> other.outputStream().use { input.copyTo(it) } }
+        BundledSQLiteDriver().open(other.path).use { connection ->
+            connection.execSQL("UPDATE meta SET value = '2020-01-01-001' WHERE key = 'inventoryDatasetVersion'")
+        }
+        runBlocking {
+            val info = container.searchIndex.import({ other.inputStream() }, other.length())
+            assertEquals("2020-01-01-001", info.inventoryDatasetVersion)
+        }
+        other.delete()
+
+        rule.onNodeWithText("Sök").performClick()
+        waitFor { tagged("search-field") }
+        rule.onNodeWithTag("search-field").performTextInput("Commodore")
+        waitFor { textOf("hit-summary") == "1 sida i 1 nummer" }
+        assertTrue(exists("Sökindexet är från en annan arkivversion."))
+        waitFor { exists("introducerades", substring = true) }
     }
 
     @Test
