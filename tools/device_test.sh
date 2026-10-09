@@ -67,7 +67,9 @@ PY
 run() {
     local output
     output=$(adb shell am instrument -w "$@" "$RUNNER")
-    echo "$output" | grep -E "^OK|^FAILURES|^Tests run|^[0-9]+\) " || true
+    # Vid ett fel visas också felmeddelandet och var det uppstod.
+    echo "$output" | grep -E -A4 "^[0-9]+\) " || true
+    echo "$output" | grep -E "^OK|^FAILURES|^Tests run" || true
     grep -q "^OK (" <<<"$output"
 }
 
