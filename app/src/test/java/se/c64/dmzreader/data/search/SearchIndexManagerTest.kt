@@ -204,6 +204,22 @@ class SearchIndexManagerTest {
     }
 
     @Test
+    fun `an index built from another archive version is imported and searchable`() = runBlocking {
+        // Planens D3: en annan arkivversion är en varning i gränssnittet, ingen spärr.
+        val other = variant("other.db", "UPDATE meta SET value = '2020-01-01-001' WHERE key = 'inventoryDatasetVersion'")
+        val manager = manager()
+
+        val info = manager.import({ other.inputStream() }, other.length())
+
+        assertEquals("2020-01-01-001", info.inventoryDatasetVersion)
+        assertEquals(4, manager.rank("\"högtalare\"")!!.size)
+        val active = se.c64.dmzreader.data.settings.ActiveInventory("2026-10-06-005", 1)
+        assertTrue(se.c64.dmzreader.ui.settings.SearchIndexUiState(info = info, active = active).otherVersion)
+        assertFalse(se.c64.dmzreader.ui.settings.SearchIndexUiState(info = info.copy(inventoryDatasetVersion = "2026-10-06-005"), active = active).otherVersion)
+        assertFalse(se.c64.dmzreader.ui.settings.SearchIndexUiState(info = null, active = active).otherVersion)
+    }
+
+    @Test
     fun `too little free space stops the import before copying`() {
         val message = importFails(manager(free = 10_000), good, total = 148_877_312)
         assertEquals("Det finns inte plats för sökindexet. Det behövs 198 MB ledigt.", message)
