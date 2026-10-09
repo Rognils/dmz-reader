@@ -1,0 +1,8 @@
+MEMORY 199514-before pssKb=314699 javaHeapKb=17493 nativeHeapKb=84894 maxJavaKb=262144
+MEMORY 199514-maxzoom pssKb=350384 javaHeapKb=7561 nativeHeapKb=75206 maxJavaKb=262144
+MEMORY 199514-pan0 pssKb=366687 javaHeapKb=7697 nativeHeapKb=92917 maxJavaKb=262144
+MEMORY 199514-pan1 pssKb=349306 javaHeapKb=8049 nativeHeapKb=92947 maxJavaKb=262144
+MEMORY 199514-pan2 pssKb=349723 javaHeapKb=8401 nativeHeapKb=93001 maxJavaKb=262144
+MEMORY 199514-pan3 pssKb=349949 javaHeapKb=8689 nativeHeapKb=93024 maxJavaKb=262144
+MEMORY 199514-held pssKb=331077 javaHeapKb=7261 nativeHeapKb=75380 maxJavaKb=262144
+MEMORY 199514-after-gc pssKb=331029 javaHeapKb=7101 nativeHeapKb=75380 maxJavaKb=262144
