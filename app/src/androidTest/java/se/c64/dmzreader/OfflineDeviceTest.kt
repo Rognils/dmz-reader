@@ -41,7 +41,7 @@ class OfflineDeviceTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
     private val issueId = "datormagazin-1986-01"
-    private val permanentFile = File(context.filesDir, "issues/$issueId.pdf")
+    private val permanentFile = File(storage(context).filesDir, "issues/$issueId.pdf")
 
     private fun waitFor(timeoutMillis: Long = 20_000, condition: () -> Boolean) =
         rule.waitUntil(timeoutMillis, condition)
@@ -94,7 +94,7 @@ class OfflineDeviceTest {
     fun downloadThenReadInAirplaneModeThenRemove() {
         // Utgångsläge: numret finns varken nedladdat eller i läs-cachen, och är oläst.
         runBlocking { appContainer(context).offlineRepository.remove(issueId) }
-        File(context.cacheDir, "pdf/$issueId.pdf").delete()
+        File(storage(context).cacheDir, "pdf/$issueId.pdf").delete()
         resetReadingState(context, issueId)
         assertFalse(permanentFile.exists())
 
@@ -118,7 +118,7 @@ class OfflineDeviceTest {
         assertEquals(DownloadState.DOWNLOADED, downloadState())
         assertTrue(permanentFile.isFile)
         assertEquals(15_105_472L, permanentFile.length())
-        assertFalse(File(context.filesDir, "issues/$issueId.pdf.part").exists())
+        assertFalse(File(storage(context).filesDir, "issues/$issueId.pdf.part").exists())
         assertTrue(exists("Ta bort nedladdning"))
 
         // Utan nät: läsaren öppnas direkt ur den nedladdade filen.
@@ -130,8 +130,8 @@ class OfflineDeviceTest {
         assertFalse(exists("Hämtar numret", substring = true))
         assertFalse(exists("Numret kunde inte öppnas", substring = true))
         // Ingenting hämtades till läs-cachen.
-        assertFalse(File(context.cacheDir, "pdf/$issueId.pdf").exists())
-        assertFalse(File(context.cacheDir, "pdf/$issueId.pdf.part").exists())
+        assertFalse(File(storage(context).cacheDir, "pdf/$issueId.pdf").exists())
+        assertFalse(File(storage(context).cacheDir, "pdf/$issueId.pdf.part").exists())
         rule.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
         waitFor { exists("Ta bort nedladdning") }
         setAirplaneMode(false)

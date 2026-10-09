@@ -15,7 +15,6 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
-import androidx.room3.useWriterConnection
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -25,7 +24,6 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
-import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -37,12 +35,8 @@ import java.io.File
  * öppna en träff på rätt sida och gå till nästa träff i numret.
  *
  * Testet använder det lilla testindexet i debug-assets (tools/build_search_testdb.py)
- * och läser i 1986 nr 1. Det lämnar telefonen som den var:
- *
- * - Ett sökindex som redan är importerat flyttas undan före testet och läggs
- *   tillbaka efteråt.
- * - Läsdata som testet skapar för 1986 nr 1 tas bort. Har användaren egen läsdata
- *   för numret hoppas testet över, så att den inte rörs.
+ * och läser i 1986 nr 1. Allt sker i testkörningens isolerade lagring (IsolatedTestRunner):
+ * appens riktiga sökindex, databas och läs-cache rörs inte.
  */
 @RunWith(AndroidJUnit4::class)
 class FullTextDeviceTest {
@@ -52,12 +46,6 @@ class FullTextDeviceTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val container get() = appContainer(context)
     private val issueId = "datormagazin-1986-01"
-    private val active = File(context.filesDir, "data/search.db")
-    private val aside = File(context.filesDir, "data/search.db.users-own")
-    private var sessionsBefore = 0L
-    private var started = 0L
-    private var ran = false
-
     private fun waitFor(timeoutMillis: Long = 30_000, condition: () -> Boolean) = rule.waitUntil(timeoutMillis, condition)
     private fun exists(text: String, substring: Boolean = false) =
         rule.onAllNodes(hasText(text, substring = substring)).fetchSemanticsNodes().isNotEmpty()
@@ -80,44 +68,17 @@ class FullTextDeviceTest {
 
     @Before
     fun prepare() {
-        // Användarens egen läsdata för numret får inte röras.
-        assumeTrue("Det finns egen läsdata för $issueId", readingState(context, issueId) == null)
-        started = System.currentTimeMillis()
-        sessionsBefore = runBlocking { container.database.readingSessionDao().getAll().size.toLong() }
+        resetReadingState(context, issueId)
         runBlocking {
-            // Ett redan importerat index flyttas undan. Filen kan flyttas medan den är öppen.
-            if (active.isFile) {
-                aside.delete()
-                assertTrue(active.renameTo(aside))
-            }
             container.searchIndex.remove()
             val info = container.searchIndex.import({ context.assets.open("search_test.db") }, null)
             assertEquals(6, info.issueCount)
         }
-        ran = true
     }
 
     @After
-    fun restore() {
-        if (!ran) return
-        // Läsaren skriver sin session när den stängs, i bakgrunden. Stäng först och vänta, så att
-        // raden finns när den ska tas bort.
-        rule.activityRule.scenario.close()
-        Thread.sleep(2_000)
-        // Med -e dmzCleanupFrom <millisekunder> tas även sessioner från en tidigare, avbruten körning bort.
-        val from = InstrumentationRegistry.getArguments().getString("dmzCleanupFrom")?.toLongOrNull() ?: started
-        runBlocking {
-            container.searchIndex.remove()
-            if (aside.isFile) {
-                assertTrue(aside.renameTo(active))
-                container.searchIndex.loadAtStartup()
-            }
-            // Läsdata som testet skapade: bara för testets nummer, och bara det som kom till under testet.
-            container.database.useWriterConnection { connection ->
-                connection.usePrepared("DELETE FROM IssueUserState WHERE issueId = '$issueId'") { it.step() }
-                connection.usePrepared("DELETE FROM ReadingSession WHERE issueId = '$issueId' AND startedAt >= $from") { it.step() }
-            }
-        }
+    fun removeIndex() {
+        runBlocking { container.searchIndex.remove() }
     }
 
     @Test
@@ -176,7 +137,7 @@ class FullTextDeviceTest {
     /** Planens D3: ett sökindex från en annan arkivversion fungerar, och sökvyn visar en diskret notis. */
     @Test
     fun indexFromAnotherArchiveVersionWorksAndShowsANotice() {
-        val other = File(context.cacheDir, "search-other-version.db")
+        val other = File(storage(context).cacheDir, "search-other-version.db")
         context.assets.open("search_test.db").use { input -> other.outputStream().use { input.copyTo(it) } }
         BundledSQLiteDriver().open(other.path).use { connection ->
             connection.execSQL("UPDATE meta SET value = '2020-01-01-001' WHERE key = 'inventoryDatasetVersion'")

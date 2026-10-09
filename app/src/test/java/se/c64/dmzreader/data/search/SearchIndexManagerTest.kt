@@ -108,6 +108,25 @@ class SearchIndexManagerTest {
     }
 
     @Test
+    fun `search terms are only logged when that is asked for`() = runBlocking {
+        // Debug-bygget loggar sökorden. Release loggar bara svarstiden.
+        val quiet = ArrayList<String>()
+        val release = SearchIndexManager(directory, now = { clock }, logQueries = false, log = quiet::add)
+        release.import({ good.inputStream() }, null)
+        release.rank("\"högtalare\"")
+        val line = quiet.last()
+        assertTrue(line, line.startsWith("Sökning: 4 sidor på "))
+        assertFalse(quiet.any { "högtalare" in it })
+        release.remove()
+
+        val loud = ArrayList<String>()
+        val debug = SearchIndexManager(directory, now = { clock }, logQueries = true, log = loud::add)
+        debug.import({ good.inputStream() }, null)
+        debug.rank("\"högtalare\"")
+        assertTrue(loud.last(), loud.last().startsWith("Sökning \"högtalare\": 4 sidor på "))
+    }
+
+    @Test
     fun `without an index there is nothing to search`() = runBlocking {
         val manager = manager()
         assertNull(manager.rank("\"amiga\""))

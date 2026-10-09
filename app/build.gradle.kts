@@ -15,9 +15,10 @@ android {
         minSdk = 26
         targetSdk = 37
         // Följer taggarna (planens G4): 0.6.1 ger 601, 0.7.0 ger 700, 1.0.0 ger 10000.
-        versionCode = 900
-        versionName = "0.9.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        versionCode = 1000
+        versionName = "0.10.0"
+        // Egen testkörare: testerna körs mot isolerad lagring, aldrig mot användarens data.
+        testInstrumentationRunner = "se.c64.dmzreader.IsolatedTestRunner"
     }
 
     buildTypes {

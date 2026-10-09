@@ -80,7 +80,7 @@ class ArchiveIndexDeviceTest {
         assertEquals(185, database.issueDao().count())
         assertNotNull(database.issueDao().get(removed))
         val before = userData()
-        val activeFile = File(context.filesDir, "data/inventory.json")
+        val activeFile = File(storage(context).filesDir, "data/inventory.json")
         assertFalse(activeFile.exists())
 
         // Import: förbered, granska skillnaden, genomför.

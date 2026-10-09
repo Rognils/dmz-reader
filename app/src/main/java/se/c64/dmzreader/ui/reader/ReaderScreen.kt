@@ -34,6 +34,10 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import se.c64.dmzreader.ui.search.HitNavigationBar
@@ -300,7 +304,20 @@ private fun ReaderScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(DmzColors.ReaderBackground).testTag("reader")) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(DmzColors.ReaderBackground)
+            .testTag("reader")
+            // Varje beröring räknas som en interaktion för lästiden: tryck, zoom, panorering
+            // och bläddring. Händelsen bara iakttas och går vidare orörd till sidorna.
+            .pointerInput(viewModel) {
+                awaitEachGesture {
+                    awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                    viewModel.onInteraction()
+                }
+            },
+    ) {
         // Ny pager när läget eller parningen ändras, placerad på skärmen som innehåller läspositionen.
         key(landscape, state.spreadOffset) {
             val pagerState = rememberPagerState(

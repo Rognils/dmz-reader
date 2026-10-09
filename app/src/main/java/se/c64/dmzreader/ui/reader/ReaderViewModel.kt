@@ -39,6 +39,9 @@ import se.c64.dmzreader.domain.ReaderPosition
 import se.c64.dmzreader.domain.RenderFocus
 import se.c64.dmzreader.domain.RenderUrgency
 import se.c64.dmzreader.domain.SeenPages
+import se.c64.dmzreader.domain.SESSION_IDLE_LIMIT_MILLIS
+import se.c64.dmzreader.domain.SESSION_PAGE_SAVE_DELAY_MILLIS
+import se.c64.dmzreader.domain.SESSION_SAVE_INTERVAL_MILLIS
 import se.c64.dmzreader.domain.SessionTracker
 import se.c64.dmzreader.domain.effectiveSpreadOffset
 import se.c64.dmzreader.domain.fileSizeText
@@ -114,6 +117,9 @@ class ReaderViewModel(
     writeScope: CoroutineScope,
     /** Sidan läsaren ska öppnas på, till exempel från ett bokmärke. null betyder läspositionen. */
     private val requestedPage: Int? = null,
+    /** Inaktivitetsgränsen för lästid. Kortas i tester. */
+    sessionIdleLimitMillis: Long = SESSION_IDLE_LIMIT_MILLIS,
+    private val sessionSaveIntervalMillis: Long = SESSION_SAVE_INTERVAL_MILLIS,
 ) : ViewModel() {
     private val _state = MutableStateFlow<ReaderUiState>(ReaderUiState.Loading)
     val state: StateFlow<ReaderUiState> = _state
@@ -124,7 +130,9 @@ class ReaderViewModel(
         Log.w(LOG_TAG, "$issueId: läsdata kunde inte sparas", error)
     }
     private val readTimer = PageReadTimer()
-    private val session = SessionTracker(issueId)
+    private val session = SessionTracker(issueId, sessionIdleLimitMillis)
+    private var sessionSaveJob: Job? = null
+    private var sessionPageSaveJob: Job? = null
     private var readTimerJob: Job? = null
     private var foreground = false
     private var seen = SeenPages.EMPTY
@@ -294,6 +302,18 @@ class ReaderViewModel(
     private fun anchorChanged(page: Int) {
         recorder.anchorPage(page)
         session.moveTo(page)
+        session.interaction(SystemClock.elapsedRealtime())
+        // Sessionen skrivs en stund efter sidbytet, så att snabb bläddring ger en enda skrivning.
+        sessionPageSaveJob?.cancel()
+        sessionPageSaveJob = viewModelScope.launch {
+            delay(SESSION_PAGE_SAVE_DELAY_MILLIS)
+            saveSession()
+        }
+    }
+
+    /** Användaren rörde skärmen: ett tryck, en zoomning eller en panorering. Håller lästiden igång. */
+    fun onInteraction() {
+        session.interaction(SystemClock.elapsedRealtime())
     }
 
     /**
@@ -341,16 +361,44 @@ class ReaderViewModel(
         if (changingConfiguration) return
         foreground = false
         updateReadTimer()
-        endSession()
+        // Klockan stannar och sessionen skrivs, men den är inte slut: kommer läsaren
+        // tillbaka inom inaktivitetsgränsen fortsätter samma session.
+        session.background(SystemClock.elapsedRealtime())
+        sessionSaveJob?.cancel()
+        sessionPageSaveJob?.cancel()
+        saveSession()
     }
 
+    /**
+     * En session börjar när läsaren visar numret (planens C6). Raden skrivs direkt och
+     * uppdateras sedan löpande, så att högst ett sparintervall går förlorat om appen dör.
+     */
     private fun startSessionIfReading() {
         val current = _state.value as? ReaderUiState.Reading ?: return
-        if (foreground) session.start(current.position.page, System.currentTimeMillis())
+        if (!foreground) return
+        val now = SystemClock.elapsedRealtime()
+        if (session.active && !session.foreground(now)) endSession()
+        if (!session.active) {
+            session.start(current.position.page, System.currentTimeMillis(), now)
+            saveSession()
+        }
+        sessionSaveJob?.cancel()
+        sessionSaveJob = viewModelScope.launch {
+            while (true) {
+                delay(sessionSaveIntervalMillis)
+                saveSession()
+            }
+        }
+    }
+
+    private fun saveSession() {
+        session.snapshot(SystemClock.elapsedRealtime())?.let { recorder.session(it) }
     }
 
     private fun endSession() {
-        session.end(System.currentTimeMillis())?.let(recorder::session)
+        sessionSaveJob?.cancel()
+        sessionPageSaveJob?.cancel()
+        session.end(SystemClock.elapsedRealtime())?.let { recorder.session(it, final = true) }
     }
 
     /**

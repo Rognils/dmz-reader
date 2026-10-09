@@ -106,63 +106,7 @@ class ReadingTrackingTest {
         assertEquals(emptyList<Int>(), timer.collect(10_000))
     }
 
-    // --- Sessioner ---
-
-    @Test
-    fun `a session records pages, time and the pages read`() {
-        val tracker = SessionTracker("datormagazin-1986-01")
-        assertFalse(tracker.active)
-        tracker.start(page = 3, now = 10_000)
-        assertTrue(tracker.active)
-        tracker.pagesRead(listOf(3))
-        tracker.moveTo(4)
-        tracker.pagesRead(listOf(4, 5))
-        tracker.pagesRead(listOf(4))
-        tracker.moveTo(25)
-        val session = tracker.end(now = 75_900)!!
-        assertEquals("datormagazin-1986-01", session.issueId)
-        assertEquals(10_000L, session.startedAt)
-        assertEquals(75_900L, session.endedAt)
-        assertEquals(3, session.startPage)
-        assertEquals(25, session.endPage)
-        // Unika sidor som räknats som lästa, inte sidor som bara bläddrats förbi.
-        assertEquals(3, session.pagesViewed)
-        assertEquals(65, session.durationSeconds)
-        assertFalse(tracker.active)
-        assertNull(tracker.end(80_000))
-    }
-
-    @Test
-    fun `sessions shorter than five seconds are not saved`() {
-        val tracker = SessionTracker("x")
-        tracker.start(1, 0)
-        assertNull(tracker.end(4_999))
-        tracker.start(1, 10_000)
-        assertEquals(5, tracker.end(15_000)!!.durationSeconds)
-    }
-
-    @Test
-    fun `a new session starts clean and a running one is not restarted`() {
-        val tracker = SessionTracker("x")
-        tracker.start(1, 0)
-        tracker.pagesRead(listOf(1, 2))
-        // Rotation: start anropas igen, men sessionen fortsätter.
-        tracker.start(9, 3_000)
-        assertEquals(1, tracker.end(10_000)!!.startPage)
-        tracker.start(2, 20_000)
-        assertEquals(0, tracker.end(30_000)!!.pagesViewed)
-    }
-
-    @Test
-    fun `nothing is recorded outside a session`() {
-        val tracker = SessionTracker("x")
-        tracker.pagesRead(listOf(1))
-        tracker.moveTo(5)
-        tracker.start(2, 0)
-        val session = tracker.end(6_000)!!
-        assertEquals(0, session.pagesViewed)
-        assertEquals(2, session.endPage)
-    }
+    // --- Sessioner: se SessionTrackerTest ---
 
     // --- Renderingsordning ---
 

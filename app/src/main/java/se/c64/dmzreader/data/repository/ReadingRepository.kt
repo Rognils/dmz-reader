@@ -1,5 +1,6 @@
 package se.c64.dmzreader.data.repository
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import se.c64.dmzreader.data.db.IssueUserState
@@ -7,6 +8,7 @@ import se.c64.dmzreader.data.db.IssueUserStateDao
 import se.c64.dmzreader.data.db.ReadStatusOverride
 import se.c64.dmzreader.data.db.ReadingSession
 import se.c64.dmzreader.data.db.ReadingSessionDao
+import se.c64.dmzreader.domain.MIN_SESSION_SECONDS
 import se.c64.dmzreader.domain.withOverride
 
 /**
@@ -52,7 +54,23 @@ class ReadingRepository(
         update(issueId) { it.copy(isFavorite = favorite) }
     }
 
-    suspend fun saveSession(session: ReadingSession) {
-        sessionDao.insert(session)
+    /**
+     * Skriver en session: en ny rad om [session] saknar id, annars en uppdatering av raden.
+     * Returnerar radens id.
+     */
+    suspend fun saveSession(session: ReadingSession): Long {
+        if (session.id == 0L) return sessionDao.insert(session)
+        sessionDao.update(session)
+        return session.id
     }
+
+    suspend fun deleteSession(id: Long) {
+        sessionDao.delete(id)
+    }
+
+    /** Städar bort sessioner som blev kvar med för lite aktiv tid. Körs när appen startar. */
+    suspend fun removeShortSessions(): Int = sessionDao.deleteShorterThan(MIN_SESSION_SECONDS)
+
+    fun observeSessions(): Flow<List<ReadingSession>> = sessionDao.observeAll()
+
 }

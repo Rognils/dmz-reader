@@ -267,6 +267,30 @@ python3 tools/search_pilot.py render datormagazin-1995-14 26 högtalare         
 
 `tools/search_pilot.py` har också kvar pilotens mätningar från FAS 8A (`build`, `measure`, `compare`, `pages`, `plan`).
 
+## Köra appens tester på telefonen (`device_test.sh`)
+
+De instrumenterade testerna körs aldrig mot appens riktiga data. Testpaketet har en egen testkörare, `se.c64.dmzreader.IsolatedTestRunner`, som startar appen med en egen databas, egna inställningar, eget `filesDir` och eget `cacheDir` under `app_dmz_test/`. Katalogen tas bort när körningen är klar. Den vanliga testköraren finns inte i testpaketet, så testerna går inte att starta mot riktig data av misstag.
+
+```bash
+./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+tools/device_test.sh            # hela sviten, omstartstestet och tvångsstoppet
+```
+
+Skriptet tar ett fingeravtryck av användarens data före och efter (SHA-256 för databasen efter checkpoint, radantal per tabell, och namn, storlek, tid och SHA-256 för filerna i läs-cachen, nedladdningarna och `filesDir/data`) och avslutar med fel om något skiljer sig.
+
+PDF:en som testerna läser i läggs på telefonen från datorns `cache/pdf/`, i `/data/local/tmp/dmz-test-pdfs/`, och tas bort efteråt. Två tester prövar själva nedladdningen och hämtar 1986 nr 1 (15 MB) från arkivet.
+
+Ett enskilt test:
+
+```bash
+adb shell am instrument -w -e class se.c64.dmzreader.StatisticsDeviceTest \
+    se.c64.dmzreader.test/se.c64.dmzreader.IsolatedTestRunner
+```
+
+Kör aldrig `./gradlew connectedDebugAndroidTest`: det avinstallerar appen, och därmed användarens data.
+
 ## Uppdatera sökindexet på telefonen
 
 Sökindexet följer inte med appen. Det byggs på datorn och importeras i appen (plan D2 och D5).

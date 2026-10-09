@@ -7,6 +7,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import se.c64.dmzreader.data.db.ReadingSession
+import se.c64.dmzreader.domain.isWorthKeeping
 import se.c64.dmzreader.domain.opened
 import se.c64.dmzreader.domain.withPagesRead
 
@@ -86,8 +87,22 @@ class ReadingRecorder(
         enqueue { repository.update(issueId) { it.withPagesRead(pages, pageCount, timestamp, clearUnread) } }
     }
 
-    fun session(session: ReadingSession) {
-        enqueue { repository.saveSession(session) }
+    // Raden för den pågående sessionen. Sätts av den första skrivningen och läses bara i skrivkön.
+    private var sessionRowId = 0L
+
+    /**
+     * Skriver den pågående sessionen: en ny rad första gången, därefter samma rad.
+     * Med [final] är sessionen slut. En session som slutade med för lite aktiv tid tas då bort.
+     */
+    fun session(session: ReadingSession, final: Boolean = false) {
+        enqueue {
+            val id = repository.saveSession(session.copy(id = sessionRowId))
+            sessionRowId = id
+            if (final) {
+                if (!session.isWorthKeeping()) repository.deleteSession(id)
+                sessionRowId = 0L
+            }
+        }
     }
 
     /** Skriver det som väntar och tar inte emot mer. Köade skrivningar utförs först. */
