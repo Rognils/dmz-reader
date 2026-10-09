@@ -28,8 +28,8 @@ class HqRepository(
     private val clock: () -> Long = System::nanoTime,
     private val log: (String) -> Unit = {},
 ) {
-    /** Sant om skanningen redan finns i cachen. */
-    fun isCached(issueId: String, scan: HqScan): Boolean = cache.file(issueId, scan.fileName).isFile
+    /** Sant om skanningen finns hel i cachen. */
+    fun isCached(issueId: String, scan: HqScan): Boolean = cache.cached(issueId, scan.fileName) != null
 
     suspend fun page(issueId: String, scan: HqScan, onProgress: (DownloadProgress) -> Unit = {}): HqResult {
         val started = clock()
@@ -40,8 +40,9 @@ class HqRepository(
                 cache.cached(issueId, scan.fileName) ?: run {
                     val part = cache.partFile(issueId, scan.fileName)
                     part.parentFile?.mkdirs()
-                    source.fetch(scan.url, part) { bytes, total -> onProgress(DownloadProgress(bytes, total)) }
-                    cache.commit(issueId, scan.fileName)
+                    // Filen skrivs till .part och flyttas in i cachen först när storleken stämmer med serverns.
+                    val size = source.fetch(scan.url, part) { bytes, total -> onProgress(DownloadProgress(bytes, total)) }
+                    cache.commit(issueId, scan.fileName, size)
                 }
             }
             val millis = (clock() - started) / 1_000_000
@@ -52,6 +53,10 @@ class HqRepository(
         } catch (e: ScanFetchException) {
             log("HQ misslyckades: $issueId/${scan.fileName}: ${e.message}")
             HqResult.Failure(e.failure, hqFailureMessage(e.failure))
+        } catch (e: java.io.IOException) {
+            // Storleken stämde inte, eller filen gick inte att lägga på plats. Ingenting hamnade i cachen.
+            log("HQ misslyckades: $issueId/${scan.fileName}: ${e.message}")
+            HqResult.Failure(ScanFailure.NETWORK, hqFailureMessage(ScanFailure.NETWORK))
         } catch (e: Exception) {
             log("HQ misslyckades: $issueId/${scan.fileName}: $e")
             HqResult.Failure(ScanFailure.SERVER, hqFailureMessage(ScanFailure.SERVER))

@@ -45,6 +45,17 @@ class FtpScanSourceTest {
     private val work = Files.createTempDirectory("dmz-ftp").toFile()
     private val log = CopyOnWriteArrayList<String>()
 
+    /** Servern bryter nästa överföring efter så här många byte. */
+    @Volatile
+    private var cutAfter: Int? = null
+
+    /** Sant om servern ska svara "klart" trots avbrottet. */
+    @Volatile
+    private var cutSilently = false
+
+    @Volatile
+    private var sizeUnsupported = false
+
     // Binärt innehåll med alla bytevärden, radslut och NUL: det avslöjar en textöverföring.
     private val pageOne = ByteArray(200_000) { (it * 31 + it / 7).toByte() }
     private val pageTwo = ByteArray(50_000) { (it * 17).toByte() }
@@ -78,6 +89,11 @@ class FtpScanSourceTest {
         })
         // Den falska servern svarar på REST men skickar ändå hela filen. Här följs REST, som på en riktig server.
         var restartAt = 0
+        server.setCommandHandler(CommandNames.SIZE, object : org.mockftpserver.fake.command.SizeCommandHandler() {
+            override fun handleCommand(command: Command, session: Session) {
+                if (sizeUnsupported) session.sendReply(502, "Command not implemented") else super.handleCommand(command, session)
+            }
+        })
         server.setCommandHandler(CommandNames.REST, object : RestCommandHandler() {
             override fun handleCommand(command: Command, session: Session) {
                 note(command)
@@ -91,13 +107,17 @@ class FtpScanSourceTest {
                 val offset = restartAt
                 restartAt = 0
                 val entry = files.getEntry(command.getParameter(0)) as? FileEntry
-                if (offset == 0 || entry == null) return super.handleCommand(command, session)
+                val cut = cutAfter
+                if ((offset == 0 && cut == null) || entry == null) return super.handleCommand(command, session)
+                cutAfter = null
                 val bytes = entry.createInputStream().use { it.readBytes() }
+                val end = if (cut == null) bytes.size else minOf(bytes.size, offset + cut)
                 session.sendReply(150, "Opening data connection")
                 session.openDataConnection()
-                session.sendData(bytes.copyOfRange(offset, bytes.size), bytes.size - offset)
+                session.sendData(bytes.copyOfRange(offset, end), end - offset)
                 session.closeDataConnection()
-                session.sendReply(226, "Transfer complete")
+                // Antingen säger servern ifrån (426), eller så påstår den att allt gick bra fast filen tog slut.
+                if (cut != null && !cutSilently) session.sendReply(426, "Connection closed; transfer aborted") else session.sendReply(226, "Transfer complete")
             }
         })
         server.start()
@@ -193,6 +213,85 @@ class FtpScanSourceTest {
         assertTrue(commands.toString(), "REST 120000" in commands)
         assertEquals(120_000L, progress.first())
         source.close()
+    }
+
+    @Test
+    fun `a transfer that the server aborts halfway fails and leaves only the part file`() = runBlocking {
+        val source = source()
+        val target = File(work, "avbruten.part")
+        cutAfter = 80_000
+        try {
+            source.fetch(url("DMZ_1986-01-001.jpg"), target) { _, _ -> }
+            fail("skulle ha kastat")
+        } catch (e: ScanFetchException) {
+            assertTrue(e.failure == ScanFailure.SERVER || e.failure == ScanFailure.NETWORK)
+        }
+        // Det som kom fram ligger kvar och är början på filen, inte en hel fil.
+        assertEquals(80_000L, target.length())
+        assertArrayEquals(pageOne.copyOf(80_000), target.readBytes())
+
+        // Nästa försök fortsätter där det slutade och ger hela filen.
+        assertEquals(pageOne.size.toLong(), source.fetch(url("DMZ_1986-01-001.jpg"), target) { _, _ -> })
+        assertArrayEquals(pageOne, target.readBytes())
+        assertTrue(commands.toString(), "REST 80000" in commands)
+        source.close()
+    }
+
+    @Test
+    fun `a transfer that ends early is an error even when the server says it went well`() = runBlocking {
+        val source = source()
+        val target = File(work, "tyst.part")
+        cutAfter = 50_000
+        cutSilently = true
+        try {
+            source.fetch(url("DMZ_1986-01-001.jpg"), target) { _, _ -> }
+            fail("skulle ha kastat")
+        } catch (e: ScanFetchException) {
+            assertEquals(ScanFailure.NETWORK, e.failure)
+            assertTrue(e.message, "50000 av 200000" in e.message!!)
+        }
+        assertEquals(50_000L, target.length())
+        cutSilently = false
+        assertEquals(200_000L, source.fetch(url("DMZ_1986-01-001.jpg"), target) { _, _ -> })
+        assertArrayEquals(pageOne, target.readBytes())
+        source.close()
+    }
+
+    @Test
+    fun `an aborted transfer never becomes a cached page, and the retry completes it`() = runBlocking {
+        // Hela kedjan: FTP-källan, cachen och överföringskön.
+        val cache = HqCache(File(work, "hq"))
+        val repository = HqRepository(cache, source(), se.c64.dmzreader.data.pdf.TransferCoordinator())
+        val scan = se.c64.dmzreader.domain.HqScan(url("DMZ_1986-01-001.jpg"), "DMZ_1986-01-001.jpg")
+        for (silent in listOf(false, true)) {
+            cache.clear()
+            cutAfter = 70_000
+            cutSilently = silent
+            val failed = repository.page("datormagazin-1986-01", scan)
+            assertTrue("$silent: $failed", failed is HqResult.Failure)
+            assertFalse(repository.isCached("datormagazin-1986-01", scan))
+            assertFalse(cache.file("datormagazin-1986-01", scan.fileName).exists())
+            assertEquals(70_000L, cache.partFile("datormagazin-1986-01", scan.fileName).length())
+
+            val retried = repository.page("datormagazin-1986-01", scan) as HqResult.Success
+            assertArrayEquals(pageOne, retried.file.readBytes())
+            assertFalse(cache.partFile("datormagazin-1986-01", scan.fileName).exists())
+        }
+    }
+
+    @Test
+    fun `a server that does not tell the size is refused`() = runBlocking {
+        // Utan SIZE går det inte att veta att hela filen kom fram.
+        sizeUnsupported = true
+        val source = source()
+        try {
+            source.fetch(url("DMZ_1986-01-001.jpg"), File(work, "x.part")) { _, _ -> }
+            fail("skulle ha kastat")
+        } catch (e: ScanFetchException) {
+            assertEquals(ScanFailure.SERVER, e.failure)
+        }
+        assertFalse(File(work, "x.part").exists())
+        assertEquals(0, commands.count { it.startsWith("RETR") })
     }
 
     @Test

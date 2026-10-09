@@ -25,9 +25,12 @@ interface ScanSource {
     /**
      * Hämtar filen på [url] till [target]. Finns [target] redan fortsätter hämtningen
      * där den slutade. [onProgress] får antalet hämtade byte och filens storlek, om den är känd.
-     * Kastar [ScanFetchException] vid fel. Avbryts anroparen ligger det hämtade kvar i [target].
+     *
+     * Returnerar filens storlek enligt servern. När anropet återvänder har [target] exakt
+     * så många byte. Kastar [ScanFetchException] vid fel, även när överföringen tog slut
+     * för tidigt utan att servern sade ifrån. Avbryts anroparen ligger det hämtade kvar i [target].
      */
-    suspend fun fetch(url: String, target: File, onProgress: (bytes: Long, total: Long?) -> Unit)
+    suspend fun fetch(url: String, target: File, onProgress: (bytes: Long, total: Long?) -> Unit): Long
 
     /** Stänger anslutningen, om någon är öppen. */
     suspend fun close() {}
