@@ -46,6 +46,9 @@ class HqRepositoryTest {
         var started: CompletableDeferred<Unit>? = null
         var delayMillis = 0L
 
+        /** Anropas när filen är färdigskriven, medan överföringen fortfarande håller sin tur. */
+        var onFinished: () -> Unit = {}
+
         override suspend fun fetch(url: String, target: File, onProgress: (Long, Long?) -> Unit) {
             val now = running.incrementAndGet()
             peak.updateAndGet { maxOf(it, now) }
@@ -60,6 +63,7 @@ class HqRepositoryTest {
                 delay(delayMillis)
                 target.writeBytes(bytes)
                 onProgress(bytes.size.toLong(), bytes.size.toLong())
+                onFinished()
             } finally {
                 running.decrementAndGet()
             }
@@ -161,8 +165,8 @@ class HqRepositoryTest {
             }
         }
         backgroundStarted.await()
+        source.onFinished = { order += "hq klar" }
         val result = withTimeout(5_000) { repository.page(issueId, scan(1)) }
-        order += "hq klar"
         assertTrue(result is HqResult.Success)
         // Köns överföring avbröts och rapporterade det med null, så att den kan fortsätta senare.
         assertNull(background.await())
@@ -176,7 +180,9 @@ class HqRepositoryTest {
         source.gate = CompletableDeferred()
         source.started = CompletableDeferred()
         val order = CopyOnWriteArrayList<String>()
-        val page = async(Dispatchers.IO) { repository.page(issueId, scan(1)).also { order += "hq klar" } }
+        // Antecknas inne i överföringen: efter att den har lämnat sin tur får kön börja när som helst.
+        source.onFinished = { order += "hq klar" }
+        val page = async(Dispatchers.IO) { repository.page(issueId, scan(1)) }
         source.started!!.await()
         val background = async(Dispatchers.IO) { transfers.background { order += "kön"; "x" } }
         delay(200)

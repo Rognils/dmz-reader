@@ -1,0 +1,14 @@
+FTP ansluten till dmzarkivet.se:21 (anslutning 1)
+HQ hämtad: datormagazin-1986-04/DMZ_1986-04-Spelbilaga-003.png, 30436261 byte på 1169 ms
+FTP ansluten till dmzarkivet.se:21 (anslutning 1)
+HQ hämtad: datormagazin-1995-15/DMZ_1995-15-015.jpg, 36618589 byte på 1567 ms
+FTP stängd (30 s utan användning)
+FTP ansluten till dmzarkivet.se:21 (anslutning 1)
+HQ hämtad: datormagazin-1987-04-05/DMZ_1987-04-001.jpg, 1150758 byte på 591 ms
+FTP ansluten till dmzarkivet.se:21 (anslutning 1)
+HQ hämtad: datormagazin-1993-03/DMZ_1993-03-29.jpg, 2476028 byte på 553 ms
+FTP ansluten till dmzarkivet.se:21 (anslutning 1)
+HQ hämtad: datormagazin-1993-03/DMZ_1993-03-43.jpg, 3742774 byte på 628 ms
+FTP ansluten till dmzarkivet.se:21 (anslutning 1)
+HQ hämtad: datormagazin-1986-01/DMZ_1986-01-009.jpg, 4934340 byte på 684 ms
+HQ hämtad: datormagazin-1986-01/DMZ_1986-01-010.jpg, 5191599 byte på 429 ms

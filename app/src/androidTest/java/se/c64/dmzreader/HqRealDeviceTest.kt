@@ -129,9 +129,9 @@ class HqRealDeviceTest {
         waitFor { rule.onAllNodes(hasScrollToNodeAction()).fetchSemanticsNodes().isNotEmpty() && !described("Inställningar") }
         rule.onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription(cover))
         rule.onNodeWithContentDescription(cover).performClick()
-        val button = if (page > 1) "Fortsätt på sida $page" else "Läs"
-        waitFor { exists(button) }
-        rule.onNodeWithText(button).performClick()
+        // Knappen heter "Läs" för ett oläst nummer och "Fortsätt på sida N" annars.
+        waitFor { exists("Fortsätt på sida $page") || exists("Läs") }
+        rule.onNodeWithText(if (exists("Fortsätt på sida $page")) "Fortsätt på sida $page" else "Läs").performClick()
         waitFor(180_000) { tagged("reader") }
         showControls()
         waitFor { indicator()?.startsWith("Sida $page av $pageCount") == true }

@@ -48,7 +48,7 @@ Appen hade redan en läsare med gester, zoom och utsnitt i hög upplösning (ADR
 - En gemensam `PageSource` gör att HQ inte får en egen, sämre prövad gestkod.
 
 ## Consequences
-- **PNG är långsamt att läsa utsnitt ur.** Formatet går inte att hoppa i, så varje utsnitt läser bilden från början. Det gäller bara 1986 nr 4.
+- Avkodningen tar tid som märks: uppmätt på OnePlus 7 Pro cirka 0,5 sekunder för översikten och 0,3–0,5 sekunder för ett utsnitt, både för den största JPEG-filen (4 890 × 7 000) och för en PNG på 30 MB. En suddigare förhandsbild visas under tiden.
 - En HQ-sida syns en kort stund efter att användaren har bläddrat till den, eftersom den inte hämtas i förväg. PDF-sidan visas under tiden.
 - Byter användaren sida mitt i en hämtning stängs FTP-anslutningen, och nästa sida öppnar en ny.
 - Systemet kan tömma `cacheDir`. Då hämtas sidorna igen.
