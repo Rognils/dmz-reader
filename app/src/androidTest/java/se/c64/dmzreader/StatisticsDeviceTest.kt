@@ -149,6 +149,7 @@ class StatisticsDeviceTest {
             "Datormagazin 1986: 2 av 4 nummer lästa, 27 procent av sidorna lästa", // 38 av 141 sidor
             described("year-datormagazin-1986"),
         )
+        assertTrue(exists("27 % sidor"))
         screenshot("testdata")
 
         rule.onNodeWithTag("statistics").performScrollToNode(hasTestTag("statistics-other"))

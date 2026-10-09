@@ -57,7 +57,9 @@ import se.c64.dmzreader.domain.computeStatistics
 import se.c64.dmzreader.domain.durationText
 import se.c64.dmzreader.domain.weekLabel
 import se.c64.dmzreader.domain.yearIssuesText
+import se.c64.dmzreader.domain.mostReadYearsText
 import se.c64.dmzreader.domain.yearPagePercent
+import se.c64.dmzreader.domain.yearPageText
 import se.c64.dmzreader.ui.components.DataRow
 import se.c64.dmzreader.ui.components.MonoLabel
 import se.c64.dmzreader.ui.components.Panel
@@ -184,10 +186,17 @@ fun StatisticsScreen(
                 MonoLabel("Övrigt")
                 Spacer(Modifier.height(8.dp))
                 Panel(modifier = Modifier.testTag("statistics-other")) {
-                    DataRow(
-                        "Mest lästa årgång",
-                        statistics.mostReadYear?.let { "${it.publicationTitle} ${it.year} · ${it.pagesRead} sidor" } ?: "–",
-                    )
+                    // Egen rad för värdet: flera årgångar med lika många sidor får inte plats bredvid etiketten.
+                    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp).semantics(mergeDescendants = true) {}) {
+                        Text("Mest lästa årgång", style = MaterialTheme.typography.bodyMedium, color = DmzColors.TextSecondary)
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            mostReadYearsText(statistics.mostReadYears),
+                            style = MonoStyles.Data,
+                            color = DmzColors.TextPrimary,
+                            modifier = Modifier.testTag("most-read-years"),
+                        )
+                    }
                     DataRow("Favoriter", "${statistics.favorites}")
                     DataRow("Bokmärken", "${statistics.bookmarks}")
                     DataRow("Olästa nummer", "${statistics.issuesUnread}")
@@ -278,11 +287,12 @@ private fun YearRow(year: YearProgress, onClick: () -> Unit) {
                 Text(yearIssuesText(year), style = MaterialTheme.typography.bodyMedium, color = DmzColors.TextSecondary)
             }
             Text(
-                "$percent %",
+                yearPageText(year),
                 style = MonoStyles.Data,
                 color = if (percent > 0) DmzColors.Accent else DmzColors.Label,
                 textAlign = TextAlign.End,
-                modifier = Modifier.width(56.dp),
+                maxLines = 1,
+                modifier = Modifier.padding(start = 8.dp),
             )
         }
     }

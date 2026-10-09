@@ -18,7 +18,9 @@ import java.time.temporal.TemporalAdjusters
  * - Lästa, påbörjade och olästa nummer: lässtatus enligt C10, med readStatusOverride.
  * - Årgångsprogress: andel lästa nummer och andel lästa sidor per år och publikation.
  * - Aktivitet: lästid per vecka (måndag–söndag, lokal tid) för de senaste tolv veckorna.
+ *   Sessioner delas vid lokal midnatt (SessionTracker), så ingen session går över en veckogräns.
  * - Mest lästa årgång: den årgång, i någon publikation, där flest sidor är lästa.
+ *   Har flera årgångar lika många visas alla.
  */
 
 /** Antal veckor i aktivitetsdiagrammet. */
@@ -55,7 +57,8 @@ data class Statistics(
     val activity: List<WeekActivity> = emptyList(),
     /** En rad per publikation och år, i tidsordning. */
     val years: List<YearProgress> = emptyList(),
-    val mostReadYear: YearProgress? = null,
+    /** Årgångarna med flest lästa sidor, i tidsordning. Fler än en när de har lika många. Tom när inget är läst. */
+    val mostReadYears: List<YearProgress> = emptyList(),
     val favorites: Int = 0,
     val bookmarks: Int = 0,
 ) {
@@ -127,7 +130,8 @@ fun computeStatistics(
         sessionCount = sessions.size,
         activity = weeklyActivity(sessions, now, zone),
         years = years,
-        mostReadYear = years.filter { it.pagesRead > 0 }.maxWithOrNull(compareBy({ it.pagesRead }, { -it.year })),
+        mostReadYears = years.maxOfOrNull { it.pagesRead }?.takeIf { it > 0 }
+            ?.let { most -> years.filter { it.pagesRead == most } }.orEmpty(),
         favorites = userStates.count { it.isFavorite },
         bookmarks = bookmarks.count { it.deletedAt == null },
     )
@@ -150,6 +154,21 @@ fun weekLabel(start: LocalDate): String = "v. ${start.get(java.time.temporal.Iso
 
 /** "3 av 22 nummer lästa". */
 fun yearIssuesText(year: YearProgress): String = "${year.issuesRead} av ${year.issueCount} nummer lästa"
+
+/**
+ * "Datormagazin 1988 · 2 sidor", eller "Datormagazin 1988, 1991 · 2 sidor" när flera årgångar
+ * har lika många lästa sidor. Publikationens namn skrivs en gång. "–" när inget är läst.
+ */
+fun mostReadYearsText(years: List<YearProgress>): String {
+    val pages = years.firstOrNull()?.pagesRead ?: return "–"
+    val names = years.groupBy { it.publicationTitle }.entries
+        .sortedBy { (_, items) -> items.minOf { it.year } }
+        .joinToString(", ") { (title, items) -> "$title " + items.map { it.year }.sorted().joinToString(", ") }
+    return "$names · $pages ${if (pages == 1) "sida" else "sidor"}"
+}
+
+/** "1 % sidor": andelen lästa sidor i årgången, med enhet så att den inte läses som andelen nummer. */
+fun yearPageText(year: YearProgress): String = "${yearPagePercent(year)} % sidor"
 
 /** Andelen lästa sidor i procent. Visar aldrig 0 när något är läst, och aldrig 100 förrän allt är läst. */
 fun yearPagePercent(year: YearProgress): Int = when {

@@ -159,9 +159,43 @@ class StatisticsTest {
 
     @Test
     fun `most read year is the one with most pages read`() {
-        assertEquals(1989, statistics.mostReadYear!!.year)
-        assertEquals(105, statistics.mostReadYear!!.pagesRead)
-        assertNull(computeStatistics(issues.map { it.copy(state = null) }, emptyList(), emptyList(), emptyList(), now, zone).mostReadYear)
+        assertEquals(1989, statistics.mostReadYears.single().year)
+        assertEquals(105, statistics.mostReadYears.single().pagesRead)
+        assertEquals("Datormagazin 1989 · 105 sidor", mostReadYearsText(statistics.mostReadYears))
+        val nothing = computeStatistics(issues.map { it.copy(state = null) }, emptyList(), emptyList(), emptyList(), now, zone)
+        assertTrue(nothing.mostReadYears.isEmpty())
+        assertEquals("–", mostReadYearsText(nothing.mostReadYears))
+    }
+
+    @Test
+    fun `years with equally many pages read are all shown`() {
+        fun statisticsOf(vararg items: IssueWithState) =
+            computeStatistics(items.toList(), items.mapNotNull { it.state }, emptyList(), emptyList(), now, zone)
+        val tie = statisticsOf(
+            item("datormagazin-1991-15", 80, state("datormagazin-1991-15", 1..2)),
+            item("datormagazin-1988-01", 44, state("datormagazin-1988-01", 1..2)),
+            item("datormagazin-1990-01", 48, state("datormagazin-1990-01", 1..1)),
+        )
+        assertEquals(listOf(1988, 1991), tie.mostReadYears.map { it.year })
+        assertEquals("Datormagazin 1988, 1991 · 2 sidor", mostReadYearsText(tie.mostReadYears))
+
+        val twoPublications = statisticsOf(
+            item("datormagazin-1991-15", 80, state("datormagazin-1991-15", 1..1)),
+            item("highscore-1984-01", 32, state("highscore-1984-01", 1..1), title = "HighScore"),
+            item("datormagazin-1988-01", 44, state("datormagazin-1988-01", 1..1)),
+        )
+        assertEquals("HighScore 1984, Datormagazin 1988, 1991 · 1 sida", mostReadYearsText(twoPublications.mostReadYears))
+    }
+
+    @Test
+    fun `the year percentage says that it counts pages`() {
+        val year = computeStatistics(
+            listOf(item("datormagazin-1988-01", 200, state("datormagazin-1988-01", 1..2))),
+            listOf(state("datormagazin-1988-01", 1..2)), emptyList(), emptyList(), now, zone,
+        ).years.single()
+        assertEquals("1 % sidor", yearPageText(year))
+        assertEquals("0 % sidor", yearPageText(year.copy(pagesRead = 0)))
+        assertEquals("100 % sidor", yearPageText(year.copy(pagesRead = 200)))
     }
 
     @Test
