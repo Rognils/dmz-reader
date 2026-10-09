@@ -94,7 +94,9 @@ class SearchIndexManager(
             }
             if (activeFile.isFile && db == null) {
                 try {
+                    val started = System.nanoTime()
                     open(activeFile)
+                    log("Sökindex öppnat på %.1f ms: %d sidor".format((System.nanoTime() - started) / 1e6, _index.value?.pages?.size ?: 0))
                 } catch (e: Exception) {
                     log("Sökindexet går inte att öppna (${e.message}). Det används inte.")
                 }
