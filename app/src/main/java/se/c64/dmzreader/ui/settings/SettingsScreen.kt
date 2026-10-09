@@ -280,6 +280,7 @@ class SettingsViewModel(
 fun SettingsScreen(
     viewModel: SettingsViewModel,
     archiveIndexViewModel: ArchiveIndexViewModel,
+    searchIndexViewModel: SearchIndexViewModel,
     onBack: () -> Unit,
     onOpenDiagnostics: () -> Unit,
     modifier: Modifier = Modifier,
@@ -403,6 +404,9 @@ fun SettingsScreen(
 
             Spacer(Modifier.height(20.dp))
             ArchiveIndexSection(archiveIndexViewModel)
+
+            Spacer(Modifier.height(20.dp))
+            SearchIndexSection(searchIndexViewModel)
 
             Spacer(Modifier.height(20.dp))
             Panel(

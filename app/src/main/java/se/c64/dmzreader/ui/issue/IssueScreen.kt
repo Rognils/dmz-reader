@@ -208,6 +208,8 @@ fun IssueScreen(
     onReadPage: (issueId: String, pageNumber: Int) -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    /** "Sök i numret" och markeringarna om sökindexet. Tom om ingen sökning är inkopplad. */
+    search: @Composable () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val details = state.details
@@ -243,6 +245,7 @@ fun IssueScreen(
                 onRead = onRead,
                 onSetReadStatus = viewModel::setReadStatus,
                 bookmarks = {
+                    search()
                     IssueBookmarks(
                         bookmarks = state.bookmarks,
                         archiveFileChanged = state.archiveFileChanged,

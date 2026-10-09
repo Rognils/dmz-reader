@@ -15,8 +15,8 @@ android {
         minSdk = 26
         targetSdk = 37
         // Följer taggarna (planens G4): 0.6.1 ger 601, 0.7.0 ger 700, 1.0.0 ger 10000.
-        versionCode = 700
-        versionName = "0.7.0"
+        versionCode = 900
+        versionName = "0.9.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -113,6 +113,9 @@ tasks.withType<Test>().configureEach {
     val ftsTestDb = layout.projectDirectory.file("src/debug/assets/fts_test.db").asFile
     inputs.file(inventory)
     inputs.file(ftsTestDb)
+    val searchTestDb = layout.projectDirectory.file("src/debug/assets/search_test.db").asFile
+    inputs.file(searchTestDb)
+    systemProperty("dmz.searchTestDb", searchTestDb.absolutePath)
     doFirst {
         systemProperty("java.library.path", nativeDir.get().asFile.absolutePath)
     }

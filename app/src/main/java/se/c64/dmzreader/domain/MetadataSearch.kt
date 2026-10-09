@@ -73,9 +73,30 @@ private val numbersInIssueId = Regex("""-\d{4}-(\d{2})(?:-(\d{2}))?""")
 fun issueNumbers(issue: IssueEntity): List<Int> =
     numbersInIssueId.find(issue.issueId)?.groupValues?.drop(1)?.filter { it.isNotEmpty() }?.map { it.toInt() }.orEmpty()
 
-/** Snabbfilter i sökvyn. */
-data class SearchFilters(val favoritesOnly: Boolean = false, val downloadedOnly: Boolean = false) {
-    val any: Boolean get() = favoritesOnly || downloadedOnly
+/** Filtren i sökvyn. De gäller både metadata-sökningen och fulltextsökningen. */
+data class SearchFilters(
+    val favoritesOnly: Boolean = false,
+    val downloadedOnly: Boolean = false,
+    /** Bara den här publikationen. null betyder alla. */
+    val publicationId: String? = null,
+    /** Första och sista året som tas med. null betyder ingen gräns. */
+    val yearFrom: Int? = null,
+    val yearTo: Int? = null,
+) {
+    val hasYears: Boolean get() = yearFrom != null || yearTo != null
+    val any: Boolean get() = favoritesOnly || downloadedOnly || publicationId != null || hasYears
+
+    /** Sant för de filter som ensamma ska lista nummer i metadata-sökningen. */
+    val listsIssues: Boolean get() = favoritesOnly || downloadedOnly
+}
+
+/** "1993–1995", "från 1993", "till 1989" eller "alla år". */
+fun yearFilterText(filters: SearchFilters): String = when {
+    filters.yearFrom != null && filters.yearTo != null ->
+        if (filters.yearFrom == filters.yearTo) "${filters.yearFrom}" else "${filters.yearFrom}–${filters.yearTo}"
+    filters.yearFrom != null -> "från ${filters.yearFrom}"
+    filters.yearTo != null -> "till ${filters.yearTo}"
+    else -> "alla år"
 }
 
 /** En träff på ett bokmärke, med numret det hör till. */
@@ -92,8 +113,12 @@ data class SearchResults(
 
 const val MAX_ISSUE_HITS = 60
 
-private fun IssueWithState.matchesFilters(filters: SearchFilters): Boolean =
-    (!filters.favoritesOnly || state?.isFavorite == true) && (!filters.downloadedOnly || isDownloaded)
+internal fun IssueWithState.matchesFilters(filters: SearchFilters): Boolean =
+    (!filters.favoritesOnly || state?.isFavorite == true) &&
+        (!filters.downloadedOnly || isDownloaded) &&
+        (filters.publicationId == null || issue.publicationId == filters.publicationId) &&
+        (filters.yearFrom == null || issue.year >= filters.yearFrom) &&
+        (filters.yearTo == null || issue.year <= filters.yearTo)
 
 private fun IssueEntity.matchesYearAndNumber(query: MetadataQuery): Boolean =
     (query.year == null || year == query.year) && (query.number == null || query.number in issueNumbers(this))
@@ -116,7 +141,7 @@ fun searchMetadata(
     issues: List<IssueWithState>,
     bookmarks: List<Bookmark>,
 ): SearchResults {
-    if (query.isEmpty && !filters.any) return SearchResults()
+    if (query.isEmpty && !filters.listsIssues) return SearchResults()
     val candidates = issues.filter { it.matchesFilters(filters) && it.issue.matchesYearAndNumber(query) }
 
     val issueHits = candidates.filter { item ->

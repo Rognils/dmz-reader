@@ -35,6 +35,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
+import se.c64.dmzreader.ui.search.HitNavigationBar
+import se.c64.dmzreader.ui.search.IssueSearchDialog
+import se.c64.dmzreader.ui.search.IssueSearchViewModel
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -107,6 +111,8 @@ import kotlin.math.roundToInt
 @Composable
 fun ReaderRoute(
     viewModel: ReaderViewModel,
+    /** "Sök i numret" och träffraden. Följer med läsaren och försvinner när den stängs. */
+    search: IssueSearchViewModel,
     imageLoader: ImageLoader,
     onClose: () -> Unit,
 ) {
@@ -132,7 +138,7 @@ fun ReaderRoute(
             onClose = onClose,
         )
 
-        is ReaderUiState.Reading -> ReaderScreen(current, viewModel, onClose)
+        is ReaderUiState.Reading -> ReaderScreen(current, viewModel, search, onClose)
     }
 }
 
@@ -243,10 +249,13 @@ fun pageIndicatorText(pages: List<Int>, currentPage: Int, pageCount: Int, pagesR
 private fun ReaderScreen(
     state: ReaderUiState.Reading,
     viewModel: ReaderViewModel,
+    search: IssueSearchViewModel,
     onClose: () -> Unit,
 ) {
     val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     var controlsVisible by rememberSaveable { mutableStateOf(false) }
+    val searchState by search.state.collectAsStateWithLifecycle()
+    var searchOpen by rememberSaveable { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     // Bokmärken: ett tryck på stjärnan ger en snackbar med en åtgärd.
@@ -357,22 +366,31 @@ private fun ReaderScreen(
         val shownPages = screens.getOrNull(state.position.screenIndex(landscape, state.pageCount, state.spreadOffset))
             ?: listOf(state.position.page)
 
-        AnimatedVisibility(
-            visible = controlsVisible,
-            enter = fadeIn(),
-            exit = fadeOut(),
-            modifier = Modifier.align(Alignment.TopCenter),
-        ) {
-            ReaderTopBar(
-                title = state.issue.fullTitle(),
-                indicator = pageIndicatorText(shownPages, state.position.page, state.pageCount, state.pagesRead),
-                showSpreadShift = landscape && state.canShiftSpread,
-                onShiftSpread = viewModel::shiftSpread,
-                bookmarked = state.pageIsBookmarked,
-                bookmarkPage = state.position.page,
-                onToggleBookmark = viewModel::toggleBookmark,
-                onClose = onClose,
-            )
+        Column(modifier = Modifier.align(Alignment.TopCenter)) {
+            AnimatedVisibility(visible = controlsVisible, enter = fadeIn(), exit = fadeOut()) {
+                ReaderTopBar(
+                    title = state.issue.fullTitle(),
+                    indicator = pageIndicatorText(shownPages, state.position.page, state.pageCount, state.pagesRead),
+                    showSpreadShift = landscape && state.canShiftSpread,
+                    onShiftSpread = viewModel::shiftSpread,
+                    bookmarked = state.pageIsBookmarked,
+                    bookmarkPage = state.position.page,
+                    onToggleBookmark = viewModel::toggleBookmark,
+                    onSearch = { searchOpen = true }.takeIf { searchState.indexAvailable && searchState.inIndex },
+                    onClose = onClose,
+                )
+            }
+            // Träffraden: syns även när kontrollerna är dolda, tills den stängs.
+            if (searchState.barVisible && searchState.query != null && !searchState.searching) {
+                HitNavigationBar(
+                    text = searchState.barText,
+                    enabled = searchState.hits.size > 1,
+                    onPrevious = { search.previous()?.let(viewModel::goToPage) },
+                    onNext = { search.next()?.let(viewModel::goToPage) },
+                    onClose = search::closeBar,
+                    modifier = Modifier.windowInsetsPadding(if (controlsVisible) WindowInsets(0) else WindowInsets.displayCutout),
+                )
+            }
         }
         AnimatedVisibility(
             visible = controlsVisible,
@@ -396,6 +414,17 @@ private fun ReaderScreen(
                 .align(Alignment.BottomCenter)
                 .windowInsetsPadding(WindowInsets.displayCutout)
                 .padding(bottom = if (controlsVisible) 190.dp else 16.dp),
+        )
+    }
+
+    if (searchOpen) {
+        IssueSearchDialog(
+            viewModel = search,
+            onOpenPage = { page ->
+                searchOpen = false
+                viewModel.goToPage(page)
+            },
+            onDismiss = { searchOpen = false },
         )
     }
 
@@ -447,6 +476,8 @@ private fun ReaderTopBar(
     bookmarked: Boolean,
     bookmarkPage: Int,
     onToggleBookmark: () -> Unit,
+    /** null när numret inte går att söka i. Då visas ingen sökknapp. */
+    onSearch: (() -> Unit)?,
     onClose: () -> Unit,
 ) {
     Row(
@@ -478,6 +509,11 @@ private fun ReaderTopBar(
         if (showSpreadShift) {
             TextButton(onClick = onShiftSpread, modifier = Modifier.heightIn(min = 48.dp)) {
                 Text("Flytta uppslag", color = DmzColors.Accent, style = MaterialTheme.typography.labelLarge)
+            }
+        }
+        if (onSearch != null) {
+            IconButton(onClick = onSearch, modifier = Modifier.size(48.dp).testTag("reader-search")) {
+                Icon(Icons.Filled.Search, contentDescription = "Sök i numret", tint = DmzColors.TextPrimary)
             }
         }
         // Fylld stjärna: sidan har ett bokmärke, och ett tryck tar bort det.

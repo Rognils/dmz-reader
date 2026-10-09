@@ -38,3 +38,5 @@ cache/
 
 # Färdigt sökindex (FAS 8B)
 dist/
+# Litet sökindex i det riktiga formatet, för appens tester (tools/build_search_testdb.py)
+!/app/src/debug/assets/search_test.db
