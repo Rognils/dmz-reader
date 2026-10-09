@@ -1268,6 +1268,8 @@ Byggs inte förrän fulltextsökningen är stabil.
 - AI får aldrig ersätta källan
 - en lokal modell (t.ex. LM Studio i hemmalabbet) kan vara ett alternativ till moln och kräver då ett uttryckligt beslut
 
+**Not från FAS 8B (blockordning):** texten i search.db följer den ordning OCR-programmet skrev den i. Spalterna hålls ihop, men på sidor med flera artiklar kan blocken komma i annan ordning än artiklarna (4 av 28 granskade sidor, `data/reading_order_review.json`). Det påverkar inte sökningen per sida. Den som delar texten i stycken eller artiklar för RAG kan däremot inte utgå från att texten följer artiklarna, och behöver ordbitarnas lägen på sidan (`pdftotext -raw -bbox`) för att dela rätt.
+
 ---
 
 # DEL G – ARBETSSÄTT
@@ -1544,3 +1546,4 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-08 | Före FAS 8B: normaliseringen får inte bero på vilka andra nummer som byggs. Ordlistan fryses i `tools/data/normalizer_lexicon_v1.txt` med `normalizerVersion` 1. | 0004 |
 | 2026-10-08 | FAS 8B: `normalizerVersion` 2 efter granskat stickprov; `meta` har också `lexiconVersion`. Ordlistan är fortsatt version 1. | 0004 |
 | 2026-10-08 | FAS 8B: inventory 2026-10-06-005 har uppmätt `pageCount` för alla 185 nummer | — |
+| 2026-10-09 | FAS 8B: not under "Senare – innehållsanalys och AI/RAG" om att blockordningen i search.db inte alltid följer artiklarna | 0004 |

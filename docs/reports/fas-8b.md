@@ -1,10 +1,10 @@
 # Fasrapport – FAS 8B: Fullständigt sökindex
 
-Datum: 2026-10-08 · Gren: `feature/fas-8b-search-index` · Toolchain, plus ett instrumenterat test. Appens gränssnitt är inte ändrat.
+Datum: 2026-10-08, telefontestet 2026-10-09 · Gren: `feature/fas-8b-search-index`, mergad till `main` och taggad `v0.8-fas8` · Toolchain, plus ett instrumenterat test. Appens gränssnitt är inte ändrat.
 
 ## 1. Sammanfattning
 
-`dist/search.db` innehåller alla 185 nummer, 11 293 sidor, och är 148,9 MB (55 MB med gzip). Alla 43 sökord i facit hittas på rätt sida, utan irrelevanta träffar. Normaliseringen läser bara en fryst ordlista och det aktuella numret, och bygget är deterministiskt. Inventory 2026-10-06-005 har uppmätt sidantal för alla nummer.
+`dist/search.db` innehåller alla 185 nummer, 11 293 sidor, och är 148,9 MB (55 MB med gzip). Alla 43 sökord i facit hittas på rätt sida, och det finns inga falska positiva bland facits kontrollerade träffar. På telefonen svarar den fullständiga databasen på under 0,13 s för alla sökningar som appen gör i dag. Normaliseringen läser bara en fryst ordlista och det aktuella numret, och bygget är deterministiskt. Inventory 2026-10-06-005 har uppmätt sidantal för alla nummer.
 
 Mätningen av felandelen visade ett systematiskt fel i avstavningen för den äldre generationen. Regeln rättades, `normalizerVersion` höjdes till 2 och ett nytt stickprov granskades. Spaltkontrollen visade inga blandade spalter.
 
@@ -86,14 +86,14 @@ Mönstret "4 av Bour-" från piloten rättades redan före den första mätninge
 | Kategori | Stickprov | Rätt | Fel | Osäker | Felandel |
 |---|---|---|---|---|---|
 | Avstavning, v2 | 30 | 27 | 1 | 2 | 3 % |
-| Avstavning, Datormagazin äldre | 15 | 11 | 1 | 3 | 7 % |
+| Avstavning, Datormagazin äldre | 15 | 11 | 1 | 3 | 1 av 15 |
 | Avstavning, HighScore | 10 | 9 | 0 | 1 | 0 % |
 
-De två felen: ett läsordningsfel (`Ela-` / `När`) och ett riktigt bindestreck som försvann (`luma-` / `keying`). Inget återkommande mönster.
+De två felen: ett läsordningsfel (`Ela-` / `När`, v2) och ett riktigt bindestreck som försvann (`luma-` / `keying`, äldre). Den äldre generationens 7 procent är alltså 1 fel av 15 granskade, utan återkommande mönster. Med så få fall går andelen inte att ange närmare än "enstaka procent".
 
 **Två förbehåll:**
 
-- I HighScore var två av de tio fel i den första körningen av version 2 (`ROD-` / `LAND` och `MOON-` / `WALKER` behöll bindestrecket). Jag justerade regeln för versaler en gång till och räknar dem här som rätt. De är alltså inte en oberoende mätning av den slutliga regeln.
+- **HighScore i version 2 är inte en helt oberoende mätning.** Två av de tio var fel i den första körningen (`ROD-` / `LAND` och `MOON-` / `WALKER` behöll bindestrecket). De två fallen användes för att justera regeln för versaler en gång till, och räknas här som rätt. De övriga åtta är oberoende.
 - Utspärrad text och mjuka bindestreck ändrades inte mellan versionerna, utom "Tips 1" och "1 Mb". Jag kontrollerade maskinellt att de övriga 143 ändringarna i det första stickprovet är oförändrade i version 2, och granskade dem inte en gång till.
 
 Stickprovet mäter ändringar som gjordes. Ord som borde ha satts ihop men lämnades delade syns bara som de 9 ofullständiga.
@@ -137,6 +137,8 @@ Stickprovet mäter ändringar som gjordes. Ord som borde ha satts ihop men lämn
 
 Mönstret i anmärkningarna: på sidor med flera artiklar lägger OCR-programmet ibland blocken i annan ordning än artiklarna. Sökningen går per sida, så träffarna påverkas inte. Det som påverkas är frassökningar och avstavningar över en blockgräns, och det är samma sak som gav läsordningsfelen i stickprovet (2 av 110 avstavningar).
 
+**För framtida RAG måste blockordningen beaktas.** Den som delar sidans text i stycken eller artiklar kan inte utgå från att texten i `rawText` eller `searchText` följer artiklarna. Det är infört som en not i planens avsnitt "Senare – innehållsanalys och AI/RAG".
+
 ### 3.5 Inventory 2026-10-06-005
 
 `pageCount` är uppmätt med `pdfinfo` ur alla 185 PDF:er: 11 293 sidor. De två värden som fanns sedan tidigare (1986 nr 1 och 1995 nr 14) stämde; inget ändrades tyst. Valideringen ger inga fel.
@@ -172,9 +174,9 @@ Rå text är 56,8 MB och `searchText` 56,4 MB. Pilotens uppräkning gav 159 MB; 
 
 ### 3.7 Facit mot den fullständiga databasen
 
-43 sökord: pilotens 29 och 14 ur nummer utanför piloten (1986 nr 3, 1988 nr 12, 1989 nr 15, 1990 nr 5, 1991 nr 10, 1992 nr 5, 1993 nr 10, 1994 nr 20, 1995 nr 15 och HighScore 1993 nr 20). Alla nya sidor är kontrollerade mot renderade utsnitt. **43 av 43 hittar alla förväntade sidor, och inga träffar är irrelevanta.**
+43 sökord: pilotens 29 och 14 ur nummer utanför piloten (1986 nr 3, 1988 nr 12, 1989 nr 15, 1990 nr 5, 1991 nr 10, 1992 nr 5, 1993 nr 10, 1994 nr 20, 1995 nr 15 och HighScore 1993 nr 20). Alla nya sidor är kontrollerade mot renderade utsnitt. **43 av 43 hittar alla förväntade sidor, och det finns inga falska positiva bland facits kontrollerade träffar.**
 
-| Sökord | Typ | Förväntad sida | Träffar | Plats | Irrelevanta |
+| Sökord | Typ | Förväntad sida | Träffar | Plats | Falska positiva |
 |---|---|---|---|---|---|
 | får | vanligt | DMZ 1995-05-06 s. 24 | 6202 | 35 | 0 |
 | för | vanligt | DMZ 1989-12 s. 45 | 10296 | 32 | 0 |
@@ -222,11 +224,75 @@ Rå text är 56,8 MB och `searchText` 56,4 MB. Pilotens uppräkning gav 159 MB; 
 
 Platsen i rangordningen är låg för vanliga ord i ett helt arkiv: "Amiga" finns på 7 289 sidor, och den utspärrade sidan i 1995 nr 14 ligger på plats 701. Sidan hittas, men ingen bläddrar dit. Det är en fråga för sökrutan i FAS 9, se förslagen.
 
-I piloten rapporterades inga irrelevanta träffar för denna tokenizer. Mot hela arkivet gav mätningen först 8, som visade sig vara ett fel i mätningen: den räknade understreck som bokstav ("_får", "CD_ROM"), vilket tokenizern inte gör. Mätningen är rättad.
+**Vad kolumnen "Falska positiva" mäter:** antalet träffsidor där sökordet inte står som det stavas i `searchText`. Den kontrollen är maskinell och visar att tokenizern inte blandar ihop ord ("får" med "far"). Den säger inte att varje träff är relevant: de 6 202 sidorna för "får" eller de 7 289 för "Amiga" är inte relevansbedömda, och ett ord som OCR:en har läst fel räknas som en riktig träff. Visuellt kontrollerade är bara de förväntade sidorna i facit.
+
+Mot hela arkivet gav kontrollen först 8 avvikelser. De var ett fel i mätningen: den räknade understreck som bokstav ("_får", "CD_ROM"), vilket tokenizern inte gör. Mätningen är rättad.
 
 ### 3.8 Telefonen
 
-**Inte gjort ännu.** Telefonen var inte ansluten när resten blev klart. Testet är skrivet och bygger: `SearchPilotDeviceTest` kör nio frågor ur facit mot den fullständiga databasen och mäter svarstiden för 16 typiska sökningar, fem varv var (median och max).
+Den fullständiga `search.db` (148,9 MB) lades tillfälligt i `/data/local/tmp/` och kopierades av testet till appens cache. Den söktes med `SearchDb` (BundledSQLiteDriver, SQLite 3.50.1; filen är byggd med 3.45.1). Efteråt togs båda kopiorna bort.
+
+**Facit: 9 av 9 rätt.**
+
+| Fråga | Förväntad sida | På telefonen |
+|---|---|---|
+| högtalare | 1995 nr 14 s. 27 | plats 1; s. 26 med utdraget "Nya [högtalare] är ett bra sätt att få mer inlevelse när du…" |
+| turboköpet | 1995 nr 14 s. 20 | enda träffen |
+| "Commodore 128" | 1986 nr 1 s. 4 | plats 1 |
+| "Decision in the Desert" | 1988 nr 12 s. 19 | plats 1 av 9 |
+| "Anders Limpar" | 1989 nr 15 s. 6 | plats 1 av 3 |
+| "Mikael Roth" | HighScore 1993 nr 17 s. 6 | plats 1 av 2 |
+| starköl | 1988 nr 12 s. 22 | plats 2 av 2 |
+| Visionärer | 1995 nr 15 s. 10 | plats 3 av 3 |
+| terminatorn | HighScore 1993 nr 20 s. 21 | plats 1 av 7 |
+
+Antalet sidor för får, far, här och har (6 202, 445, 6 210 och 9 011) är detsamma som på datorn, och raden i `issues` för 1995 nr 15 stämmer med sidantal, storlek, ETag och SHA-256.
+
+**Svarstider för appens sökfråga** (bm25, textutdrag, högst 50 träffar). Kall är att öppna databasen i en ny anslutning och ställa första frågan. Varm är samma fråga fem gånger till.
+
+| | Median | Max |
+|---|---|---|
+| Kall, 16 typiska sökord | 30 ms | 103 ms ("för") |
+| Varm, 80 sökningar | 29 ms | 96 ms ("för") |
+
+Att öppna databasen tar 0,1–0,2 ms. Kall och varm skiljer sig med några millisekunder. Förbehåll: filen var nyss kopierad och låg troligen kvar i systemets filcache, så mätningen visar inte första sökningen efter en omstart av telefonen. Det gick inte att tömma cachen utan root.
+
+**De dyra fallen:**
+
+| Fråga | Sidor som matchar | Kall | Varm, median | Bara rangordning | Räkna träffar |
+|---|---|---|---|---|---|
+| Amiga | 7 289 | 79 ms | 78 ms | 21 ms | 1 ms |
+| Prefix: amig* | 8 204 | 98 ms | 98 ms | 39 ms | 6 ms |
+| Fras: "Commodore 128" | 168 | 20 ms | 18 ms | 2 ms | 1 ms |
+| OCH: för att | 8 803 | 118 ms | 117 ms | 37 ms | 3 ms |
+| OCH: och det | 8 738 | 129 ms | 124 ms | 38 ms | 3 ms |
+| Prefix: a* (värsta fall) | 11 088 | 405 ms | 400 ms | 342 ms | 97 ms |
+
+"Bara rangordning" är samma fråga utan textutdrag och utan att läsa tabellen `pages`.
+
+**Ingen fråga som appen ställer tar över 1 s.** Den tyngsta är prefixet "a*", som matchar 98 procent av alla sidor, på 0,4 s. Två iakttagelser:
+
+- Textutdragen står för två tredjedelar av tiden i de vanliga fallen (Amiga: 78 ms med utdrag, 21 ms utan).
+- En variant jag prövade som underlag för FAS 9, att ta utdrag i ett andra steg för de tio översta träffarna, tog 960 ms för "a*". Den frågan matchar om hela mängden för att nå tio rader. För övriga frågor tog den 1–55 ms. Ett andra steg ska därför hämta utdragen per rad, inte med en ny MATCH över allt.
+
+**Kopiering:** 148,9 MB från filen utanför appen till appens privata lagring tog 0,8 s (186 MB/s), med synkning till disk. Källan låg på telefonens interna lagring; en fil som väljs i filväljaren läses genom systemets dokumentleverantör och kan gå långsammare.
+
+**Minne under den tyngsta frågan** ("a*" och "Amiga" omväxlande i tio sekunder, 21 varv):
+
+| | Värde |
+|---|---|
+| Processens PSS enligt `dumpsys meminfo`, högst | 55,6 MB |
+| Native heap enligt `dumpsys meminfo`, högst | 12,0 MB |
+| Native heap mätt i processen: före, högst | 6,4 MB, 8,8 MB |
+| PSS mätt i processen: före, högst | 53,8 MB, 54,6 MB |
+
+Sökningen lägger alltså till några megabyte. Databasen läses in sida för sida och hålls inte i minnet.
+
+**Logcat:** inga SQLite- eller FTS-fel från appen, och inga krascher.
+
+**Din data:** testet öppnar aldrig appens databas. Appens process startas dock av testet, och då öppnar appen sin databas som vid en vanlig start. Huvudfilen `dmz-reader.db` och dess logg (`-wal`) har samma storlek och tidsstämpel som före testet. Jag har inte läst innehållet.
+
+**Borttaget:** `/data/local/tmp/dmz-search.db` och `cache/search-pilot.db` finns inte kvar. Appens cache innehåller bara `cover_cache`, `pdf` och `thumbs`.
 
 ## 4. Testresultat
 
@@ -235,7 +301,7 @@ I piloten rapporterades inga irrelevanta träffar för denna tokenizer. Mot hela
 | Python-tester | 170 av 170 |
 | JVM-tester | 320 av 320 |
 | Lint | 0 fel, 6 varningar |
-| Instrumenterat test på telefonen | återstår |
+| Instrumenterat test på telefonen, `SearchPilotDeviceTest` | 5 av 5 |
 
 Ett JVM-test och två Python-tester antog att bara två nummer hade `pageCount` och är uppdaterade. Testindexen i `tools/testdata/` är omgenererade ur det nya inventory.
 
@@ -246,11 +312,13 @@ Ett JVM-test och två Python-tester antog att bara två nummer hade `pageCount` 
 - [x] `pageCount` är infört i inventory för alla nummer som har en PDF
 - [x] storleken är uppmätt och dokumenterad
 - [x] om storleken är problematisk finns ett förslag: 148,9 MB bedöms inte som problematisk; utan `rawText` blir den 91,6 MB
-- [ ] den fullständiga databasen söks med appens motor på telefonen, med uppmätta svarstider
+- [x] den fullständiga databasen söks med appens motor på telefonen, med uppmätta svarstider
 
 ## 6. Kända begränsningar
 
-- **Avstavning i den äldre generationen har kvar en felandel på några procent.** Stickprovet är litet (15), så siffran är osäker. Felen är riktiga bindestreck som försvinner i ovanliga sammansättningar, och läsordningsfel.
+- **Avstavning i den äldre generationen:** 1 fel av 15 granskade i version 2, utan återkommande mönster. Stickprovet är för litet för en säker andel. Felen är riktiga bindestreck som försvinner i ovanliga sammansättningar, och läsordningsfel.
+- **Träffarna för vanliga ord är inte relevansbedömda.** Facit visar att rätt sida hittas och att tokenizern inte blandar ihop ord, inte att alla träffar är meningsfulla.
+- **Svarstiderna är mätta med filen i systemets cache.** Första sökningen efter en omstart av telefonen är inte mätt.
 - **Ord som förblir delade mäts inte** av stickprovet annat än som 9 ofullständiga av 145.
 - **Läsordningen** är kontrollerad på 28 sidor av 11 293.
 - **Ordlistan innehåller OCR-skräp** som förekommer minst två gånger ("xmin", "upspel", "tips1"). Det är därför två av reglerna i version 2 inte litar på den för korta förled och tal.
@@ -264,14 +332,15 @@ Ett JVM-test och två Python-tester antog att bara två nummer hade `pageCount` 
 
 ## 8. Återstår, och förslag inför FAS 9
 
-Återstår i fasen: steg 8 på telefonen, därefter merge och tagg `v0.8-fas8`.
+Ingenting återstår i fasen.
 
 **Förslag inför FAS 9:**
 
-1. **Import av search.db:** samma väg som arkivindexet (filväljare, kopiering till privat lagring, kontroll, byte). Kontrollera `searchSchemaVersion`, att filen går att öppna och att `pages_fts` svarar. 149 MB tar tid att kopiera, så visa förlopp.
+1. **Import av search.db:** samma väg som arkivindexet (filväljare, kopiering till privat lagring, kontroll, byte). Kontrollera `searchSchemaVersion`, att filen går att öppna och att `pages_fts` svarar. Kopieringen tog 0,8 s från intern lagring; visa ändå förlopp, eftersom filväljaren kan ge en långsammare källa.
 2. **Frågelagret:** sätt varje sökord inom citattecken, tolka flera ord som OCH, och låt citattecken från användaren ge frassökning. Sök "C64" också som "C-64" och "C 64", och omvänt.
-3. **Rangordning och urval:** vanliga ord ger tusentals sidor. Gruppera träffarna per nummer, visa antal träffar per nummer och låt filtren från metadata-sökningen (år, publikation, favoriter, nedladdade) gälla även här.
-4. **Sidantal:** nästa appbygge får inventory 2026-10-06-005, och då blir progress rätt även för oöppnade nummer. Bestäm om appen ska byggas om redan i början av FAS 9.
-5. **Bytt PDF:** jämför `issues.ocrPdfSize` och `ocrPdfEtag` med aktivt inventory och visa "Sökindexet gäller en äldre version av filen" på numret.
-6. **`rawText`:** om importen eller lagringen blir tung på telefonen finns varianten på 91,6 MB färdig att bygga med en flagga.
-7. **HQ (FAS 11):** 1986 nr 4 och 1993 nr 3 behöver en egen sidmappning.
+3. **Textutdrag i två steg:** rangordna först och hämta utdrag bara för de träffar som syns, rad för rad. Det sänker de vanliga frågorna från cirka 80–125 ms till 20–40 ms. Med nuvarande fråga är allt redan under 0,13 s, så det är en förbättring och inget krav. Sätt en nedre gräns för prefixsökning (minst två eller tre tecken), eftersom "a*" tar 0,4 s.
+4. **Rangordning och urval:** vanliga ord ger tusentals sidor. Gruppera träffarna per nummer, visa antal träffar per nummer och låt filtren från metadata-sökningen (år, publikation, favoriter, nedladdade) gälla även här.
+5. **Sidantal:** nästa appbygge får inventory 2026-10-06-005, och då blir progress rätt även för oöppnade nummer. Bestäm om appen ska byggas om redan i början av FAS 9.
+6. **Bytt PDF:** jämför `issues.ocrPdfSize` och `ocrPdfEtag` med aktivt inventory och visa "Sökindexet gäller en äldre version av filen" på numret.
+7. **`rawText`:** om importen eller lagringen blir tung på telefonen finns varianten på 91,6 MB färdig att bygga med en flagga.
+8. **HQ (FAS 11):** 1986 nr 4 och 1993 nr 3 behöver en egen sidmappning.
