@@ -69,6 +69,8 @@ class SearchIndexManager(
     private val freeBytes: () -> Long = { directory.usableSpace },
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val now: () -> Long = System::currentTimeMillis,
+    /** Sant om sökorden får skrivas i loggen. Bara i debug-bygget; annars loggas bara svarstiden. */
+    private val logQueries: Boolean = false,
     private val log: (String) -> Unit = {},
 ) {
     private val queries = dispatcher.limitedParallelism(1)
@@ -294,7 +296,7 @@ class SearchIndexManager(
         val started = System.nanoTime()
         db?.rank(match) { context.isActive }?.also { rows ->
             context.ensureActive()
-            log("Sökning %s: %d sidor på %.1f ms".format(match, rows.size, (System.nanoTime() - started) / 1e6))
+            log("Sökning%s: %d sidor på %.1f ms".format(if (logQueries) " $match" else "", rows.size, (System.nanoTime() - started) / 1e6))
         }
     }
 

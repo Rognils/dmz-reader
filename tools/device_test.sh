@@ -97,7 +97,34 @@ run -e dmzTestRoot restart -e dmzKeepRoot true -e dmzPhase 2 -e class "$CLASS#re
 # En sista körning utan dmzKeepRoot tar bort katalogen.
 run -e dmzTestRoot restart -e class "$PACKAGE.BackupVersionDeviceTest" >/dev/null || status=1
 
-for extra in "${DMZ_EXTRA_RUNS[@]:-}"; do [ -n "$extra" ] && { echo "Extra: $extra"; eval "$extra" || status=1; }; done
+echo "Lässession vid tvångsstopp…"
+STATS=$PACKAGE.StatisticsDeviceTest
+adb logcat -c
+adb shell am instrument -w -e dmzTestRoot forcestop -e dmzKeepRoot true -e dmzPhase 1 \
+    -e class "$STATS#forceStopPhase1Read" "$RUNNER" >/dev/null 2>&1 &
+phase1=$!
+started=""
+for _ in $(seq 1 240); do
+    started=$(adb logcat -d -s DmzStatistics | grep -c "LÄSER sidbyte" || true)
+    [ "$started" -ge 1 ] && break
+    sleep 1
+done
+if [ "${started:-0}" -ge 1 ]; then
+    # Läsningen började 18 s före sidbytet. Läs 12 s till och stoppa sedan appen mitt i läsningen.
+    sleep 12
+    adb shell am force-stop "$PACKAGE"
+    wait $phase1 2>/dev/null || true
+    echo "Appen är tvångsstoppad efter cirka 30 s läsning."
+    run -e dmzTestRoot forcestop -e dmzKeepRoot true -e dmzPhase 2 -e dmzReadSeconds 30 \
+        -e class "$STATS#forceStopPhase2SessionSurvived" || status=1
+    adb logcat -d -s DmzStatistics | grep -o "TVÅNGSSTOPP.*" || true
+else
+    echo "Läsaren öppnades aldrig i den första delen." >&2
+    adb shell am force-stop "$PACKAGE"
+    status=1
+fi
+run -e dmzTestRoot forcestop -e class "$PACKAGE.BackupVersionDeviceTest" >/dev/null || status=1
+
 
 adb shell "rm -rf $SEEDS"
 echo "Fingeravtryck efter…"

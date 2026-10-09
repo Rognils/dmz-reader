@@ -47,13 +47,39 @@ private class FakeUserStateDao : IssueUserStateDao {
 
 private class FakeSessionDao : ReadingSessionDao {
     val sessions = ArrayList<ReadingSession>()
+    private var nextId = 1L
+
+    /** Varje skrivning, i ordning: "insert 1", "update 1", "delete 1". */
+    val log = ArrayList<String>()
 
     override suspend fun insert(session: ReadingSession): Long {
-        sessions += session
-        return sessions.size.toLong()
+        val id = nextId++
+        sessions += session.copy(id = id)
+        log += "insert $id"
+        return id
+    }
+
+    override suspend fun update(session: ReadingSession): Int {
+        val index = sessions.indexOfFirst { it.id == session.id }
+        if (index < 0) return 0
+        sessions[index] = session
+        log += "update ${session.id}"
+        return 1
+    }
+
+    override suspend fun delete(id: Long): Int {
+        log += "delete $id"
+        return if (sessions.removeAll { it.id == id }) 1 else 0
+    }
+
+    override suspend fun deleteShorterThan(minSeconds: Int): Int {
+        val before = sessions.size
+        sessions.removeAll { it.durationSeconds < minSeconds }
+        return before - sessions.size
     }
 
     override suspend fun getAll(): List<ReadingSession> = sessions
+    override fun observeAll(): Flow<List<ReadingSession>> = MutableStateFlow(sessions.toList())
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -187,16 +213,71 @@ class ReadingRecorderTest {
         assertEquals(SeenPages.of(1, 2, 3), SeenPages.decode(userStates.rows.getValue(issueId).seenPages))
     }
 
+    private fun session(seconds: Int, endPage: Int = 6) = ReadingSession(
+        issueId = issueId, startedAt = 1_000, endedAt = 1_000 + seconds * 1000L, startPage = 1, endPage = endPage,
+        pagesViewed = endPage, durationSeconds = seconds,
+    )
+
     @Test
-    fun `sessions are saved through the same queue`() = runTest {
+    fun `a running session is written to one row, first as an insert and then as updates`() = runTest {
         val recorder = recorder()
-        val session = ReadingSession(
-            issueId = issueId, startedAt = 1_000, endedAt = 61_000, startPage = 1, endPage = 6,
-            pagesViewed = 6, durationSeconds = 60,
-        )
-        recorder.session(session)
+        recorder.session(session(0, endPage = 1))
+        recorder.session(session(30, endPage = 3))
+        recorder.session(session(60))
         recorder.awaitWritten()
-        assertEquals(listOf(session), sessions.sessions)
+
+        assertEquals(listOf("insert 1", "update 1", "update 1"), sessions.log)
+        assertEquals(listOf(session(60).copy(id = 1)), sessions.sessions)
+    }
+
+    @Test
+    fun `the last written state survives when the app dies`() = runTest {
+        // Appen dör efter den andra skrivningen: ingen avslutande skrivning kommer.
+        val recorder = recorder()
+        recorder.session(session(0, endPage = 1))
+        recorder.session(session(30, endPage = 3))
+        recorder.awaitWritten()
+
+        val saved = sessions.sessions.single()
+        assertEquals(30, saved.durationSeconds)
+        assertEquals(3, saved.endPage)
+    }
+
+    @Test
+    fun `a session that ends with too little active time is removed`() = runTest {
+        val recorder = recorder()
+        recorder.session(session(0, endPage = 1))
+        recorder.session(session(4), final = true)
+        recorder.awaitWritten()
+
+        assertEquals(listOf("insert 1", "update 1", "delete 1"), sessions.log)
+        assertTrue(sessions.sessions.isEmpty())
+    }
+
+    @Test
+    fun `a finished session is kept and the next session gets a new row`() = runTest {
+        val recorder = recorder()
+        recorder.session(session(0, endPage = 1))
+        recorder.session(session(42), final = true)
+        recorder.session(session(0, endPage = 2).copy(startedAt = 900_000))
+        recorder.session(session(10).copy(startedAt = 900_000), final = true)
+        recorder.awaitWritten()
+
+        assertEquals(listOf("insert 1", "update 1", "insert 2", "update 2"), sessions.log)
+        assertEquals(listOf(42, 10), sessions.sessions.map { it.durationSeconds })
+        assertEquals(listOf(1L, 2L), sessions.sessions.map { it.id })
+    }
+
+    @Test
+    fun `short sessions left behind are cleaned up at start`() = runTest {
+        val repository = ReadingRepository(userStates, sessions) { clock }
+        // Kvar efter en krasch strax efter att läsaren öppnades, och två riktiga sessioner.
+        sessions.sessions += listOf(session(0).copy(id = 7), session(4).copy(id = 8), session(5).copy(id = 9), session(61).copy(id = 10))
+
+        assertEquals(2, repository.removeShortSessions())
+
+        assertEquals(listOf(9L, 10L), sessions.sessions.map { it.id })
+        assertEquals(0, repository.removeShortSessions())
     }
 
     @Test

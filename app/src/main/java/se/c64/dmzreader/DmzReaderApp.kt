@@ -20,5 +20,6 @@ open class DmzReaderApp : Application() {
         container.loadBundledInventory()
         container.reconcileDownloads()
         container.loadSearchIndex()
+        container.removeShortSessions()
     }
 }

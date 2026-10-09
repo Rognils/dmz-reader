@@ -112,6 +112,26 @@ class AppContainer(private val context: Context) {
         }
     }
 
+    /** Inaktivitetsgränsen för lästid (ADR 0021). De instrumenterade testerna kortar den. */
+    @Volatile
+    var sessionIdleLimitMillis: Long = se.c64.dmzreader.domain.SESSION_IDLE_LIMIT_MILLIS
+
+    /** Så ofta en pågående session skrivs. De instrumenterade testerna kortar den. */
+    @Volatile
+    var sessionSaveIntervalMillis: Long = se.c64.dmzreader.domain.SESSION_SAVE_INTERVAL_MILLIS
+
+    /** Tar bort sessioner som blev kvar med för lite aktiv tid, till exempel efter en krasch. Körs när appen startar. */
+    fun removeShortSessions() {
+        scope.launch {
+            try {
+                val removed = readingRepository.removeShortSessions()
+                if (removed > 0) Log.i("DmzReading", "$removed korta lässessioner togs bort")
+            } catch (e: Exception) {
+                Log.w("DmzReading", "Korta sessioner kunde inte städas", e)
+            }
+        }
+    }
+
     /** Stämmer av nedladdningarnas status mot filsystemet. Körs när appen startar. */
     fun reconcileDownloads() {
         scope.launch { offlineRepository.reconcile() }
@@ -191,7 +211,11 @@ class AppContainer(private val context: Context) {
      * är skilt från appens databas.
      */
     val searchIndex: SearchIndexManager by lazy {
-        SearchIndexManager(directory = File(context.filesDir, "data"), log = { Log.i("DmzSearch", it) })
+        SearchIndexManager(
+            directory = File(context.filesDir, "data"),
+            logQueries = BuildConfig.DEBUG,
+            log = { Log.i("DmzSearch", it) },
+        )
     }
 
     /** Öppnar det importerade sökindexet, om det finns. Körs när appen startar. */

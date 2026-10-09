@@ -1,0 +1,23 @@
+== databasfilerna på telefonen (SHA-256, storlek)
+c2511288fce8d1116f7c2091fbaade0cdb674e376d7e83e8f52eb7e56c458bcc  dmz-reader.db
+6bf4ec7997a77c97f9dd25c73993a5a90865dcf649336c3a179ee8aa183d7aa7  dmz-reader.db-wal
+155648 dmz-reader.db
+4124152 dmz-reader.db-wal
+== dmz-reader.db efter checkpoint, och radantal
+47e75d79e1cf58be76100460bba0b1ee72a9b281f3f340a9e84082ad63d18805 dmz-reader.db (efter checkpoint)
+     0  Bookmark
+   185  Issue
+     3  IssueLocalState
+     2  IssueUserState
+     2  ReadingSession
+     1  room_master_table
+     1  sqlite_sequence
+== filer (SHA-256, storlek, ändrad, namn)
+01305ec8e90b5fffcbbb9f082eef26f7d1fb2bcbcce96eaf5f2879dca0a03c46 15105472 2026-10-09 19:25:57 cache/pdf/datormagazin-1986-01.pdf
+b7a62b69ff76d74d6e2039a9d96fcab9e83afc50df015c33011b063e5ee43b84 24474598 2026-10-09 00:19:09 cache/pdf/datormagazin-1988-01.pdf
+feaff108105dfd9ae424c7260b8fa74fd9a428114f08f51e99e421ad57cf6c1b 25481916 2026-10-09 19:37:09 cache/pdf/datormagazin-1991-15.pdf
+files/issues: finns inte
+fd2c4f406d47f6ba801362723400cfe86060fd10971907c1aa92a2fd4ee3a9b1 57344 2026-10-09 19:18:22 files/data/fts_test.db
+f150bd8aded727ee5938309f61d1f42d4124a8067a9405f9357be2cff0bd6fb7 148877312 2026-10-09 19:04:29 files/data/search.db
+f8e53656895723d0d0f0eb9c928a436ac0e5029b19c3f5866c4fbcd3e196076d 203 2026-10-09 19:18:17 files/datastore/settings.preferences_pb
+== testkataloger (ska vara tomt)

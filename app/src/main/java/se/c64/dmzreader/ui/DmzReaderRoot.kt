@@ -1,5 +1,6 @@
 package se.c64.dmzreader.ui
 
+import se.c64.dmzreader.ui.statistics.StatisticsViewModel
 import android.net.Uri
 import se.c64.dmzreader.ui.search.IssueSearchSection
 import se.c64.dmzreader.ui.search.IssueSearchViewModel
@@ -270,6 +271,8 @@ fun DmzReaderRoot(container: AppContainer) {
                                 container.thumbnailRoot,
                                 container.applicationScope,
                                 requestedPage = page,
+                                sessionIdleLimitMillis = container.sessionIdleLimitMillis,
+                                sessionSaveIntervalMillis = container.sessionSaveIntervalMillis,
                             )
                         }
                     },
@@ -317,7 +320,24 @@ fun DmzReaderRoot(container: AppContainer) {
                     onReadPage = { id, pageNumber -> navController.navigate(Routes.reader(id, pageNumber)) },
                 )
             }
-            composable(Routes.STATISTICS) { StatisticsScreen() }
+            composable(Routes.STATISTICS) {
+                val viewModel: StatisticsViewModel = viewModel(
+                    factory = viewModelFactory {
+                        initializer {
+                            StatisticsViewModel(
+                                container.libraryRepository,
+                                container.bookmarkRepository,
+                                container.readingRepository,
+                                container.libraryPreferences,
+                            )
+                        }
+                    },
+                )
+                StatisticsScreen(
+                    viewModel = viewModel,
+                    onOpenYear = { publicationId, year -> navController.navigate(Routes.year(publicationId, year)) },
+                )
+            }
             composable(Routes.SETTINGS) {
                 val viewModel: SettingsViewModel = viewModel(
                     factory = viewModelFactory {

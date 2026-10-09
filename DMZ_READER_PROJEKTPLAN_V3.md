@@ -342,10 +342,14 @@ ReadingSession
 ├── startPage        Int
 ├── endPage          Int
 ├── pagesViewed      Int, antal unika sidor visade i sessionen
-└── durationSeconds  Int
+└── durationSeconds  Int, aktiv lästid
 ```
 
-En session börjar när läsaren öppnas och slutar när den stängs eller appen går i bakgrunden. Sessioner kortare än 5 sekunder sparas inte.
+En session skapas när läsaren öppnas. Raden uppdateras var 30:e sekund, två sekunder efter ett sidbyte, när appen går i bakgrunden och när läsaren stängs. Dör appen gäller den senaste skrivningen, och högst 30 sekunder går förlorade.
+
+`durationSeconds` är **aktiv tid**: klockan går bara när läsaren är i förgrunden och det har förekommit en interaktion (sidbyte, tryck, zoom eller panorering) under de senaste 5 minuterna. `endedAt` är den sista stunden som räknades som aktiv.
+
+Rotation avslutar inte sessionen. Kommer läsaren tillbaka från bakgrunden inom 5 minuter fortsätter samma session, annars börjar en ny. En session som slutar med under 5 sekunder aktiv tid tas bort, och kvarlämnade korta sessioner städas när appen startar.
 
 ## C7. Sidnumrering
 
@@ -760,15 +764,18 @@ Beslutet dokumenteras i ADR 0006.
 
 ## E12. Statistik (FAS 10)
 
-- antal lästa, påbörjade och olästa nummer
-- antal lästa sidor (summa av `pagesViewed`)
-- total lästid
-- progress per årgång (stapeldiagram)
-- mest lästa årgång
-- antal favoriter och bokmärken
-- lässtreak eller aktivitet per vecka (valfritt)
+Definitioner (ADR 0021):
 
-All statistik beräknas från lokal data.
+- **Lästa sidor:** summan av antalet satta bitar i `seenPages`, för all användardata.
+- **Lästid:** summan av `durationSeconds` i `ReadingSession` (aktiv tid enligt C6).
+- **Lästa, påbörjade och olästa nummer:** lässtatus enligt C10, med `readStatusOverride`. Användardata för nummer som saknas i katalogen (D6) räknas med bland lästa och påbörjade.
+- **Årgångsprogress:** andel lästa nummer och andel lästa sidor per år och publikation. Nummer med okänt sidantal ingår inte i sidsumman.
+- **Aktivitet:** lästid per vecka (måndag–söndag, lokal tid) för de senaste 12 veckorna. En session räknas till den vecka den började.
+- **Mest lästa årgång:** den årgång där flest sidor är lästa.
+
+Fliken visar nyckeltal (lästa nummer, påbörjade, lästa sidor, total lästid), aktivitet per vecka som stapeldiagram, en rad per årgång med stapel för andelen lästa sidor och "X av Y nummer lästa", samt mest lästa årgång, antal favoriter och antal bokmärken. Staplarna ritas med Compose Canvas, utan diagrambibliotek. Sökningar räknas inte.
+
+All statistik beräknas från lokal data. Ingenting lagras.
 
 ---
 
@@ -1220,7 +1227,9 @@ Fasen är delad i två. **8A** prövar hela kedjan på ett urval och ger mätdat
 
 **Bygg:** statistikvyn enligt E12.
 
-**Att utreda:** en session som pågår när appen tvångsstoppas eller kraschar går förlorad (FAS 4, ADR 0018). Löpande sparning av pågående sessioner utreds här.
+**Lässessioner:** en session som pågår när appen tvångsstoppas eller kraschar gick tidigare förlorad (FAS 4, ADR 0018). Sessionerna sparas därför löpande, och lästiden är aktiv tid (C6, ADR 0021).
+
+**Tester:** de instrumenterade testerna körs mot isolerad lagring och rör aldrig användarens data (G6).
 
 **Klart när:**
 
@@ -1389,6 +1398,10 @@ dmz-reader/
 | Import | fel schema avvisas; atomiskt byte; återgång till tidigare fil vid fel |
 | Sökning | rätt nummer, sida och utdrag; versionsnotis; trasig fil avvisas |
 
+| Statistik | definitionerna mot kontrollerade testdata; tomt läge; aktiv lästid och tvångsstopp |
+
+**De instrumenterade testerna rör aldrig användarens data.** De körs med testköraren `IsolatedTestRunner`, som ger appen en egen databas, egna inställningar, eget `filesDir` och eget `cacheDir` för körningen. `tools/device_test.sh` kör hela sviten och jämför ett fingeravtryck av användarens data före och efter.
+
 Domänlogik (progress, status, effektivt sidantal, sammanslagning vid backup) testas med enhetstester. Läsaren testas manuellt på C64:s telefon enligt en checklista i fasrapporten.
 
 ## G7. Prestandakrav
@@ -1550,3 +1563,7 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-09 | FAS 9: E10: frågelagret (citattecken kring varje ord, OCH mellan ord, prefix med stjärna och minst tre tecken, "C64"/"C-64"/"C 64" som alternativ), sökning medan man skriver och fråga i två steg (rangordning, därefter textutdrag per synlig rad) | 0020 |
 | 2026-10-09 | FAS 9: E10: träffarna grupperas per nummer, med sorteringen Relevans eller Äldst först och filtren publikation, år, favoriter och nedladdade. Läsaren har en träffrad som hoppar mellan träffarna i numret. | 0020 |
 | 2026-10-09 | FAS 9: D5: search.db importeras till `filesDir/data/search.db` med kontroll och atomiskt byte, och kan tas bort i inställningarna | 0020 |
+| 2026-10-09 | Före FAS 10: G6: de instrumenterade testerna körs med en egen testkörare mot isolerad databas, inställningar, filesDir och cacheDir. `tools/device_test.sh` kör hela sviten och jämför ett fingeravtryck av användarens data före och efter. | 0021 |
+| 2026-10-09 | FAS 10: C6: sessioner sparas löpande (var 30:e sekund, efter sidbyte, i bakgrunden och vid stängning). `durationSeconds` är aktiv tid med 5 minuters inaktivitetsgräns. Tabellen är oförändrad, så ingen migrering behövdes. | 0021 |
+| 2026-10-09 | FAS 10: E12: definitioner av lästa sidor, lästid, lässtatus, årgångsprogress, aktivitet per vecka och mest lästa årgång. Lästa sidor räknas ur `seenPages`, inte ur `pagesViewed`. | 0021 |
+| 2026-10-09 | FAS 10: E10: sökord skrivs i loggen bara i debug-bygget | 0020 |

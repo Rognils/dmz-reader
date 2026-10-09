@@ -225,6 +225,19 @@ interface ReadingSessionDao {
     @Insert
     suspend fun insert(session: ReadingSession): Long
 
+    @Update
+    suspend fun update(session: ReadingSession): Int
+
+    @Query("DELETE FROM ReadingSession WHERE id = :id")
+    suspend fun delete(id: Long): Int
+
+    /** Tar bort sessioner med för lite aktiv tid, till exempel de som lämnades av en krasch strax efter start. */
+    @Query("DELETE FROM ReadingSession WHERE durationSeconds < :minSeconds")
+    suspend fun deleteShorterThan(minSeconds: Int): Int
+
     @Query("SELECT * FROM ReadingSession ORDER BY id")
     suspend fun getAll(): List<ReadingSession>
+
+    @Query("SELECT * FROM ReadingSession ORDER BY id")
+    fun observeAll(): Flow<List<ReadingSession>>
 }
