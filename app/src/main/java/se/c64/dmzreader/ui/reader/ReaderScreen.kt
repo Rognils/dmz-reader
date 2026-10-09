@@ -256,7 +256,9 @@ private fun ReaderScreen(
     search: IssueSearchViewModel,
     onClose: () -> Unit,
 ) {
-    val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    // I HQ-läge visas en sida i taget, även när telefonen ligger ned (planens FAS 11).
+    val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE && !state.hqMode
+    val hqProgress by viewModel.hqProgress.collectAsStateWithLifecycle()
     var controlsVisible by rememberSaveable { mutableStateOf(false) }
     val searchState by search.state.collectAsStateWithLifecycle()
     var searchOpen by rememberSaveable { mutableStateOf(false) }
@@ -353,15 +355,34 @@ private fun ReaderScreen(
                 modifier = Modifier.fillMaxSize(),
                 key = { screens[it].first() },
             ) { index ->
+                // En sida vars skanning är hämtad visas ur skanningen. Alla andra visas ur PDF:en.
+                val hqImage = (state.hqPages[screens[index].singleOrNull()] as? HqPageState.Ready)?.image
+                    .takeIf { state.hqMode }
+                val pdfSource = remember(state.document) {
+                    PageSource(state.document, state.document::pageSize, state.document::renderRegion)
+                }
+                val source = remember(hqImage, pdfSource) {
+                    if (hqImage == null) {
+                        pdfSource
+                    } else {
+                        // Skanningen har fler pixlar än PDF-sidan: utsnittet renderas ända upp till högsta zoom.
+                        PageSource(hqImage, { hqImage.size }, hqImage::renderRegion, maxRenderZoom = MAX_ZOOM)
+                    }
+                }
                 ZoomablePages(
                     pages = screens[index],
-                    document = state.document,
+                    source = source,
                     isCurrent = pagerState.settledPage == index,
                     acquirePage = { page, width, height, preview ->
-                        viewModel.acquirePageBitmap(state.document, page, width, height, preview)
+                        if (hqImage != null) {
+                            viewModel.acquireHqBitmap(hqImage, width, height)
+                        } else {
+                            viewModel.acquirePageBitmap(state.document, page, width, height, preview)
+                        }
                     },
                     releasePage = { page, width, height, bitmap ->
-                        viewModel.pageBitmaps.release(viewModel.pageKey(page, width, height), bitmap)
+                        val key = if (hqImage != null) viewModel.hqKey(hqImage, width, height) else viewModel.pageKey(page, width, height)
+                        viewModel.pageBitmaps.release(key, bitmap)
                     },
                     recycleLater = viewModel.pageBitmaps::recycleLater,
                     onPageShown = viewModel::onPageShown,
@@ -394,6 +415,9 @@ private fun ReaderScreen(
                     bookmarkPage = state.position.page,
                     onToggleBookmark = viewModel::toggleBookmark,
                     onSearch = { searchOpen = true }.takeIf { searchState.indexAvailable && searchState.inIndex },
+                    hqSupported = state.hqSupported,
+                    hqMode = state.hqMode,
+                    onToggleHq = viewModel::toggleHq,
                     onClose = onClose,
                 )
             }
@@ -407,6 +431,22 @@ private fun ReaderScreen(
                     onClose = search::closeBar,
                     modifier = Modifier.windowInsetsPadding(if (controlsVisible) WindowInsets(0) else WindowInsets.displayCutout),
                 )
+            }
+            // HQ-raden: förlopp, "HQ" när skanningen visas, eller varför PDF-sidan visas i stället.
+            if (state.hqMode) {
+                val hqState = state.hqPages[state.position.page]
+                hqStatusText(hqState, hqProgress)?.let { text ->
+                    HqStatusBar(
+                        text = text,
+                        fraction = hqProgress?.fraction.takeIf { hqState is HqPageState.Loading },
+                        loading = hqState is HqPageState.Loading,
+                        failed = hqState is HqPageState.Failed,
+                        onRetry = viewModel::retryHq,
+                        modifier = Modifier.windowInsetsPadding(
+                            if (controlsVisible || searchState.barVisible) WindowInsets(0) else WindowInsets.displayCutout,
+                        ),
+                    )
+                }
             }
         }
         AnimatedVisibility(
@@ -495,6 +535,9 @@ private fun ReaderTopBar(
     onToggleBookmark: () -> Unit,
     /** null när numret inte går att söka i. Då visas ingen sökknapp. */
     onSearch: (() -> Unit)?,
+    hqSupported: Boolean,
+    hqMode: Boolean,
+    onToggleHq: () -> Unit,
     onClose: () -> Unit,
 ) {
     Row(
@@ -546,9 +589,74 @@ private fun ReaderTopBar(
         ) {
             StarIcon(filled = bookmarked, tint = if (bookmarked) DmzColors.Accent else DmzColors.TextPrimary)
         }
-        // HQ kommer i FAS 11. Knappen visar var den hamnar.
-        TextButton(onClick = {}, enabled = false, modifier = Modifier.heightIn(min = 48.dp)) {
-            Text("HQ", color = DmzColors.Label.copy(alpha = 0.5f), style = MonoStyles.Data)
+        // HQ-läget för det öppna numret: sidan som visas hämtas som originalskanning.
+        TextButton(
+            onClick = onToggleHq,
+            enabled = hqSupported,
+            modifier = Modifier.heightIn(min = 48.dp).testTag("hq-toggle").semantics {
+                contentDescription = when {
+                    !hqSupported -> "HQ finns inte för det här numret"
+                    hqMode -> "Stäng av HQ-läget"
+                    else -> "Slå på HQ-läget"
+                }
+            },
+        ) {
+            Text(
+                "HQ",
+                color = when {
+                    !hqSupported -> DmzColors.Label.copy(alpha = 0.5f)
+                    hqMode -> DmzColors.Accent
+                    else -> DmzColors.TextPrimary
+                },
+                style = MonoStyles.Data,
+            )
+        }
+    }
+}
+
+/** Raden under toppraden i HQ-läge. Trycket går igenom till sidan, utom på "Försök igen". */
+@Composable
+private fun HqStatusBar(
+    text: String,
+    fraction: Float?,
+    loading: Boolean,
+    failed: Boolean,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier.fillMaxWidth().background(ControlsBackground).testTag("hq-status")) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = if (failed) 2.dp else 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = text,
+                style = if (failed) MaterialTheme.typography.bodyMedium else MonoStyles.DataSmall,
+                color = if (failed) DmzColors.Failure else DmzColors.TextPrimary,
+                modifier = Modifier.weight(1f).testTag("hq-status-text"),
+            )
+            if (failed) {
+                TextButton(onClick = onRetry, modifier = Modifier.heightIn(min = 48.dp).testTag("hq-retry")) {
+                    Text("Försök igen", color = DmzColors.Accent, style = MaterialTheme.typography.labelLarge)
+                }
+            }
+        }
+        if (loading) {
+            if (fraction != null) {
+                LinearProgressIndicator(
+                    progress = { fraction },
+                    modifier = Modifier.fillMaxWidth().height(3.dp).testTag("hq-progress"),
+                    color = DmzColors.Accent,
+                    trackColor = DmzColors.BorderStrong,
+                    drawStopIndicator = {},
+                )
+            } else {
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth().height(3.dp).testTag("hq-progress"),
+                    color = DmzColors.Accent,
+                    trackColor = DmzColors.BorderStrong,
+                )
+            }
         }
     }
 }

@@ -22,6 +22,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import se.c64.dmzreader.data.db.Bookmark
 import se.c64.dmzreader.data.db.IssueEntity
+import se.c64.dmzreader.data.hq.HqRepository
+import se.c64.dmzreader.data.hq.HqResult
+import se.c64.dmzreader.data.hq.ScanImage
+import se.c64.dmzreader.domain.HQ_PAGE_UNAVAILABLE
+import se.c64.dmzreader.domain.HqIssueInfo
+import se.c64.dmzreader.domain.downloadProgressText
+import se.c64.dmzreader.domain.hqScanFor
+import se.c64.dmzreader.domain.hqSupported
 import se.c64.dmzreader.data.pdf.DownloadProgress
 import se.c64.dmzreader.data.pdf.DownloadResult
 import se.c64.dmzreader.data.pdf.PdfDocument
@@ -69,12 +77,41 @@ sealed interface ReaderUiState {
         val pagesRead: Int = 0,
         /** Sidor i numret som har bokmärke. */
         val bookmarkedPages: Set<Int> = emptySet(),
+        /** Sant om numret har originalskanningar att hämta. HQ-knappen är avstängd annars. */
+        val hqSupported: Boolean = false,
+        /** HQ-läget för det öppna numret. I HQ-läge visas en sida i taget, även liggande. */
+        val hqMode: Boolean = false,
+        /** Läget för de sidor som har visats i HQ-läge. */
+        val hqPages: Map<Int, HqPageState> = emptyMap(),
     ) : ReaderUiState {
         val pageCount: Int get() = document.pageCount
 
         /** Sant om ankarsidan har ett bokmärke: då är stjärnan fylld. */
         val pageIsBookmarked: Boolean get() = position.page in bookmarkedPages
     }
+}
+
+/** Läget för HQ på en sida (planens FAS 11). I alla lägen utom [Ready] visas PDF-sidan. */
+sealed interface HqPageState {
+    /** Skanningen hämtas. Förloppet finns i ReaderViewModel.hqProgress. */
+    data object Loading : HqPageState
+
+    data class Ready(val image: ScanImage) : HqPageState
+
+    /** Sidan har ingen skanning med säker motsvarighet. */
+    data object Unavailable : HqPageState
+
+    /** Hämtningen misslyckades. [message] visas, och användaren kan försöka igen. */
+    data class Failed(val message: String) : HqPageState
+}
+
+/** Texten i HQ-raden, eller null när den inte ska visas. */
+fun hqStatusText(state: HqPageState?, progress: DownloadProgress?): String? = when (state) {
+    null -> null
+    is HqPageState.Loading -> if (progress == null) "HQ · ansluter …" else "HQ · hämtar " + downloadProgressText(progress, null)
+    is HqPageState.Ready -> "HQ"
+    is HqPageState.Unavailable -> HQ_PAGE_UNAVAILABLE
+    is HqPageState.Failed -> state.message
 }
 
 /** Något läsaren vill berätta med en snackbar. */
@@ -112,6 +149,7 @@ class ReaderViewModel(
     private val readingRepository: ReadingRepository,
     private val offlineRepository: OfflineRepository,
     private val bookmarkRepository: BookmarkRepository,
+    private val hqRepository: HqRepository,
     private val thumbnailRoot: File,
     /** Lever längre än läsaren, så att skrivningar vid stängning hinner bli klara. */
     writeScope: CoroutineScope,
@@ -155,6 +193,13 @@ class ReaderViewModel(
     val messages: Flow<ReaderMessage> = _messages.receiveAsFlow()
 
     private var bookmarkedPages: Set<Int> = emptySet()
+
+    private var hqJob: Job? = null
+    private var hqLoadingPage: Int? = null
+    private val _hqProgress = MutableStateFlow<DownloadProgress?>(null)
+
+    /** Förloppet för HQ-sidan som hämtas just nu. */
+    val hqProgress: StateFlow<DownloadProgress?> = _hqProgress
 
     private var downloadJob: Job? = null
     private var document: PdfDocument? = null
@@ -260,6 +305,7 @@ class ReaderViewModel(
             canShiftSpread = issue.spreadOffset == null,
             pagesRead = seen.countUpTo(opened.pageCount),
             bookmarkedPages = bookmarkedPages,
+            hqSupported = hqSupported(issue.hqInfo()),
         )
         startSessionIfReading()
         updateReadTimer()
@@ -288,7 +334,117 @@ class ReaderViewModel(
             anchorChanged(position.page)
         }
         updateReadTimer()
+        // I HQ-läge hämtas bara sidan som visas, och först när den visas. Ingen förhandshämtning.
+        if (current.hqMode) loadHq(position.page)
     }
+
+    /** HQ-knappen: slår på eller av HQ-läget för det öppna numret. */
+    fun toggleHq() {
+        val current = _state.value as? ReaderUiState.Reading ?: return
+        if (!current.hqSupported) return
+        session.interaction(SystemClock.elapsedRealtime())
+        if (current.hqMode) {
+            stopHq()
+        } else {
+            _state.value = current.copy(hqMode = true)
+            loadHq(current.position.page)
+        }
+    }
+
+    /** Nytt försök för sidan som visas, efter ett fel. */
+    fun retryHq() {
+        val current = _state.value as? ReaderUiState.Reading ?: return
+        if (!current.hqMode) return
+        _state.value = current.copy(hqPages = current.hqPages - current.position.page)
+        loadHq(current.position.page)
+    }
+
+    private fun stopHq() {
+        hqJob?.cancel()
+        hqLoadingPage = null
+        _hqProgress.value = null
+        val current = _state.value as? ReaderUiState.Reading ?: return
+        _state.value = current.copy(hqMode = false, hqPages = emptyMap())
+        current.hqPages.values.forEach { (it as? HqPageState.Ready)?.image?.close() }
+    }
+
+    private fun setHq(page: Int, pageState: HqPageState) {
+        val current = _state.value as? ReaderUiState.Reading ?: return
+        if (!current.hqMode) return
+        // En sida vars hämtning avbröts ska inte stå kvar som "hämtas".
+        var pages = current.hqPages.filterValues { it !is HqPageState.Loading } + (page to pageState)
+        // Bara ett fåtal skanningar hålls öppna. De som ligger längst från sidan som visas stängs.
+        val ready = pages.filterValues { it is HqPageState.Ready }.keys
+        if (ready.size > HQ_OPEN_PAGES) {
+            val evicted = ready.sortedByDescending { kotlin.math.abs(it - page) }.take(ready.size - HQ_OPEN_PAGES)
+            evicted.forEach { (pages[it] as HqPageState.Ready).image.close() }
+            pages = pages - evicted.toSet()
+        }
+        _state.value = current.copy(hqPages = pages)
+    }
+
+    private fun loadHq(page: Int) {
+        val current = _state.value as? ReaderUiState.Reading ?: return
+        if (!current.hqMode) return
+        when (current.hqPages[page]) {
+            is HqPageState.Ready, is HqPageState.Unavailable, is HqPageState.Failed -> {
+                // Sidan är redan avgjord. En hämtning för en annan sida som användaren har lämnat avbryts.
+                if (hqLoadingPage != page) cancelHqLoad()
+                return
+            }
+            is HqPageState.Loading -> if (hqLoadingPage == page && hqJob?.isActive == true) return
+            null -> {}
+        }
+        cancelHqLoad()
+        val scan = hqScanFor(current.issue.hqInfo(), page, current.pageCount)
+        if (scan == null) {
+            setHq(page, HqPageState.Unavailable)
+            return
+        }
+        hqLoadingPage = page
+        setHq(page, HqPageState.Loading)
+        hqJob = viewModelScope.launch {
+            val result = hqRepository.page(issueId, scan) { progress -> _hqProgress.value = progress }
+            val next = when (result) {
+                is HqResult.Success -> try {
+                    HqPageState.Ready(ScanImage.open(result.file, scan.rotation))
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    // En fil som inte går att avkoda ska inte ligga kvar i cachen.
+                    result.file.delete()
+                    Log.w(LOG_TAG, "$issueId: HQ-sidan ${scan.fileName} gick inte att öppna", e)
+                    HqPageState.Failed("HQ-bilden gick inte att öppna. PDF-sidan visas.")
+                }
+                is HqResult.Failure -> HqPageState.Failed(result.message)
+            }
+            hqLoadingPage = null
+            _hqProgress.value = null
+            if ((_state.value as? ReaderUiState.Reading)?.hqMode == true) {
+                setHq(page, next)
+            } else {
+                (next as? HqPageState.Ready)?.image?.close()
+            }
+        }
+    }
+
+    private fun cancelHqLoad() {
+        hqJob?.cancel()
+        hqLoadingPage = null
+        _hqProgress.value = null
+    }
+
+    /**
+     * Lånar översiktsbilden av en HQ-sida: hela skanningen nedskalad till skärmens storlek.
+     * Skanningen avkodas aldrig i full upplösning. Lämnas tillbaka med pageBitmaps.release().
+     */
+    suspend fun acquireHqBitmap(image: ScanImage, width: Int, height: Int): Bitmap {
+        val key = hqKey(image, width, height)
+        pageBitmaps.acquire(key)?.let { return it }
+        return pageBitmaps.putAndAcquire(key, image.overview(width, height))
+    }
+
+    fun hqKey(image: ScanImage, width: Int, height: Int) = "hq:${image.file.path}:${image.rotation}@${width}x$height"
 
     /** Snabbhopp via reglaget eller miniatyrremsan. */
     fun goToPage(page: Int) {
@@ -541,6 +697,8 @@ class ReaderViewModel(
         recorder.flush()
         endSession()
         recorder.close()
+        hqJob?.cancel()
+        (_state.value as? ReaderUiState.Reading)?.hqPages?.values?.forEach { (it as? HqPageState.Ready)?.image?.close() }
         downloadJob?.cancel()
         pageBitmaps.clear()
         thumbnails.evictAll()
@@ -552,6 +710,9 @@ class ReaderViewModel(
         private const val THUMBNAIL_CACHE_BYTES = 12 * 1024 * 1024
         private const val LOG_TAG = "DmzReader"
         private const val PAGE_TURN_LOG_LIMIT = 500
+
+        /** Så många skanningar hålls öppna samtidigt i HQ-läge. */
+        private const val HQ_OPEN_PAGES = 3
         private val pageTurns = ArrayList<PageTurn>()
 
         /** De senaste sidbytena framåt, för mätning av förrenderingen. */
@@ -560,3 +721,6 @@ class ReaderViewModel(
         fun clearPageTurnLog() = synchronized(pageTurns) { pageTurns.clear() }
     }
 }
+
+/** Det ur katalogen som bestämmer HQ för numret. */
+fun IssueEntity.hqInfo() = HqIssueInfo(hqSource, scanPagePattern, scanPageCount, hqPageMap, hqPageRotation)

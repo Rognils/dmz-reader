@@ -24,6 +24,7 @@ class AppVersionTest {
         assertEquals(900, versionCodeFor("0.9.0"))
         assertEquals(1000, versionCodeFor("0.10.0"))
         assertEquals(1001, versionCodeFor("0.10.1"))
+        assertEquals(1100, versionCodeFor("0.11.0"))
         assertEquals(10_000, versionCodeFor("1.0.0"))
     }
 }

@@ -20,6 +20,8 @@ androidxTestRunner = "1.7.0"
 espresso = "3.7.0"
 coil = "3.6.3"
 okhttp = "5.5.0"
+commonsNet = "3.13.0"
+mockFtpServer = "3.2.0"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -48,6 +50,9 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" 
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp" }
+# FTP-klient för HQ-skanningarna (ADR 0009), och en falsk FTP-server för JVM-testerna.
+commons-net = { module = "commons-net:commons-net", version.ref = "commonsNet" }
+mockftpserver = { module = "org.mockftpserver:MockFtpServer", version.ref = "mockFtpServer" }
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }

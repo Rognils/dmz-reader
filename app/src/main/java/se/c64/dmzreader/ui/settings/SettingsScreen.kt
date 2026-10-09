@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.platform.testTag
 import kotlinx.coroutines.flow.update
+import se.c64.dmzreader.data.hq.HqCache
 import se.c64.dmzreader.data.backup.BackupFile
 import se.c64.dmzreader.data.backup.BackupFormatException
 import se.c64.dmzreader.data.backup.BackupRepository
@@ -99,6 +100,8 @@ data class StorageUiState(
     val downloadCount: Int = 0,
     val cacheBytes: Long = 0,
     val wifiOnly: Boolean = true,
+    /** HQ-cachen: hämtade originalskanningar (planens FAS 11). */
+    val hqCacheBytes: Long = 0,
 )
 
 /** Läget för säkerhetskopian i inställningarna. */
@@ -142,12 +145,14 @@ class SettingsViewModel(
     private val downloadPreferences: DownloadPreferences,
     private val downloadScheduler: DownloadScheduler,
     private val thumbnailRoot: File,
+    private val hqCache: HqCache,
     private val backupRepository: BackupRepository,
     private val backupPreferences: BackupPreferences,
     private val readDocument: (Uri) -> String,
     private val writeDocument: (Uri, String) -> Unit,
 ) : ViewModel() {
     private val sizes = MutableStateFlow(0L to 0L)
+    private val hqCacheBytes = MutableStateFlow(0L)
     private val backupDialog = MutableStateFlow(BackupUiState())
 
     val backup: StateFlow<BackupUiState> =
@@ -225,8 +230,9 @@ class SettingsViewModel(
         sizes,
         libraryRepository.observeIssuesWithState(),
         downloadPreferences.observeWifiOnly(),
-    ) { (downloadBytes, cacheBytes), issues, wifiOnly ->
-        StorageUiState(downloadBytes, issues.count { it.isDownloaded }, cacheBytes, wifiOnly)
+        hqCacheBytes,
+    ) { (downloadBytes, cacheBytes), issues, wifiOnly, hqBytes ->
+        StorageUiState(downloadBytes, issues.count { it.isDownloaded }, cacheBytes, wifiOnly, hqBytes)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), StorageUiState())
 
     init {
@@ -242,6 +248,15 @@ class SettingsViewModel(
     private suspend fun refresh() {
         sizes.value = withContext(Dispatchers.IO) {
             offlineRepository.totalBytes() to pdfRepository.cacheBytes() + directoryBytes(thumbnailRoot)
+        }
+        hqCacheBytes.value = withContext(Dispatchers.IO) { hqCache.sizeBytes() }
+    }
+
+    /** Rensar HQ-cachen: hämtade originalskanningar. Inget annat rörs. */
+    fun clearHqCache() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) { hqCache.clear() }
+            refresh()
         }
     }
 
@@ -307,9 +322,10 @@ fun SettingsScreen(
                     value = "${fileSizeText(storage.downloadBytes) ?: "0 MB"} · ${storage.downloadCount} nummer",
                 )
                 DataRow("Läs-cache", fileSizeText(storage.cacheBytes) ?: "0 MB")
+                DataRow("HQ-cache", "${fileSizeText(storage.hqCacheBytes) ?: "0 MB"} av högst ${fileSizeText(HqCache.MAX_BYTES)}")
                 DataRow(
                     label = "Totalt",
-                    value = fileSizeText(storage.downloadBytes + storage.cacheBytes) ?: "0 MB",
+                    value = fileSizeText(storage.downloadBytes + storage.cacheBytes + storage.hqCacheBytes) ?: "0 MB",
                     valueColor = DmzColors.Accent,
                 )
                 Spacer(Modifier.height(10.dp))
@@ -320,13 +336,20 @@ fun SettingsScreen(
                 ) { Text("Rensa läs-cache", color = DmzColors.TextPrimary) }
                 Spacer(Modifier.height(8.dp))
                 OutlinedButton(
+                    onClick = viewModel::clearHqCache,
+                    enabled = storage.hqCacheBytes > 0,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("clear-hq-cache"),
+                ) { Text("Rensa HQ-cache", color = DmzColors.TextPrimary) }
+                Spacer(Modifier.height(8.dp))
+                OutlinedButton(
                     onClick = { confirmRemoveAll = true },
                     enabled = storage.downloadBytes > 0 || storage.downloadCount > 0,
                     modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                 ) { Text("Ta bort alla nedladdningar", color = DmzColors.TextPrimary) }
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    "Läs-cachen är nummer som hämtats tillfälligt med Läs. Systemet kan rensa den när utrymmet tryter.",
+                    "Läs-cachen är nummer som hämtats tillfälligt med Läs. HQ-cachen är sidor som hämtats i HQ-läge; " +
+                        "de äldsta tas bort när taket nås. Systemet kan rensa båda när utrymmet tryter.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = DmzColors.TextSecondary,
                 )

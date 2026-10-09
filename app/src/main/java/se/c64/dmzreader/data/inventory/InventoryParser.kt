@@ -31,6 +31,8 @@ object InventoryParser {
     private val issueIdPattern = Regex("""[a-z][a-z0-9]*-\d{4}-\d{2}(-\d{2})?[a-z]?""")
     private val sortKeyPattern = Regex("""\d{4}-\d{2}[a-z]?""")
     private val coverAssetPattern = Regex("""covers/[a-z0-9-]+\.webp""")
+    private val scanFileNamePattern = Regex("""[A-Za-z0-9][A-Za-z0-9._-]*\.(jpg|jpeg|png)""")
+    private val hqRotations = setOf(90, 180, 270)
     private val coverFlags = setOf("rotate_cw", "rotate_ccw", "rotate_180", "crop_left_half", "crop_right_half")
 
     /**
@@ -168,6 +170,15 @@ object InventoryParser {
             }
             if (issue.coverAsset != null && !coverAssetPattern.matches(issue.coverAsset)) {
                 fail("$id: coverAsset \"${issue.coverAsset}\" har fel format")
+            }
+            // HQ-mappningen (FAS 11). Fel här hade kunnat visa fel skanning för en sida.
+            issue.hqPageMap?.forEach { (page, fileName) ->
+                if (page.toIntOrNull()?.let { it >= 1 } != true) fail("$id: hqPageMap har ett ogiltigt sidnummer: \"$page\"")
+                if (fileName != null && !scanFileNamePattern.matches(fileName)) fail("$id: hqPageMap har ett ogiltigt filnamn: \"$fileName\"")
+            }
+            issue.hqPageRotation?.forEach { (page, degrees) ->
+                if (page.toIntOrNull()?.let { it >= 1 } != true) fail("$id: hqPageRotation har ett ogiltigt sidnummer: \"$page\"")
+                if (degrees !in hqRotations) fail("$id: hqPageRotation har en ogiltig vridning: $degrees")
             }
             issue.coverFlags.firstOrNull { it !in coverFlags }?.let { fail("$id: okänd coverFlag \"$it\"") }
             if (issue.coverFlags.count { it.startsWith("rotate_") } > 1 || issue.coverFlags.count { it.startsWith("crop_") } > 1) {
