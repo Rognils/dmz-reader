@@ -142,11 +142,11 @@
           "additionalProperties": { "type": ["string", "null"], "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*\\.(jpg|jpeg|png)$" }
         },
         "hqPageRotation": {
-          "description": "Bara för PDF-sidor där skanningen ligger vriden i förhållande till PDF-sidan: antal grader medurs som skanningen ska vridas (sidnummer från 1 som nyckel). Framtagen med bildjämförelse.",
+          "description": "Bara för PDF-sidor där skanningen ligger vriden i förhållande till PDF-sidan: antal grader medurs som skanningen ska vridas (sidnummer från 1 som nyckel). Tillåtna värden är 0, 90, 180 och 270. En sida som inte nämns har 0, som är standard. Framtagen med bildjämförelse.",
           "type": ["object", "null"],
           "minProperties": 1,
           "propertyNames": { "pattern": "^[1-9][0-9]*$" },
-          "additionalProperties": { "enum": [90, 180, 270] }
+          "additionalProperties": { "enum": [0, 90, 180, 270] }
         },
         "pageCount": {
           "description": "Uppmätt sidantal i läs-PDF:en. null när det inte är uppmätt.",

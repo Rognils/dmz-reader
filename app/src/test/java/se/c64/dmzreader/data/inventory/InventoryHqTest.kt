@@ -121,6 +121,10 @@ class InventoryHqTest {
         assertTrue("filnamn" in rejected(""""hqPageMap": {"1": "a/b.jpg"}""").message!!)
         assertTrue("filnamn" in rejected(""""hqPageMap": {"1": "a.exe"}""").message!!)
         assertTrue("vridning" in rejected(""""hqPageRotation": {"1": 45}""").message!!)
+        assertTrue("vridning" in rejected(""""hqPageRotation": {"1": 360}""").message!!)
+        // 0 är tillåtet och betyder ingen vridning.
+        val zero = InventoryParser.parse(inventoryJson(issues = listOf(issueJson("datormagazin-1989-06", extra = """, "hqPageRotation": {"1": 0}"""))))
+        assertEquals(mapOf("1" to 0), zero.issues.single().hqPageRotation)
         assertTrue("hqPageRotation" in rejected(""""hqPageRotation": {"-1": 90}""").message!!)
         assertNotNull(rejected(""""hqPageMap": "inte ett objekt""""))
     }

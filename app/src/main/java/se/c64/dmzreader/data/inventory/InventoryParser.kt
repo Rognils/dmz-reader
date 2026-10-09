@@ -32,7 +32,7 @@ object InventoryParser {
     private val sortKeyPattern = Regex("""\d{4}-\d{2}[a-z]?""")
     private val coverAssetPattern = Regex("""covers/[a-z0-9-]+\.webp""")
     private val scanFileNamePattern = Regex("""[A-Za-z0-9][A-Za-z0-9._-]*\.(jpg|jpeg|png)""")
-    private val hqRotations = setOf(90, 180, 270)
+    private val hqRotations = setOf(0, 90, 180, 270)
     private val coverFlags = setOf("rotate_cw", "rotate_ccw", "rotate_180", "crop_left_half", "crop_right_half")
 
     /**
