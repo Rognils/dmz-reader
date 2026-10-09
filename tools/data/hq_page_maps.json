@@ -1,0 +1,498 @@
+{
+ "comment": "HQ-mappningar framtagna med bildjämförelse av tools/map_hq_pages.py. Underlaget finns i data/hq_mapping_report.json. Slås ihop med inventory av tools/archive_inventory.py.",
+ "issues": {
+  "datormagazin-1986-02": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1986-03": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1986-04": {
+   "hqPageMap": {
+    "1": "DMZ_1986-04-001.png",
+    "10": "DMZ_1986-04-010.png",
+    "11": "DMZ_1986-04-011.png",
+    "12": "DMZ_1986-04-012.png",
+    "13": "DMZ_1986-04-013.png",
+    "14": "DMZ_1986-04-014.png",
+    "15": "DMZ_1986-04-015.png",
+    "16": "DMZ_1986-04-016.png",
+    "17": "DMZ_1986-04-017.png",
+    "18": "DMZ_1986-04-018.png",
+    "19": "DMZ_1986-04-019.png",
+    "2": "DMZ_1986-04-002.png",
+    "20": "DMZ_1986-04-020.png",
+    "21": "DMZ_1986-04-021.png",
+    "22": "DMZ_1986-04-022.png",
+    "23": "DMZ_1986-04-023.png",
+    "24": "DMZ_1986-04-024.png",
+    "25": "DMZ_1986-04-025.png",
+    "26": "DMZ_1986-04-026.png",
+    "27": "DMZ_1986-04-027.png",
+    "28": "DMZ_1986-04-028.png",
+    "29": "DMZ_1986-04-029.png",
+    "3": "DMZ_1986-04-003.png",
+    "30": "DMZ_1986-04-030.png",
+    "31": "DMZ_1986-04-031.png",
+    "32": "DMZ_1986-04-032.png",
+    "33": "DMZ_1986-04-033.png",
+    "34": "DMZ_1986-04-Spelbilaga-001.png",
+    "35": "DMZ_1986-04-Spelbilaga-002.png",
+    "36": "DMZ_1986-04-Spelbilaga-003.png",
+    "37": "DMZ_1986-04-Spelbilaga-004.png",
+    "38": "DMZ_1986-04-Spelbilaga-005.png",
+    "39": "DMZ_1986-04-Spelbilaga-006.png",
+    "4": "DMZ_1986-04-004.png",
+    "40": "DMZ_1986-04-Spelbilaga-007.png",
+    "41": "DMZ_1986-04-Spelbilaga-008.png",
+    "42": "DMZ_1986-04-Spelbilaga-009.png",
+    "43": "DMZ_1986-04-Spelbilaga-010.png",
+    "44": "DMZ_1986-04-Spelbilaga-011.png",
+    "45": "DMZ_1986-04-Spelbilaga-012.png",
+    "46": "DMZ_1986-04-Spelbilaga-013.png",
+    "47": "DMZ_1986-04-Spelbilaga-014.png",
+    "48": "DMZ_1986-04-Spelbilaga-015.png",
+    "49": "DMZ_1986-04-Spelbilaga-016.png",
+    "5": "DMZ_1986-04-005.png",
+    "6": "DMZ_1986-04-006.png",
+    "7": "DMZ_1986-04-007.png",
+    "8": "DMZ_1986-04-008.png",
+    "9": "DMZ_1986-04-009.png"
+   }
+  },
+  "datormagazin-1987-01": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1987-02": {
+   "hqPageRotation": {
+    "1": 90,
+    "24": 270
+   }
+  },
+  "datormagazin-1987-04-05": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1987-06": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1988-05": {
+   "hqPageRotation": {
+    "36": 90
+   }
+  },
+  "datormagazin-1988-06": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1988-07": {
+   "hqPageRotation": {
+    "1": 270
+   }
+  },
+  "datormagazin-1988-08": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1988-09": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1988-11": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1988-12": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1988-13": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1988-14": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1988-15": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1988-16-17": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1989-01": {
+   "hqPageRotation": {
+    "1": 90,
+    "13": 90
+   }
+  },
+  "datormagazin-1989-02": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1989-03": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1989-05": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1989-06": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1989-07": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1989-08": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1989-09": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1989-10": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1989-11": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1989-12": {
+   "hqPageRotation": {
+    "42": 270
+   }
+  },
+  "datormagazin-1989-13": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1989-14": {
+   "hqPageRotation": {
+    "1": 90,
+    "28": 90
+   }
+  },
+  "datormagazin-1989-15": {
+   "hqPageRotation": {
+    "1": 90,
+    "34": 90
+   }
+  },
+  "datormagazin-1989-16": {
+   "hqPageRotation": {
+    "1": 90,
+    "33": 270
+   }
+  },
+  "datormagazin-1989-16b": {
+   "hqPageRotation": {
+    "27": 270,
+    "35": 90
+   }
+  },
+  "datormagazin-1989-17": {
+   "hqPageRotation": {
+    "1": 90,
+    "26": 90
+   }
+  },
+  "datormagazin-1989-18": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1990-03": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1990-04": {
+   "hqPageRotation": {
+    "1": 90,
+    "21": 90
+   }
+  },
+  "datormagazin-1990-06": {
+   "hqPageRotation": {
+    "18": 90
+   }
+  },
+  "datormagazin-1990-08": {
+   "hqPageRotation": {
+    "1": 90
+   }
+  },
+  "datormagazin-1990-09": {
+   "hqPageRotation": {
+    "18": 270,
+    "21": 90
+   }
+  },
+  "datormagazin-1990-10": {
+   "hqPageRotation": {
+    "1": 90,
+    "15": 90
+   }
+  },
+  "datormagazin-1990-12": {
+   "hqPageRotation": {
+    "74": 90
+   }
+  },
+  "datormagazin-1990-13": {
+   "hqPageRotation": {
+    "16": 90,
+    "17": 90
+   }
+  },
+  "datormagazin-1990-15": {
+   "hqPageRotation": {
+    "33": 90,
+    "38": 90,
+    "39": 90
+   }
+  },
+  "datormagazin-1990-16": {
+   "hqPageRotation": {
+    "38": 270,
+    "39": 270,
+    "47": 90
+   }
+  },
+  "datormagazin-1990-17": {
+   "hqPageRotation": {
+    "34": 270,
+    "36": 90,
+    "37": 90
+   }
+  },
+  "datormagazin-1990-18": {
+   "hqPageRotation": {
+    "41": 90,
+    "66": 90,
+    "67": 90,
+    "69": 90
+   }
+  },
+  "datormagazin-1990-19": {
+   "hqPageRotation": {
+    "13": 90,
+    "16": 90,
+    "17": 90
+   }
+  },
+  "datormagazin-1990-20": {
+   "hqPageRotation": {
+    "37": 90
+   }
+  },
+  "datormagazin-1991-01": {
+   "hqPageRotation": {
+    "31": 270
+   }
+  },
+  "datormagazin-1991-04": {
+   "hqPageRotation": {
+    "53": 90
+   }
+  },
+  "datormagazin-1991-05": {
+   "hqPageRotation": {
+    "9": 90
+   }
+  },
+  "datormagazin-1991-06": {
+   "hqPageRotation": {
+    "14": 90,
+    "21": 270
+   }
+  },
+  "datormagazin-1991-07": {
+   "hqPageRotation": {
+    "19": 90
+   }
+  },
+  "datormagazin-1991-08": {
+   "hqPageRotation": {
+    "35": 90
+   }
+  },
+  "datormagazin-1991-09": {
+   "hqPageRotation": {
+    "28": 90
+   }
+  },
+  "datormagazin-1991-11": {
+   "hqPageRotation": {
+    "23": 90,
+    "5": 90
+   }
+  },
+  "datormagazin-1991-12": {
+   "hqPageRotation": {
+    "5": 90
+   }
+  },
+  "datormagazin-1991-13": {
+   "hqPageRotation": {
+    "11": 90,
+    "49": 270
+   }
+  },
+  "datormagazin-1991-14": {
+   "hqPageRotation": {
+    "28": 270
+   }
+  },
+  "datormagazin-1991-15": {
+   "hqPageRotation": {
+    "19": 90,
+    "5": 270
+   }
+  },
+  "datormagazin-1991-16": {
+   "hqPageRotation": {
+    "5": 270
+   }
+  },
+  "datormagazin-1991-17": {
+   "hqPageRotation": {
+    "22": 90,
+    "35": 90
+   }
+  },
+  "datormagazin-1991-18": {
+   "hqPageRotation": {
+    "22": 90
+   }
+  },
+  "datormagazin-1991-19": {
+   "hqPageRotation": {
+    "19": 90,
+    "37": 90
+   }
+  },
+  "datormagazin-1991-20": {
+   "hqPageRotation": {
+    "45": 90,
+    "53": 270
+   }
+  },
+  "datormagazin-1991-21": {
+   "hqPageRotation": {
+    "29": 90,
+    "35": 90
+   }
+  },
+  "datormagazin-1993-03": {
+   "hqPageMap": {
+    "1": "DMZ_1993-03-03.jpg",
+    "10": "DMZ_1993-03-12.jpg",
+    "11": "DMZ_1993-03-13.jpg",
+    "12": "DMZ_1993-03-14.jpg",
+    "13": "DMZ_1993-03-15.jpg",
+    "14": "DMZ_1993-03-16.jpg",
+    "15": "DMZ_1993-03-17.jpg",
+    "16": "DMZ_1993-03-18.jpg",
+    "17": "DMZ_1993-03-19.jpg",
+    "18": "DMZ_1993-03-20.jpg",
+    "19": "DMZ_1993-03-21.jpg",
+    "2": "DMZ_1993-03-04.jpg",
+    "20": "DMZ_1993-03-22.jpg",
+    "21": "DMZ_1993-03-23.jpg",
+    "22": "DMZ_1993-03-24.jpg",
+    "23": "DMZ_1993-03-25.jpg",
+    "24": "DMZ_1993-03-26.jpg",
+    "25": "DMZ_1993-03-27.jpg",
+    "26": "DMZ_1993-03-28.jpg",
+    "27": "DMZ_1993-03-29.jpg",
+    "28": "DMZ_1993-03-30.jpg",
+    "29": "DMZ_1993-03-31.jpg",
+    "3": "DMZ_1993-03-05.jpg",
+    "30": "DMZ_1993-03-32.jpg",
+    "31": "DMZ_1993-03-33.jpg",
+    "32": "DMZ_1993-03-34.jpg",
+    "33": "DMZ_1993-03-35.jpg",
+    "34": "DMZ_1993-03-36.jpg",
+    "35": "DMZ_1993-03-37.jpg",
+    "36": "DMZ_1993-03-38.jpg",
+    "37": "DMZ_1993-03-39.jpg",
+    "38": "DMZ_1993-03-40.jpg",
+    "39": null,
+    "4": "DMZ_1993-03-06.jpg",
+    "40": null,
+    "41": "DMZ_1993-03-43.jpg",
+    "42": "DMZ_1993-03-44.jpg",
+    "43": "DMZ_1993-03-45.jpg",
+    "44": "DMZ_1993-03-46.jpg",
+    "45": "DMZ_1993-03-47.jpg",
+    "46": "DMZ_1993-03-48.jpg",
+    "47": "DMZ_1993-03-49.jpg",
+    "48": "DMZ_1993-03-50.jpg",
+    "49": "DMZ_1993-03-51.jpg",
+    "5": "DMZ_1993-03-07.jpg",
+    "50": "DMZ_1993-03-52.jpg",
+    "51": "DMZ_1993-03-53.jpg",
+    "52": "DMZ_1993-03-54.jpg",
+    "53": "DMZ_1993-03-55.jpg",
+    "54": "DMZ_1993-03-56.jpg",
+    "55": "DMZ_1993-03-57.jpg",
+    "56": "DMZ_1993-03-58.jpg",
+    "57": "DMZ_1993-03-59.jpg",
+    "58": "DMZ_1993-03-60.jpg",
+    "59": "DMZ_1993-03-61.jpg",
+    "6": "DMZ_1993-03-08.jpg",
+    "60": "DMZ_1993-03-62.jpg",
+    "61": "DMZ_1993-03-63.jpg",
+    "62": "DMZ_1993-03-64.jpg",
+    "63": "DMZ_1993-03-65.jpg",
+    "64": "DMZ_1993-03-66.jpg",
+    "65": "DMZ_1993-03-67.jpg",
+    "66": "DMZ_1993-03-68.jpg",
+    "67": "DMZ_1993-03-69.jpg",
+    "68": "DMZ_1993-03-70.jpg",
+    "7": "DMZ_1993-03-09.jpg",
+    "8": "DMZ_1993-03-10.jpg",
+    "9": "DMZ_1993-03-11.jpg"
+   },
+   "hqPageRotation": {
+    "27": 180
+   }
+  }
+ }
+}

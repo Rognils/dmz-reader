@@ -35,7 +35,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
 
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
 MIN_PAUSE_SECONDS = 0.5
@@ -810,6 +810,69 @@ def load_schema(path: Path) -> dict:
         return json.load(fh)
 
 
+# --------------------------------------------------------------------------
+# HQ-mappning (FAS 11)
+# --------------------------------------------------------------------------
+
+class HqPageMapError(ValueError):
+    """Fel i filen med HQ-mappningar. Ingenting ignoreras tyst."""
+
+
+def load_hq_page_maps(path: Path) -> dict:
+    """Läser tools/data/hq_page_maps.json: {"issues": {issueId: {"hqPageMap": …, "hqPageRotation": …}}}."""
+    if not path.exists():
+        return {}
+    data = _read_json(path)
+    if not isinstance(data, dict) or not isinstance(data.get("issues"), dict):
+        raise HqPageMapError(f"{path.name}: förväntade ett objekt med nyckeln \"issues\"")
+    return data["issues"]
+
+
+def apply_hq_page_maps(inventory: dict, maps: dict, listing: dict, diagnostics: dict | None = None) -> None:
+    """Lägger hqPageMap och hqPageRotation på de nummer som har dem, på plats.
+
+    Mappningarna är framtagna med bildjämförelse (tools/map_hq_pages.py). Här kontrolleras
+    bara att de hänger ihop med resten: numret finns, varje fil finns i numrets
+    skanningskatalog och ingen skanning används för två sidor.
+    """
+    by_id = {issue["issueId"]: issue for issue in inventory["issues"]}
+    errors = []
+    for issue_id in sorted(maps):
+        entry = maps[issue_id]
+        issue = by_id.get(issue_id)
+        if issue is None:
+            errors.append(f"okänt issueId: {issue_id}")
+            continue
+        if not isinstance(entry, dict) or set(entry) - {"hqPageMap", "hqPageRotation"} or not entry:
+            errors.append(f"{issue_id}: förväntade hqPageMap och/eller hqPageRotation")
+            continue
+        if issue.get("scanPagePattern") is None:
+            errors.append(f"{issue_id}: numret har inget scanPagePattern")
+            continue
+        directory = next((name.rstrip("/") for name in issue["sourceNames"] if name.startswith("Original Scans/")), None)
+        available = {item["name"] for item in listing["directories"].get(directory, []) if item["type"] == "file"}
+        page_map = entry.get("hqPageMap")
+        if page_map is not None:
+            names = [name for name in page_map.values() if name is not None]
+            for name in sorted(set(names)):
+                if name not in available:
+                    errors.append(f"{issue_id}: {name} finns inte i {directory}")
+                if names.count(name) > 1:
+                    errors.append(f"{issue_id}: {name} används för flera sidor")
+            issue["hqPageMap"] = {str(page): page_map[str(page)] for page in sorted(map(int, page_map))}
+        rotation = entry.get("hqPageRotation")
+        if rotation is not None:
+            issue["hqPageRotation"] = {str(page): rotation[str(page)] for page in sorted(map(int, rotation))}
+        if diagnostics is not None and issue_id in diagnostics.get("issues", {}):
+            diagnostics["issues"][issue_id]["hqMapping"] = {
+                "mappedPages": sum(1 for name in (page_map or {}).values() if name is not None),
+                "pagesWithoutHq": sorted(int(page) for page, name in (page_map or {}).items() if name is None),
+                "rotatedPages": sorted(int(page) for page in (rotation or {})),
+            }
+    if errors:
+        raise HqPageMapError("Fel i HQ-mappningarna: " + "; ".join(errors))
+
+
 def validate_inventory(inventory: dict, schema: dict) -> list[str]:
     """Returnerar en lista med fel. Tom lista betyder giltigt inventory."""
     try:
@@ -854,6 +917,7 @@ def validate_inventory(inventory: dict, schema: dict) -> list[str]:
             errors.append(f"{issue_id}: issueId börjar inte med publicationId")
         if not issue["sortKey"].startswith(f"{issue['year']:04d}-"):
             errors.append(f"{issue_id}: sortKey {issue['sortKey']} börjar inte med året {issue['year']}")
+        errors.extend(_hq_mapping_errors(issue))
 
     # sortKey ska ge en entydig ordning inom varje publikation och år,
     # och numren ska ligga i den ordningen i filen.
@@ -870,6 +934,36 @@ def validate_inventory(inventory: dict, schema: dict) -> list[str]:
     order = [(issue["publicationId"], issue["sortKey"]) for issue in issues]
     if order != sorted(order) and not any("sortKey-ordning" in e or "inte unik" in e for e in errors):
         errors.append("numren ligger inte sorterade på publicationId och sortKey")
+    return errors
+
+
+def _hq_mapping_errors(issue: dict) -> list[str]:
+    """hqPageMap ska täcka alla PDF-sidor, och hqPageRotation får bara nämna sidor som finns."""
+    issue_id = issue["issueId"]
+    errors = []
+    page_map = issue.get("hqPageMap")
+    rotation = issue.get("hqPageRotation")
+    if (page_map is not None or rotation is not None) and (issue.get("hqSource") != "scans" or not issue.get("scanPagePattern")):
+        errors.append(f"{issue_id}: HQ-mappning utan hqSource \"scans\" och scanPagePattern")
+    page_count = issue.get("pageCount")
+    if page_map is not None:
+        if page_count is None:
+            errors.append(f"{issue_id}: hqPageMap kräver ett uppmätt pageCount")
+        elif sorted(map(int, page_map)) != list(range(1, page_count + 1)):
+            errors.append(f"{issue_id}: hqPageMap ska ha en post för var och en av sidorna 1–{page_count}")
+        names = [name for name in page_map.values() if name is not None]
+        duplicates = sorted({name for name in names if names.count(name) > 1})
+        if duplicates:
+            errors.append(f"{issue_id}: hqPageMap använder samma skanning för flera sidor: {', '.join(duplicates)}")
+    if rotation is not None:
+        limit = page_count if page_count is not None else issue.get("scanPageCount")
+        outside = sorted(int(page) for page in rotation if limit is not None and int(page) > limit)
+        if outside:
+            errors.append(f"{issue_id}: hqPageRotation nämner sidor som inte finns: {outside}")
+        if page_map is not None:
+            unmapped = sorted(int(page) for page in rotation if page_map.get(page) is None)
+            if unmapped:
+                errors.append(f"{issue_id}: hqPageRotation nämner sidor utan skanning: {unmapped}")
     return errors
 
 
@@ -986,7 +1080,8 @@ def load_covers_manifest(config: dict) -> dict:
 
 
 def generate(config: dict, listing: dict, dataset_version: str | None = None,
-             generated_at: str | None = None, overrides: dict | None = None) -> dict:
+             generated_at: str | None = None, overrides: dict | None = None,
+             hq_page_maps: dict | None = None) -> dict:
     """Hela kedjan från rålistning till validerat inventory, utan att skriva filer."""
     analysis = analyze(listing, config["roots"], config.get("extraRoots", []))
     probe_path = REPO_ROOT / config["httpsProbePath"]
@@ -1004,6 +1099,9 @@ def generate(config: dict, listing: dict, dataset_version: str | None = None,
         listing, analysis, probe, measurements, dataset_version, generated_at,
         covers=load_covers_manifest(config))
     apply_overrides(inventory, overrides, diagnostics)
+    if hq_page_maps is None:
+        hq_page_maps = load_hq_page_maps(REPO_ROOT / config["hqPageMapsPath"]) if "hqPageMapsPath" in config else {}
+    apply_hq_page_maps(inventory, hq_page_maps, listing, diagnostics)
     errors = validate_inventory(inventory, load_schema(REPO_ROOT / config["schemaPath"]))
     return {"analysis": analysis, "inventory": inventory, "diagnostics": diagnostics, "errors": errors}
 
@@ -1055,7 +1153,7 @@ def main(argv=None) -> int:
 
     try:
         result = generate(config, listing, args.dataset_version, args.generated_at)
-    except OverrideError as error:
+    except (OverrideError, HqPageMapError) as error:
         print(f"FEL {error}")
         return 1
     analysis, inventory, diagnostics = result["analysis"], result["inventory"], result["diagnostics"]

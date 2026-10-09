@@ -1,6 +1,6 @@
 {
- "datasetVersion": "2026-10-06-005",
- "generator": "archive_inventory.py 0.3.0",
+ "datasetVersion": "2026-10-06-006",
+ "generator": "archive_inventory.py 0.4.0",
  "httpsProbedAt": "2026-10-06T11:30:53Z",
  "issues": {
   "datormagazin-1986-01": {
@@ -37,6 +37,13 @@
    "ftpCoverSize": 5461737,
    "ftpOcrPdfSize": 101964831,
    "ftpOcrPdfV2Size": 18024807,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 18024807,
     "pageCount": 32,
@@ -60,6 +67,13 @@
    "ftpCoverSize": 8787200,
    "ftpOcrPdfSize": 105949528,
    "ftpOcrPdfV2Size": 18478586,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 18478586,
     "pageCount": 32,
@@ -83,6 +97,11 @@
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 99954855,
    "ftpOcrPdfV2Size": 23329624,
+   "hqMapping": {
+    "mappedPages": 49,
+    "pagesWithoutHq": [],
+    "rotatedPages": []
+   },
    "measurement": {
     "ocrPdfSize": 23329624,
     "pageCount": 49,
@@ -107,6 +126,13 @@
    "ftpCoverSize": 7673880,
    "ftpOcrPdfSize": 111431661,
    "ftpOcrPdfV2Size": 19032390,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 19032390,
     "pageCount": 36,
@@ -130,6 +156,14 @@
    "ftpCoverSize": 6947421,
    "ftpOcrPdfSize": 123457371,
    "ftpOcrPdfV2Size": 21422879,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1,
+     24
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 21422879,
     "pageCount": 40,
@@ -176,6 +210,13 @@
    "ftpCoverSize": 1834477,
    "ftpOcrPdfSize": 58456351,
    "ftpOcrPdfV2Size": 33327407,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 33327407,
     "pageCount": 48,
@@ -199,6 +240,13 @@
    "ftpCoverSize": 10020435,
    "ftpOcrPdfSize": 154173941,
    "ftpOcrPdfV2Size": 27882487,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 27882487,
     "pageCount": 48,
@@ -437,6 +485,13 @@
    "ftpCoverSize": 13707461,
    "ftpOcrPdfSize": 95625004,
    "ftpOcrPdfV2Size": 24362335,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     36
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 24362335,
     "pageCount": 48,
@@ -460,6 +515,13 @@
    "ftpCoverSize": 5895198,
    "ftpOcrPdfSize": 97092781,
    "ftpOcrPdfV2Size": 24970770,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 24970770,
     "pageCount": 48,
@@ -483,6 +545,13 @@
    "ftpCoverSize": 6218042,
    "ftpOcrPdfSize": 83047881,
    "ftpOcrPdfV2Size": 22069886,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 22069886,
     "pageCount": 44,
@@ -506,6 +575,13 @@
    "ftpCoverSize": 6119681,
    "ftpOcrPdfSize": 78303315,
    "ftpOcrPdfV2Size": 20261222,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 20261222,
     "pageCount": 40,
@@ -531,6 +607,13 @@
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
    "ftpOcrPdfV2Size": 21732720,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 21732720,
     "pageCount": 40,
@@ -579,6 +662,13 @@
    "ftpCoverSize": 6146417,
    "ftpOcrPdfSize": 108502201,
    "ftpOcrPdfV2Size": 26011862,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 26011862,
     "pageCount": 48,
@@ -602,6 +692,13 @@
    "ftpCoverSize": 5262111,
    "ftpOcrPdfSize": 99784069,
    "ftpOcrPdfV2Size": 25647525,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25647525,
     "pageCount": 48,
@@ -627,6 +724,13 @@
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
    "ftpOcrPdfV2Size": 26061502,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 26061502,
     "pageCount": 48,
@@ -650,6 +754,13 @@
    "ftpCoverSize": 6014900,
    "ftpOcrPdfSize": 98876343,
    "ftpOcrPdfV2Size": 25274281,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25274281,
     "pageCount": 48,
@@ -675,6 +786,13 @@
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
    "ftpOcrPdfV2Size": 24838919,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 24838919,
     "pageCount": 48,
@@ -698,6 +816,13 @@
    "ftpCoverSize": 6045578,
    "ftpOcrPdfSize": 98334577,
    "ftpOcrPdfV2Size": 25641314,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25641314,
     "pageCount": 48,
@@ -721,6 +846,14 @@
    "ftpCoverSize": 6061586,
    "ftpOcrPdfSize": 98945860,
    "ftpOcrPdfV2Size": 24108625,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1,
+     13
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 24108625,
     "pageCount": 48,
@@ -746,6 +879,13 @@
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
    "ftpOcrPdfV2Size": 26026118,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 26026118,
     "pageCount": 48,
@@ -769,6 +909,13 @@
    "ftpCoverSize": 6006489,
    "ftpOcrPdfSize": 94591576,
    "ftpOcrPdfV2Size": 23488554,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 23488554,
     "pageCount": 48,
@@ -819,6 +966,13 @@
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
    "ftpOcrPdfV2Size": 26335898,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 26335898,
     "pageCount": 48,
@@ -842,6 +996,13 @@
    "ftpCoverSize": 6136649,
    "ftpOcrPdfSize": 55338224,
    "ftpOcrPdfV2Size": 25672804,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25672804,
     "pageCount": 48,
@@ -865,6 +1026,13 @@
    "ftpCoverSize": 5422056,
    "ftpOcrPdfSize": 54962567,
    "ftpOcrPdfV2Size": 23914949,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 23914949,
     "pageCount": 48,
@@ -888,6 +1056,13 @@
    "ftpCoverSize": 1644629,
    "ftpOcrPdfSize": 55458682,
    "ftpOcrPdfV2Size": 27021492,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 27021492,
     "pageCount": 48,
@@ -911,6 +1086,13 @@
    "ftpCoverSize": 6008376,
    "ftpOcrPdfSize": 82920453,
    "ftpOcrPdfV2Size": 20461113,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 20461113,
     "pageCount": 40,
@@ -934,6 +1116,13 @@
    "ftpCoverSize": 1694288,
    "ftpOcrPdfSize": 49035920,
    "ftpOcrPdfV2Size": 23352350,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 23352350,
     "pageCount": 40,
@@ -957,6 +1146,13 @@
    "ftpCoverSize": 1988276,
    "ftpOcrPdfSize": 54923303,
    "ftpOcrPdfV2Size": 26189195,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 26189195,
     "pageCount": 44,
@@ -980,6 +1176,13 @@
    "ftpCoverSize": 6227678,
    "ftpOcrPdfSize": 99738796,
    "ftpOcrPdfV2Size": 25595148,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     42
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25595148,
     "pageCount": 48,
@@ -1003,6 +1206,13 @@
    "ftpCoverSize": 1673947,
    "ftpOcrPdfSize": 57077902,
    "ftpOcrPdfV2Size": 27678270,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 27678270,
     "pageCount": 48,
@@ -1026,6 +1236,14 @@
    "ftpCoverSize": 1755512,
    "ftpOcrPdfSize": 56466965,
    "ftpOcrPdfV2Size": 26828063,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1,
+     28
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 26828063,
     "pageCount": 48,
@@ -1049,6 +1267,14 @@
    "ftpCoverSize": 4964909,
    "ftpOcrPdfSize": 89234009,
    "ftpOcrPdfV2Size": 24183820,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1,
+     34
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 24183820,
     "pageCount": 48,
@@ -1072,6 +1298,14 @@
    "ftpCoverSize": 1580269,
    "ftpOcrPdfSize": 54266892,
    "ftpOcrPdfV2Size": 26082713,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1,
+     33
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 26082713,
     "pageCount": 48,
@@ -1095,6 +1329,14 @@
    "ftpCoverSize": null,
    "ftpOcrPdfSize": null,
    "ftpOcrPdfV2Size": 23239532,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     27,
+     35
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 23239532,
     "pageCount": 36,
@@ -1118,6 +1360,14 @@
    "ftpCoverSize": 1761746,
    "ftpOcrPdfSize": 58117931,
    "ftpOcrPdfV2Size": 26816123,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1,
+     26
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 26816123,
     "pageCount": 48,
@@ -1141,6 +1391,13 @@
    "ftpCoverSize": 4580893,
    "ftpOcrPdfSize": 78142743,
    "ftpOcrPdfV2Size": 20209390,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 20209390,
     "pageCount": 40,
@@ -1210,6 +1467,13 @@
    "ftpCoverSize": 1708473,
    "ftpOcrPdfSize": 57289275,
    "ftpOcrPdfV2Size": 25241837,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25241837,
     "pageCount": 44,
@@ -1233,6 +1497,14 @@
    "ftpCoverSize": 1577800,
    "ftpOcrPdfSize": 55701642,
    "ftpOcrPdfV2Size": 25756518,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1,
+     21
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25756518,
     "pageCount": 44,
@@ -1279,6 +1551,13 @@
    "ftpCoverSize": 6388029,
    "ftpOcrPdfSize": 97661101,
    "ftpOcrPdfV2Size": 23739268,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     18
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 23739268,
     "pageCount": 44,
@@ -1325,6 +1604,13 @@
    "ftpCoverSize": 1881660,
    "ftpOcrPdfSize": 60259095,
    "ftpOcrPdfV2Size": 31313861,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 31313861,
     "pageCount": 48,
@@ -1348,6 +1634,14 @@
    "ftpCoverSize": 6039641,
    "ftpOcrPdfSize": 106950065,
    "ftpOcrPdfV2Size": 26039674,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     18,
+     21
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 26039674,
     "pageCount": 48,
@@ -1371,6 +1665,14 @@
    "ftpCoverSize": 1677866,
    "ftpOcrPdfSize": 57790015,
    "ftpOcrPdfV2Size": 29627724,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     1,
+     15
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 29627724,
     "pageCount": 44,
@@ -1417,6 +1719,13 @@
    "ftpCoverSize": 7327415,
    "ftpOcrPdfSize": 87429617,
    "ftpOcrPdfV2Size": 23398996,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     74
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 23398996,
     "pageCount": 88,
@@ -1440,6 +1749,14 @@
    "ftpCoverSize": 6268017,
    "ftpOcrPdfSize": 102067979,
    "ftpOcrPdfV2Size": 26565442,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     16,
+     17
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 26565442,
     "pageCount": 98,
@@ -1486,6 +1803,15 @@
    "ftpCoverSize": 5507876,
    "ftpOcrPdfSize": 95384812,
    "ftpOcrPdfV2Size": 23785392,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     33,
+     38,
+     39
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 23785392,
     "pageCount": 88,
@@ -1509,6 +1835,15 @@
    "ftpCoverSize": 6567992,
    "ftpOcrPdfSize": 90065424,
    "ftpOcrPdfV2Size": 22945902,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     38,
+     39,
+     47
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 22945902,
     "pageCount": 88,
@@ -1532,6 +1867,15 @@
    "ftpCoverSize": 6383867,
    "ftpOcrPdfSize": 96967419,
    "ftpOcrPdfV2Size": 25146449,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     34,
+     36,
+     37
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25146449,
     "pageCount": 96,
@@ -1555,6 +1899,16 @@
    "ftpCoverSize": 22816761,
    "ftpOcrPdfSize": 107181612,
    "ftpOcrPdfV2Size": 24610286,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     41,
+     66,
+     67,
+     69
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 24610286,
     "pageCount": 104,
@@ -1578,6 +1932,15 @@
    "ftpCoverSize": 6038545,
    "ftpOcrPdfSize": 101255080,
    "ftpOcrPdfV2Size": 26853787,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     13,
+     16,
+     17
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 26853787,
     "pageCount": 104,
@@ -1601,6 +1964,13 @@
    "ftpCoverSize": 5778784,
    "ftpOcrPdfSize": 90911862,
    "ftpOcrPdfV2Size": 23131052,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     37
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 23131052,
     "pageCount": 88,
@@ -1624,6 +1994,13 @@
    "ftpCoverSize": 6519507,
    "ftpOcrPdfSize": 88460536,
    "ftpOcrPdfV2Size": 23667957,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     31
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 23667957,
     "pageCount": 88,
@@ -1693,6 +2070,13 @@
    "ftpCoverSize": 1594771,
    "ftpOcrPdfSize": 96640229,
    "ftpOcrPdfV2Size": 24090439,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     53
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 24090439,
     "pageCount": 88,
@@ -1716,6 +2100,13 @@
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 55382410,
    "ftpOcrPdfV2Size": 22410233,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     9
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 22410233,
     "pageCount": 88,
@@ -1739,6 +2130,14 @@
    "ftpCoverSize": 6715994,
    "ftpOcrPdfSize": 100843895,
    "ftpOcrPdfV2Size": 25772685,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     14,
+     21
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25772685,
     "pageCount": 80,
@@ -1762,6 +2161,13 @@
    "ftpCoverSize": 8458129,
    "ftpOcrPdfSize": 99167510,
    "ftpOcrPdfV2Size": 25886898,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     19
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25886898,
     "pageCount": 80,
@@ -1785,6 +2191,13 @@
    "ftpCoverSize": 7860186,
    "ftpOcrPdfSize": 93162477,
    "ftpOcrPdfV2Size": 24823297,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     35
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 24823297,
     "pageCount": 80,
@@ -1808,6 +2221,13 @@
    "ftpCoverSize": 7808924,
    "ftpOcrPdfSize": 94615952,
    "ftpOcrPdfV2Size": 24528234,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     28
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 24528234,
     "pageCount": 80,
@@ -1854,6 +2274,14 @@
    "ftpCoverSize": 4523988,
    "ftpOcrPdfSize": 81643853,
    "ftpOcrPdfV2Size": 21907664,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     5,
+     23
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 21907664,
     "pageCount": 80,
@@ -1877,6 +2305,13 @@
    "ftpCoverSize": 4172921,
    "ftpOcrPdfSize": 81819473,
    "ftpOcrPdfV2Size": 22439593,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     5
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 22439593,
     "pageCount": 80,
@@ -1900,6 +2335,14 @@
    "ftpCoverSize": 5240508,
    "ftpOcrPdfSize": 100585259,
    "ftpOcrPdfV2Size": 24071175,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     11,
+     49
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 24071175,
     "pageCount": 80,
@@ -1923,6 +2366,13 @@
    "ftpCoverSize": 4138149,
    "ftpOcrPdfSize": 84698119,
    "ftpOcrPdfV2Size": 22286147,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     28
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 22286147,
     "pageCount": 80,
@@ -1946,6 +2396,14 @@
    "ftpCoverSize": 8073249,
    "ftpOcrPdfSize": 105599770,
    "ftpOcrPdfV2Size": 25481916,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     5,
+     19
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25481916,
     "pageCount": 80,
@@ -1969,6 +2427,13 @@
    "ftpCoverSize": 5310501,
    "ftpOcrPdfSize": 111358519,
    "ftpOcrPdfV2Size": 25777191,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     5
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25777191,
     "pageCount": 80,
@@ -1992,6 +2457,14 @@
    "ftpCoverSize": 5237420,
    "ftpOcrPdfSize": 108040332,
    "ftpOcrPdfV2Size": 25618186,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     22,
+     35
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25618186,
     "pageCount": 80,
@@ -2015,6 +2488,13 @@
    "ftpCoverSize": 5051847,
    "ftpOcrPdfSize": 107553551,
    "ftpOcrPdfV2Size": 25382609,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     22
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 25382609,
     "pageCount": 80,
@@ -2038,6 +2518,14 @@
    "ftpCoverSize": 3958883,
    "ftpOcrPdfSize": 90368041,
    "ftpOcrPdfV2Size": 23234304,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     19,
+     37
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 23234304,
     "pageCount": 80,
@@ -2061,6 +2549,14 @@
    "ftpCoverSize": 4335924,
    "ftpOcrPdfSize": 92329465,
    "ftpOcrPdfV2Size": 24372645,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     45,
+     53
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 24372645,
     "pageCount": 80,
@@ -2084,6 +2580,14 @@
    "ftpCoverSize": 3987421,
    "ftpOcrPdfSize": 90777160,
    "ftpOcrPdfV2Size": 23808786,
+   "hqMapping": {
+    "mappedPages": 0,
+    "pagesWithoutHq": [],
+    "rotatedPages": [
+     29,
+     35
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 23808786,
     "pageCount": 80,
@@ -2682,6 +3186,16 @@
    "ftpCoverSize": null,
    "ftpOcrPdfSize": 78922903,
    "ftpOcrPdfV2Size": null,
+   "hqMapping": {
+    "mappedPages": 66,
+    "pagesWithoutHq": [
+     39,
+     40
+    ],
+    "rotatedPages": [
+     27
+    ]
+   },
    "measurement": {
     "ocrPdfSize": 89792864,
     "pageCount": 68,

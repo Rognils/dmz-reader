@@ -1,0 +1,3084 @@
+{
+ "full": {
+  "datormagazin-1986-04": {
+   "duplicateScans": [],
+   "hqPageMap": {
+    "1": "DMZ_1986-04-001.png",
+    "10": "DMZ_1986-04-010.png",
+    "11": "DMZ_1986-04-011.png",
+    "12": "DMZ_1986-04-012.png",
+    "13": "DMZ_1986-04-013.png",
+    "14": "DMZ_1986-04-014.png",
+    "15": "DMZ_1986-04-015.png",
+    "16": "DMZ_1986-04-016.png",
+    "17": "DMZ_1986-04-017.png",
+    "18": "DMZ_1986-04-018.png",
+    "19": "DMZ_1986-04-019.png",
+    "2": "DMZ_1986-04-002.png",
+    "20": "DMZ_1986-04-020.png",
+    "21": "DMZ_1986-04-021.png",
+    "22": "DMZ_1986-04-022.png",
+    "23": "DMZ_1986-04-023.png",
+    "24": "DMZ_1986-04-024.png",
+    "25": "DMZ_1986-04-025.png",
+    "26": "DMZ_1986-04-026.png",
+    "27": "DMZ_1986-04-027.png",
+    "28": "DMZ_1986-04-028.png",
+    "29": "DMZ_1986-04-029.png",
+    "3": "DMZ_1986-04-003.png",
+    "30": "DMZ_1986-04-030.png",
+    "31": "DMZ_1986-04-031.png",
+    "32": "DMZ_1986-04-032.png",
+    "33": "DMZ_1986-04-033.png",
+    "34": "DMZ_1986-04-Spelbilaga-001.png",
+    "35": "DMZ_1986-04-Spelbilaga-002.png",
+    "36": "DMZ_1986-04-Spelbilaga-003.png",
+    "37": "DMZ_1986-04-Spelbilaga-004.png",
+    "38": "DMZ_1986-04-Spelbilaga-005.png",
+    "39": "DMZ_1986-04-Spelbilaga-006.png",
+    "4": "DMZ_1986-04-004.png",
+    "40": "DMZ_1986-04-Spelbilaga-007.png",
+    "41": "DMZ_1986-04-Spelbilaga-008.png",
+    "42": "DMZ_1986-04-Spelbilaga-009.png",
+    "43": "DMZ_1986-04-Spelbilaga-010.png",
+    "44": "DMZ_1986-04-Spelbilaga-011.png",
+    "45": "DMZ_1986-04-Spelbilaga-012.png",
+    "46": "DMZ_1986-04-Spelbilaga-013.png",
+    "47": "DMZ_1986-04-Spelbilaga-014.png",
+    "48": "DMZ_1986-04-Spelbilaga-015.png",
+    "49": "DMZ_1986-04-Spelbilaga-016.png",
+    "5": "DMZ_1986-04-005.png",
+    "6": "DMZ_1986-04-006.png",
+    "7": "DMZ_1986-04-007.png",
+    "8": "DMZ_1986-04-008.png",
+    "9": "DMZ_1986-04-009.png"
+   },
+   "hqPageRotation": {},
+   "issueId": "datormagazin-1986-04",
+   "pages": [
+    {
+     "bestCandidate": "DMZ_1986-04-001.png",
+     "margin": 0.459,
+     "pdfPage": 1,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-001.png",
+     "score": 0.993,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-008.png",
+     "secondScore": 0.534
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-002.png",
+     "margin": 0.363,
+     "pdfPage": 2,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-002.png",
+     "score": 0.989,
+     "secondCandidate": "DMZ_1986-04-017.png",
+     "secondScore": 0.626
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-003.png",
+     "margin": 0.402,
+     "pdfPage": 3,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-003.png",
+     "score": 0.984,
+     "secondCandidate": "DMZ_1986-04-017.png",
+     "secondScore": 0.582
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-004.png",
+     "margin": 0.508,
+     "pdfPage": 4,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-004.png",
+     "score": 0.994,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-008.png",
+     "secondScore": 0.486
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-005.png",
+     "margin": 0.459,
+     "pdfPage": 5,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-005.png",
+     "score": 0.997,
+     "secondCandidate": "DMZ_1986-04-007.png",
+     "secondScore": 0.538
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-006.png",
+     "margin": 0.528,
+     "pdfPage": 6,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-006.png",
+     "score": 0.995,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.467
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-007.png",
+     "margin": 0.46,
+     "pdfPage": 7,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-007.png",
+     "score": 0.994,
+     "secondCandidate": "DMZ_1986-04-005.png",
+     "secondScore": 0.534
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-008.png",
+     "margin": 0.575,
+     "pdfPage": 8,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-008.png",
+     "score": 0.993,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.418
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-009.png",
+     "margin": 0.464,
+     "pdfPage": 9,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-009.png",
+     "score": 0.995,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.531
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-010.png",
+     "margin": 0.514,
+     "pdfPage": 10,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-010.png",
+     "score": 0.996,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.482
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-011.png",
+     "margin": 0.569,
+     "pdfPage": 11,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-011.png",
+     "score": 0.997,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.428
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-012.png",
+     "margin": 0.45,
+     "pdfPage": 12,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-012.png",
+     "score": 0.996,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.546
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-013.png",
+     "margin": 0.515,
+     "pdfPage": 13,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-013.png",
+     "score": 0.995,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.48
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-014.png",
+     "margin": 0.531,
+     "pdfPage": 14,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-014.png",
+     "score": 0.992,
+     "secondCandidate": "DMZ_1986-04-006.png",
+     "secondScore": 0.461
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-015.png",
+     "margin": 0.481,
+     "pdfPage": 15,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-015.png",
+     "score": 0.995,
+     "secondCandidate": "DMZ_1986-04-017.png",
+     "secondScore": 0.514
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-016.png",
+     "margin": 0.588,
+     "pdfPage": 16,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-016.png",
+     "score": 0.993,
+     "secondCandidate": "DMZ_1986-04-022.png",
+     "secondScore": 0.405
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-017.png",
+     "margin": 0.359,
+     "pdfPage": 17,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-017.png",
+     "score": 0.997,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.638
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-018.png",
+     "margin": 0.512,
+     "pdfPage": 18,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-018.png",
+     "score": 0.995,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.483
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-019.png",
+     "margin": 0.44,
+     "pdfPage": 19,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-019.png",
+     "score": 0.996,
+     "secondCandidate": "DMZ_1986-04-021.png",
+     "secondScore": 0.556
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-020.png",
+     "margin": 0.609,
+     "pdfPage": 20,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-020.png",
+     "score": 0.996,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.387
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-021.png",
+     "margin": 0.447,
+     "pdfPage": 21,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-021.png",
+     "score": 0.998,
+     "secondCandidate": "DMZ_1986-04-019.png",
+     "secondScore": 0.551
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-022.png",
+     "margin": 0.521,
+     "pdfPage": 22,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-022.png",
+     "score": 0.99,
+     "secondCandidate": "DMZ_1986-04-017.png",
+     "secondScore": 0.469
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-023.png",
+     "margin": 0.515,
+     "pdfPage": 23,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-023.png",
+     "score": 0.992,
+     "secondCandidate": "DMZ_1986-04-017.png",
+     "secondScore": 0.477
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-024.png",
+     "margin": 0.594,
+     "pdfPage": 24,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-024.png",
+     "score": 0.988,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.394
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-025.png",
+     "margin": 0.485,
+     "pdfPage": 25,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-025.png",
+     "score": 0.988,
+     "secondCandidate": "DMZ_1986-04-017.png",
+     "secondScore": 0.503
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-026.png",
+     "margin": 0.563,
+     "pdfPage": 26,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-026.png",
+     "score": 0.987,
+     "secondCandidate": "DMZ_1986-04-017.png",
+     "secondScore": 0.424
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-027.png",
+     "margin": 0.585,
+     "pdfPage": 27,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-027.png",
+     "score": 0.992,
+     "secondCandidate": "DMZ_1986-04-017.png",
+     "secondScore": 0.407
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-028.png",
+     "margin": 0.489,
+     "pdfPage": 28,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-028.png",
+     "score": 0.996,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-015.png",
+     "secondScore": 0.507
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-029.png",
+     "margin": 0.578,
+     "pdfPage": 29,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-029.png",
+     "score": 0.998,
+     "secondCandidate": "DMZ_1986-04-011.png",
+     "secondScore": 0.42
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-030.png",
+     "margin": 0.496,
+     "pdfPage": 30,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-030.png",
+     "score": 0.989,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.493
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-031.png",
+     "margin": 0.455,
+     "pdfPage": 31,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-031.png",
+     "score": 0.991,
+     "secondCandidate": "DMZ_1986-04-017.png",
+     "secondScore": 0.536
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-032.png",
+     "margin": 0.54,
+     "pdfPage": 32,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-032.png",
+     "score": 0.989,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-009.png",
+     "secondScore": 0.449
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-033.png",
+     "margin": 0.584,
+     "pdfPage": 33,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-033.png",
+     "score": 0.993,
+     "secondCandidate": "DMZ_1986-04-017.png",
+     "secondScore": 0.409
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-001.png",
+     "margin": 0.551,
+     "pdfPage": 34,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-001.png",
+     "score": 0.994,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.443
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-002.png",
+     "margin": 0.472,
+     "pdfPage": 35,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-002.png",
+     "score": 0.998,
+     "secondCandidate": "DMZ_1986-04-002.png",
+     "secondScore": 0.526
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-003.png",
+     "margin": 0.56,
+     "pdfPage": 36,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-003.png",
+     "score": 0.994,
+     "secondCandidate": "DMZ_1986-04-012.png",
+     "secondScore": 0.434
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-004.png",
+     "margin": 0.321,
+     "pdfPage": 37,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-004.png",
+     "score": 0.996,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-006.png",
+     "secondScore": 0.675
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-005.png",
+     "margin": 0.462,
+     "pdfPage": 38,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-005.png",
+     "score": 0.997,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-013.png",
+     "secondScore": 0.535
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-006.png",
+     "margin": 0.322,
+     "pdfPage": 39,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-006.png",
+     "score": 0.996,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-004.png",
+     "secondScore": 0.674
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-007.png",
+     "margin": 0.416,
+     "pdfPage": 40,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-007.png",
+     "score": 0.997,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-013.png",
+     "secondScore": 0.581
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-008.png",
+     "margin": 0.434,
+     "pdfPage": 41,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-008.png",
+     "score": 0.998,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-009.png",
+     "secondScore": 0.564
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-009.png",
+     "margin": 0.326,
+     "pdfPage": 42,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-009.png",
+     "score": 0.998,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-016.png",
+     "secondScore": 0.672
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-010.png",
+     "margin": 0.233,
+     "pdfPage": 43,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-010.png",
+     "score": 0.996,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-013.png",
+     "secondScore": 0.763
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-011.png",
+     "margin": 0.242,
+     "pdfPage": 44,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-011.png",
+     "score": 0.997,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-013.png",
+     "secondScore": 0.755
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-012.png",
+     "margin": 0.259,
+     "pdfPage": 45,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-012.png",
+     "score": 0.996,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-010.png",
+     "secondScore": 0.737
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-013.png",
+     "margin": 0.234,
+     "pdfPage": 46,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-013.png",
+     "score": 0.997,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-010.png",
+     "secondScore": 0.763
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-014.png",
+     "margin": 0.484,
+     "pdfPage": 47,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-014.png",
+     "score": 0.994,
+     "secondCandidate": "DMZ_1986-04-019.png",
+     "secondScore": 0.51
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-015.png",
+     "margin": 0.247,
+     "pdfPage": 48,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-015.png",
+     "score": 0.997,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-013.png",
+     "secondScore": 0.75
+    },
+    {
+     "bestCandidate": "DMZ_1986-04-Spelbilaga-016.png",
+     "margin": 0.321,
+     "pdfPage": 49,
+     "rotation": 0,
+     "scan": "DMZ_1986-04-Spelbilaga-016.png",
+     "score": 0.996,
+     "secondCandidate": "DMZ_1986-04-Spelbilaga-009.png",
+     "secondScore": 0.675
+    }
+   ],
+   "pdfPageCount": 49,
+   "scanFileCount": 49,
+   "unusedScans": []
+  },
+  "datormagazin-1993-03": {
+   "duplicateScans": [],
+   "hqPageMap": {
+    "1": "DMZ_1993-03-03.jpg",
+    "10": "DMZ_1993-03-12.jpg",
+    "11": "DMZ_1993-03-13.jpg",
+    "12": "DMZ_1993-03-14.jpg",
+    "13": "DMZ_1993-03-15.jpg",
+    "14": "DMZ_1993-03-16.jpg",
+    "15": "DMZ_1993-03-17.jpg",
+    "16": "DMZ_1993-03-18.jpg",
+    "17": "DMZ_1993-03-19.jpg",
+    "18": "DMZ_1993-03-20.jpg",
+    "19": "DMZ_1993-03-21.jpg",
+    "2": "DMZ_1993-03-04.jpg",
+    "20": "DMZ_1993-03-22.jpg",
+    "21": "DMZ_1993-03-23.jpg",
+    "22": "DMZ_1993-03-24.jpg",
+    "23": "DMZ_1993-03-25.jpg",
+    "24": "DMZ_1993-03-26.jpg",
+    "25": "DMZ_1993-03-27.jpg",
+    "26": "DMZ_1993-03-28.jpg",
+    "27": "DMZ_1993-03-29.jpg",
+    "28": "DMZ_1993-03-30.jpg",
+    "29": "DMZ_1993-03-31.jpg",
+    "3": "DMZ_1993-03-05.jpg",
+    "30": "DMZ_1993-03-32.jpg",
+    "31": "DMZ_1993-03-33.jpg",
+    "32": "DMZ_1993-03-34.jpg",
+    "33": "DMZ_1993-03-35.jpg",
+    "34": "DMZ_1993-03-36.jpg",
+    "35": "DMZ_1993-03-37.jpg",
+    "36": "DMZ_1993-03-38.jpg",
+    "37": "DMZ_1993-03-39.jpg",
+    "38": "DMZ_1993-03-40.jpg",
+    "39": null,
+    "4": "DMZ_1993-03-06.jpg",
+    "40": null,
+    "41": "DMZ_1993-03-43.jpg",
+    "42": "DMZ_1993-03-44.jpg",
+    "43": "DMZ_1993-03-45.jpg",
+    "44": "DMZ_1993-03-46.jpg",
+    "45": "DMZ_1993-03-47.jpg",
+    "46": "DMZ_1993-03-48.jpg",
+    "47": "DMZ_1993-03-49.jpg",
+    "48": "DMZ_1993-03-50.jpg",
+    "49": "DMZ_1993-03-51.jpg",
+    "5": "DMZ_1993-03-07.jpg",
+    "50": "DMZ_1993-03-52.jpg",
+    "51": "DMZ_1993-03-53.jpg",
+    "52": "DMZ_1993-03-54.jpg",
+    "53": "DMZ_1993-03-55.jpg",
+    "54": "DMZ_1993-03-56.jpg",
+    "55": "DMZ_1993-03-57.jpg",
+    "56": "DMZ_1993-03-58.jpg",
+    "57": "DMZ_1993-03-59.jpg",
+    "58": "DMZ_1993-03-60.jpg",
+    "59": "DMZ_1993-03-61.jpg",
+    "6": "DMZ_1993-03-08.jpg",
+    "60": "DMZ_1993-03-62.jpg",
+    "61": "DMZ_1993-03-63.jpg",
+    "62": "DMZ_1993-03-64.jpg",
+    "63": "DMZ_1993-03-65.jpg",
+    "64": "DMZ_1993-03-66.jpg",
+    "65": "DMZ_1993-03-67.jpg",
+    "66": "DMZ_1993-03-68.jpg",
+    "67": "DMZ_1993-03-69.jpg",
+    "68": "DMZ_1993-03-70.jpg",
+    "7": "DMZ_1993-03-09.jpg",
+    "8": "DMZ_1993-03-10.jpg",
+    "9": "DMZ_1993-03-11.jpg"
+   },
+   "hqPageRotation": {
+    "27": 180
+   },
+   "issueId": "datormagazin-1993-03",
+   "pages": [
+    {
+     "bestCandidate": "DMZ_1993-03-03.jpg",
+     "margin": 0.495,
+     "pdfPage": 1,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-03.jpg",
+     "score": 0.929,
+     "secondCandidate": "DMZ_1993-03-34.jpg",
+     "secondScore": 0.434
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-04.jpg",
+     "margin": 0.592,
+     "pdfPage": 2,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-04.jpg",
+     "score": 0.94,
+     "secondCandidate": "DMZ_1993-03-17.jpg",
+     "secondScore": 0.348
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-05.jpg",
+     "margin": 0.601,
+     "pdfPage": 3,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-05.jpg",
+     "score": 0.915,
+     "secondCandidate": "DMZ_1993-03-14.jpg",
+     "secondScore": 0.314
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-06.jpg",
+     "margin": 0.415,
+     "pdfPage": 4,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-06.jpg",
+     "score": 0.972,
+     "secondCandidate": "DMZ_1993-03-60.jpg",
+     "secondScore": 0.557
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-07.jpg",
+     "margin": 0.545,
+     "pdfPage": 5,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-07.jpg",
+     "score": 0.96,
+     "secondCandidate": "DMZ_1993-03-22.jpg",
+     "secondScore": 0.415
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-08.jpg",
+     "margin": 0.562,
+     "pdfPage": 6,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-08.jpg",
+     "score": 0.951,
+     "secondCandidate": "DMZ_1993-03-13.jpg",
+     "secondScore": 0.389
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-09.jpg",
+     "margin": 0.532,
+     "pdfPage": 7,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-09.jpg",
+     "score": 0.862,
+     "secondCandidate": "DMZ_1993-03-33.jpg",
+     "secondScore": 0.33
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-10.jpg",
+     "margin": 0.417,
+     "pdfPage": 8,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-10.jpg",
+     "score": 0.968,
+     "secondCandidate": "DMZ_1993-03-65.jpg",
+     "secondScore": 0.551
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-11.jpg",
+     "margin": 0.511,
+     "pdfPage": 9,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-11.jpg",
+     "score": 0.957,
+     "secondCandidate": "DMZ_1993-03-61.jpg",
+     "secondScore": 0.446
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-12.jpg",
+     "margin": 0.23,
+     "pdfPage": 10,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-12.jpg",
+     "score": 0.956,
+     "secondCandidate": "DMZ_1993-03-47.jpg",
+     "secondScore": 0.726
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-13.jpg",
+     "margin": 0.312,
+     "pdfPage": 11,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-13.jpg",
+     "score": 0.961,
+     "secondCandidate": "DMZ_1993-03-61.jpg",
+     "secondScore": 0.649
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-14.jpg",
+     "margin": 0.5,
+     "pdfPage": 12,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-14.jpg",
+     "score": 0.776,
+     "secondCandidate": "DMZ_1993-03-31.jpg",
+     "secondScore": 0.276
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-15.jpg",
+     "margin": 0.373,
+     "pdfPage": 13,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-15.jpg",
+     "score": 0.971,
+     "secondCandidate": "DMZ_1993-03-26.jpg",
+     "secondScore": 0.598
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-16.jpg",
+     "margin": 0.35,
+     "pdfPage": 14,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-16.jpg",
+     "score": 0.985,
+     "secondCandidate": "DMZ_1993-03-40.jpg",
+     "secondScore": 0.635
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-17.jpg",
+     "margin": 0.568,
+     "pdfPage": 15,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-17.jpg",
+     "score": 0.941,
+     "secondCandidate": "DMZ_1993-03-04.jpg",
+     "secondScore": 0.373
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-18.jpg",
+     "margin": 0.531,
+     "pdfPage": 16,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-18.jpg",
+     "score": 0.934,
+     "secondCandidate": "DMZ_1993-03-23.jpg",
+     "secondScore": 0.403
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-19.jpg",
+     "margin": 0.489,
+     "pdfPage": 17,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-19.jpg",
+     "score": 0.938,
+     "secondCandidate": "DMZ_1993-03-55.jpg",
+     "secondScore": 0.449
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-20.jpg",
+     "margin": 0.35,
+     "pdfPage": 18,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-20.jpg",
+     "score": 0.94,
+     "secondCandidate": "DMZ_1993-03-55.jpg",
+     "secondScore": 0.59
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-21.jpg",
+     "margin": 0.436,
+     "pdfPage": 19,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-21.jpg",
+     "score": 0.879,
+     "secondCandidate": "DMZ_1993-03-40.jpg",
+     "secondScore": 0.443
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-22.jpg",
+     "margin": 0.224,
+     "pdfPage": 20,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-22.jpg",
+     "score": 0.901,
+     "secondCandidate": "DMZ_1993-03-25.jpg",
+     "secondScore": 0.677
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-23.jpg",
+     "margin": 0.35,
+     "pdfPage": 21,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-23.jpg",
+     "score": 0.888,
+     "secondCandidate": "DMZ_1993-03-30.jpg",
+     "secondScore": 0.538
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-24.jpg",
+     "margin": 0.365,
+     "pdfPage": 22,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-24.jpg",
+     "score": 0.882,
+     "secondCandidate": "DMZ_1993-03-47.jpg",
+     "secondScore": 0.517
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-25.jpg",
+     "margin": 0.314,
+     "pdfPage": 23,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-25.jpg",
+     "score": 0.931,
+     "secondCandidate": "DMZ_1993-03-22.jpg",
+     "secondScore": 0.617
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-26.jpg",
+     "margin": 0.268,
+     "pdfPage": 24,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-26.jpg",
+     "score": 0.974,
+     "secondCandidate": "DMZ_1993-03-50.jpg",
+     "secondScore": 0.706
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-27.jpg",
+     "margin": 0.367,
+     "pdfPage": 25,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-27.jpg",
+     "score": 0.941,
+     "secondCandidate": "DMZ_1993-03-50.jpg",
+     "secondScore": 0.574
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-28.jpg",
+     "margin": 0.47,
+     "pdfPage": 26,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-28.jpg",
+     "score": 0.824,
+     "secondCandidate": "DMZ_1993-03-25.jpg",
+     "secondScore": 0.354
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-29.jpg",
+     "margin": 0.605,
+     "pdfPage": 27,
+     "rotation": 180,
+     "scan": "DMZ_1993-03-29.jpg",
+     "score": 0.887,
+     "secondCandidate": "DMZ_1993-03-60.jpg",
+     "secondScore": 0.383
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-30.jpg",
+     "margin": 0.392,
+     "pdfPage": 28,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-30.jpg",
+     "score": 0.932,
+     "secondCandidate": "DMZ_1993-03-23.jpg",
+     "secondScore": 0.54
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-31.jpg",
+     "margin": 0.55,
+     "pdfPage": 29,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-31.jpg",
+     "score": 0.931,
+     "secondCandidate": "DMZ_1993-03-68.jpg",
+     "secondScore": 0.381
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-32.jpg",
+     "margin": 0.46,
+     "pdfPage": 30,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-32.jpg",
+     "score": 0.944,
+     "secondCandidate": "DMZ_1993-03-20.jpg",
+     "secondScore": 0.484
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-33.jpg",
+     "margin": 0.522,
+     "pdfPage": 31,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-33.jpg",
+     "score": 0.966,
+     "secondCandidate": "DMZ_1993-03-61.jpg",
+     "secondScore": 0.444
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-34.jpg",
+     "margin": 0.489,
+     "pdfPage": 32,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-34.jpg",
+     "score": 0.944,
+     "secondCandidate": "DMZ_1993-03-03.jpg",
+     "secondScore": 0.455
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-35.jpg",
+     "margin": 0.579,
+     "pdfPage": 33,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-35.jpg",
+     "score": 0.919,
+     "secondCandidate": "DMZ_1993-03-60.jpg",
+     "secondScore": 0.34
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-36.jpg",
+     "margin": 0.561,
+     "pdfPage": 34,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-36.jpg",
+     "score": 0.928,
+     "secondCandidate": "DMZ_1993-03-68.jpg",
+     "secondScore": 0.367
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-37.jpg",
+     "margin": 0.469,
+     "pdfPage": 35,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-37.jpg",
+     "score": 0.877,
+     "secondCandidate": "DMZ_1993-03-34.jpg",
+     "secondScore": 0.408
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-38.jpg",
+     "margin": 0.437,
+     "pdfPage": 36,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-38.jpg",
+     "score": 0.894,
+     "secondCandidate": "DMZ_1993-03-62.jpg",
+     "secondScore": 0.457
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-39.jpg",
+     "margin": 0.549,
+     "pdfPage": 37,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-39.jpg",
+     "score": 0.94,
+     "secondCandidate": "DMZ_1993-03-18.jpg",
+     "secondScore": 0.391
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-40.jpg",
+     "margin": 0.306,
+     "pdfPage": 38,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-40.jpg",
+     "score": 0.982,
+     "secondCandidate": "DMZ_1993-03-16.jpg",
+     "secondScore": 0.676
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-66.jpg",
+     "margin": 0.01,
+     "pdfPage": 39,
+     "rotation": 0,
+     "scan": null,
+     "score": 0.378,
+     "secondCandidate": "DMZ_1993-03-62.jpg",
+     "secondScore": 0.368
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-63.jpg",
+     "margin": 0.009,
+     "pdfPage": 40,
+     "rotation": 0,
+     "scan": null,
+     "score": 0.404,
+     "secondCandidate": "DMZ_1993-03-16.jpg",
+     "secondScore": 0.395
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-43.jpg",
+     "margin": 0.423,
+     "pdfPage": 41,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-43.jpg",
+     "score": 0.959,
+     "secondCandidate": "DMZ_1993-03-61.jpg",
+     "secondScore": 0.536
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-44.jpg",
+     "margin": 0.457,
+     "pdfPage": 42,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-44.jpg",
+     "score": 0.972,
+     "secondCandidate": "DMZ_1993-03-06.jpg",
+     "secondScore": 0.515
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-45.jpg",
+     "margin": 0.39,
+     "pdfPage": 43,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-45.jpg",
+     "score": 0.916,
+     "secondCandidate": "DMZ_1993-03-27.jpg",
+     "secondScore": 0.526
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-46.jpg",
+     "margin": 0.382,
+     "pdfPage": 44,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-46.jpg",
+     "score": 0.894,
+     "secondCandidate": "DMZ_1993-03-61.jpg",
+     "secondScore": 0.512
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-47.jpg",
+     "margin": 0.128,
+     "pdfPage": 45,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-47.jpg",
+     "score": 0.974,
+     "secondCandidate": "DMZ_1993-03-54.jpg",
+     "secondScore": 0.846
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-48.jpg",
+     "margin": 0.527,
+     "pdfPage": 46,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-48.jpg",
+     "score": 0.845,
+     "secondCandidate": "DMZ_1993-03-20.jpg",
+     "secondScore": 0.318
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-49.jpg",
+     "margin": 0.559,
+     "pdfPage": 47,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-49.jpg",
+     "score": 0.913,
+     "secondCandidate": "DMZ_1993-03-55.jpg",
+     "secondScore": 0.354
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-50.jpg",
+     "margin": 0.208,
+     "pdfPage": 48,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-50.jpg",
+     "score": 0.971,
+     "secondCandidate": "DMZ_1993-03-60.jpg",
+     "secondScore": 0.763
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-51.jpg",
+     "margin": 0.415,
+     "pdfPage": 49,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-51.jpg",
+     "score": 0.955,
+     "secondCandidate": "DMZ_1993-03-26.jpg",
+     "secondScore": 0.54
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-52.jpg",
+     "margin": 0.381,
+     "pdfPage": 50,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-52.jpg",
+     "score": 0.952,
+     "secondCandidate": "DMZ_1993-03-50.jpg",
+     "secondScore": 0.571
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-53.jpg",
+     "margin": 0.401,
+     "pdfPage": 51,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-53.jpg",
+     "score": 0.958,
+     "secondCandidate": "DMZ_1993-03-61.jpg",
+     "secondScore": 0.557
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-54.jpg",
+     "margin": 0.146,
+     "pdfPage": 52,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-54.jpg",
+     "score": 0.972,
+     "secondCandidate": "DMZ_1993-03-47.jpg",
+     "secondScore": 0.826
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-55.jpg",
+     "margin": 0.322,
+     "pdfPage": 53,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-55.jpg",
+     "score": 0.962,
+     "secondCandidate": "DMZ_1993-03-66.jpg",
+     "secondScore": 0.64
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-56.jpg",
+     "margin": 0.452,
+     "pdfPage": 54,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-56.jpg",
+     "score": 0.855,
+     "secondCandidate": "DMZ_1993-03-08.jpg",
+     "secondScore": 0.403
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-57.jpg",
+     "margin": 0.541,
+     "pdfPage": 55,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-57.jpg",
+     "score": 0.862,
+     "secondCandidate": "DMZ_1993-03-60.jpg",
+     "secondScore": 0.321
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-58.jpg",
+     "margin": 0.397,
+     "pdfPage": 56,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-58.jpg",
+     "score": 0.9,
+     "secondCandidate": "DMZ_1993-03-70.jpg",
+     "secondScore": 0.503
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-59.jpg",
+     "margin": 0.496,
+     "pdfPage": 57,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-59.jpg",
+     "score": 0.924,
+     "secondCandidate": "DMZ_1993-03-22.jpg",
+     "secondScore": 0.428
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-60.jpg",
+     "margin": 0.178,
+     "pdfPage": 58,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-60.jpg",
+     "score": 0.975,
+     "secondCandidate": "DMZ_1993-03-47.jpg",
+     "secondScore": 0.797
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-61.jpg",
+     "margin": 0.317,
+     "pdfPage": 59,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-61.jpg",
+     "score": 0.959,
+     "secondCandidate": "DMZ_1993-03-13.jpg",
+     "secondScore": 0.642
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-62.jpg",
+     "margin": 0.286,
+     "pdfPage": 60,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-62.jpg",
+     "score": 0.958,
+     "secondCandidate": "DMZ_1993-03-54.jpg",
+     "secondScore": 0.672
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-63.jpg",
+     "margin": 0.465,
+     "pdfPage": 61,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-63.jpg",
+     "score": 0.895,
+     "secondCandidate": "DMZ_1993-03-23.jpg",
+     "secondScore": 0.43
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-64.jpg",
+     "margin": 0.447,
+     "pdfPage": 62,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-64.jpg",
+     "score": 0.873,
+     "secondCandidate": "DMZ_1993-03-70.jpg",
+     "secondScore": 0.426
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-65.jpg",
+     "margin": 0.13,
+     "pdfPage": 63,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-65.jpg",
+     "score": 0.946,
+     "secondCandidate": "DMZ_1993-03-47.jpg",
+     "secondScore": 0.816
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-66.jpg",
+     "margin": 0.289,
+     "pdfPage": 64,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-66.jpg",
+     "score": 0.955,
+     "secondCandidate": "DMZ_1993-03-55.jpg",
+     "secondScore": 0.666
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-67.jpg",
+     "margin": 0.443,
+     "pdfPage": 65,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-67.jpg",
+     "score": 0.864,
+     "secondCandidate": "DMZ_1993-03-61.jpg",
+     "secondScore": 0.421
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-68.jpg",
+     "margin": 0.365,
+     "pdfPage": 66,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-68.jpg",
+     "score": 0.869,
+     "secondCandidate": "DMZ_1993-03-30.jpg",
+     "secondScore": 0.504
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-69.jpg",
+     "margin": 0.474,
+     "pdfPage": 67,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-69.jpg",
+     "score": 0.834,
+     "secondCandidate": "DMZ_1993-03-30.jpg",
+     "secondScore": 0.36
+    },
+    {
+     "bestCandidate": "DMZ_1993-03-70.jpg",
+     "margin": 0.345,
+     "pdfPage": 68,
+     "rotation": 0,
+     "scan": "DMZ_1993-03-70.jpg",
+     "score": 0.857,
+     "secondCandidate": "DMZ_1993-03-26.jpg",
+     "secondScore": 0.512
+    }
+   ],
+   "pdfPageCount": 68,
+   "scanFileCount": 72,
+   "unusedScans": [
+    "DMZ_1993-03-01.jpg",
+    "DMZ_1993-03-02.jpg",
+    "DMZ_1993-03-41.jpg",
+    "DMZ_1993-03-42.jpg",
+    "DMZ_1993-03-71.jpg",
+    "DMZ_1993-03-72.jpg"
+   ]
+  }
+ },
+ "method": {
+  "compareSize": [
+   48,
+   64
+  ],
+  "insets": [
+   0.0,
+   0.03,
+   0.06,
+   0.1
+  ],
+  "measure": "normaliserad korskorrelation mellan gråskalebilder, bästa värdet över beskärningar av båda bilderna",
+  "minMargin": 0.1,
+  "minScore": 0.6
+ },
+ "rotation": {
+  "datormagazin-1986-02": {
+   "issueId": "datormagazin-1986-02",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1986-02-001.jpg",
+     "scanLandscape": false,
+     "score": 0.996
+    }
+   ]
+  },
+  "datormagazin-1986-03": {
+   "issueId": "datormagazin-1986-03",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1986-03-001.jpg",
+     "scanLandscape": false,
+     "score": 0.995
+    }
+   ]
+  },
+  "datormagazin-1987-01": {
+   "issueId": "datormagazin-1987-01",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1987-01-001.jpg",
+     "scanLandscape": false,
+     "score": 0.997
+    }
+   ]
+  },
+  "datormagazin-1987-02": {
+   "issueId": "datormagazin-1987-02",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1987-02-001.jpg",
+     "scanLandscape": false,
+     "score": 0.995
+    },
+    {
+     "ok": true,
+     "pdfPage": 24,
+     "rotation": 270,
+     "scan": "DMZ_1987-02-024.jpg",
+     "scanLandscape": false,
+     "score": 0.996
+    }
+   ]
+  },
+  "datormagazin-1987-04-05": {
+   "issueId": "datormagazin-1987-04-05",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1987-04-001.jpg",
+     "scanLandscape": false,
+     "score": 0.997
+    }
+   ]
+  },
+  "datormagazin-1987-06": {
+   "issueId": "datormagazin-1987-06",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1987-06-001.jpg",
+     "scanLandscape": false,
+     "score": 0.993
+    }
+   ]
+  },
+  "datormagazin-1988-05": {
+   "issueId": "datormagazin-1988-05",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 36,
+     "rotation": 90,
+     "scan": "DMZ_1988-05-036.jpg",
+     "scanLandscape": false,
+     "score": 0.999
+    }
+   ]
+  },
+  "datormagazin-1988-06": {
+   "issueId": "datormagazin-1988-06",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1988-06-001.jpg",
+     "scanLandscape": false,
+     "score": 0.99
+    }
+   ]
+  },
+  "datormagazin-1988-07": {
+   "issueId": "datormagazin-1988-07",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 270,
+     "scan": "DMZ_1988-07-001.jpg",
+     "scanLandscape": false,
+     "score": 0.993
+    }
+   ]
+  },
+  "datormagazin-1988-08": {
+   "issueId": "datormagazin-1988-08",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1988-08-001.jpg",
+     "scanLandscape": false,
+     "score": 0.995
+    }
+   ]
+  },
+  "datormagazin-1988-09": {
+   "issueId": "datormagazin-1988-09",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1988-09-001.jpg",
+     "scanLandscape": false,
+     "score": 0.996
+    }
+   ]
+  },
+  "datormagazin-1988-11": {
+   "issueId": "datormagazin-1988-11",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1988-11-001.jpg",
+     "scanLandscape": false,
+     "score": 0.984
+    }
+   ]
+  },
+  "datormagazin-1988-12": {
+   "issueId": "datormagazin-1988-12",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1988-12-001.jpg",
+     "scanLandscape": false,
+     "score": 0.997
+    }
+   ]
+  },
+  "datormagazin-1988-13": {
+   "issueId": "datormagazin-1988-13",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1988-13-001.jpg",
+     "scanLandscape": false,
+     "score": 0.995
+    }
+   ]
+  },
+  "datormagazin-1988-14": {
+   "issueId": "datormagazin-1988-14",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1988-14-001.jpg",
+     "scanLandscape": false,
+     "score": 0.996
+    }
+   ]
+  },
+  "datormagazin-1988-15": {
+   "issueId": "datormagazin-1988-15",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1988-15-001.jpg",
+     "scanLandscape": false,
+     "score": 0.923
+    }
+   ]
+  },
+  "datormagazin-1988-16-17": {
+   "issueId": "datormagazin-1988-16-17",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1988-1617-001.jpg",
+     "scanLandscape": false,
+     "score": 0.999
+    }
+   ]
+  },
+  "datormagazin-1989-01": {
+   "issueId": "datormagazin-1989-01",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-01-001.jpg",
+     "scanLandscape": false,
+     "score": 0.989
+    },
+    {
+     "ok": true,
+     "pdfPage": 13,
+     "rotation": 90,
+     "scan": "DMZ_1989-01-013.jpg",
+     "scanLandscape": false,
+     "score": 0.994
+    }
+   ]
+  },
+  "datormagazin-1989-02": {
+   "issueId": "datormagazin-1989-02",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-02-001.jpg",
+     "scanLandscape": false,
+     "score": 0.996
+    }
+   ]
+  },
+  "datormagazin-1989-03": {
+   "issueId": "datormagazin-1989-03",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-03-001.jpg",
+     "scanLandscape": false,
+     "score": 0.988
+    }
+   ]
+  },
+  "datormagazin-1989-05": {
+   "issueId": "datormagazin-1989-05",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-05-001.jpg",
+     "scanLandscape": false,
+     "score": 0.996
+    }
+   ]
+  },
+  "datormagazin-1989-06": {
+   "issueId": "datormagazin-1989-06",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-06-001.jpg",
+     "scanLandscape": false,
+     "score": 0.996
+    }
+   ]
+  },
+  "datormagazin-1989-07": {
+   "issueId": "datormagazin-1989-07",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-07-001.jpg",
+     "scanLandscape": false,
+     "score": 0.992
+    }
+   ]
+  },
+  "datormagazin-1989-08": {
+   "issueId": "datormagazin-1989-08",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-08-001.jpg",
+     "scanLandscape": false,
+     "score": 0.987
+    }
+   ]
+  },
+  "datormagazin-1989-09": {
+   "issueId": "datormagazin-1989-09",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-09-001.jpg",
+     "scanLandscape": false,
+     "score": 0.996
+    }
+   ]
+  },
+  "datormagazin-1989-10": {
+   "issueId": "datormagazin-1989-10",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-10-001.jpg",
+     "scanLandscape": false,
+     "score": 0.995
+    }
+   ]
+  },
+  "datormagazin-1989-11": {
+   "issueId": "datormagazin-1989-11",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-11-001.jpg",
+     "scanLandscape": false,
+     "score": 0.993
+    }
+   ]
+  },
+  "datormagazin-1989-12": {
+   "issueId": "datormagazin-1989-12",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 42,
+     "rotation": 270,
+     "scan": "DMZ_1989-12-042.jpg",
+     "scanLandscape": false,
+     "score": 0.988
+    }
+   ]
+  },
+  "datormagazin-1989-13": {
+   "issueId": "datormagazin-1989-13",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-13-001.jpg",
+     "scanLandscape": false,
+     "score": 0.994
+    }
+   ]
+  },
+  "datormagazin-1989-14": {
+   "issueId": "datormagazin-1989-14",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-14-001.jpg",
+     "scanLandscape": false,
+     "score": 0.992
+    },
+    {
+     "ok": true,
+     "pdfPage": 28,
+     "rotation": 90,
+     "scan": "DMZ_1989-14-028.jpg",
+     "scanLandscape": false,
+     "score": 0.993
+    }
+   ]
+  },
+  "datormagazin-1989-15": {
+   "issueId": "datormagazin-1989-15",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-15-001.jpg",
+     "scanLandscape": false,
+     "score": 0.998
+    },
+    {
+     "ok": true,
+     "pdfPage": 34,
+     "rotation": 90,
+     "scan": "DMZ_1989-15-034.jpg",
+     "scanLandscape": false,
+     "score": 0.985
+    }
+   ]
+  },
+  "datormagazin-1989-16": {
+   "issueId": "datormagazin-1989-16",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-16-001.jpg",
+     "scanLandscape": false,
+     "score": 0.994
+    },
+    {
+     "ok": true,
+     "pdfPage": 33,
+     "rotation": 270,
+     "scan": "DMZ_1989-16-033.jpg",
+     "scanLandscape": false,
+     "score": 0.983
+    }
+   ]
+  },
+  "datormagazin-1989-16b": {
+   "issueId": "datormagazin-1989-16b",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 27,
+     "rotation": 270,
+     "scan": "DMZ_1989-16b-027.jpg",
+     "scanLandscape": false,
+     "score": 0.998
+    },
+    {
+     "ok": true,
+     "pdfPage": 35,
+     "rotation": 90,
+     "scan": "DMZ_1989-16b-035.jpg",
+     "scanLandscape": false,
+     "score": 0.997
+    }
+   ]
+  },
+  "datormagazin-1989-17": {
+   "issueId": "datormagazin-1989-17",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-17-001.jpg",
+     "scanLandscape": false,
+     "score": 0.994
+    },
+    {
+     "ok": true,
+     "pdfPage": 26,
+     "rotation": 90,
+     "scan": "DMZ_1989-17-026.jpg",
+     "scanLandscape": false,
+     "score": 0.993
+    }
+   ]
+  },
+  "datormagazin-1989-18": {
+   "issueId": "datormagazin-1989-18",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1989-18-001.jpg",
+     "scanLandscape": false,
+     "score": 0.998
+    }
+   ]
+  },
+  "datormagazin-1990-01": {
+   "issueId": "datormagazin-1990-01",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 0,
+     "scan": "DMZ_1990-01-001.jpg",
+     "scanLandscape": true,
+     "score": 0.999
+    }
+   ]
+  },
+  "datormagazin-1990-02": {
+   "issueId": "datormagazin-1990-02",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 0,
+     "scan": "DMZ_1990-02-001.jpg",
+     "scanLandscape": true,
+     "score": 0.997
+    }
+   ]
+  },
+  "datormagazin-1990-03": {
+   "issueId": "datormagazin-1990-03",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1990-03-001.jpg",
+     "scanLandscape": false,
+     "score": 0.995
+    }
+   ]
+  },
+  "datormagazin-1990-04": {
+   "issueId": "datormagazin-1990-04",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1990-04-001.jpg",
+     "scanLandscape": false,
+     "score": 0.986
+    },
+    {
+     "ok": true,
+     "pdfPage": 21,
+     "rotation": 90,
+     "scan": "DMZ_1990-04-021.jpg",
+     "scanLandscape": false,
+     "score": 0.988
+    }
+   ]
+  },
+  "datormagazin-1990-05": {
+   "issueId": "datormagazin-1990-05",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 0,
+     "scan": "DMZ_1990-05-001.jpg",
+     "scanLandscape": true,
+     "score": 0.993
+    }
+   ]
+  },
+  "datormagazin-1990-06": {
+   "issueId": "datormagazin-1990-06",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 18,
+     "rotation": 90,
+     "scan": "DMZ_1990-06-018.jpg",
+     "scanLandscape": false,
+     "score": 0.993
+    }
+   ]
+  },
+  "datormagazin-1990-07": {
+   "issueId": "datormagazin-1990-07",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 0,
+     "scan": "DMZ_1990-07-001.jpg",
+     "scanLandscape": true,
+     "score": 0.999
+    }
+   ]
+  },
+  "datormagazin-1990-08": {
+   "issueId": "datormagazin-1990-08",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1990-08-001.jpg",
+     "scanLandscape": false,
+     "score": 0.995
+    }
+   ]
+  },
+  "datormagazin-1990-09": {
+   "issueId": "datormagazin-1990-09",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 0,
+     "scan": "DMZ_1990-09-001.jpg",
+     "scanLandscape": true,
+     "score": 0.994
+    },
+    {
+     "ok": true,
+     "pdfPage": 18,
+     "rotation": 270,
+     "scan": "DMZ_1990-09-018.jpg",
+     "scanLandscape": false,
+     "score": 0.99
+    },
+    {
+     "ok": true,
+     "pdfPage": 21,
+     "rotation": 90,
+     "scan": "DMZ_1990-09-021.jpg",
+     "scanLandscape": false,
+     "score": 0.986
+    }
+   ]
+  },
+  "datormagazin-1990-10": {
+   "issueId": "datormagazin-1990-10",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 1,
+     "rotation": 90,
+     "scan": "DMZ_1990-10-001.jpg",
+     "scanLandscape": false,
+     "score": 0.998
+    },
+    {
+     "ok": true,
+     "pdfPage": 15,
+     "rotation": 90,
+     "scan": "DMZ_1990-10-015.jpg",
+     "scanLandscape": false,
+     "score": 0.994
+    }
+   ]
+  },
+  "datormagazin-1990-12": {
+   "issueId": "datormagazin-1990-12",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 74,
+     "rotation": 90,
+     "scan": "DMZ_1990-12-074.jpg",
+     "scanLandscape": false,
+     "score": 0.995
+    }
+   ]
+  },
+  "datormagazin-1990-13": {
+   "issueId": "datormagazin-1990-13",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 16,
+     "rotation": 90,
+     "scan": "DMZ_1990-13-016.jpg",
+     "scanLandscape": false,
+     "score": 0.996
+    },
+    {
+     "ok": true,
+     "pdfPage": 17,
+     "rotation": 90,
+     "scan": "DMZ_1990-13-017.jpg",
+     "scanLandscape": false,
+     "score": 0.963
+    },
+    {
+     "ok": true,
+     "pdfPage": 77,
+     "rotation": 0,
+     "scan": "DMZ_1990-13-077.jpg",
+     "scanLandscape": true,
+     "score": 0.971
+    },
+    {
+     "ok": true,
+     "pdfPage": 78,
+     "rotation": 0,
+     "scan": "DMZ_1990-13-078.jpg",
+     "scanLandscape": true,
+     "score": 0.991
+    }
+   ]
+  },
+  "datormagazin-1990-15": {
+   "issueId": "datormagazin-1990-15",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 33,
+     "rotation": 90,
+     "scan": "DMZ_1990-15-033.jpg",
+     "scanLandscape": false,
+     "score": 0.982
+    },
+    {
+     "ok": true,
+     "pdfPage": 38,
+     "rotation": 90,
+     "scan": "DMZ_1990-15-038.jpg",
+     "scanLandscape": false,
+     "score": 0.993
+    },
+    {
+     "ok": true,
+     "pdfPage": 39,
+     "rotation": 90,
+     "scan": "DMZ_1990-15-039.jpg",
+     "scanLandscape": false,
+     "score": 0.992
+    }
+   ]
+  },
+  "datormagazin-1990-16": {
+   "issueId": "datormagazin-1990-16",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 38,
+     "rotation": 270,
+     "scan": "DMZ_1990-16-038.jpg",
+     "scanLandscape": false,
+     "score": 0.988
+    },
+    {
+     "ok": true,
+     "pdfPage": 39,
+     "rotation": 270,
+     "scan": "DMZ_1990-16-039.jpg",
+     "scanLandscape": false,
+     "score": 0.986
+    },
+    {
+     "ok": true,
+     "pdfPage": 47,
+     "rotation": 90,
+     "scan": "DMZ_1990-16-047.jpg",
+     "scanLandscape": false,
+     "score": 0.939
+    }
+   ]
+  },
+  "datormagazin-1990-17": {
+   "issueId": "datormagazin-1990-17",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 34,
+     "rotation": 270,
+     "scan": "DMZ_1990-17-034.jpg",
+     "scanLandscape": false,
+     "score": 0.974
+    },
+    {
+     "ok": true,
+     "pdfPage": 36,
+     "rotation": 90,
+     "scan": "DMZ_1990-17-036.jpg",
+     "scanLandscape": false,
+     "score": 0.94
+    },
+    {
+     "ok": true,
+     "pdfPage": 37,
+     "rotation": 90,
+     "scan": "DMZ_1990-17-037.jpg",
+     "scanLandscape": false,
+     "score": 0.957
+    }
+   ]
+  },
+  "datormagazin-1990-18": {
+   "issueId": "datormagazin-1990-18",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 41,
+     "rotation": 90,
+     "scan": "DMZ_1990-18-041.jpg",
+     "scanLandscape": false,
+     "score": 0.989
+    },
+    {
+     "ok": true,
+     "pdfPage": 66,
+     "rotation": 90,
+     "scan": "DMZ_1990-18-066.jpg",
+     "scanLandscape": false,
+     "score": 0.971
+    },
+    {
+     "ok": true,
+     "pdfPage": 67,
+     "rotation": 90,
+     "scan": "DMZ_1990-18-067.jpg",
+     "scanLandscape": false,
+     "score": 0.995
+    },
+    {
+     "ok": true,
+     "pdfPage": 69,
+     "rotation": 90,
+     "scan": "DMZ_1990-18-069.jpg",
+     "scanLandscape": false,
+     "score": 0.997
+    }
+   ]
+  },
+  "datormagazin-1990-19": {
+   "issueId": "datormagazin-1990-19",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 13,
+     "rotation": 90,
+     "scan": "DMZ_1990-19-013.jpg",
+     "scanLandscape": false,
+     "score": 0.992
+    },
+    {
+     "ok": true,
+     "pdfPage": 16,
+     "rotation": 90,
+     "scan": "DMZ_1990-19-016.jpg",
+     "scanLandscape": false,
+     "score": 0.99
+    },
+    {
+     "ok": true,
+     "pdfPage": 17,
+     "rotation": 90,
+     "scan": "DMZ_1990-19-017.jpg",
+     "scanLandscape": false,
+     "score": 0.986
+    }
+   ]
+  },
+  "datormagazin-1990-20": {
+   "issueId": "datormagazin-1990-20",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 37,
+     "rotation": 90,
+     "scan": "DMZ_1990-20-037.jpg",
+     "scanLandscape": false,
+     "score": 0.975
+    }
+   ]
+  },
+  "datormagazin-1991-01": {
+   "issueId": "datormagazin-1991-01",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 30,
+     "rotation": 0,
+     "scan": "DMZ_1991-01-030.jpg",
+     "scanLandscape": true,
+     "score": 0.953
+    },
+    {
+     "ok": true,
+     "pdfPage": 31,
+     "rotation": 270,
+     "scan": "DMZ_1991-01-031.jpg",
+     "scanLandscape": false,
+     "score": 0.977
+    }
+   ]
+  },
+  "datormagazin-1991-04": {
+   "issueId": "datormagazin-1991-04",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 53,
+     "rotation": 90,
+     "scan": "DMZ_1991-04-053.jpg",
+     "scanLandscape": false,
+     "score": 0.993
+    }
+   ]
+  },
+  "datormagazin-1991-05": {
+   "issueId": "datormagazin-1991-05",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 9,
+     "rotation": 90,
+     "scan": "DMZ_1991-05-09.jpg",
+     "scanLandscape": false,
+     "score": 0.987
+    }
+   ]
+  },
+  "datormagazin-1991-06": {
+   "issueId": "datormagazin-1991-06",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 14,
+     "rotation": 90,
+     "scan": "DMZ_1991-06-014.jpg",
+     "scanLandscape": false,
+     "score": 0.989
+    },
+    {
+     "ok": true,
+     "pdfPage": 21,
+     "rotation": 270,
+     "scan": "DMZ_1991-06-021.jpg",
+     "scanLandscape": false,
+     "score": 0.994
+    }
+   ]
+  },
+  "datormagazin-1991-07": {
+   "issueId": "datormagazin-1991-07",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 19,
+     "rotation": 90,
+     "scan": "DMZ_1991-07-019.jpg",
+     "scanLandscape": false,
+     "score": 0.988
+    }
+   ]
+  },
+  "datormagazin-1991-08": {
+   "issueId": "datormagazin-1991-08",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 35,
+     "rotation": 90,
+     "scan": "DMZ_1991-08-035.jpg",
+     "scanLandscape": false,
+     "score": 0.994
+    }
+   ]
+  },
+  "datormagazin-1991-09": {
+   "issueId": "datormagazin-1991-09",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 28,
+     "rotation": 90,
+     "scan": "DMZ_1991-09-028.jpg",
+     "scanLandscape": false,
+     "score": 0.996
+    }
+   ]
+  },
+  "datormagazin-1991-10": {
+   "issueId": "datormagazin-1991-10",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 19,
+     "rotation": 0,
+     "scan": "DMZ_1991-10-019.jpg",
+     "scanLandscape": true,
+     "score": 0.991
+    }
+   ]
+  },
+  "datormagazin-1991-11": {
+   "issueId": "datormagazin-1991-11",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 5,
+     "rotation": 90,
+     "scan": "DMZ_1991-11-005.jpg",
+     "scanLandscape": false,
+     "score": 0.995
+    },
+    {
+     "ok": true,
+     "pdfPage": 23,
+     "rotation": 90,
+     "scan": "DMZ_1991-11-023.jpg",
+     "scanLandscape": false,
+     "score": 0.969
+    }
+   ]
+  },
+  "datormagazin-1991-12": {
+   "issueId": "datormagazin-1991-12",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 5,
+     "rotation": 90,
+     "scan": "DMZ_1991-12-005.jpg",
+     "scanLandscape": false,
+     "score": 0.987
+    }
+   ]
+  },
+  "datormagazin-1991-13": {
+   "issueId": "datormagazin-1991-13",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 11,
+     "rotation": 90,
+     "scan": "DMZ_1991-13-011.jpg",
+     "scanLandscape": false,
+     "score": 0.992
+    },
+    {
+     "ok": true,
+     "pdfPage": 49,
+     "rotation": 270,
+     "scan": "DMZ_1991-13-049.jpg",
+     "scanLandscape": false,
+     "score": 0.984
+    }
+   ]
+  },
+  "datormagazin-1991-14": {
+   "issueId": "datormagazin-1991-14",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 28,
+     "rotation": 270,
+     "scan": "DMZ_1991-14-028.jpg",
+     "scanLandscape": false,
+     "score": 0.989
+    }
+   ]
+  },
+  "datormagazin-1991-15": {
+   "issueId": "datormagazin-1991-15",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 5,
+     "rotation": 270,
+     "scan": "DMZ_1991-15-005.jpg",
+     "scanLandscape": false,
+     "score": 0.958
+    },
+    {
+     "ok": true,
+     "pdfPage": 19,
+     "rotation": 90,
+     "scan": "DMZ_1991-15-019.jpg",
+     "scanLandscape": false,
+     "score": 0.989
+    }
+   ]
+  },
+  "datormagazin-1991-16": {
+   "issueId": "datormagazin-1991-16",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 5,
+     "rotation": 270,
+     "scan": "DMZ_1991-16-005.jpg",
+     "scanLandscape": false,
+     "score": 0.985
+    }
+   ]
+  },
+  "datormagazin-1991-17": {
+   "issueId": "datormagazin-1991-17",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 22,
+     "rotation": 90,
+     "scan": "DMZ_1991-17-022.jpg",
+     "scanLandscape": false,
+     "score": 0.95
+    },
+    {
+     "ok": true,
+     "pdfPage": 35,
+     "rotation": 90,
+     "scan": "DMZ_1991-17-035.jpg",
+     "scanLandscape": false,
+     "score": 0.957
+    }
+   ]
+  },
+  "datormagazin-1991-18": {
+   "issueId": "datormagazin-1991-18",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 22,
+     "rotation": 90,
+     "scan": "DMZ_1991-18-022.jpg",
+     "scanLandscape": false,
+     "score": 0.993
+    }
+   ]
+  },
+  "datormagazin-1991-19": {
+   "issueId": "datormagazin-1991-19",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 19,
+     "rotation": 90,
+     "scan": "DMZ_1991-19-019.jpg",
+     "scanLandscape": false,
+     "score": 0.992
+    },
+    {
+     "ok": true,
+     "pdfPage": 37,
+     "rotation": 90,
+     "scan": "DMZ_1991-19-037.jpg",
+     "scanLandscape": false,
+     "score": 0.994
+    }
+   ]
+  },
+  "datormagazin-1991-20": {
+   "issueId": "datormagazin-1991-20",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 45,
+     "rotation": 90,
+     "scan": "DMZ_1991-20-045.jpg",
+     "scanLandscape": false,
+     "score": 0.986
+    },
+    {
+     "ok": true,
+     "pdfPage": 53,
+     "rotation": 270,
+     "scan": "DMZ_1991-20-053.jpg",
+     "scanLandscape": false,
+     "score": 0.985
+    }
+   ]
+  },
+  "datormagazin-1991-21": {
+   "issueId": "datormagazin-1991-21",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 29,
+     "rotation": 90,
+     "scan": "DMZ_1991-21-029.jpg",
+     "scanLandscape": false,
+     "score": 0.99
+    },
+    {
+     "ok": true,
+     "pdfPage": 35,
+     "rotation": 90,
+     "scan": "DMZ_1991-21-035.jpg",
+     "scanLandscape": false,
+     "score": 0.993
+    }
+   ]
+  },
+  "datormagazin-1994-17": {
+   "issueId": "datormagazin-1994-17",
+   "pages": [
+    {
+     "ok": true,
+     "pdfPage": 54,
+     "rotation": 0,
+     "scan": "DMZ_1994-17-054.jpg",
+     "scanLandscape": true,
+     "score": 0.998
+    }
+   ]
+  }
+ },
+ "sample": {
+  "datormagazin-1986-01": {
+   "issueId": "datormagazin-1986-01",
+   "pages": [
+    {
+     "bestOtherScan": "DMZ_1986-01-014.jpg",
+     "bestOtherScore": 0.398,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "DMZ_1986-01-001.jpg",
+     "scanRotation": 0,
+     "score": 0.996
+    },
+    {
+     "bestOtherScan": "DMZ_1986-01-028.jpg",
+     "bestOtherScore": 0.463,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 14,
+     "position": "middle",
+     "scan": "DMZ_1986-01-014.jpg",
+     "scanRotation": 0,
+     "score": 0.998
+    },
+    {
+     "bestOtherScan": "DMZ_1986-01-014.jpg",
+     "bestOtherScore": 0.459,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 28,
+     "position": "last",
+     "scan": "DMZ_1986-01-028.jpg",
+     "scanRotation": 0,
+     "score": 0.997
+    }
+   ],
+   "pdfPageCount": 28,
+   "scanFileCount": 28
+  },
+  "datormagazin-1987-04-05": {
+   "issueId": "datormagazin-1987-04-05",
+   "pages": [
+    {
+     "bestOtherScan": "DMZ_1987-04-024.jpg",
+     "bestOtherScore": 0.387,
+     "ok": true,
+     "pdfLandscape": true,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "DMZ_1987-04-001.jpg",
+     "scanRotation": 90,
+     "score": 0.997
+    },
+    {
+     "bestOtherScan": "DMZ_1987-04-048.jpg",
+     "bestOtherScore": 0.226,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 24,
+     "position": "middle",
+     "scan": "DMZ_1987-04-024.jpg",
+     "scanRotation": 0,
+     "score": 0.996
+    },
+    {
+     "bestOtherScan": "DMZ_1987-04-001.jpg",
+     "bestOtherScore": 0.249,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 48,
+     "position": "last",
+     "scan": "DMZ_1987-04-048.jpg",
+     "scanRotation": 0,
+     "score": 0.997
+    }
+   ],
+   "pdfPageCount": 48,
+   "scanFileCount": 48
+  },
+  "datormagazin-1988-16-17": {
+   "issueId": "datormagazin-1988-16-17",
+   "pages": [
+    {
+     "bestOtherScan": "DMZ_1988-1617-048.jpg",
+     "bestOtherScore": 0.513,
+     "ok": true,
+     "pdfLandscape": true,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "DMZ_1988-1617-001.jpg",
+     "scanRotation": 90,
+     "score": 0.999
+    },
+    {
+     "bestOtherScan": "DMZ_1988-1617-001.jpg",
+     "bestOtherScore": 0.36,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 24,
+     "position": "middle",
+     "scan": "DMZ_1988-1617-024.jpg",
+     "scanRotation": 0,
+     "score": 0.994
+    },
+    {
+     "bestOtherScan": "DMZ_1988-1617-001.jpg",
+     "bestOtherScore": 0.425,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 48,
+     "position": "last",
+     "scan": "DMZ_1988-1617-048.jpg",
+     "scanRotation": 0,
+     "score": 0.987
+    }
+   ],
+   "pdfPageCount": 48,
+   "scanFileCount": 48
+  },
+  "datormagazin-1989-06": {
+   "issueId": "datormagazin-1989-06",
+   "pages": [
+    {
+     "bestOtherScan": "DMZ_1989-06-024.jpg",
+     "bestOtherScore": 0.235,
+     "ok": true,
+     "pdfLandscape": true,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "DMZ_1989-06-001.jpg",
+     "scanRotation": 90,
+     "score": 0.996
+    },
+    {
+     "bestOtherScan": "DMZ_1989-06-001.jpg",
+     "bestOtherScore": 0.237,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 24,
+     "position": "middle",
+     "scan": "DMZ_1989-06-024.jpg",
+     "scanRotation": 0,
+     "score": 0.99
+    },
+    {
+     "bestOtherScan": "DMZ_1989-06-024.jpg",
+     "bestOtherScore": 0.189,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 48,
+     "position": "last",
+     "scan": "DMZ_1989-06-048.jpg",
+     "scanRotation": 0,
+     "score": 0.997
+    }
+   ],
+   "pdfPageCount": 48,
+   "scanFileCount": 48
+  },
+  "datormagazin-1990-10": {
+   "issueId": "datormagazin-1990-10",
+   "pages": [
+    {
+     "bestOtherScan": "DMZ_1990-10-044.jpg",
+     "bestOtherScore": 0.432,
+     "ok": true,
+     "pdfLandscape": true,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "DMZ_1990-10-001.jpg",
+     "scanRotation": 90,
+     "score": 0.998
+    },
+    {
+     "bestOtherScan": "DMZ_1990-10-001.jpg",
+     "bestOtherScore": 0.315,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 22,
+     "position": "middle",
+     "scan": "DMZ_1990-10-022.jpg",
+     "scanRotation": 0,
+     "score": 0.997
+    },
+    {
+     "bestOtherScan": "DMZ_1990-10-001.jpg",
+     "bestOtherScore": 0.428,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 44,
+     "position": "last",
+     "scan": "DMZ_1990-10-044.jpg",
+     "scanRotation": 0,
+     "score": 0.997
+    }
+   ],
+   "pdfPageCount": 44,
+   "scanFileCount": 44
+  },
+  "datormagazin-1991-02": {
+   "issueId": "datormagazin-1991-02",
+   "pages": [
+    {
+     "bestOtherScan": "DMZ_1991-02-088.jpg",
+     "bestOtherScore": 0.388,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "DMZ_1991-02-001.jpg",
+     "scanRotation": 0,
+     "score": 0.981
+    },
+    {
+     "bestOtherScan": "DMZ_1991-02-001.jpg",
+     "bestOtherScore": 0.376,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 44,
+     "position": "middle",
+     "scan": "DMZ_1991-02-044.jpg",
+     "scanRotation": 0,
+     "score": 0.997
+    },
+    {
+     "bestOtherScan": "DMZ_1991-02-001.jpg",
+     "bestOtherScore": 0.384,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 88,
+     "position": "last",
+     "scan": "DMZ_1991-02-088.jpg",
+     "scanRotation": 0,
+     "score": 0.975
+    }
+   ],
+   "pdfPageCount": 88,
+   "scanFileCount": 88
+  },
+  "datormagazin-1991-22": {
+   "issueId": "datormagazin-1991-22",
+   "pages": [
+    {
+     "bestOtherScan": "DMZ_1991-22-080.jpg",
+     "bestOtherScore": 0.258,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "DMZ_1991-22-001.jpg",
+     "scanRotation": 0,
+     "score": 0.995
+    },
+    {
+     "bestOtherScan": "DMZ_1991-22-080.jpg",
+     "bestOtherScore": 0.11,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 40,
+     "position": "middle",
+     "scan": "DMZ_1991-22-040.jpg",
+     "scanRotation": 0,
+     "score": 0.998
+    },
+    {
+     "bestOtherScan": "DMZ_1991-22-001.jpg",
+     "bestOtherScore": 0.255,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 80,
+     "position": "last",
+     "scan": "DMZ_1991-22-080.jpg",
+     "scanRotation": 0,
+     "score": 0.997
+    }
+   ],
+   "pdfPageCount": 80,
+   "scanFileCount": 80
+  },
+  "datormagazin-1992-13": {
+   "issueId": "datormagazin-1992-13",
+   "pages": [
+    {
+     "bestOtherScan": "DMZ_1992-13-40.jpg",
+     "bestOtherScore": 0.04,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "DMZ_1992-13-01.jpg",
+     "scanRotation": 0,
+     "score": 0.997
+    },
+    {
+     "bestOtherScan": "DMZ_1992-13-01.jpg",
+     "bestOtherScore": 0.042,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 40,
+     "position": "middle",
+     "scan": "DMZ_1992-13-40.jpg",
+     "scanRotation": 0,
+     "score": 0.995
+    },
+    {
+     "bestOtherScan": "DMZ_1992-13-01.jpg",
+     "bestOtherScore": 0.008,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 80,
+     "position": "last",
+     "scan": "DMZ_1992-13-80.jpg",
+     "scanRotation": 0,
+     "score": 0.998
+    }
+   ],
+   "pdfPageCount": 80,
+   "scanFileCount": 80
+  },
+  "datormagazin-1994-09": {
+   "issueId": "datormagazin-1994-09",
+   "pages": [
+    {
+     "bestOtherScan": "DMZ_1994-09-64.jpg",
+     "bestOtherScore": 0.174,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "DMZ_1994-09-01.jpg",
+     "scanRotation": 0,
+     "score": 0.993
+    },
+    {
+     "bestOtherScan": "DMZ_1994-09-64.jpg",
+     "bestOtherScore": 0.332,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 32,
+     "position": "middle",
+     "scan": "DMZ_1994-09-32.jpg",
+     "scanRotation": 0,
+     "score": 0.994
+    },
+    {
+     "bestOtherScan": "DMZ_1994-09-32.jpg",
+     "bestOtherScore": 0.346,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 64,
+     "position": "last",
+     "scan": "DMZ_1994-09-64.jpg",
+     "scanRotation": 0,
+     "score": 0.99
+    }
+   ],
+   "pdfPageCount": 64,
+   "scanFileCount": 64
+  },
+  "datormagazin-1995-14": {
+   "issueId": "datormagazin-1995-14",
+   "pages": [
+    {
+     "bestOtherScan": "DMZ_1995-14-042.jpg",
+     "bestOtherScore": 0.212,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "DMZ_1995-14-001.jpg",
+     "scanRotation": 0,
+     "score": 0.998
+    },
+    {
+     "bestOtherScan": "DMZ_1995-14-001.jpg",
+     "bestOtherScore": 0.221,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 42,
+     "position": "middle",
+     "scan": "DMZ_1995-14-042.jpg",
+     "scanRotation": 0,
+     "score": 0.995
+    },
+    {
+     "bestOtherScan": "DMZ_1995-14-042.jpg",
+     "bestOtherScore": 0.166,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 84,
+     "position": "last",
+     "scan": "DMZ_1995-14-084.jpg",
+     "scanRotation": 0,
+     "score": 0.996
+    }
+   ],
+   "pdfPageCount": 84,
+   "scanFileCount": 84
+  },
+  "datormagazin-1995-15": {
+   "issueId": "datormagazin-1995-15",
+   "pages": [
+    {
+     "bestOtherScan": "DMZ_1995-15-092.jpg",
+     "bestOtherScore": 0.122,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "DMZ_1995-15-001.jpg",
+     "scanRotation": 0,
+     "score": 0.993
+    },
+    {
+     "bestOtherScan": "DMZ_1995-15-092.jpg",
+     "bestOtherScore": 0.201,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 46,
+     "position": "middle",
+     "scan": "DMZ_1995-15-046.jpg",
+     "scanRotation": 0,
+     "score": 0.998
+    },
+    {
+     "bestOtherScan": "DMZ_1995-15-046.jpg",
+     "bestOtherScore": 0.204,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 92,
+     "position": "last",
+     "scan": "DMZ_1995-15-092.jpg",
+     "scanRotation": 0,
+     "score": 0.997
+    }
+   ],
+   "pdfPageCount": 92,
+   "scanFileCount": 92
+  },
+  "highscore-1993-17": {
+   "issueId": "highscore-1993-17",
+   "pages": [
+    {
+     "bestOtherScan": "HighScore_1993-17_016.jpg",
+     "bestOtherScore": 0.197,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "HighScore_1993-17_001.jpg",
+     "scanRotation": 0,
+     "score": 0.992
+    },
+    {
+     "bestOtherScan": "HighScore_1993-17_032.jpg",
+     "bestOtherScore": 0.393,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 16,
+     "position": "middle",
+     "scan": "HighScore_1993-17_016.jpg",
+     "scanRotation": 0,
+     "score": 0.996
+    },
+    {
+     "bestOtherScan": "HighScore_1993-17_016.jpg",
+     "bestOtherScore": 0.407,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 32,
+     "position": "last",
+     "scan": "HighScore_1993-17_032.jpg",
+     "scanRotation": 0,
+     "score": 0.987
+    }
+   ],
+   "pdfPageCount": 32,
+   "scanFileCount": 32
+  },
+  "highscore-1994-08": {
+   "issueId": "highscore-1994-08",
+   "pages": [
+    {
+     "bestOtherScan": "HighScore_1994-08_032.jpg",
+     "bestOtherScore": 0.0,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 1,
+     "position": "first",
+     "scan": "HighScore_1994-08_001.jpg",
+     "scanRotation": 0,
+     "score": 0.997
+    },
+    {
+     "bestOtherScan": "HighScore_1994-08_032.jpg",
+     "bestOtherScore": 0.286,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 16,
+     "position": "middle",
+     "scan": "HighScore_1994-08_016.jpg",
+     "scanRotation": 0,
+     "score": 0.996
+    },
+    {
+     "bestOtherScan": "HighScore_1994-08_016.jpg",
+     "bestOtherScore": 0.287,
+     "ok": true,
+     "pdfLandscape": false,
+     "pdfPage": 32,
+     "position": "last",
+     "scan": "HighScore_1994-08_032.jpg",
+     "scanRotation": 0,
+     "score": 0.999
+    }
+   ],
+   "pdfPageCount": 32,
+   "scanFileCount": 32
+  }
+ }
+}
