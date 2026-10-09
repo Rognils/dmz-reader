@@ -76,8 +76,9 @@ class LibraryNavigationTest {
         rule.onNode(readButton).assertIsEnabled()
         rule.onNodeWithText("DATORMAGAZIN 1989").assertIsDisplayed()
         // "≈ 48 sidor" från katalogen, eller det uppmätta "48 sidor" om numret har öppnats på telefonen.
-        rule.onNodeWithText("48 sidor", substring = true).assertIsDisplayed()
-        rule.onNodeWithText("25,7 MB").assertIsDisplayed()
+        // Uppgifterna ligger under nedladdningen och "Sök i numret", och kan vara utanför skärmen.
+        rule.onNodeWithText("48 sidor", substring = true).performScrollTo().assertIsDisplayed()
+        rule.onNodeWithText("25,7 MB").performScrollTo().assertIsDisplayed()
         rule.onNodeWithText("Bibliotek").assertIsDisplayed()
 
         // Tillbaka till årgången, och sedan till biblioteket.

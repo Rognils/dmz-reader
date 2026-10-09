@@ -11,6 +11,7 @@ import se.c64.dmzreader.data.search.IndexedIssue
 import se.c64.dmzreader.data.search.IndexedPage
 import se.c64.dmzreader.data.search.RankedRow
 import se.c64.dmzreader.testing.issueEntity
+import se.c64.dmzreader.ui.search.nextYearSelection
 
 /** Gruppering, sortering, filter och markeringar för fulltextsökningens träffar. */
 class FullTextResultsTest {
@@ -113,6 +114,16 @@ class FullTextResultsTest {
         assertEquals("alla år", yearFilterText(SearchFilters()))
         assertTrue(SearchFilters(yearFrom = 1993).any)
         assertFalse(SearchFilters(yearFrom = 1993).listsIssues)
+    }
+
+    @Test
+    fun `year picker selects one year, then a range, then starts over`() {
+        val pick = ::nextYearSelection
+        assertEquals(1993..1993, pick(null, 1993))
+        assertEquals(1993..1995, pick(1993..1993, 1995))
+        assertEquals(1989..1993, pick(1993..1993, 1989))
+        assertEquals(1993..1993, pick(1993..1993, 1993))
+        assertEquals(1990..1990, pick(1993..1995, 1990))
     }
 
     @Test

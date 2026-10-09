@@ -289,7 +289,11 @@ class SearchIndexManager(
      */
     suspend fun rank(match: String): List<RankedRow>? = withContext(queries) {
         val context = coroutineContext
-        db?.rank(match) { context.isActive }?.also { context.ensureActive() }
+        val started = System.nanoTime()
+        db?.rank(match) { context.isActive }?.also { rows ->
+            context.ensureActive()
+            log("Sökning %s: %d sidor på %.1f ms".format(match, rows.size, (System.nanoTime() - started) / 1e6))
+        }
     }
 
     /** Steg 2: textutdraget för en enda träff. */

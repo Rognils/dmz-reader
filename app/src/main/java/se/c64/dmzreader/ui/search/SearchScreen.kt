@@ -3,7 +3,8 @@ package se.c64.dmzreader.ui.search
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.RangeSlider
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -18,7 +19,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 import se.c64.dmzreader.data.search.RankedRow
 import se.c64.dmzreader.data.search.SearchIndexManager
 import se.c64.dmzreader.data.settings.ActiveInventoryStore
@@ -35,6 +35,7 @@ import se.c64.dmzreader.domain.hitSummaryText
 import se.c64.dmzreader.domain.outdatedInIndex
 import se.c64.dmzreader.domain.parseFullTextQuery
 import se.c64.dmzreader.domain.yearFilterText
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -183,12 +184,17 @@ class SearchViewModel(
         searchMetadata(parseMetadataQuery(text), filters, issues, bookmarks)
     }
 
-    private val grouped = combine(fullText, searchIndex.index, issues, filters, view.map { it.sort }.distinctUntilChanged()) {
+    // Bara en ny rangordning ger en ny gruppering, inte att "söker" tänds och släcks.
+    private val rankedResult = fullText.distinctUntilChanged { old, new -> old.query == new.query && old.ranked === new.ranked }
+
+    private val grouped = combine(rankedResult, searchIndex.index, issues, filters, view.map { it.sort }.distinctUntilChanged()) {
             fullText, index, issues, filters, sort ->
         if (index == null || fullText.query == null) {
             null
         } else {
+            val started = System.nanoTime()
             groupHits(fullText.ranked, index.pages, issues, filters, sort, outdatedInIndex(index.issues, issues.map { it.issue }))
+                .also { Log.i("DmzSearch", "Gruppering: ${it.totalPages} sidor i ${it.totalIssues} nummer på %.1f ms".format((System.nanoTime() - started) / 1e6)) }
         }
     }.flowOn(Dispatchers.Default)
 
@@ -296,8 +302,8 @@ fun SearchScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.horizontalScroll(rememberScrollState()).testTag("search-filters"),
             ) {
-                QuickFilter("Favoriter", state.filters.favoritesOnly, viewModel::toggleFavorites)
-                QuickFilter("Nedladdade", state.filters.downloadedOnly, viewModel::toggleDownloaded)
+                QuickFilter("Favoriter", state.filters.favoritesOnly, onToggle = viewModel::toggleFavorites)
+                QuickFilter("Nedladdade", state.filters.downloadedOnly, onToggle = viewModel::toggleDownloaded)
                 for ((id, title) in state.publications) {
                     QuickFilter(title, state.filters.publicationId == id) { viewModel.togglePublication(id) }
                 }
@@ -305,6 +311,7 @@ fun SearchScreen(
                     QuickFilter(
                         label = if (state.filters.hasYears) yearFilterText(state.filters) else "År",
                         selected = state.filters.hasYears,
+                        tag = "year-filter",
                         onToggle = { choosingYears = true },
                     )
                 }
@@ -509,51 +516,64 @@ private fun ImportIndexHint(onOpenSettings: () -> Unit) {
     }
 }
 
+/**
+ * Nästa urval när ett år trycks i årsväljaren: första trycket väljer ett år, det andra
+ * utökar till ett intervall, och ett tredje börjar om.
+ */
+fun nextYearSelection(current: IntRange?, year: Int): IntRange = when {
+    current == null || current.first != current.last -> year..year
+    else -> minOf(current.first, year)..maxOf(current.first, year)
+}
+
 /** Val av årsintervall. Båda ändarna tas med. */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun YearRangeDialog(range: IntRange, from: Int?, to: Int?, onChoose: (Int?, Int?) -> Unit, onDismiss: () -> Unit) {
     var chosen by remember {
-        mutableStateOf((from ?: range.first).toFloat()..(to ?: range.last).toFloat())
+        mutableStateOf(if (from == null && to == null) null else (from ?: range.first)..(to ?: range.last))
     }
-    val first = chosen.start.roundToInt()
-    val last = chosen.endInclusive.roundToInt()
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("År") },
         text = {
-            Column {
+            Column(modifier = Modifier.testTag("year-range")) {
+                val selection = chosen
                 Text(
-                    if (first == last) "$first" else "$first–$last",
+                    when {
+                        selection == null -> "Tryck på ett år, och på ett till för ett intervall."
+                        selection.first == selection.last -> "${selection.first}"
+                        else -> "${selection.first}–${selection.last}"
+                    },
                     style = MonoStyles.Data,
                     color = DmzColors.Accent,
                     modifier = Modifier.testTag("year-range-text"),
                 )
-                RangeSlider(
-                    value = chosen,
-                    onValueChange = { chosen = it },
-                    valueRange = range.first.toFloat()..range.last.toFloat(),
-                    steps = (range.last - range.first - 1).coerceAtLeast(0),
-                    modifier = Modifier.testTag("year-range"),
-                )
+                Spacer(Modifier.height(8.dp))
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    for (year in range) {
+                        QuickFilter("$year", selection != null && year in selection, tag = "year-$year") {
+                            chosen = nextYearSelection(chosen, year)
+                        }
+                    }
+                }
             }
         },
         confirmButton = {
-            TextButton(onClick = {
-                // Hela intervallet är detsamma som inget filter.
-                if (first == range.first && last == range.last) onChoose(null, null) else onChoose(first, last)
-            }) { Text("Använd") }
+            TextButton(onClick = { chosen.let { if (it == null) onChoose(null, null) else onChoose(it.first, it.last) } }) {
+                Text("Använd")
+            }
         },
         dismissButton = { TextButton(onClick = { onChoose(null, null) }) { Text("Alla år") } },
     )
 }
 
 @Composable
-private fun QuickFilter(label: String, selected: Boolean, onToggle: () -> Unit) {
+private fun QuickFilter(label: String, selected: Boolean, tag: String? = null, onToggle: () -> Unit) {
     FilterChip(
         selected = selected,
         onClick = onToggle,
         label = { Text(label, style = MaterialTheme.typography.labelLarge) },
-        modifier = Modifier.heightIn(min = 48.dp),
+        modifier = Modifier.heightIn(min = 48.dp).then(if (tag != null) Modifier.testTag(tag) else Modifier),
         colors = FilterChipDefaults.filterChipColors(
             containerColor = DmzColors.Surface,
             labelColor = DmzColors.TextSecondary,
