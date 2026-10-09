@@ -51,6 +51,9 @@ data class InventoryIssueDto(
     val pageCount: Int? = null,
     val spreadOffset: Int? = null,
     val flags: List<String>,
+    // Bara för nummer där PDF-sida N inte är skanning N (FAS 11). Nycklarna är sidnummer.
+    val hqPageMap: Map<String, String?>? = null,
+    val hqPageRotation: Map<String, Int>? = null,
 )
 
 /** Bara det som behövs för att avgöra om filen alls går att läsa. */

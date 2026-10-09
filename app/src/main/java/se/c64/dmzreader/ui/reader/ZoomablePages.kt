@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.IntOffset
 import kotlinx.coroutines.delay
 import se.c64.dmzreader.data.pdf.PagePlacement
 import se.c64.dmzreader.data.pdf.PageSize
-import se.c64.dmzreader.data.pdf.PdfDocument
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -93,6 +92,20 @@ fun clampPan(offset: Offset, scale: Float, content: Rect, viewportWidth: Float, 
     return Offset(offset.x.coerceIn(-maxX, maxX), offset.y.coerceIn(-maxY, maxY))
 }
 
+/**
+ * Det ZoomablePages behöver veta om var sidorna kommer ifrån: läs-PDF:en eller en
+ * HQ-skanning. Gester, zoom och utsnitt i hög upplösning är desamma för båda.
+ */
+class PageSource(
+    /** Byts när källan byts, så att bilderna hämtas om. Zoom och läge behålls. */
+    val key: Any,
+    val pageSize: suspend (pageNumber: Int) -> PageSize,
+    /** Det synliga området i en bild av skärmens storlek. Se PdfDocument.renderRegion. */
+    val renderRegion: suspend (width: Int, height: Int, placements: List<PagePlacement>) -> Bitmap,
+    /** Högsta zoom som utsnittet renderas i. Över den förstoras utsnittet på skärmen. */
+    val maxRenderZoom: Float = MAX_RENDER_ZOOM,
+)
+
 private data class HighResTile(val bitmap: Bitmap, val scale: Float, val offset: Offset)
 
 /**
@@ -104,7 +117,7 @@ private data class HighResTile(val bitmap: Bitmap, val scale: Float, val offset:
 @Composable
 fun ZoomablePages(
     pages: List<Int>,
-    document: PdfDocument,
+    source: PageSource,
     isCurrent: Boolean,
     acquirePage: suspend (pageNumber: Int, width: Int, height: Int, preview: Boolean) -> Bitmap,
     releasePage: (pageNumber: Int, width: Int, height: Int, bitmap: Bitmap) -> Unit,
@@ -118,8 +131,8 @@ fun ZoomablePages(
         val viewportHeight = constraints.maxHeight.toFloat()
         val center = Offset(viewportWidth / 2, viewportHeight / 2)
 
-        val sizes by produceState<List<PageSize>?>(null, pages) {
-            value = pages.map { document.pageSize(it) }
+        val sizes by produceState<List<PageSize>?>(null, pages, source.key) {
+            value = pages.map { source.pageSize(it) }
         }
         val rects = remember(sizes, viewportWidth, viewportHeight) {
             sizes?.let { layoutPages(it, viewportWidth, viewportHeight) }
@@ -154,7 +167,7 @@ fun ZoomablePages(
         }
 
         // Det synliga området i hög upplösning, när gesten har stannat en stund.
-        LaunchedEffect(scale, offset, rects, sizes) {
+        LaunchedEffect(scale, offset, rects, sizes, source.key) {
             val currentRects = rects
             val currentSizes = sizes
             if (scale <= HIGH_RES_ABOVE_ZOOM || currentRects == null || currentSizes == null) {
@@ -165,7 +178,7 @@ fun ZoomablePages(
             // Över MAX_RENDER_ZOOM finns inga fler detaljer att hämta ur skanningarna.
             // Då renderas utsnittet i den upplösningen och förstoras på skärmen. Annars
             // skulle PDF-motorn arbeta med en sida på över tiotusen pixlars bredd.
-            val shrink = scale / minOf(scale, MAX_RENDER_ZOOM)
+            val shrink = scale / minOf(scale, source.maxRenderZoom)
             val placements = pages.indices.map { index ->
                 val rect = currentRects[index]
                 PagePlacement(
@@ -175,7 +188,7 @@ fun ZoomablePages(
                     top = (center.y + (rect.top - center.y) * scale + offset.y) / shrink,
                 )
             }
-            val bitmap = document.renderRegion(
+            val bitmap = source.renderRegion(
                 (viewportWidth / shrink).roundToInt().coerceAtLeast(1),
                 (viewportHeight / shrink).roundToInt().coerceAtLeast(1),
                 placements,
@@ -255,7 +268,7 @@ fun ZoomablePages(
                         },
                 ) {
                     pages.forEachIndexed { index, pageNumber ->
-                        PageImage(pageNumber, currentRects[index], acquirePage, releasePage, onPageShown)
+                        PageImage(pageNumber, source.key, currentRects[index], acquirePage, releasePage, onPageShown)
                     }
                 }
             }
@@ -278,6 +291,7 @@ fun ZoomablePages(
 @Composable
 private fun PageImage(
     pageNumber: Int,
+    sourceKey: Any,
     rect: Rect,
     acquirePage: suspend (pageNumber: Int, width: Int, height: Int, preview: Boolean) -> Bitmap,
     releasePage: (pageNumber: Int, width: Int, height: Int, bitmap: Bitmap) -> Unit,
@@ -290,7 +304,7 @@ private fun PageImage(
     // sekund att rendera; förhandsbilden tar en tiondel av det.
     val previewWidth = (width / PREVIEW_DIVISOR).coerceAtLeast(1)
     val previewHeight = (height / PREVIEW_DIVISOR).coerceAtLeast(1)
-    val preview by produceState<Bitmap?>(null, pageNumber, width, height) {
+    val preview by produceState<Bitmap?>(null, pageNumber, width, height, sourceKey) {
         val acquired = acquirePage(pageNumber, previewWidth, previewHeight, true)
         value = acquired
         awaitDispose {
@@ -299,7 +313,7 @@ private fun PageImage(
         }
     }
     // Bilden lånas ur cachen så länge den visas och lämnas tillbaka efteråt.
-    val bitmap by produceState<Bitmap?>(null, pageNumber, width, height) {
+    val bitmap by produceState<Bitmap?>(null, pageNumber, width, height, sourceKey) {
         val acquired = acquirePage(pageNumber, width, height, false)
         value = acquired
         awaitDispose {
@@ -323,7 +337,7 @@ private fun PageImage(
         else -> null
     }
     val latestOnPageShown by rememberUpdatedState(onPageShown)
-    LaunchedEffect(pageNumber, quality) { latestOnPageShown(pageNumber, quality) }
+    LaunchedEffect(pageNumber, quality, sourceKey) { latestOnPageShown(pageNumber, quality) }
     DisposableEffect(pageNumber) {
         onDispose { latestOnPageShown(pageNumber, null) }
     }

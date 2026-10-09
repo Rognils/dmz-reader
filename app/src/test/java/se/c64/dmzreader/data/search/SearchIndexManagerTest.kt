@@ -60,7 +60,7 @@ class SearchIndexManagerTest {
 
         val info = manager.import({ good.inputStream() }, good.length(), progress::add)
 
-        assertEquals("2026-10-06-005", info.inventoryDatasetVersion)
+        assertEquals("2026-10-06-006", info.inventoryDatasetVersion)
         assertEquals("2", info.normalizerVersion)
         assertEquals("unicode61 remove_diacritics 0", info.tokenizer)
         assertEquals(6, info.issueCount)

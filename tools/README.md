@@ -44,6 +44,9 @@ Exemplen nedan skriver `python3`. Använd `.venv/bin/python` om du installerat i
 | `tools/testdata/search_golden.json` | facit för sökindexet, visuellt kontrollerat | för hand |
 | `tools/testdata/search_lines.json` | verkliga rader med ordlägen, för normaliseringstesterna | för hand (ur pilotens PDF:er) |
 | `data/search_pilot.json` | pilotens mätresultat (FAS 8A) | `search_pilot.py` |
+| `cache/scans/` | originalskanningar för HQ-mappningen, cirka 3 GB; versionshanteras inte | `fetch_scans.py` |
+| `data/hq_mapping_report.json` | bildjämförelsens poäng per kontrollerad sida | `map_hq_pages.py` |
+| `tools/data/hq_page_maps.json` | **HQ-mappningarna som slås ihop med inventory** | `map_hq_pages.py export` |
 
 ## Köra inventeringen
 
@@ -267,6 +270,33 @@ python3 tools/search_pilot.py render datormagazin-1995-14 26 högtalare         
 
 `tools/search_pilot.py` har också kvar pilotens mätningar från FAS 8A (`build`, `measure`, `compare`, `pages`, `plan`).
 
+## HQ-mappning (`fetch_scans.py`, `map_hq_pages.py`)
+
+HQ i appen är originalskanningen för sidan som visas (ADR 0009). Huvudregeln är att PDF-sida N är skanning N. Var det inte stämmer avgörs med bildjämförelse, och resultatet läggs i inventory:
+
+- `hqPageMap`: skanningens filnamn för varje PDF-sida, eller null för en sida utan säker motsvarighet. Bara för nummer som avviker (1986 nr 4 och 1993 nr 3).
+- `hqPageRotation`: grader medurs för de sidor där skanningen ligger vriden i förhållande till PDF-sidan.
+
+Skanningarna finns bara på FTP. `fetch_scans.py` hämtar dem till `cache/scans/{issueId}/` över en enda anslutning, med paus mellan filerna, högst 5 MB/s, och fortsätter en avbruten fil där den slutade.
+
+```bash
+cd tools
+python3 fetch_scans.py datormagazin-1993-03 --all                        # alla skanningar i numret
+python3 fetch_scans.py datormagazin-1989-06 --positions first middle last
+python3 fetch_scans.py datormagazin-1989-14 --pages 1 28
+
+python3 map_hq_pages.py full datormagazin-1993-03     # varje PDF-sida mot varje skanning
+python3 map_hq_pages.py sample datormagazin-1989-06   # första, mellersta och sista sidan
+python3 map_hq_pages.py landscape                     # liggande PDF-sidor, att hämta skanningarna för
+python3 map_hq_pages.py rotation                      # vridningen för varje liggande sida
+python3 map_hq_pages.py export                        # skriver tools/data/hq_page_maps.json
+python3 archive_inventory.py --offline                # nytt inventory (höj datasetSequence först)
+```
+
+Måttet är normaliserad korskorrelation mellan nedskalade gråskalebilder, 0–1. Jämförelsen görs över flera beskärningar av båda bilderna, eftersom skanningen kan ha annan marginal än PDF-sidan. En sida räknas som säkert mappad vid minst 0,60 och minst 0,10 över näst bästa kandidat. Rätt skanning fick 0,78–1,00. Den närmaste felaktiga kandidaten fick som mest 0,85 (två annonssidor med samma uppställning i 1993 nr 3), mot 0,97 för den rätta.
+
+Poängen för varje kontrollerad sida står i `data/hq_mapping_report.json`. `map_hq_pages.py` kräver `numpy` och `pdftoppm`.
+
 ## Köra appens tester på telefonen (`device_test.sh`)
 
 De instrumenterade testerna körs aldrig mot appens riktiga data. Testpaketet har en egen testkörare, `se.c64.dmzreader.IsolatedTestRunner`, som startar appen med en egen databas, egna inställningar, eget `filesDir` och eget `cacheDir` under `app_dmz_test/`. Katalogen tas bort när körningen är klar. Den vanliga testköraren finns inte i testpaketet, så testerna går inte att starta mot riktig data av misstag.
@@ -282,7 +312,20 @@ Skriptet tar ett fingeravtryck av användarens data före och efter (SHA-256 fö
 
 PDF:en som testerna läser i läggs på telefonen från datorns `cache/pdf/`, i `/data/local/tmp/dmz-test-pdfs/`, och tas bort efteråt. Två tester prövar själva nedladdningen och hämtar 1986 nr 1 (15 MB) från arkivet.
 
-Ett enskilt test:
+En enda testklass, med samma fingeravtryck före och efter:
+
+```bash
+tools/device_test.sh /tmp/hq --only -e class se.c64.dmzreader.HqDeviceTest
+```
+
+HQ mot det riktiga arkivet (`HqRealDeviceTest`) körs bara på begäran. Numrens PDF:er läggs på telefonen med `DMZ_SEED_ISSUES`:
+
+```bash
+DMZ_SEED_ISSUES="datormagazin-1993-03" tools/device_test.sh /tmp/hq --only \
+    -e dmzHqReal true -e class se.c64.dmzreader.HqRealDeviceTest#olderPageAfterTheDeviationIn199303
+```
+
+Ett enskilt test utan fingeravtryck:
 
 ```bash
 adb shell am instrument -w -e class se.c64.dmzreader.StatisticsDeviceTest \

@@ -65,6 +65,7 @@ class DatabaseSchemaTest {
                 "sourceKey", "relatedIssueId", "coverUrl", "coverFlags", "coverAsset", "ocrPdfUrl", "ocrPdfSize",
                 "ocrPdfEtag", "ocrPdfLastModified", "largePdfUrl", "largePdfSize", "hqSource",
                 "scanPagePattern", "scanPageCount", "pageCount", "spreadOffset", "flags",
+                "hqPageMap", "hqPageRotation",
             ),
             columns,
         )

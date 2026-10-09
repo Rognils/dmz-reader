@@ -38,6 +38,13 @@ data class IssueEntity(
     val pageCount: Int?,
     val spreadOffset: Int?,
     val flags: List<String>,
+    /**
+     * hqPageMap ur inventory som JSON-text: skanningens filnamn för varje PDF-sida, eller null
+     * för en sida utan HQ. null när numret följer huvudregeln (sida N är skanning N). Se HqMapping.
+     */
+    val hqPageMap: String? = null,
+    /** hqPageRotation ur inventory som JSON-text: grader medurs för de sidor där skanningen ligger vriden. */
+    val hqPageRotation: String? = null,
 )
 
 enum class DownloadState { NONE, QUEUED, DOWNLOADING, DOWNLOADED, FAILED }

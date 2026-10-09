@@ -64,9 +64,12 @@ class InventoryContent(Generated):
             [{"publicationId": "datormagazin", "publicationTitle": "Datormagazin"},
              {"publicationId": "highscore", "publicationTitle": "HighScore"}])
 
+    # Finns bara på nummer där mappningen mellan PDF-sida och skanning avviker (FAS 11).
+    OPTIONAL_FIELDS = {"hqPageMap", "hqPageRotation"}
+
     def test_exactly_the_planned_fields(self):
         for issue_id, issue in self.issues.items():
-            self.assertEqual(set(issue), self.FIELDS, issue_id)
+            self.assertEqual(set(issue) - self.OPTIONAL_FIELDS, self.FIELDS, issue_id)
 
     def test_toolchain_only_data_is_not_in_inventory(self):
         text = json.dumps(self.inventory)
@@ -368,6 +371,9 @@ class SchemaValidation(Generated):
     def test_optional_fields_may_be_absent_or_null(self):
         inventory = self.fresh()
         issue = self.issue(inventory)
+        # En HQ-mappning kräver skanningar, och de tas bort här.
+        issue.pop("hqPageMap", None)
+        issue.pop("hqPageRotation", None)
         for field in ("relatedIssueId", "coverAsset", "ocrPdfSize", "ocrPdfEtag", "ocrPdfLastModified",
                       "largePdfUrl", "largePdfSize", "hqSource", "scanPagePattern",
                       "scanPageCount", "pageCount", "spreadOffset"):

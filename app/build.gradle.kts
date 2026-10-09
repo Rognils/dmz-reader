@@ -15,10 +15,13 @@ android {
         minSdk = 26
         targetSdk = 37
         // Följer taggarna (planens G4): 0.6.1 ger 601, 0.7.0 ger 700, 1.0.0 ger 10000.
-        versionCode = 1001
-        versionName = "0.10.1"
+        versionCode = 1100
+        versionName = "0.11.0"
         // Egen testkörare: testerna körs mot isolerad lagring, aldrig mot användarens data.
         testInstrumentationRunner = "se.c64.dmzreader.IsolatedTestRunner"
+        // Arkivets publika FTP-konto, för HQ-skanningarna (planens A2, ADR 0009).
+        buildConfigField("String", "ARCHIVE_FTP_USER", "\"dmz\"")
+        buildConfigField("String", "ARCHIVE_FTP_PASSWORD", "\"dmz\"")
     }
 
     buildTypes {
@@ -149,6 +152,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.okhttp)
+    implementation(libs.commons.net)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.android)
@@ -156,6 +160,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.okhttp.mockwebserver)
+    testImplementation(libs.mockftpserver)
     hostSqlite(libs.sqlite.bundled.jvm)
 
     androidTestImplementation(libs.junit)

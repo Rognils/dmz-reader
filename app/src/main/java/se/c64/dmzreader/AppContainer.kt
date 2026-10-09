@@ -17,6 +17,11 @@ import java.io.IOException
 import java.io.InputStream
 import se.c64.dmzreader.data.backup.BackupRepository
 import se.c64.dmzreader.data.db.DmzDatabase
+import se.c64.dmzreader.data.hq.FtpAccount
+import se.c64.dmzreader.data.hq.FtpScanSource
+import se.c64.dmzreader.data.hq.HqCache
+import se.c64.dmzreader.data.hq.HqRepository
+import se.c64.dmzreader.data.hq.ScanSource
 import se.c64.dmzreader.data.inventory.InventoryManager
 import se.c64.dmzreader.data.inventory.InventoryLoadResult
 import se.c64.dmzreader.data.network.CoverImageLoader
@@ -72,6 +77,24 @@ class AppContainer(private val context: Context) {
     /** En PDF-överföring åt gången i hela appen: "Läs" och nedladdningskön delar på den. */
     private val transferCoordinator = TransferCoordinator()
     private val localStateStore by lazy { LocalStateStore(database.issueLocalStateDao()) }
+
+    /** HQ-sidornas cache i cacheDir/hq/, med ett tak på 500 MB (planens FAS 11). */
+    val hqCache: HqCache by lazy { HqCache(File(context.cacheDir, "hq")) }
+
+    /**
+     * Källan för originalskanningar: arkivets FTP-server, med en enda anslutning som
+     * stängs efter 30 sekunder utan användning. De instrumenterade testerna byter den mot en falsk.
+     */
+    @Volatile
+    var scanSource: ScanSource = FtpScanSource(
+        account = FtpAccount(BuildConfig.ARCHIVE_FTP_USER, BuildConfig.ARCHIVE_FTP_PASSWORD),
+        scope = scope,
+        log = { Log.i("DmzHq", it) },
+    )
+
+    /** HQ-sidor: ur cachen eller från arkivet, genom samma överföringskö som PDF:erna. */
+    val hqRepository: HqRepository
+        get() = HqRepository(hqCache, scanSource, transferCoordinator, log = { Log.i("DmzHq", it) })
 
     val downloadPreferences: DownloadPreferences by lazy { DataStoreDownloadPreferences(context) }
 

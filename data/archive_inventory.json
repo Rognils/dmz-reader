@@ -1,7 +1,7 @@
 {
- "datasetVersion": "2026-10-06-005",
+ "datasetVersion": "2026-10-06-006",
  "generatedAt": "2026-10-06T00:00:00Z",
- "generator": "archive_inventory.py 0.3.0",
+ "generator": "archive_inventory.py 0.4.0",
  "issues": [
   {
    "coverAsset": "covers/datormagazin-1986-01.webp",
@@ -43,6 +43,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198602/DMZ_1986-02-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1986-02",
    "issueLabel": "Nr 2",
@@ -75,6 +78,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198603/DMZ_1986-03-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1986-03",
    "issueLabel": "Nr 3",
@@ -110,6 +116,57 @@
     "scan_png",
     "scan_supplement"
    ],
+   "hqPageMap": {
+    "1": "DMZ_1986-04-001.png",
+    "10": "DMZ_1986-04-010.png",
+    "11": "DMZ_1986-04-011.png",
+    "12": "DMZ_1986-04-012.png",
+    "13": "DMZ_1986-04-013.png",
+    "14": "DMZ_1986-04-014.png",
+    "15": "DMZ_1986-04-015.png",
+    "16": "DMZ_1986-04-016.png",
+    "17": "DMZ_1986-04-017.png",
+    "18": "DMZ_1986-04-018.png",
+    "19": "DMZ_1986-04-019.png",
+    "2": "DMZ_1986-04-002.png",
+    "20": "DMZ_1986-04-020.png",
+    "21": "DMZ_1986-04-021.png",
+    "22": "DMZ_1986-04-022.png",
+    "23": "DMZ_1986-04-023.png",
+    "24": "DMZ_1986-04-024.png",
+    "25": "DMZ_1986-04-025.png",
+    "26": "DMZ_1986-04-026.png",
+    "27": "DMZ_1986-04-027.png",
+    "28": "DMZ_1986-04-028.png",
+    "29": "DMZ_1986-04-029.png",
+    "3": "DMZ_1986-04-003.png",
+    "30": "DMZ_1986-04-030.png",
+    "31": "DMZ_1986-04-031.png",
+    "32": "DMZ_1986-04-032.png",
+    "33": "DMZ_1986-04-033.png",
+    "34": "DMZ_1986-04-Spelbilaga-001.png",
+    "35": "DMZ_1986-04-Spelbilaga-002.png",
+    "36": "DMZ_1986-04-Spelbilaga-003.png",
+    "37": "DMZ_1986-04-Spelbilaga-004.png",
+    "38": "DMZ_1986-04-Spelbilaga-005.png",
+    "39": "DMZ_1986-04-Spelbilaga-006.png",
+    "4": "DMZ_1986-04-004.png",
+    "40": "DMZ_1986-04-Spelbilaga-007.png",
+    "41": "DMZ_1986-04-Spelbilaga-008.png",
+    "42": "DMZ_1986-04-Spelbilaga-009.png",
+    "43": "DMZ_1986-04-Spelbilaga-010.png",
+    "44": "DMZ_1986-04-Spelbilaga-011.png",
+    "45": "DMZ_1986-04-Spelbilaga-012.png",
+    "46": "DMZ_1986-04-Spelbilaga-013.png",
+    "47": "DMZ_1986-04-Spelbilaga-014.png",
+    "48": "DMZ_1986-04-Spelbilaga-015.png",
+    "49": "DMZ_1986-04-Spelbilaga-016.png",
+    "5": "DMZ_1986-04-005.png",
+    "6": "DMZ_1986-04-006.png",
+    "7": "DMZ_1986-04-007.png",
+    "8": "DMZ_1986-04-008.png",
+    "9": "DMZ_1986-04-009.png"
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1986-04",
    "issueLabel": "Nr 4",
@@ -141,6 +198,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198701/DMZ_1987-01-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1987-01",
    "issueLabel": "Nr 1",
@@ -173,6 +233,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198702/DMZ_1987-02-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90,
+    "24": 270
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1987-02",
    "issueLabel": "Nr 2",
@@ -240,6 +304,9 @@
     "double_issue",
     "scan_named_after_first_number"
    ],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1987-04-05",
    "issueLabel": "Nr 4–5",
@@ -272,6 +339,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198706/DMZ_1987-06-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1987-06",
    "issueLabel": "Nr 6",
@@ -602,6 +672,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198805/DMZ_1988-05-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "36": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1988-05",
    "issueLabel": "Nr 5",
@@ -634,6 +707,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198806/DMZ_1988-06-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1988-06",
    "issueLabel": "Nr 6",
@@ -666,6 +742,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198807/DMZ_1988-07-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 270
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1988-07",
    "issueLabel": "Nr 7",
@@ -698,6 +777,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198808/DMZ_1988-08-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1988-08",
    "issueLabel": "Nr 8",
@@ -733,6 +815,9 @@
    ],
    "coverUrl": "https://dmzarkivet.se/magazines/198809/DMZ_1988-09-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1988-09",
    "issueLabel": "Nr 9",
@@ -796,6 +881,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198811/DMZ_1988-11-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1988-11",
    "issueLabel": "Nr 11",
@@ -828,6 +916,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198812/DMZ_1988-12-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1988-12",
    "issueLabel": "Nr 12",
@@ -863,6 +954,9 @@
    ],
    "coverUrl": "https://dmzarkivet.se/magazines/198813/DMZ_1988-13-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1988-13",
    "issueLabel": "Nr 13",
@@ -893,6 +987,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198814/DMZ_1988-14-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1988-14",
    "issueLabel": "Nr 14",
@@ -928,6 +1025,9 @@
    ],
    "coverUrl": "https://dmzarkivet.se/magazines/198815/DMZ_1988-15-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1988-15",
    "issueLabel": "Nr 15",
@@ -960,6 +1060,9 @@
    "flags": [
     "double_issue"
    ],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1988-16-17",
    "issueLabel": "Nr 16–17",
@@ -992,6 +1095,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198901/DMZ_1989-01-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90,
+    "13": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-01",
    "issueLabel": "Nr 1",
@@ -1027,6 +1134,9 @@
    ],
    "coverUrl": "https://dmzarkivet.se/magazines/198902/DMZ_1989-02-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-02",
    "issueLabel": "Nr 2",
@@ -1057,6 +1167,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198903/DMZ_1989-03-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-03",
    "issueLabel": "Nr 3",
@@ -1125,6 +1238,9 @@
    ],
    "coverUrl": "https://dmzarkivet.se/magazines/198905/DMZ_1989-05-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-05",
    "issueLabel": "Nr 5",
@@ -1155,6 +1271,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198906/DMZ_1989-06-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-06",
    "issueLabel": "Nr 6",
@@ -1187,6 +1306,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198907/DMZ_1989-07-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-07",
    "issueLabel": "Nr 7",
@@ -1219,6 +1341,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198908/DMZ_1989-08-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-08",
    "issueLabel": "Nr 8",
@@ -1251,6 +1376,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198909/DMZ_1989-09-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-09",
    "issueLabel": "Nr 9",
@@ -1283,6 +1411,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198910/DMZ_1989-10-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-10",
    "issueLabel": "Nr 10",
@@ -1315,6 +1446,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198911/DMZ_1989-11-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-11",
    "issueLabel": "Nr 11",
@@ -1347,6 +1481,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198912/DMZ_1989-12-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "42": 270
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-12",
    "issueLabel": "Nr 12",
@@ -1379,6 +1516,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198913/DMZ_1989-13-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-13",
    "issueLabel": "Nr 13",
@@ -1411,6 +1551,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198914/DMZ_1989-14-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90,
+    "28": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-14",
    "issueLabel": "Nr 14",
@@ -1443,6 +1587,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198915/DMZ_1989-15-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90,
+    "34": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-15",
    "issueLabel": "Nr 15",
@@ -1475,6 +1623,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198916/DMZ_1989-16-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90,
+    "33": 270
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-16",
    "issueLabel": "Nr 16",
@@ -1509,6 +1661,10 @@
    "flags": [
     "variant_b"
    ],
+   "hqPageRotation": {
+    "27": 270,
+    "35": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-16b",
    "issueLabel": "Nr 16b",
@@ -1539,6 +1695,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198917/DMZ_1989-17-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90,
+    "26": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-17",
    "issueLabel": "Nr 17",
@@ -1571,6 +1731,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/198918/DMZ_1989-18-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1989-18",
    "issueLabel": "Nr 18",
@@ -1667,6 +1830,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199003/DMZ_1990-03-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-03",
    "issueLabel": "Nr 3",
@@ -1699,6 +1865,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199004/DMZ_1990-04-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90,
+    "21": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-04",
    "issueLabel": "Nr 4",
@@ -1763,6 +1933,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199006/DMZ_1990-06-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "18": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-06",
    "issueLabel": "Nr 6",
@@ -1827,6 +2000,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199008/DMZ_1990-08-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-08",
    "issueLabel": "Nr 8",
@@ -1859,6 +2035,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199009/DMZ_1990-09-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "18": 270,
+    "21": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-09",
    "issueLabel": "Nr 9",
@@ -1891,6 +2071,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199010/DMZ_1990-10-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "1": 90,
+    "15": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-10",
    "issueLabel": "Nr 10",
@@ -1955,6 +2139,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199012/DMZ_1990-12-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "74": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-12",
    "issueLabel": "Nr 12",
@@ -1987,6 +2174,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199013/DMZ_1990-13-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "16": 90,
+    "17": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-13",
    "issueLabel": "Nr 13",
@@ -2051,6 +2242,11 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199015/DMZ_1990-15-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "33": 90,
+    "38": 90,
+    "39": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-15",
    "issueLabel": "Nr 15",
@@ -2083,6 +2279,11 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199016/DMZ_1990-16-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "38": 270,
+    "39": 270,
+    "47": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-16",
    "issueLabel": "Nr 16",
@@ -2115,6 +2316,11 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199017/DMZ_1990-17-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "34": 270,
+    "36": 90,
+    "37": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-17",
    "issueLabel": "Nr 17",
@@ -2147,6 +2353,12 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199018/DMZ_1990-18-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "41": 90,
+    "66": 90,
+    "67": 90,
+    "69": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-18",
    "issueLabel": "Nr 18",
@@ -2179,6 +2391,11 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199019/DMZ_1990-19-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "13": 90,
+    "16": 90,
+    "17": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-19",
    "issueLabel": "Nr 19",
@@ -2211,6 +2428,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199020/DMZ_1990-20-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "37": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1990-20",
    "issueLabel": "Nr 20",
@@ -2243,6 +2463,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199101/DMZ_1991-01-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "31": 270
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-01",
    "issueLabel": "Nr 1",
@@ -2339,6 +2562,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199104/DMZ_1991-04-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "53": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-04",
    "issueLabel": "Nr 4",
@@ -2373,6 +2599,9 @@
    "flags": [
     "scan_two_digit_pages"
    ],
+   "hqPageRotation": {
+    "9": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-05",
    "issueLabel": "Nr 5",
@@ -2404,6 +2633,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199106/DMZ_1991-06-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "14": 90,
+    "21": 270
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-06",
    "issueLabel": "Nr 6",
@@ -2436,6 +2669,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199107/DMZ_1991-07-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "19": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-07",
    "issueLabel": "Nr 7",
@@ -2468,6 +2704,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199108/DMZ_1991-08-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "35": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-08",
    "issueLabel": "Nr 8",
@@ -2500,6 +2739,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199109/DMZ_1991-09-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "28": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-09",
    "issueLabel": "Nr 9",
@@ -2564,6 +2806,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199111/DMZ_1991-11-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "23": 90,
+    "5": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-11",
    "issueLabel": "Nr 11",
@@ -2596,6 +2842,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199112/DMZ_1991-12-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "5": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-12",
    "issueLabel": "Nr 12",
@@ -2628,6 +2877,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199113/DMZ_1991-13-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "11": 90,
+    "49": 270
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-13",
    "issueLabel": "Nr 13",
@@ -2660,6 +2913,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199114/DMZ_1991-14-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "28": 270
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-14",
    "issueLabel": "Nr 14",
@@ -2692,6 +2948,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199115/DMZ_1991-15-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "19": 90,
+    "5": 270
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-15",
    "issueLabel": "Nr 15",
@@ -2724,6 +2984,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199116/DMZ_1991-16-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "5": 270
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-16",
    "issueLabel": "Nr 16",
@@ -2756,6 +3019,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199117/DMZ_1991-17-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "22": 90,
+    "35": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-17",
    "issueLabel": "Nr 17",
@@ -2788,6 +3055,9 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199118/DMZ_1991-18-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "22": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-18",
    "issueLabel": "Nr 18",
@@ -2820,6 +3090,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199119/DMZ_1991-19-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "19": 90,
+    "37": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-19",
    "issueLabel": "Nr 19",
@@ -2852,6 +3126,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199120/DMZ_1991-20-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "45": 90,
+    "53": 270
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-20",
    "issueLabel": "Nr 20",
@@ -2884,6 +3162,10 @@
    "coverFlags": [],
    "coverUrl": "https://dmzarkivet.se/magazines/199121/DMZ_1991-21-001.jpg",
    "flags": [],
+   "hqPageRotation": {
+    "29": 90,
+    "35": 90
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1991-21",
    "issueLabel": "Nr 21",
@@ -3703,6 +3985,79 @@
    "flags": [
     "scan_two_digit_pages"
    ],
+   "hqPageMap": {
+    "1": "DMZ_1993-03-03.jpg",
+    "10": "DMZ_1993-03-12.jpg",
+    "11": "DMZ_1993-03-13.jpg",
+    "12": "DMZ_1993-03-14.jpg",
+    "13": "DMZ_1993-03-15.jpg",
+    "14": "DMZ_1993-03-16.jpg",
+    "15": "DMZ_1993-03-17.jpg",
+    "16": "DMZ_1993-03-18.jpg",
+    "17": "DMZ_1993-03-19.jpg",
+    "18": "DMZ_1993-03-20.jpg",
+    "19": "DMZ_1993-03-21.jpg",
+    "2": "DMZ_1993-03-04.jpg",
+    "20": "DMZ_1993-03-22.jpg",
+    "21": "DMZ_1993-03-23.jpg",
+    "22": "DMZ_1993-03-24.jpg",
+    "23": "DMZ_1993-03-25.jpg",
+    "24": "DMZ_1993-03-26.jpg",
+    "25": "DMZ_1993-03-27.jpg",
+    "26": "DMZ_1993-03-28.jpg",
+    "27": "DMZ_1993-03-29.jpg",
+    "28": "DMZ_1993-03-30.jpg",
+    "29": "DMZ_1993-03-31.jpg",
+    "3": "DMZ_1993-03-05.jpg",
+    "30": "DMZ_1993-03-32.jpg",
+    "31": "DMZ_1993-03-33.jpg",
+    "32": "DMZ_1993-03-34.jpg",
+    "33": "DMZ_1993-03-35.jpg",
+    "34": "DMZ_1993-03-36.jpg",
+    "35": "DMZ_1993-03-37.jpg",
+    "36": "DMZ_1993-03-38.jpg",
+    "37": "DMZ_1993-03-39.jpg",
+    "38": "DMZ_1993-03-40.jpg",
+    "39": null,
+    "4": "DMZ_1993-03-06.jpg",
+    "40": null,
+    "41": "DMZ_1993-03-43.jpg",
+    "42": "DMZ_1993-03-44.jpg",
+    "43": "DMZ_1993-03-45.jpg",
+    "44": "DMZ_1993-03-46.jpg",
+    "45": "DMZ_1993-03-47.jpg",
+    "46": "DMZ_1993-03-48.jpg",
+    "47": "DMZ_1993-03-49.jpg",
+    "48": "DMZ_1993-03-50.jpg",
+    "49": "DMZ_1993-03-51.jpg",
+    "5": "DMZ_1993-03-07.jpg",
+    "50": "DMZ_1993-03-52.jpg",
+    "51": "DMZ_1993-03-53.jpg",
+    "52": "DMZ_1993-03-54.jpg",
+    "53": "DMZ_1993-03-55.jpg",
+    "54": "DMZ_1993-03-56.jpg",
+    "55": "DMZ_1993-03-57.jpg",
+    "56": "DMZ_1993-03-58.jpg",
+    "57": "DMZ_1993-03-59.jpg",
+    "58": "DMZ_1993-03-60.jpg",
+    "59": "DMZ_1993-03-61.jpg",
+    "6": "DMZ_1993-03-08.jpg",
+    "60": "DMZ_1993-03-62.jpg",
+    "61": "DMZ_1993-03-63.jpg",
+    "62": "DMZ_1993-03-64.jpg",
+    "63": "DMZ_1993-03-65.jpg",
+    "64": "DMZ_1993-03-66.jpg",
+    "65": "DMZ_1993-03-67.jpg",
+    "66": "DMZ_1993-03-68.jpg",
+    "67": "DMZ_1993-03-69.jpg",
+    "68": "DMZ_1993-03-70.jpg",
+    "7": "DMZ_1993-03-09.jpg",
+    "8": "DMZ_1993-03-10.jpg",
+    "9": "DMZ_1993-03-11.jpg"
+   },
+   "hqPageRotation": {
+    "27": 180
+   },
    "hqSource": "scans",
    "issueId": "datormagazin-1993-03",
    "issueLabel": "Nr 3",

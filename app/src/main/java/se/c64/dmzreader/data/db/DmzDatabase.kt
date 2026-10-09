@@ -25,13 +25,13 @@ import kotlinx.coroutines.Dispatchers
         Bookmark::class,
         ReadingSession::class,
     ],
-    version = 7,
+    version = 8,
     exportSchema = true,
     // Version 2 lägger till Issue.coverAsset. Version 3 lägger till ETag och
     // Last-Modified i IssueLocalState. Version 4 lägger till IssueUserState.seenPages.
     // Version 5 lägger till IssueLocalState.downloadQueuedAt. Version 6 lägger till
     // PDF-versionen i Bookmark. Version 7 (MIGRATION_6_7) ger bokmärkena ett UUID och
-    // mjuk radering.
+    // mjuk radering. Version 8 lägger till Issue.hqPageMap och Issue.hqPageRotation (katalogdata).
     // Migreringarna lägger bara till kolumner; befintlig användardata rörs inte.
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
@@ -39,6 +39,7 @@ import kotlinx.coroutines.Dispatchers
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5),
         AutoMigration(from = 5, to = 6),
+        AutoMigration(from = 7, to = 8),
     ],
 )
 @ColumnTypeConverters(Converters::class)

@@ -180,6 +180,8 @@ Användaren ser bara **Standard** och **HQ**, aldrig tekniska källnamn.
 
 Den slutliga HQ-källan beslutas efter FAS 0 (ADR 0009).
 
+**Fastställt i FAS 11 (ADR 0009):** HQ är originalskanningen för aktuell sida, hämtad via FTP. Large PDF används inte. En sida utan säker motsvarighet bland skanningarna har ingen HQ, och visas som Standard med meddelandet "HQ finns inte för den här sidan".
+
 ## B5. Förväntade specialfall
 
 Systemet ska förvänta sig och hantera:
@@ -241,9 +243,15 @@ Issue
 ├── scanPageCount       Int?, antal skanningar i numrets huvuddel
 ├── pageCount           Int?, nullable
 ├── spreadOffset        Int?, nullable
-└── flags               List<String>, t.ex. "double_issue", "scan_supplement",
-                        "missing_cover", "missing_ocr_pdf"
+├── flags               List<String>, t.ex. "double_issue", "scan_supplement",
+│                       "missing_cover", "missing_ocr_pdf"
+├── hqPageMap           String?, JSON: skanningens filnamn per PDF-sida, eller null för
+│                       en sida utan HQ. Bara för nummer där sida N inte är skanning N.
+└── hqPageRotation      String?, JSON: grader medurs (90, 180, 270) för de sidor där
+                        skanningen ligger vriden i förhållande till PDF-sidan
 ```
+
+`hqPageMap` och `hqPageRotation` är valfria fält i inventory (FAS 11, ADR 0009 och 0022), framtagna med bildjämförelse i toolchainen. Saknas `hqPageMap` gäller `scanPagePattern` med sida N som skanning N, förutsatt att PDF:en har lika många sidor som det finns skanningar.
 
 **Regler:**
 
@@ -696,6 +704,7 @@ Observera: app-specifik lagring raderas när appen avinstalleras. Därför finns
 - FTP används bara för HQ (Original Scans) och Large PDF, via en FTP-klient (t.ex. Apache Commons Net)
 - om filer bara finns via FTP betyder "Läs nu": ladda ned till cache och öppna lokalt
 - högst en FTP-anslutning åt gången, och nedladdningar köas
+- **HQ (FAS 11, ADR 0022):** skanningarna hämtas genom ett utbytbart gränssnitt (`ScanSource`), i appen med Apache Commons Net: passivt läge, binärt, arkivets publika konto. Anslutningen återanvänds för följande sidor och stängs efter 30 sekunder utan användning. All HQ-trafik går genom `TransferCoordinator` som en läsning: högst en överföring mot arkivet åt gången, och en HQ-sida går före nedladdningskön. Bara sidan som visas hämtas, aldrig i förväg. HQ fungerar på mobildata. Hämtade sidor cachas i `cacheDir/hq/{issueId}/` med ett tak på 500 MB, och fungerar sedan utan nät.
 - **en PDF-överföring åt gången i hela appen.** All PDF-trafik, både "Läs" och nedladdningskön, går genom en gemensam `TransferCoordinator`. "Läs" går före: kön pausas (den aktuella förfrågan avbryts och `.part` ligger kvar) och återupptas när läsningens nedladdning är klar. "Läs" på ett nummer som redan laddas ned väntar på den nedladdningen i stället för att hämta numret en gång till.
 - en egen HTTP-spegel i hemmalabbet är en dokumenterad reservlösning, inte ett beslut. Den byggs bara om FAS 0 eller verklig användning visar att den behövs.
 
@@ -1253,6 +1262,7 @@ Fasen är delad i två. **8A** prövar hela kedjan på ett urval och ger mätdat
 - HQ-knappen i läsaren
 - hämtning av HQ-källa per sida (originalskanning) eller Large PDF enligt ADR 0009
 - mappning mellan PDF-sidindex och skanningsfil, verifierad mot stickproven. För nummer med avvikelser (se flaggorna i inventory) får mappningen inte konstrueras matematiskt. Den exakta mappningen beslutas i denna fas.
+  **Beslutat i FAS 11:** mappningen tas fram med bildjämförelse i toolchainen (`tools/map_hq_pages.py`). 1986 nr 4 och 1993 nr 3 har `hqPageMap` i inventory, och sidor där skanningen ligger vriden har `hqPageRotation`. Övriga nummer följer sida N = skanning N.
 - cache av HQ-sidor i `cacheDir`, med storleksgräns
 - tillbaka till Standard utan att sidan tappas
 
@@ -1571,4 +1581,6 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-09 | FAS 10: C6: sessioner sparas löpande (var 30:e sekund, efter sidbyte, i bakgrunden och vid stängning). `durationSeconds` är aktiv tid med 5 minuters inaktivitetsgräns. Tabellen är oförändrad, så ingen migrering behövdes. | 0021 |
 | 2026-10-09 | FAS 10: E12: definitioner av lästa sidor, lästid, lässtatus, årgångsprogress, aktivitet per vecka och mest lästa årgång. Lästa sidor räknas ur `seenPages`, inte ur `pagesViewed`. | 0021 |
 | 2026-10-09 | FAS 10: E10: sökord skrivs i loggen bara i debug-bygget | 0020 |
+| 2026-10-09 | FAS 11: B4 och ADR 0009 fastställda: HQ är originalskanningar per sida via FTP, Large PDF används inte. C2 och D1: nya valfria fält `hqPageMap` (på användarens beslut) och `hqPageRotation` (tillagt under fasen, sedan bildjämförelsen visat att 97 liggande sidor har skanningen vriden; förslag som användaren får ta ställning till i fasrapporten). E9: HQ genom `ScanSource` och `TransferCoordinator`, cache på 500 MB. | 0009, 0022 |
+| 2026-10-09 | Före FAS 11: Gradle 9.8.1 (AGP 9.4 kräver minst 9.6.0). | – |
 | 2026-10-09 | v0.10.1: C6 och E12: sessioner delas vid lokal midnatt. Mest lästa årgång visar alla årgångar med lika många sidor. Årgångsradens procent skrivs "N % sidor". | 0021 |

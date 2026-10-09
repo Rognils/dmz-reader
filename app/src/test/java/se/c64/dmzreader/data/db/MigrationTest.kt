@@ -18,7 +18,7 @@ import java.io.File
  * Migreringen från databasversion 1 (FAS 1) via 2 (Issue.coverAsset), 3
  * (ETag och Last-Modified i IssueLocalState), 4 (IssueUserState.seenPages) och 5
  * (IssueLocalState.downloadQueuedAt), 6 (PDF-versionen i Bookmark) och
- * till 7 (bookmarkId och deletedAt i Bookmark).
+ * till 7 (bookmarkId och deletedAt i Bookmark) och 8 (Issue.hqPageMap och Issue.hqPageRotation).
  * Den gamla versionen byggs upp ur det exporterade schemat, precis som den såg ut.
  */
 class MigrationTest {
@@ -54,9 +54,11 @@ class MigrationTest {
                 "INSERT INTO IssueUserState (issueId, isFavorite, lastPage, maxPageReached, " +
                     "readStatusOverride, updatedAt) VALUES ('datormagazin-1989-06', 1, 12, 30, 'UNREAD', 2000)",
             )
+            // Från version 7 har bokmärkena ett UUID som måste finnas.
+            val (idColumn, idValue) = if (version >= 7) ", bookmarkId" to ", '0b0e7a52-1c7d-4e0b-9a39-0d6f3d2f9a11'" else "" to ""
             connection.execSQL(
-                "INSERT INTO Bookmark (issueId, pageNumber, title, createdAt, updatedAt) " +
-                    "VALUES ('datormagazin-1989-06', 14, 'Annons', 1500, 1500)",
+                "INSERT INTO Bookmark (issueId, pageNumber, title, createdAt, updatedAt$idColumn) " +
+                    "VALUES ('datormagazin-1989-06', 14, 'Annons', 1500, 1500$idValue)",
             )
             connection.execSQL(
                 "INSERT INTO ReadingSession (issueId, startedAt, endedAt, startPage, endPage, " +
@@ -158,6 +160,43 @@ class MigrationTest {
                 assertEquals(6, db.bookmarkDao().getAll().size)
                 assertEquals(9_000L, db.bookmarkDao().get(bookmarks.first().id)!!.deletedAt)
                 assertEquals(0, db.bookmarkDao().getForPage("datormagazin-1989-06", 14).size)
+            } finally {
+                db.close()
+            }
+        } finally {
+            file.delete()
+            File(file.path + "-wal").delete()
+            File(file.path + "-shm").delete()
+        }
+    }
+
+    /** Version 7 till 8 (FAS 11): Issue får hqPageMap och hqPageRotation. All användardata finns kvar. */
+    @Test
+    fun `migration from version 7 adds the hq mapping to the catalogue and keeps user data`() = runTest {
+        val file = File.createTempFile("dmz-migration", ".db").apply { delete() }
+        try {
+            createVersion(file, 7)
+            val db = Room.databaseBuilder<DmzDatabase>(file.path)
+                .addMigrations(*DmzDatabase.MIGRATIONS)
+                .setDriver(BundledSQLiteDriver())
+                .setQueryCoroutineContext(Dispatchers.IO)
+                .build()
+            try {
+                val issue = db.issueDao().getAll().single()
+                assertNull(issue.hqPageMap)
+                assertNull(issue.hqPageRotation)
+                // Användardata och telefonens egen data är orörda.
+                val state = db.issueUserStateDao().get("datormagazin-1989-06")!!
+                assertEquals(12, state.lastPage)
+                assertEquals(30, state.maxPageReached)
+                assertEquals(true, state.isFavorite)
+                assertEquals(1, db.bookmarkDao().getAll().size)
+                assertEquals(600, db.readingSessionDao().getAll().single().durationSeconds)
+                assertEquals(48, db.issueLocalStateDao().get("datormagazin-1989-06")!!.observedPageCount)
+                // De nya kolumnerna går att skriva och läsa.
+                db.issueDao().replaceAll(listOf(issue.copy(hqPageMap = """{"1":"a.jpg","2":null}""", hqPageRotation = """{"1":90}""")))
+                assertEquals("""{"1":"a.jpg","2":null}""", db.issueDao().getAll().single().hqPageMap)
+                assertEquals(12, db.issueUserStateDao().get("datormagazin-1989-06")!!.lastPage)
             } finally {
                 db.close()
             }

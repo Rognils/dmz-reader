@@ -23,12 +23,22 @@
 #   adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 #
 # Användning:  tools/device_test.sh [katalog för fingeravtrycken]
+#              tools/device_test.sh KATALOG --only [argument till am instrument]
+#
+# Med --only körs bara det som argumenten väljer, till exempel en testklass, med
+# samma fingeravtryck före och efter:
+#   tools/device_test.sh /tmp/hq --only -e class se.c64.dmzreader.HqDeviceTest
+# Fler PDF:er än 1986 nr 1 läggs på telefonen med DMZ_SEED_ISSUES="issueId issueId".
 set -euo pipefail
 
 PACKAGE=se.c64.dmzreader
 RUNNER=$PACKAGE.test/$PACKAGE.IsolatedTestRunner
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 OUT=${1:-$(mktemp -d)}
+ONLY=()
+if [ "${2:-}" = "--only" ]; then
+    ONLY=("${@:3}")
+fi
 SEEDS=/data/local/tmp/dmz-test-pdfs
 mkdir -p "$OUT"
 
@@ -78,7 +88,7 @@ fingerprint before
 
 echo "Lägger testernas PDF på telefonen…"
 adb shell "rm -rf $SEEDS && mkdir -p $SEEDS"
-for issue in datormagazin-1986-01; do
+for issue in datormagazin-1986-01 ${DMZ_SEED_ISSUES:-}; do
     if [ -f "$ROOT/cache/pdf/$issue.pdf" ]; then
         adb push "$ROOT/cache/pdf/$issue.pdf" "$SEEDS/$issue.pdf" >/dev/null
     else
@@ -88,6 +98,26 @@ done
 adb shell "chmod 644 $SEEDS/*.pdf 2>/dev/null" || true
 
 status=0
+finish() {
+    adb shell "rm -rf $SEEDS"
+    echo "Fingeravtryck efter…"
+    fingerprint after
+    if diff -u "$OUT/before.txt" "$OUT/after.txt" > "$OUT/diff.txt"; then
+        echo "ANVÄNDARENS DATA ÄR OFÖRÄNDRAD (fingeravtrycken är identiska): $OUT/before.txt"
+    else
+        echo "FINGERAVTRYCKEN SKILJER SIG:" >&2
+        cat "$OUT/diff.txt" >&2
+        status=1
+    fi
+    exit $status
+}
+
+if [ ${#ONLY[@]} -gt 0 ]; then
+    echo "Kör: ${ONLY[*]}"
+    run "${ONLY[@]}" || status=1
+    finish
+fi
+
 echo "Hela sviten…"
 run || status=1
 
@@ -128,15 +158,4 @@ fi
 run -e dmzTestRoot forcestop -e class "$PACKAGE.BackupVersionDeviceTest" >/dev/null || status=1
 
 
-adb shell "rm -rf $SEEDS"
-echo "Fingeravtryck efter…"
-fingerprint after
-
-if diff -u "$OUT/before.txt" "$OUT/after.txt" > "$OUT/diff.txt"; then
-    echo "ANVÄNDARENS DATA ÄR OFÖRÄNDRAD (fingeravtrycken är identiska): $OUT/before.txt"
-else
-    echo "FINGERAVTRYCKEN SKILJER SIG:" >&2
-    cat "$OUT/diff.txt" >&2
-    status=1
-fi
-exit $status
+finish
