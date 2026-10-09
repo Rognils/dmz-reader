@@ -349,6 +349,8 @@ En session skapas när läsaren öppnas. Raden uppdateras var 30:e sekund, två 
 
 `durationSeconds` är **aktiv tid**: klockan går bara när läsaren är i förgrunden och det har förekommit en interaktion (sidbyte, tryck, zoom eller panorering) under de senaste 5 minuterna. `endedAt` är den sista stunden som räknades som aktiv.
 
+En session **delas vid lokal midnatt**: den pågående avslutas 23:59:59 och en ny börjar 00:00 på samma nummer och sida (v0.10.1). Sessioner sparade före v0.10.1 är inte delade.
+
 Rotation avslutar inte sessionen. Kommer läsaren tillbaka från bakgrunden inom 5 minuter fortsätter samma session, annars börjar en ny. En session som slutar med under 5 sekunder aktiv tid tas bort, och kvarlämnade korta sessioner städas när appen startar.
 
 ## C7. Sidnumrering
@@ -770,8 +772,10 @@ Definitioner (ADR 0021):
 - **Lästid:** summan av `durationSeconds` i `ReadingSession` (aktiv tid enligt C6).
 - **Lästa, påbörjade och olästa nummer:** lässtatus enligt C10, med `readStatusOverride`. Användardata för nummer som saknas i katalogen (D6) räknas med bland lästa och påbörjade.
 - **Årgångsprogress:** andel lästa nummer och andel lästa sidor per år och publikation. Nummer med okänt sidantal ingår inte i sidsumman.
-- **Aktivitet:** lästid per vecka (måndag–söndag, lokal tid) för de senaste 12 veckorna. En session räknas till den vecka den började.
-- **Mest lästa årgång:** den årgång där flest sidor är lästa.
+- **Aktivitet:** lästid per vecka (måndag–söndag, lokal tid) för de senaste 12 veckorna. En session räknas till den vecka den började. Eftersom sessioner delas vid lokal midnatt (C6) hamnar tiden i rätt dag och vecka.
+- **Mest lästa årgång:** den årgång där flest sidor är lästa. Har flera årgångar lika många visas alla ("Datormagazin 1988, 1991 · 2 sidor").
+
+Årgångsradens procenttal gäller sidor och skrivs "N % sidor".
 
 Fliken visar nyckeltal (lästa nummer, påbörjade, lästa sidor, total lästid), aktivitet per vecka som stapeldiagram, en rad per årgång med stapel för andelen lästa sidor och "X av Y nummer lästa", samt mest lästa årgång, antal favoriter och antal bokmärken. Staplarna ritas med Compose Canvas, utan diagrambibliotek. Sökningar räknas inte.
 
@@ -1567,3 +1571,4 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-09 | FAS 10: C6: sessioner sparas löpande (var 30:e sekund, efter sidbyte, i bakgrunden och vid stängning). `durationSeconds` är aktiv tid med 5 minuters inaktivitetsgräns. Tabellen är oförändrad, så ingen migrering behövdes. | 0021 |
 | 2026-10-09 | FAS 10: E12: definitioner av lästa sidor, lästid, lässtatus, årgångsprogress, aktivitet per vecka och mest lästa årgång. Lästa sidor räknas ur `seenPages`, inte ur `pagesViewed`. | 0021 |
 | 2026-10-09 | FAS 10: E10: sökord skrivs i loggen bara i debug-bygget | 0020 |
+| 2026-10-09 | v0.10.1: C6 och E12: sessioner delas vid lokal midnatt. Mest lästa årgång visar alla årgångar med lika många sidor. Årgångsradens procent skrivs "N % sidor". | 0021 |

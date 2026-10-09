@@ -1,6 +1,8 @@
 package se.c64.dmzreader.domain
 
 import se.c64.dmzreader.data.db.ReadingSession
+import java.time.Instant
+import java.time.ZoneId
 
 /** Så länge ska en sida ha visats i följd för att räknas som läst (planens C10). */
 const val PAGE_READ_MILLIS = 1_500L
@@ -75,10 +77,15 @@ const val SESSION_PAGE_SAVE_DELAY_MILLIS = 2_000L
  * Två klockor används: [start] och [snapshot] får klocktiden (för startedAt och
  * endedAt), och allt som mäter längd får en monoton klocka som inte påverkas av
  * att telefonens tid ställs om.
+ *
+ * En session delas vid lokal midnatt i [zone]: den som pågår avslutas 23:59:59
+ * och en ny börjar 00:00 på samma nummer och sida. Lästiden hamnar då på rätt
+ * dag och i rätt vecka (planens E12). De avslutade delarna hämtas med [takeCompleted].
  */
 class SessionTracker(
     private val issueId: String,
     private val idleLimitMillis: Long = SESSION_IDLE_LIMIT_MILLIS,
+    private val zone: ZoneId = ZoneId.systemDefault(),
 ) {
     private var startedAt: Long? = null
     private var startedElapsed = 0L
@@ -94,6 +101,10 @@ class SessionTracker(
     /** Sista stunden som räknades som aktiv, på den monotona klockan. */
     private var lastActive = 0L
     private var backgroundedAt: Long? = null
+
+    /** Nästa lokala midnatt, på den monotona klockan. */
+    private var midnightElapsed = Long.MAX_VALUE
+    private val completed = ArrayList<ReadingSession>()
 
     val active: Boolean get() = startedAt != null
 
@@ -117,10 +128,44 @@ class SessionTracker(
         lastInteraction = elapsed
         lastActive = elapsed
         backgroundedAt = null
+        midnightElapsed = elapsed + (nextMidnight(wallClock) - wallClock)
     }
+
+    private fun nextMidnight(wallClock: Long): Long =
+        Instant.ofEpochMilli(wallClock).atZone(zone).toLocalDate().plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli()
+
+    /**
+     * Delar sessionen vid varje lokal midnatt som har passerats före [elapsed].
+     * Förgrund, senaste interaktion och sida följer med till den nya sessionen.
+     */
+    private fun splitAtMidnight(elapsed: Long) {
+        while (active && elapsed >= midnightElapsed) {
+            val midnight = midnightElapsed
+            accrueUntil(midnight)
+            val midnightWall = startedAt!! + (midnight - startedElapsed)
+            current()?.let { completed += it.copy(endedAt = minOf(it.endedAt, midnightWall - 1)) }
+            startedAt = midnightWall
+            startedElapsed = midnight
+            startPage = endPage
+            pagesRead.clear()
+            activeMillis = 0
+            midnightElapsed = midnight + (nextMidnight(midnightWall) - midnightWall)
+        }
+    }
+
+    /**
+     * Sessioner som avslutades vid midnatt, äldst först. Varje session lämnas ut en gång
+     * och ska skrivas som avslutad före den pågående.
+     */
+    fun takeCompleted(): List<ReadingSession> = completed.toList().also { completed.clear() }
 
     /** Lägger till den aktiva tiden fram till [elapsed]. */
     private fun accrue(elapsed: Long) {
+        splitAtMidnight(elapsed)
+        accrueUntil(elapsed)
+    }
+
+    private fun accrueUntil(elapsed: Long) {
         if (!active || elapsed <= accruedUntil) return
         if (foreground) {
             val activeUntil = minOf(elapsed, lastInteraction + idleLimitMillis)
@@ -167,6 +212,7 @@ class SessionTracker(
         if (!active || foreground) return true
         val away = elapsed - (backgroundedAt ?: elapsed)
         if (away > idleLimitMillis) return false
+        splitAtMidnight(elapsed)
         accruedUntil = elapsed
         foreground = true
         backgroundedAt = null
@@ -180,12 +226,18 @@ class SessionTracker(
      * endedAt är den sista stunden som räknades som aktiv, inte stunden då raden skrevs.
      */
     fun snapshot(elapsed: Long): ReadingSession? {
-        val started = startedAt ?: return null
+        if (!active) return null
         accrue(elapsed)
+        return current()
+    }
+
+    private fun current(): ReadingSession? {
+        val started = startedAt ?: return null
         return ReadingSession(
             issueId = issueId,
             startedAt = started,
-            endedAt = started + (lastActive - startedElapsed),
+            // Efter en delning vid midnatt kan den sista aktiva stunden ligga före sessionens början.
+            endedAt = started + (lastActive - startedElapsed).coerceAtLeast(0),
             startPage = startPage,
             endPage = endPage,
             pagesViewed = pagesRead.size,

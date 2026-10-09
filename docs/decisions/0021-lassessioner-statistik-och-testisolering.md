@@ -1,7 +1,7 @@
 # ADR 0021: Lässessioner med aktiv tid, statistikens definitioner och isolerade tester
 
 ## Status
-Accepted (FAS 10, 2026-10-09)
+Accepted (FAS 10, 2026-10-09). Ändrad i v0.10.1 (2026-10-09): sessioner delas vid lokal midnatt, och mest lästa årgång visar alla årgångar med lika många sidor.
 
 ## Context
 Tre saker behövde beslut inför statistiken (planens E12).
@@ -20,6 +20,7 @@ Tre saker behövde beslut inför statistiken (planens E12).
 - `endedAt` är den sista stunden som räknades som aktiv, inte stunden då raden skrevs.
 - Längden mäts med en monoton klocka, så att den inte påverkas av att telefonens tid ställs om. `startedAt` är klocktid.
 - **Rotation** avslutar inte sessionen. Går läsaren i bakgrunden och kommer tillbaka inom 5 minuter fortsätter samma session, annars avslutas den och en ny börjar.
+- En session **delas vid lokal midnatt** (v0.10.1): den pågående avslutas 23:59:59 och en ny börjar 00:00 på samma nummer och sida, med egna `pagesViewed`. Inaktivitetsgränsen följer med över midnatt. Midnatten räknas ut i telefonens tidszon när sessionen börjar och mäts sedan på den monotona klockan.
 - En session som slutar med **under 5 sekunder** aktiv tid tas bort. Korta sessioner som blivit kvar efter en krasch städas när appen startar.
 - Tabellen `ReadingSession` är oförändrad. Ingen migrering behövdes, och befintliga sessioner ligger kvar. Deras `durationSeconds` är mätt på det äldre sättet.
 
@@ -28,8 +29,9 @@ Tre saker behövde beslut inför statistiken (planens E12).
 - **Lästid:** summan av `durationSeconds`.
 - **Lästa, påbörjade och olästa nummer:** lässtatus enligt C10, med `readStatusOverride`. Användardata för nummer som saknas i katalogen (D6) räknas som läst (bara genom en manuell markering, eftersom sidantalet är okänt) eller påbörjat.
 - **Årgångsprogress:** andel lästa nummer och andel lästa sidor per år och publikation. Lästa sidor över numrets sidantal räknas inte, och nummer med okänt sidantal ingår inte i sidsumman.
-- **Aktivitet:** lästid per vecka, måndag–söndag i telefonens tidszon, för de senaste 12 veckorna. En session räknas till den vecka den började.
-- **Mest lästa årgång:** den årgång, i någon publikation, där flest sidor är lästa. Vid lika vinner den tidigaste.
+- **Aktivitet:** lästid per vecka, måndag–söndag i telefonens tidszon, för de senaste 12 veckorna. En session räknas till den vecka den började. Eftersom sessioner delas vid midnatt hamnar tiden i rätt dag och vecka.
+- **Mest lästa årgång:** den årgång, i någon publikation, där flest sidor är lästa. Har flera lika många visas alla (v0.10.1; tidigare vann den tidigaste).
+- Årgångsradens procenttal gäller sidor och skrivs "N % sidor" (v0.10.1).
 - Statistiken **räknas fram varje gång** ur användardatan. Ingenting lagras, och ingen sökstatistik förs.
 - Diagrammen ritas med Compose Canvas, utan diagrambibliotek.
 
@@ -49,7 +51,9 @@ Tre saker behövde beslut inför statistiken (planens E12).
 ## Consequences
 - Äldre sessioner har väggklockstid i `durationSeconds`. Lästiden före FAS 10 kan därför vara något för hög. Det går inte att räkna om.
 - Den som läser en sida i mer än 5 minuter utan att röra skärmen får inte den överskjutande tiden räknad.
-- Aktiviteten per vecka lägger hela sessionen i den vecka den började, även om den går över midnatt till måndag.
+- Sessioner sparade före v0.10.1 är inte delade vid midnatt. En sådan session räknas i sin helhet till den vecka den började. De ändras inte.
+- En läsning över midnatt ger två rader i `ReadingSession`, så antalet sessioner är inte antalet lästillfällen.
+- Ställs telefonens klocka eller tidszon om under en pågående session delas den där midnatten låg när sessionen började.
 - En testkörning börjar alltid med en tom databas. Tester som läser i ett nummer får PDF:en från datorn genom `device_test.sh`, eller hämtar den från arkivet.
 - Tester som behöver appens riktiga data går inte längre att skriva. Verifiering mot riktiga data görs för hand, och bara genom att läsa.
 - Inaktivitetsgränsen och sparintervallet går att ändra i `AppContainer`, och det används av testerna. I appen finns ingen inställning för dem.

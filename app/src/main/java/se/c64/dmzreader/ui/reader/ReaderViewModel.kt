@@ -392,13 +392,22 @@ class ReaderViewModel(
     }
 
     private fun saveSession() {
-        session.snapshot(SystemClock.elapsedRealtime())?.let { recorder.session(it) }
+        val current = session.snapshot(SystemClock.elapsedRealtime())
+        saveCompletedSessions()
+        current?.let { recorder.session(it) }
+    }
+
+    /** Sessioner som delades vid midnatt skrivs som avslutade, före den som pågår. */
+    private fun saveCompletedSessions() {
+        session.takeCompleted().forEach { recorder.session(it, final = true) }
     }
 
     private fun endSession() {
         sessionSaveJob?.cancel()
         sessionPageSaveJob?.cancel()
-        session.end(SystemClock.elapsedRealtime())?.let { recorder.session(it, final = true) }
+        val last = session.end(SystemClock.elapsedRealtime())
+        saveCompletedSessions()
+        last?.let { recorder.session(it, final = true) }
     }
 
     /**

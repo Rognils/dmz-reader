@@ -5,6 +5,9 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import se.c64.dmzreader.data.db.ReadingSession
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 /**
  * Lässessioner med aktiv tid (planens C6, ADR 0021). Tiderna i testerna är millisekunder på
@@ -199,5 +202,137 @@ class SessionTrackerTest {
         assertEquals(0, session.pagesViewed)
         assertEquals(8, session.durationSeconds)
         assertEquals(wall + minute, session.startedAt)
+    }
+
+    // ---- Delning vid lokal midnatt (planens E12)
+
+    private val zone = ZoneId.of("Europe/Stockholm")
+    private fun at(text: String): Long = LocalDateTime.parse(text).atZone(zone).toInstant().toEpochMilli()
+
+    /** Läser från [start] i [minutes] minuter, med en interaktion i minuten. Returnerar alla sessioner. */
+    private fun read(start: String, minutes: Int, tracker: SessionTracker = SessionTracker("x", zone = zone)): List<ReadingSession> {
+        tracker.start(page = 7, wallClock = at(start), elapsed = t0)
+        val sessions = ArrayList<ReadingSession>()
+        for (m in 1..minutes) {
+            tracker.interaction(t0 + m * minute)
+            sessions += tracker.takeCompleted()
+        }
+        val last = tracker.end(t0 + minutes * minute)
+        return sessions + tracker.takeCompleted() + listOfNotNull(last)
+    }
+
+    @Test
+    fun `sunday 23-50 to monday 00-20 gives ten minutes in one week and twenty in the next`() {
+        // 2026-10-04 är en söndag (vecka 40) och 2026-10-05 en måndag (vecka 41).
+        val sessions = read("2026-10-04T23:50:00", 30)
+        assertEquals(2, sessions.size)
+        val (sunday, monday) = sessions
+        assertEquals(at("2026-10-04T23:50:00"), sunday.startedAt)
+        assertEquals(at("2026-10-05T00:00:00") - 1, sunday.endedAt)
+        assertEquals(600, sunday.durationSeconds)
+        assertEquals(at("2026-10-05T00:00:00"), monday.startedAt)
+        assertEquals(at("2026-10-05T00:20:00"), monday.endedAt)
+        assertEquals(1200, monday.durationSeconds)
+
+        val activity = weeklyActivity(sessions, at("2026-10-09T12:00:00"), zone)
+        assertEquals(600L, activity[activity.size - 2].seconds)
+        assertEquals(1200L, activity.last().seconds)
+    }
+
+    @Test
+    fun `the new session continues on the same issue and page, with its own pages read`() {
+        val tracker = SessionTracker("datormagazin-1986-01", zone = zone)
+        tracker.start(page = 3, wallClock = at("2026-10-06T23:59:00"), elapsed = t0)
+        tracker.pagesRead(listOf(3, 4))
+        tracker.moveTo(5)
+        tracker.interaction(t0 + 30 * second)
+        assertTrue(tracker.takeCompleted().isEmpty())
+        tracker.interaction(t0 + 70 * second)
+        tracker.pagesRead(listOf(5))
+        val current = tracker.snapshot(t0 + 90 * second)!!
+        val before = tracker.takeCompleted().single()
+        assertTrue(tracker.takeCompleted().isEmpty())
+        assertEquals("datormagazin-1986-01", before.issueId)
+        assertEquals(3, before.startPage)
+        assertEquals(5, before.endPage)
+        assertEquals(2, before.pagesViewed)
+        assertEquals(60, before.durationSeconds)
+        assertEquals("datormagazin-1986-01", current.issueId)
+        assertEquals(5, current.startPage)
+        assertEquals(5, current.endPage)
+        assertEquals(1, current.pagesViewed)
+        assertEquals(30, current.durationSeconds)
+        assertTrue(tracker.active)
+    }
+
+    @Test
+    fun `the idle limit carries over midnight`() {
+        // Sista interaktionen 23:57. Gränsen på 5 minuter når till 00:02.
+        val tracker = SessionTracker("x", zone = zone)
+        tracker.start(1, at("2026-10-06T23:50:00"), t0)
+        tracker.interaction(t0 + 4 * minute)
+        tracker.interaction(t0 + 7 * minute)
+        val last = tracker.end(t0 + 40 * minute)!!
+        val before = tracker.takeCompleted().single()
+        assertEquals(600, before.durationSeconds)
+        assertEquals(120, last.durationSeconds)
+        assertEquals(at("2026-10-07T00:00:00"), last.startedAt)
+        assertEquals(at("2026-10-07T00:02:00"), last.endedAt)
+    }
+
+    @Test
+    fun `an idle reader over midnight gives no time and no negative length after midnight`() {
+        val tracker = SessionTracker("x", zone = zone)
+        tracker.start(1, at("2026-10-06T23:00:00"), t0)
+        val last = tracker.end(t0 + 90 * minute)!!
+        val before = tracker.takeCompleted().single()
+        assertEquals(300, before.durationSeconds)
+        assertEquals(at("2026-10-06T23:05:00"), before.endedAt)
+        assertEquals(0, last.durationSeconds)
+        assertEquals(last.startedAt, last.endedAt)
+        assertFalse(last.isWorthKeeping())
+    }
+
+    @Test
+    fun `a short pause in the background over midnight also splits the session`() {
+        val tracker = SessionTracker("x", zone = zone)
+        tracker.start(1, at("2026-10-06T23:58:00"), t0)
+        tracker.background(t0 + 1 * minute)
+        assertTrue(tracker.foreground(t0 + 3 * minute))
+        val last = tracker.end(t0 + 4 * minute)!!
+        val before = tracker.takeCompleted().single()
+        assertEquals(60, before.durationSeconds)
+        assertEquals(at("2026-10-06T23:59:00"), before.endedAt)
+        assertEquals(at("2026-10-07T00:00:00"), last.startedAt)
+        assertEquals(60, last.durationSeconds)
+    }
+
+    @Test
+    fun `several midnights give one session per day`() {
+        val tracker = SessionTracker("x", idleLimitMillis = 100 * 60 * minute, zone = zone)
+        tracker.start(1, at("2026-10-06T23:00:00"), t0)
+        val last = tracker.end(t0 + 50 * 60 * minute)!!
+        val done = tracker.takeCompleted()
+        assertEquals(listOf(3600, 86_400, 86_400), done.map { it.durationSeconds })
+        assertEquals(listOf("2026-10-06T23:00:00", "2026-10-07T00:00:00", "2026-10-08T00:00:00").map(::at), done.map { it.startedAt })
+        assertEquals(3600, last.durationSeconds)
+        assertEquals(at("2026-10-09T00:00:00"), last.startedAt)
+    }
+
+    @Test
+    fun `a day with a clock change is split at the local midnight`() {
+        // Natten till 2026-10-25 går klockan från sommartid till vintertid: dygnet är 25 timmar.
+        val tracker = SessionTracker("x", idleLimitMillis = 100 * 60 * minute, zone = zone)
+        tracker.start(1, at("2026-10-24T23:00:00"), t0)
+        val last = tracker.end(t0 + 27 * 60 * minute)!!
+        assertEquals(listOf(3600, 25 * 3600), tracker.takeCompleted().map { it.durationSeconds })
+        assertEquals(at("2026-10-26T00:00:00"), last.startedAt)
+        assertEquals(3600, last.durationSeconds)
+    }
+
+    @Test
+    fun `a session within one day is not split`() {
+        val sessions = read("2026-10-06T10:00:00", 30)
+        assertEquals(1800, sessions.single().durationSeconds)
     }
 }
