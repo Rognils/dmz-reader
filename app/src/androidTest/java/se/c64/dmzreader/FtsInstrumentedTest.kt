@@ -18,7 +18,8 @@ import se.c64.dmzreader.data.search.SearchDb
  */
 @RunWith(AndroidJUnit4::class)
 class FtsInstrumentedTest {
-    private val context = InstrumentationRegistry.getInstrumentation().targetContext
+    // Testkörningens egen lagring, inte appens riktiga filesDir.
+    private val context = storage(InstrumentationRegistry.getInstrumentation().targetContext)
 
     @Test
     fun pregeneratedFts5DatabaseIsSearchedCorrectly() {

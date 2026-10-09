@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+# DMZ Reader – kör hela den instrumenterade sviten på telefonen och visar att
+# användarens data är orörd.
+#
+# Testerna körs med se.c64.dmzreader.IsolatedTestRunner, som ger appen en egen
+# databas, egna inställningar, eget filesDir och eget cacheDir under
+# app_dmz_test/. Skriptet tar ett fingeravtryck av den riktiga datan före och
+# efter körningen och jämför dem:
+#
+#   - SHA-256 för dmz-reader.db efter checkpoint (görs på en kopia på datorn)
+#   - SHA-256 för databasfilerna och inställningsfilen som de ligger på telefonen
+#   - radantalet i varje tabell
+#   - namn, storlek, tid och SHA-256 för varje fil i läs-cachen, nedladdningarna
+#     och filesDir/data
+#
+# PDF:en som testerna läser i (1986 nr 1) läggs på telefonen från datorns
+# cache/pdf/, så att arkivservern inte belastas mer än nödvändigt. Två tester
+# prövar själva nedladdningen och hämtar den filen från arkivet (15 MB var).
+#
+# Kräver en ansluten telefon med appen och testpaketet installerade:
+#   ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
+#   adb install -r app/build/outputs/apk/debug/app-debug.apk
+#   adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+#
+# Användning:  tools/device_test.sh [katalog för fingeravtrycken]
+set -euo pipefail
+
+PACKAGE=se.c64.dmzreader
+RUNNER=$PACKAGE.test/$PACKAGE.IsolatedTestRunner
+ROOT=$(cd "$(dirname "$0")/.." && pwd)
+OUT=${1:-$(mktemp -d)}
+SEEDS=/data/local/tmp/dmz-test-pdfs
+mkdir -p "$OUT"
+
+# Fingeravtrycket av användarens data. Appen ska vara stoppad, så att filerna är stilla.
+fingerprint() {
+    local name=$1 work
+    adb shell am force-stop "$PACKAGE"
+    work=$(mktemp -d)
+    for file in dmz-reader.db dmz-reader.db-wal dmz-reader.db-shm; do
+        adb exec-out run-as "$PACKAGE" cat "databases/$file" > "$work/$file" 2>/dev/null || true
+    done
+    {
+        echo "== databasfilerna på telefonen (SHA-256, storlek)"
+        adb shell "run-as $PACKAGE sh -c 'cd databases && sha256sum dmz-reader.db dmz-reader.db-wal 2>/dev/null; ls -l dmz-reader.db dmz-reader.db-wal 2>/dev/null'" | awk '{ if (NF > 2) print $5, $NF; else print }'
+        echo "== dmz-reader.db efter checkpoint, och radantal"
+        python3 - "$work/dmz-reader.db" <<'PY'
+import hashlib, sqlite3, sys
+path = sys.argv[1]
+db = sqlite3.connect(path)
+db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+tables = [row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name")]
+counts = {table: db.execute(f'SELECT COUNT(*) FROM "{table}"').fetchone()[0] for table in tables}
+db.close()
+print(hashlib.sha256(open(path, "rb").read()).hexdigest(), "dmz-reader.db (efter checkpoint)")
+for table, count in counts.items():
+    print(f"{count:>6}  {table}")
+PY
+        echo "== filer (SHA-256, storlek, ändrad, namn)"
+        adb shell "run-as $PACKAGE sh -c 'for d in cache/pdf files/issues files/data files/datastore; do [ -d \$d ] || { echo \"\$d: finns inte\"; continue; }; for f in \$d/*; do [ -f \"\$f\" ] || continue; echo \"\$(sha256sum \"\$f\" | cut -d\" \" -f1) \$(stat -c \"%s %y\" \"\$f\" | cut -d. -f1) \$f\"; done; done'"
+        echo "== testkataloger (ska vara tomt)"
+        adb shell "run-as $PACKAGE ls app_dmz_test 2>/dev/null" || true
+    } > "$OUT/$name.txt"
+    rm -rf "$work"
+}
+
+run() {
+    local output
+    output=$(adb shell am instrument -w "$@" "$RUNNER")
+    echo "$output" | grep -E "^OK|^FAILURES|^Tests run|^[0-9]+\) " || true
+    grep -q "^OK (" <<<"$output"
+}
+
+echo "Fingeravtryck före…"
+fingerprint before
+
+echo "Lägger testernas PDF på telefonen…"
+adb shell "rm -rf $SEEDS && mkdir -p $SEEDS"
+for issue in datormagazin-1986-01; do
+    if [ -f "$ROOT/cache/pdf/$issue.pdf" ]; then
+        adb push "$ROOT/cache/pdf/$issue.pdf" "$SEEDS/$issue.pdf" >/dev/null
+    else
+        echo "  $issue finns inte i datorns cache/pdf/. Testerna hämtar den från arkivet."
+    fi
+done
+adb shell "chmod 644 $SEEDS/*.pdf 2>/dev/null" || true
+
+status=0
+echo "Hela sviten…"
+run || status=1
+
+echo "Omstartstestet (tvångsstopp mellan delarna)…"
+CLASS=$PACKAGE.ReadingStateDeviceTest
+run -e dmzTestRoot restart -e dmzKeepRoot true -e dmzPhase 1 -e class "$CLASS#restartPhase1ReadPages" || status=1
+adb shell am force-stop "$PACKAGE"
+run -e dmzTestRoot restart -e dmzKeepRoot true -e dmzPhase 2 -e class "$CLASS#restartPhase2ContinueReading" || status=1
+# En sista körning utan dmzKeepRoot tar bort katalogen.
+run -e dmzTestRoot restart -e class "$PACKAGE.BackupVersionDeviceTest" >/dev/null || status=1
+
+for extra in "${DMZ_EXTRA_RUNS[@]:-}"; do [ -n "$extra" ] && { echo "Extra: $extra"; eval "$extra" || status=1; }; done
+
+adb shell "rm -rf $SEEDS"
+echo "Fingeravtryck efter…"
+fingerprint after
+
+if diff -u "$OUT/before.txt" "$OUT/after.txt" > "$OUT/diff.txt"; then
+    echo "ANVÄNDARENS DATA ÄR OFÖRÄNDRAD (fingeravtrycken är identiska): $OUT/before.txt"
+else
+    echo "FINGERAVTRYCKEN SKILJER SIG:" >&2
+    cat "$OUT/diff.txt" >&2
+    status=1
+fi
+exit $status

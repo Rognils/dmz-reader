@@ -43,7 +43,7 @@ import java.io.File
  * begärs med argumentet dmzVerify, eftersom de hämtar stora filer:
  *
  *   adb shell am instrument -w -e class se.c64.dmzreader.ReaderDeviceTest \
- *     -e dmzVerify true se.c64.dmzreader.test/androidx.test.runner.AndroidJUnitRunner
+ *     -e dmzVerify true se.c64.dmzreader.test/se.c64.dmzreader.IsolatedTestRunner
  */
 @RunWith(AndroidJUnit4::class)
 class ReaderDeviceTest {
@@ -53,8 +53,8 @@ class ReaderDeviceTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
     private val arguments = InstrumentationRegistry.getArguments()
-    private val pdfDirectory = File(context.cacheDir, "pdf")
-    private val screenshotDirectory = File(context.cacheDir, "screens")
+    private val pdfDirectory = File(storage(context).cacheDir, "pdf")
+    private val screenshotDirectory = File(storage(context).cacheDir, "screens")
 
     private fun verifying() = arguments.getString("dmzVerify") == "true"
 

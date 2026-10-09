@@ -16,11 +16,10 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
-import androidx.room3.useWriterConnection
+import java.io.File
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.runBlocking
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
@@ -30,13 +29,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Verifiering mot det riktiga sökindexet (dist/search.db, 185 nummer), som ska vara
- * importerat på telefonen. Körs bara med -e dmzRealIndex true.
+ * Verifiering mot det riktiga sökindexet (dist/search.db, 185 nummer). Körs bara med
+ * -e dmzRealIndex true, och när datorn har lagt filen på telefonen:
  *
- * Testet skriver sökorden i sökfältet, kontrollerar antalet träffar mot det datorn
- * ger, mäter tiden från inmatning till visat resultat och öppnar en träff på rätt
- * sida. Vid varje "SKÄRMBILD" i loggen väntar det några sekunder, så att en
- * skärmbild kan tas utifrån. Läsdata som skapas för 1986 nr 1 tas bort efteråt.
+ *   adb push dist/search.db /data/local/tmp/dmz-test-search.db
+ *
+ * Testet importerar filen i testkörningens isolerade lagring, skriver sökorden i
+ * sökfältet, kontrollerar antalet träffar mot det datorn ger, mäter tiden från
+ * inmatning till visat resultat och öppnar en träff på rätt sida. Vid varje
+ * "SKÄRMBILD" i loggen väntar det några sekunder, så att en skärmbild kan tas utifrån.
  */
 @RunWith(AndroidJUnit4::class)
 class RealIndexDeviceTest {
@@ -47,8 +48,6 @@ class RealIndexDeviceTest {
     private val arguments = InstrumentationRegistry.getArguments()
     private val container get() = appContainer(context)
     private val issueId = "datormagazin-1986-01"
-    private var started = 0L
-    private var ran = false
 
     private fun waitFor(timeoutMillis: Long = 30_000, condition: () -> Boolean) = rule.waitUntil(timeoutMillis, condition)
     private fun tagged(tag: String) = rule.onAllNodes(hasTestTag(tag)).fetchSemanticsNodes().isNotEmpty()
@@ -95,23 +94,11 @@ class RealIndexDeviceTest {
     @Before
     fun prepare() {
         assumeTrue(arguments.getString("dmzRealIndex") == "true")
-        assumeTrue("Det riktiga sökindexet är inte importerat", container.searchIndex.index.value?.info?.issueCount == 185)
-        assumeTrue("Det finns egen läsdata för $issueId", readingState(context, issueId) == null)
-        started = System.currentTimeMillis()
-        ran = true
-    }
-
-    @After
-    fun removeTestReadingData() {
-        if (!ran) return
-        rule.activityRule.scenario.close()
-        Thread.sleep(2_000)
-        runBlocking {
-            container.database.useWriterConnection { connection ->
-                connection.usePrepared("DELETE FROM IssueUserState WHERE issueId = '$issueId'") { it.step() }
-                connection.usePrepared("DELETE FROM ReadingSession WHERE issueId = '$issueId' AND startedAt >= $started") { it.step() }
-            }
-        }
+        val file = File("/data/local/tmp/dmz-test-search.db")
+        assumeTrue("${file.path} saknas", file.canRead())
+        val info = runBlocking { container.searchIndex.import({ file.inputStream() }, file.length()) }
+        assumeTrue("Filen är inte det riktiga sökindexet", info.issueCount == 185)
+        resetReadingState(context, issueId)
     }
 
     @Test

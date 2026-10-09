@@ -26,7 +26,7 @@ import java.io.File
  *   adb push dist/search.db /data/local/tmp/dmz-search.db
  *   adb shell am instrument -w -e dmzSearchPilot true \
  *       -e class se.c64.dmzreader.SearchPilotDeviceTest \
- *       se.c64.dmzreader.test/androidx.test.runner.AndroidJUnitRunner
+ *       se.c64.dmzreader.test/se.c64.dmzreader.IsolatedTestRunner
  *   adb shell rm /data/local/tmp/dmz-search.db
  *   adb shell run-as se.c64.dmzreader rm cache/search-pilot.db
  *
@@ -38,7 +38,7 @@ import java.io.File
 class SearchPilotDeviceTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val external = File("/data/local/tmp/dmz-search.db")
-    private val file = context.cacheDir.resolve("search-pilot.db")
+    private val file = storage(context).cacheDir.resolve("search-pilot.db")
 
     private fun SearchDb.pages(query: String) = search(query).map { "${it.issueId}:${it.pageNumber}" }
 
