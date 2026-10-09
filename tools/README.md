@@ -40,6 +40,7 @@ Exemplen nedan skriver `python3`. Använd `.venv/bin/python` om du installerat i
 | `data/normalizer_review_v1.json`, `_v2.json` | granskade stickprov av normaliseringens ändringar | `search_quality.py sample`, bedömning för hand |
 | `data/reading_order_review.json` | visuell kontroll av läsordningen på 28 sidor | för hand |
 | `data/search_index_report.json` | facit och storlek för den fullständiga databasen | `search_pilot.py --db` |
+| `app/src/debug/assets/search_test.db` | litet sökindex i det riktiga formatet, för appens tester | `build_search_testdb.py` |
 | `tools/testdata/search_golden.json` | facit för sökindexet, visuellt kontrollerat | för hand |
 | `tools/testdata/search_lines.json` | verkliga rader med ordlägen, för normaliseringstesterna | för hand (ur pilotens PDF:er) |
 | `data/search_pilot.json` | pilotens mätresultat (FAS 8A) | `search_pilot.py` |
@@ -265,6 +266,33 @@ python3 tools/search_pilot.py render datormagazin-1995-14 26 högtalare         
 **Facit** (`tools/testdata/search_golden.json`) får bara ändras efter att sidan har kontrollerats mot en rendering, inte mot OCR-texten.
 
 `tools/search_pilot.py` har också kvar pilotens mätningar från FAS 8A (`build`, `measure`, `compare`, `pages`, `plan`).
+
+## Uppdatera sökindexet på telefonen
+
+Sökindexet följer inte med appen. Det byggs på datorn och importeras i appen (plan D2 och D5).
+
+1. **Bygg** `dist/search.db` enligt "Bygga om search.db" ovan, och kontrollera den mot facit.
+2. **Kopiera** filen till telefonens Download:
+
+   ```bash
+   adb push dist/search.db /sdcard/Download/search.db
+   ```
+
+   Det går lika bra med en USB-kabel och filhanteraren, eller via en molntjänst. Filen är cirka 149 MB.
+3. **Importera** i appen: Inställningar → Sökindex → "Importera sökindex", och välj filen i filväljaren.
+   Appen kopierar filen till sin privata lagring med förlopp i MB och procent, kontrollerar den och byter in den. Det tar ett par sekunder.
+4. **Kontrollera** raderna under Sökindex: arkivversion, normalisering, antal nummer och sidor och importdatum.
+5. **Ta bort** filen i Download. Appen har sin egen kopia.
+
+Vad appen kontrollerar vid import: att filen är en hel SQLite-databas (`PRAGMA quick_check`), att tabellerna `meta`, `issues`, `pages` och `pages_fts` finns, att `searchSchemaVersion` är 1, att indexet går att söka i och att det inte är tomt. Går något fel visas vad som var fel, och det tidigare sökindexet gäller fortfarande.
+
+Om sökindexet byggdes av ett annat arkivindex än det som är aktivt i appen fungerar sökningen ändå. Sökvyn visar då "Sökindexet är från en annan arkivversion." Ett nummer vars PDF har bytts sedan indexet byggdes får markeringen "Sökindexet gäller en äldre version av filen".
+
+"Ta bort sökindex" under samma rubrik tar bort appens kopia. Sökningen gäller då år, nummer, publikation och bokmärken, som före importen.
+
+### Testindex för appens tester (`build_search_testdb.py`)
+
+`app/src/debug/assets/search_test.db` är ett litet index i samma format, med ett tiotal påhittade sidor. Det används av appens JVM-tester och av det instrumenterade testet, och byggs om med `python3 tools/build_search_testdb.py` när formatet ändras.
 
 ## Uppdatera arkivet på telefonen
 

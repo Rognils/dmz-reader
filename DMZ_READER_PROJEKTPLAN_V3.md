@@ -1547,3 +1547,6 @@ Godkända ändringar efter att planen frysts förs in här, med datum och ADR-h�
 | 2026-10-08 | FAS 8B: `normalizerVersion` 2 efter granskat stickprov; `meta` har också `lexiconVersion`. Ordlistan är fortsatt version 1. | 0004 |
 | 2026-10-08 | FAS 8B: inventory 2026-10-06-005 har uppmätt `pageCount` för alla 185 nummer | — |
 | 2026-10-09 | FAS 8B: not under "Senare – innehållsanalys och AI/RAG" om att blockordningen i search.db inte alltid följer artiklarna | 0004 |
+| 2026-10-09 | FAS 9: E10: frågelagret (citattecken kring varje ord, OCH mellan ord, prefix med stjärna och minst tre tecken, "C64"/"C-64"/"C 64" som alternativ), sökning medan man skriver och fråga i två steg (rangordning, därefter textutdrag per synlig rad) | 0020 |
+| 2026-10-09 | FAS 9: E10: träffarna grupperas per nummer, med sorteringen Relevans eller Äldst först och filtren publikation, år, favoriter och nedladdade. Läsaren har en träffrad som hoppar mellan träffarna i numret. | 0020 |
+| 2026-10-09 | FAS 9: D5: search.db importeras till `filesDir/data/search.db` med kontroll och atomiskt byte, och kan tas bort i inställningarna | 0020 |

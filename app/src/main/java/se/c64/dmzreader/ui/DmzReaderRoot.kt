@@ -1,5 +1,9 @@
 package se.c64.dmzreader.ui
 
+import android.net.Uri
+import se.c64.dmzreader.ui.search.IssueSearchSection
+import se.c64.dmzreader.ui.search.IssueSearchViewModel
+import se.c64.dmzreader.ui.settings.SearchIndexViewModel
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -69,10 +73,16 @@ private object Routes {
     const val STATISTICS = "statistics"
     const val SETTINGS = "settings"
     const val DIAGNOSTICS = "settings/diagnostics"
-    const val READER = "reader/{issueId}?page={page}"
+    const val READER = "reader/{issueId}?page={page}&q={q}"
 
-    /** Läsaren för ett nummer. Med [page] öppnas den på den sidan, annars på läspositionen. */
-    fun reader(issueId: String, page: Int? = null) = "reader/$issueId" + (page?.let { "?page=$it" } ?: "")
+    /**
+     * Läsaren för ett nummer. Med [page] öppnas den på den sidan, annars på läspositionen.
+     * Med [query] visas träffraden för den sökningen.
+     */
+    fun reader(issueId: String, page: Int? = null, query: String? = null): String {
+        val arguments = listOfNotNull(page?.let { "page=$it" }, query?.takeIf { it.isNotBlank() }?.let { "q=${Uri.encode(it)}" })
+        return "reader/$issueId" + if (arguments.isEmpty()) "" else arguments.joinToString("&", prefix = "?")
+    }
     fun year(publicationId: String, year: Int) = "year/$publicationId/$year"
     fun issue(issueId: String) = "issue/$issueId"
 
@@ -207,6 +217,17 @@ fun DmzReaderRoot(container: AppContainer) {
                         onRead = { navController.navigate(Routes.reader(it)) },
                         onReadPage = { id, pageNumber -> navController.navigate(Routes.reader(id, pageNumber)) },
                         onBack = { navController.popBackStack() },
+                        search = {
+                            val issueSearch: IssueSearchViewModel = viewModel(
+                                key = "issue-search-$issueId",
+                                factory = viewModelFactory {
+                                    initializer { IssueSearchViewModel(issueId, container.searchIndex, container.libraryRepository) }
+                                },
+                            )
+                            IssueSearchSection(issueSearch) { pageNumber, query ->
+                                navController.navigate(Routes.reader(issueId, pageNumber, query))
+                            }
+                        },
                     )
                 }
             }
@@ -218,10 +239,24 @@ fun DmzReaderRoot(container: AppContainer) {
                         type = NavType.IntType
                         defaultValue = NO_PAGE
                     },
+                    navArgument("q") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    },
                 ),
             ) { entry ->
                 val issueId = requireNotNull(entry.arguments?.getString("issueId"))
                 val page = entry.arguments?.getInt("page")?.takeIf { it != NO_PAGE }
+                val query = entry.arguments?.getString("q")
+                val issueSearch: IssueSearchViewModel = viewModel(
+                    key = "reader-search",
+                    factory = viewModelFactory {
+                        initializer {
+                            IssueSearchViewModel(issueId, container.searchIndex, container.libraryRepository, query, page)
+                        }
+                    },
+                )
                 val viewModel: ReaderViewModel = viewModel(
                     factory = viewModelFactory {
                         initializer {
@@ -239,12 +274,19 @@ fun DmzReaderRoot(container: AppContainer) {
                         }
                     },
                 )
-                ReaderRoute(viewModel, container.imageLoader, onClose = { navController.popBackStack() })
+                ReaderRoute(viewModel, issueSearch, container.imageLoader, onClose = { navController.popBackStack() })
             }
             composable(Routes.SEARCH) {
                 val viewModel: SearchViewModel = viewModel(
                     factory = viewModelFactory {
-                        initializer { SearchViewModel(container.libraryRepository, container.bookmarkRepository) }
+                        initializer {
+                            SearchViewModel(
+                                container.libraryRepository,
+                                container.bookmarkRepository,
+                                container.searchIndex,
+                                container.activeInventory,
+                            )
+                        }
                     },
                 )
                 SearchScreen(
@@ -252,6 +294,8 @@ fun DmzReaderRoot(container: AppContainer) {
                     imageLoader = container.imageLoader,
                     onOpenIssue = { navController.navigate(Routes.issue(it)) },
                     onReadPage = { id, pageNumber -> navController.navigate(Routes.reader(id, pageNumber)) },
+                    onReadHit = { id, pageNumber, query -> navController.navigate(Routes.reader(id, pageNumber, query)) },
+                    onOpenSettings = { navController.navigate(Routes.SETTINGS) },
                 )
             }
             composable(Routes.FAVORITES) {
@@ -300,9 +344,23 @@ fun DmzReaderRoot(container: AppContainer) {
                         }
                     },
                 )
+                val searchIndexViewModel: SearchIndexViewModel = viewModel(
+                    factory = viewModelFactory {
+                        initializer {
+                            SearchIndexViewModel(
+                                container.searchIndex,
+                                container.activeInventory,
+                                container::openDocument,
+                                container::documentSize,
+                                container.applicationScope,
+                            )
+                        }
+                    },
+                )
                 SettingsScreen(
                     viewModel = viewModel,
                     archiveIndexViewModel = archiveIndexViewModel,
+                    searchIndexViewModel = searchIndexViewModel,
                     onBack = { navController.popBackStack() },
                     onOpenDiagnostics = { navController.navigate(Routes.DIAGNOSTICS) },
                 )

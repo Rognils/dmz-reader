@@ -81,3 +81,28 @@ class FtsTestDatabase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SearchTestDatabase(unittest.TestCase):
+    """app/src/debug/assets/search_test.db: det lilla indexet i det riktiga formatet (FAS 9)."""
+
+    def test_committed_file_matches_the_generator(self):
+        import tempfile
+        import build_search_testdb as st
+        with tempfile.TemporaryDirectory() as directory:
+            built = st.build(Path(directory) / "search_test.db")
+            self.assertEqual(built.read_bytes(), st.OUTPUT.read_bytes(),
+                             "kör python3 tools/build_search_testdb.py och committa filen")
+
+    def test_content(self):
+        import sqlite3
+        import build_search_testdb as st
+        db = sqlite3.connect(f"file:{st.OUTPUT}?mode=ro", uri=True)
+        self.addCleanup(db.close)
+        meta = dict(db.execute("SELECT key, value FROM meta"))
+        self.assertEqual(meta["searchSchemaVersion"], "1")
+        self.assertEqual(meta["tokenizer"], "unicode61 remove_diacritics 0")
+        hits = db.execute("SELECT p.issueId, p.pageNumber FROM pages_fts JOIN pages p ON p.id = pages_fts.rowid "
+                          "WHERE pages_fts MATCH '\"högtalare\"' ORDER BY p.issueId, p.pageNumber").fetchall()
+        self.assertEqual(hits, [("datormagazin-1995-14", 26), ("datormagazin-1995-14", 27),
+                                ("datormagazin-1995-14", 29), ("datormagazin-1999-01", 3)])

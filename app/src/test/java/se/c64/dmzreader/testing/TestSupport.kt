@@ -16,6 +16,9 @@ object TestFiles {
     val inventory: File get() = fileFromProperty("dmz.inventoryPath")
     val ftsTestDb: File get() = fileFromProperty("dmz.ftsTestDb")
 
+    /** Ett litet sökindex i det riktiga formatet (tools/build_search_testdb.py). */
+    val searchTestDb: File get() = fileFromProperty("dmz.searchTestDb")
+
     private fun fileFromProperty(name: String): File {
         val path = System.getProperty(name) ?: error("Systemegenskapen $name saknas. Kör testerna via Gradle.")
         return File(path).also { check(it.isFile) { "$path saknas" } }

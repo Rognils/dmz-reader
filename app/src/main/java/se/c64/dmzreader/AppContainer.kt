@@ -31,6 +31,7 @@ import se.c64.dmzreader.data.repository.BookmarkRepository
 import se.c64.dmzreader.data.repository.DiagnosticsRepository
 import se.c64.dmzreader.data.repository.LibraryRepository
 import se.c64.dmzreader.data.repository.ReadingRepository
+import se.c64.dmzreader.data.search.SearchIndexManager
 import se.c64.dmzreader.data.settings.ActiveInventoryStore
 import se.c64.dmzreader.data.settings.BackupPreferences
 import se.c64.dmzreader.data.settings.DataStoreActiveInventoryStore
@@ -184,6 +185,31 @@ class AppContainer(private val context: Context) {
             log = { Log.i("DmzInventory", it) },
         )
     }
+
+    /**
+     * Sökindexet i filesDir/data/search.db (planens D2). Importeras av användaren och
+     * är skilt från appens databas.
+     */
+    val searchIndex: SearchIndexManager by lazy {
+        SearchIndexManager(directory = File(context.filesDir, "data"), log = { Log.i("DmzSearch", it) })
+    }
+
+    /** Öppnar det importerade sökindexet, om det finns. Körs när appen startar. */
+    fun loadSearchIndex() {
+        scope.launch {
+            try {
+                searchIndex.loadAtStartup()
+            } catch (e: Exception) {
+                Log.w("DmzSearch", "Sökindexet gick inte att öppna", e)
+            }
+        }
+    }
+
+    /** Storleken på en fil som användaren har valt i filväljaren. null om den inte är känd. */
+    fun documentSize(uri: Uri): Long? =
+        context.contentResolver.query(uri, arrayOf(android.provider.OpenableColumns.SIZE), null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst() && !cursor.isNull(0)) cursor.getLong(0) else null
+        }
 
     /** Miniatyrerna som följer med appen. Ett coverAsset används bara om filen finns här. */
     val bundledCovers: Set<String> by lazy {

@@ -11,5 +11,6 @@ class DmzReaderApp : Application() {
         container = AppContainer(this)
         container.loadBundledInventory()
         container.reconcileDownloads()
+        container.loadSearchIndex()
     }
 }
