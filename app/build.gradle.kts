@@ -24,15 +24,39 @@ android {
         buildConfigField("String", "ARCHIVE_FTP_PASSWORD", "\"dmz\"")
     }
 
+    // Release-nyckeln ligger utanför repot, och lösenorden i ~/.gradle/gradle.properties
+    // (docs/signing.md). Saknas uppgifterna byggs release och rc osignerade.
+    val releaseStoreFile = providers.gradleProperty("dmzReleaseStoreFile").orNull
+    signingConfigs {
+        if (releaseStoreFile != null) {
+            create("release") {
+                storeFile = file(releaseStoreFile)
+                storePassword = providers.gradleProperty("dmzReleaseStorePassword").get()
+                keyAlias = providers.gradleProperty("dmzReleaseKeyAlias").get()
+                keyPassword = providers.gradleProperty("dmzReleaseKeyPassword").get()
+            }
+        }
+    }
+
     buildTypes {
+        debug {
+            // Eget app-ID och namn, så att utvecklingsbygget och testerna ligger bredvid
+            // den riktiga appen på telefonen och aldrig rör dess data.
+            applicationIdSuffix = ".debug"
+        }
         release {
-            // R8 krymper och optimerar koden. Varianten signeras tills vidare med
-            // debug-nyckeln, så att den kan installeras på telefonen för mätning.
-            // En riktig releasenyckel beslutas när appen ska distribueras.
+            // R8 krymper och optimerar koden. Signeras med release-nyckeln.
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.findByName("release")
+        }
+        // Samma kod, R8-regler och signering som release, men med eget app-ID:
+        // för prov på telefonen vid sidan av den riktiga appen.
+        create("rc") {
+            initWith(getByName("release"))
+            applicationIdSuffix = ".rc"
+            matchingFallbacks += "release"
         }
     }
 

@@ -17,7 +17,12 @@
 # cache/pdf/, så att arkivservern inte belastas mer än nödvändigt. Två tester
 # prövar själva nedladdningen och hämtar den filen från arkivet (15 MB var).
 #
-# Kräver en ansluten telefon med appen och testpaketet installerade:
+# Testerna körs i utvecklingsbygget (se.c64.dmzreader.debug), som ligger bredvid
+# användarens app (se.c64.dmzreader) och inte delar något med den. Fingeravtrycket
+# tas av användarens app, och kräver att den går att läsa med run-as (ett debug-bygge).
+# Finns ingen sådan app på telefonen hoppas fingeravtrycket över, och det sägs i utskriften.
+#
+# Kräver en ansluten telefon med utvecklingsbygget och testpaketet installerade:
 #   ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
 #   adb install -r app/build/outputs/apk/debug/app-debug.apk
 #   adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
@@ -29,10 +34,17 @@
 # samma fingeravtryck före och efter:
 #   tools/device_test.sh /tmp/hq --only -e class se.c64.dmzreader.HqDeviceTest
 # Fler PDF:er än 1986 nr 1 läggs på telefonen med DMZ_SEED_ISSUES="issueId issueId".
+#
+#              tools/device_test.sh KATALOG --fingerprint NAMN
+# tar bara ett fingeravtryck till KATALOG/NAMN.txt, för körningar utanför skriptet.
 set -euo pipefail
 
+# Användarens app, vars data fingeravtrycket gäller, och utvecklingsbygget som testerna körs i.
+# De har olika app-ID och delar ingenting på telefonen.
 PACKAGE=se.c64.dmzreader
-RUNNER=$PACKAGE.test/$PACKAGE.IsolatedTestRunner
+TEST_PACKAGE=se.c64.dmzreader.debug
+NAMESPACE=se.c64.dmzreader
+RUNNER=$TEST_PACKAGE.test/$NAMESPACE.IsolatedTestRunner
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 OUT=${1:-$(mktemp -d)}
 ONLY=()
@@ -45,6 +57,11 @@ mkdir -p "$OUT"
 # Fingeravtrycket av användarens data. Appen ska vara stoppad, så att filerna är stilla.
 fingerprint() {
     local name=$1 work
+    if ! adb shell "run-as $PACKAGE true" >/dev/null 2>&1; then
+        echo "inget fingeravtryck: $PACKAGE finns inte på telefonen eller går inte att läsa med run-as (release-bygge)" > "$OUT/$name.txt"
+        echo "  OBS: $PACKAGE går inte att läsa med run-as. Fingeravtrycket hoppas över." >&2
+        return
+    fi
     adb shell am force-stop "$PACKAGE"
     work=$(mktemp -d)
     for file in dmz-reader.db dmz-reader.db-wal dmz-reader.db-shm; do
@@ -69,7 +86,7 @@ PY
         echo "== filer (SHA-256, storlek, ändrad, namn)"
         adb shell "run-as $PACKAGE sh -c 'for d in cache/pdf files/issues files/data files/datastore; do [ -d \$d ] || { echo \"\$d: finns inte\"; continue; }; for f in \$d/*; do [ -f \"\$f\" ] || continue; echo \"\$(sha256sum \"\$f\" | cut -d\" \" -f1) \$(stat -c \"%s %y\" \"\$f\" | cut -d. -f1) \$f\"; done; done'"
         echo "== testkataloger (ska vara tomt)"
-        adb shell "run-as $PACKAGE ls app_dmz_test 2>/dev/null" || true
+        adb shell "run-as $TEST_PACKAGE ls app_dmz_test 2>/dev/null" || true
     } > "$OUT/$name.txt"
     rm -rf "$work"
 }
@@ -82,6 +99,13 @@ run() {
     echo "$output" | grep -E "^OK|^FAILURES|^Tests run" || true
     grep -q "^OK (" <<<"$output"
 }
+
+# Bara ett fingeravtryck, för körningar som görs utanför skriptet (till exempel av ett annat bygge).
+if [ "${2:-}" = "--fingerprint" ]; then
+    fingerprint "${3:?namn saknas}"
+    echo "$OUT/$3.txt"
+    exit 0
+fi
 
 echo "Fingeravtryck före…"
 fingerprint before
@@ -103,7 +127,11 @@ finish() {
     echo "Fingeravtryck efter…"
     fingerprint after
     if diff -u "$OUT/before.txt" "$OUT/after.txt" > "$OUT/diff.txt"; then
-        echo "ANVÄNDARENS DATA ÄR OFÖRÄNDRAD (fingeravtrycken är identiska): $OUT/before.txt"
+        if grep -q "^inget fingeravtryck" "$OUT/before.txt"; then
+            echo "INGET FINGERAVTRYCK TOGS (användarens app går inte att läsa med run-as)."
+        else
+            echo "ANVÄNDARENS DATA ÄR OFÖRÄNDRAD (fingeravtrycken är identiska): $OUT/before.txt"
+        fi
     else
         echo "FINGERAVTRYCKEN SKILJER SIG:" >&2
         cat "$OUT/diff.txt" >&2
@@ -122,15 +150,15 @@ echo "Hela sviten…"
 run || status=1
 
 echo "Omstartstestet (tvångsstopp mellan delarna)…"
-CLASS=$PACKAGE.ReadingStateDeviceTest
+CLASS=$NAMESPACE.ReadingStateDeviceTest
 run -e dmzTestRoot restart -e dmzKeepRoot true -e dmzPhase 1 -e class "$CLASS#restartPhase1ReadPages" || status=1
-adb shell am force-stop "$PACKAGE"
+adb shell am force-stop "$TEST_PACKAGE"
 run -e dmzTestRoot restart -e dmzKeepRoot true -e dmzPhase 2 -e class "$CLASS#restartPhase2ContinueReading" || status=1
 # En sista körning utan dmzKeepRoot tar bort katalogen.
-run -e dmzTestRoot restart -e class "$PACKAGE.BackupVersionDeviceTest" >/dev/null || status=1
+run -e dmzTestRoot restart -e class "$NAMESPACE.BackupVersionDeviceTest" >/dev/null || status=1
 
 echo "Lässession vid tvångsstopp…"
-STATS=$PACKAGE.StatisticsDeviceTest
+STATS=$NAMESPACE.StatisticsDeviceTest
 adb logcat -c
 adb shell am instrument -w -e dmzTestRoot forcestop -e dmzKeepRoot true -e dmzPhase 1 \
     -e class "$STATS#forceStopPhase1Read" "$RUNNER" >/dev/null 2>&1 &
@@ -144,7 +172,7 @@ done
 if [ "${started:-0}" -ge 1 ]; then
     # Läsningen började 18 s före sidbytet. Läs 12 s till och stoppa sedan appen mitt i läsningen.
     sleep 12
-    adb shell am force-stop "$PACKAGE"
+    adb shell am force-stop "$TEST_PACKAGE"
     wait $phase1 2>/dev/null || true
     echo "Appen är tvångsstoppad efter cirka 30 s läsning."
     run -e dmzTestRoot forcestop -e dmzKeepRoot true -e dmzPhase 2 -e dmzReadSeconds 30 \
@@ -152,10 +180,10 @@ if [ "${started:-0}" -ge 1 ]; then
     adb logcat -d -s DmzStatistics | grep -o "TVÅNGSSTOPP.*" || true
 else
     echo "Läsaren öppnades aldrig i den första delen." >&2
-    adb shell am force-stop "$PACKAGE"
+    adb shell am force-stop "$TEST_PACKAGE"
     status=1
 fi
-run -e dmzTestRoot forcestop -e class "$PACKAGE.BackupVersionDeviceTest" >/dev/null || status=1
+run -e dmzTestRoot forcestop -e class "$NAMESPACE.BackupVersionDeviceTest" >/dev/null || status=1
 
 
 finish

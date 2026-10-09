@@ -26,7 +26,7 @@ import java.io.File
  *   adb push dist/search.db /data/local/tmp/dmz-search.db
  *   adb shell am instrument -w -e dmzSearchPilot true \
  *       -e class se.c64.dmzreader.SearchPilotDeviceTest \
- *       se.c64.dmzreader.test/se.c64.dmzreader.IsolatedTestRunner
+ *       se.c64.dmzreader.debug.test/se.c64.dmzreader.IsolatedTestRunner
  *   adb shell rm /data/local/tmp/dmz-search.db
  *   adb shell run-as se.c64.dmzreader rm cache/search-pilot.db
  *

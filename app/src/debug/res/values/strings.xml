@@ -1,0 +1,4 @@
+<resources>
+    <!-- Utvecklingsbygget har eget namn och app-ID (se.c64.dmzreader.debug). -->
+    <string name="app_name">DMZ Reader DEV</string>
+</resources>

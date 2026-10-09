@@ -329,7 +329,7 @@ Ett enskilt test utan fingeravtryck:
 
 ```bash
 adb shell am instrument -w -e class se.c64.dmzreader.StatisticsDeviceTest \
-    se.c64.dmzreader.test/se.c64.dmzreader.IsolatedTestRunner
+    se.c64.dmzreader.debug.test/se.c64.dmzreader.IsolatedTestRunner
 ```
 
 Kör aldrig `./gradlew connectedDebugAndroidTest`: det avinstallerar appen, och därmed användarens data.
