@@ -1,158 +1,279 @@
 # Rapport – maskerat sökindex för distribution
 
-Datum: 2026-10-10 · Gren: `tools/privacy-filter` · Filter: `privacyFilterVersion` 1 · Arkivversion 2026-10-06-006
-
-**Utkast. Del D1 är gjord. D2 (bygge och kontroll) är bara provkörd, och D3 (uppladdning) är inte gjord:** arbetet stannade före 1.0.0-rc3 när grindkörningen inte gav 10 av 10, se `docs/reports/gates.md`. Grenen är inte mergad, och ingen fil är uppladdad.
+Datum: 2026-10-11 · Gren: `tools/privacy-filter`, mergad till `main` · Filter: `privacyFilterVersion` 1 · Arkivversion 2026-10-06-006
 
 Rapporten citerar inga personuppgifter. Stickproven som bedömningen bygger på ligger utanför repot, i `~/dmz-privacy-stickprov/`.
 
 ## 1. Sammanfattning
 
-Sökindexet som delas ut byggs nu med ett filter som byter e-postadresser mot `[e-post]` och telefonnummer mot `[telefon]` innan texten läggs i databasen. Den omaskerade `dist/search.db` är orörd och har inte laddats upp någonstans.
+Sökindexet som delas ut är byggt, kontrollerat och upplagt som prerelease i det privata repot. Den omaskerade `dist/search.db` är orörd och har inte laddats upp någonstans.
 
 | | |
 |---|---|
-| Maskerade telefonnummer | 46 330, på 4 810 av 11 293 sidor (43 %) |
-| Maskerade e-postadresser | 309, på 172 sidor |
-| Falska telefonträffar i stickprovet | 0 av 150 |
-| Falska e-postträffar i stickprovet | 1 av 60 |
-| Uppskattad andel missade telefonnummer med riktnummer | cirka 3 %, alla skadade av texttolkningen |
+| Fil | `search-2026-10-06-006-p1.db`, 90 980 352 byte (91 MB) |
+| SHA-256 | `1256339bf39679c21581f1b620f4846918450ad7ba1ddd0cd2913ff0acf5f2e6` |
+| Innehåll | 185 nummer, 11 293 sidor |
+| Maskerat | 46 331 telefonnummer, 1 937 postgironummer, 309 e-postadresser, 12 personnummerformer |
+| Berörda sidor | 5 025 av 11 293 (44 %) |
+| `rawText` | tom på varje rad |
+| Falska träffar i stickproven | telefon 0 av 150, postgiro 0 av 133, e-post 1 av 60, personnummerform 0 av 12 |
 | Sökfacit | 43 av 43 före och efter, 0 irrelevanta före och efter |
+| Integritetskontroll | 0 träffar med SQL, 0 i `strings`-utdata, 0 i råa bytes |
+| Två byggen | byte-identiska |
 
-**Det filtret inte tar är inte litet.** Utanför de två kategorierna finns postgironummer till privatpersoner (uppskattningsvis 2 000–3 000), nummer utan riktnummer, utländska nummer och tolv teckenföljder som har formen av ett personnummer. Namn och postadresser maskeras inte, enligt uppgiften. Se avsnitt 5.
+**Det filtret inte tar:** uppskattningsvis 3 % av telefonnumren med riktnummer, som är skadade av texttolkningen, samt nummer utan riktnummer, utländska nummer, bankgironummer, namn och postadresser. Se avsnitt 6.
 
-## 2. Textkolumnerna (D1.1)
+## 2. Textkolumnerna
 
 `search.db` har två textkolumner i tabellen `pages`:
 
-| Kolumn | Innehåll | Läser appen den? |
+| Kolumn | Innehåll | Läser appen den? | I distributionsfilen |
+|---|---|---|---|
+| `searchText` | texten normaliserad för sökning | Ja. FTS-indexet är byggt över den, och utdragen i sökträffarna hämtas ur den. | maskerad |
+| `rawText` | texten som den kom ur PDF:en | Nej. Ingen fråga i appen läser kolumnen. | **tom** |
+
+Kolumnen `rawText` finns kvar och schemat är oförändrat. Appen kräver tabellerna `meta`, `issues`, `pages` och `pages_fts`, och läser ur `pages` bara `id`, `issueId` och `pageNumber`.
+
+Filen blev 91 MB i stället för 149.
+
+## 3. Filtret
+
+`tools/privacy_filter.py`, `PRIVACY_FILTER_VERSION = 1`. Det körs i `build_search_index.py --privacy-filter` på varje sidas `searchText`, innan raden skrivs och innan FTS-indexet får texten. Det är deterministiskt.
+
+### Markeringen
+
+Alla kategorier byts mot `•••`. Markeringen har inga bokstäver eller siffror, så den ger inga ord i indexet.
+
+Verifierat på tre sätt:
+
+- **Tokeniseraren:** en text med bara markeringar ger noll ord i FTS5 med `unicode61 remove_diacritics 0` (test).
+- **Normaliseringen:** `normalize_page` lämnar markeringen orörd och lägger inte till något (test).
+- **Den färdiga filen:** indexets ordlista har 333 918 ord, och inget av dem innehåller tecknet `•`.
+
+Sökorden som den förra markeringen förstörde ger nu samma antal sidor som i det omaskerade indexet:
+
+| Sökord | Omaskerat | Maskerat |
 |---|---|---|
-| `searchText` | texten normaliserad för sökning | Ja. FTS-indexet är byggt över den, och utdragen i sökträffarna hämtas ur den. |
-| `rawText` | texten som den kom ur PDF:en | **Nej.** Ingen fråga i appen läser kolumnen. |
+| telefon | 1 253 | 1 253 |
+| epost | 2 | 2 |
+| e-post | 10 | 10 |
+| postgiro | 294 | 295 |
+| personnummer | 88 | 88 |
 
-Appen kräver att tabellerna `meta`, `issues`, `pages` och `pages_fts` finns, och läser ur `pages` bara `id`, `issueId` och `pageNumber`.
+"postgiro" får en sida till, eftersom ordet på ett ställe stod hopskrivet med numret och nu står för sig.
 
-Båda kolumnerna är maskerade i distributionsfilen, som uppgiften kräver.
+**En sak att känna till:** `•••` förekommer redan i tidningarnas text, som punktlistor och utfyllnad, på 362 sidor. I den maskerade filen finns teckenföljden på 5 162 sidor. README säger att `•••` i ett sökutdrag betyder en maskerad kontaktuppgift. Det stämmer nästan alltid, men inte alltid.
 
-**Förslag: uteslut `rawText` ur nästa distributionsfil.** Kolumnen är ungefär 57 MB av filens 148 och används inte av appen. Tom kolumn ger en fil på cirka 92 MB, och halverar mängden tidningstext som delas ut. Byggskriptet har redan flaggan `--without-raw-text`, som lämnar kolumnen tom men kvar i schemat, så appen behöver inte ändras. Jag har inte gjort det i den här filen, eftersom uppgiften bad om ett förslag.
+### Kategorierna
 
-## 3. Filtret (D1.2)
-
-`tools/privacy_filter.py`, `PRIVACY_FILTER_VERSION = 1`. Det körs i `build_search_index.py --privacy-filter` på varje sidas `rawText` och `searchText`, innan raden skrivs och innan FTS-indexet får texten. Det är deterministiskt: samma text ger samma resultat.
-
-**E-postadresser → `[e-post]`**
+**E-postadresser**
 
 - en vanlig adress: namn, `@`, en domän med minst en punkt
 - en adress som texttolkningen har dragit isär, med mellanslag kring `@` eller inne i domänen, om den slutar på en känd toppdomän inom 25 tecken
 
-**Telefon- och faxnummer → `[telefon]`**
+**Telefon- och faxnummer**
 
 - riktnummer (0 och 1–3 siffror), skiljetecken `-` eller `/`, och ett abonnentnummer på minst 5 siffror i grupper. Högst 8 siffror efter ett tvåsiffrigt riktnummer, 7 efter tre och 6 efter fyra. Samma regel täcker 010, 020 och 07x.
-- riktnummer inom parentes
-- `+46`, med eller utan `(0)`
+- riktnummer inom parentes, och `+46` med eller utan `(0)`
 - efter orden tel, telefon, tfn, fax, telefax, bbs, ring och mobil: också riktnummer följt av bara ett mellanslag, nummer i ett stycke, och nummer hopskrivet med ordet
 - det som texttolkningen ställer till med: utspärrade siffror, `·` eller `*` i stället för bindestreck, och nummer hopskrivna med ordet före
 
-Reglerna för var numret slutar står i modulens huvud. Kort: en siffergrupp räknas inte till numret om den gör numret för långt, är ett pris eller ett antal (`:-`, `kr`, `st`, `bps`), eller är nästa nummers riktnummer.
+**Postgironummer**
 
-**Med avsikt utanför:** fyra siffror efter riktnumret (tider som 0900-1700 och ISSN har den formen), nummer utan riktnummer, utländska nummer, och beteckningar som 68EC030-25.
+- två till åtta siffror, bindestreck och en kontrollsiffra, direkt efter ordet postgiro, postgirot eller pg, med eller utan nr, nummer eller konto
+- mellan ordet och numret får det stå högst fyra tecken som inte är bokstäver eller siffror
+- skiftlägesokänsligt, och ordet och siffrorna får vara utspärrade
+- bara numret maskeras. Ordet står kvar.
 
-Filtret byggdes ut i fem omgångar efter vad stickproven och filkontrollen visade. Den första versionen följde bara formaten i uppgiften och missade uppskattningsvis 7 % av numren. Tilläggen är de tre sista punkterna ovan och regeln för isärdragna e-postadresser. Utan den regeln missades 71 av 309 adresser.
+**Personnummerform**
 
-## 4. Tester (D1.3)
+- `ÅÅMMDD-NNNN` och `ÅÅÅÅMMDD-NNNN`, där månaden är 01–12 och dagen 01–31
+- bindestrecket krävs, eller plustecknet
 
-`tools/tests/test_privacy_filter.py` och `test_privacy_audit.py`, 23 tester med påhittade nummer och adresser. Inget exempel kommer ur tidningarna.
+**Med avsikt utanför:** fyra siffror efter riktnumret (tider som 0900-1700 och ISSN har den formen), nummer utan riktnummer, utländska nummer, bankgironummer, och beteckningar som 68EC030-25. Namn och postadresser maskeras inte.
 
-- **Ska maskeras:** 08-, 031-, 0303/, 070-, 010-, 020-, åtta siffror i Stockholm, `+46` i fyra skrivsätt, parentes, utspärrade siffror, `·` och `*`, nummer efter tel och fax utan skiljetecken, nummer hopskrivna med ordet före, e-postadresser i fem former och fem isärdragna.
-- **Ska inte maskeras:** 1989, 499 kr, 1 995:-, Commodore 128, 68000, 512 KB, C-64, Nr 12, postnummer, datum i fyra former, poäng, artikelnummer, versionsnummer, klockslag, ISSN, ISBN (även utspärrat), minnesadresser, FidoNet-adresser, modemhastigheter, postgironummer, processorbeteckningar. Sammanlagt 60 exempel.
-- **Egenskaper:** en maskerad text har inget kvar att maskera, och maskeringen ger samma resultat varje gång.
-- **Databasen:** båda kolumnerna maskeras, numren finns ingenstans i filens bytes, `meta` får filtrets version, ett omaskerat bygge är oförändrat, och två maskerade byggen är byte-identiska.
+## 4. Tester
 
-Alla Python-tester: 229 av 229 (4 hoppas över när den färdiga databasen inte finns i katalogen).
+`tools/tests/test_privacy_filter.py` och `test_privacy_audit.py`, 31 tester med påhittade nummer och adresser. Inget exempel kommer ur tidningarna.
 
-## 5. Mätning över hela korpusen (D1.4)
+- **Ska maskeras:** telefonnummer i 43 exempel, e-postadresser i 12, postgiro i 18, personnummerform i 6.
+- **Ska inte maskeras:** 1989, 499 kr, 1 995:-, Commodore 128, 68000, 512 KB, C-64, Nr 12, postnummer, datum, poäng, artikelnummer, versionsnummer, klockslag, ISSN, ISBN, minnesadresser, FidoNet-adresser, modemhastigheter, processorbeteckningar, organisationsnummer, bankgiro, personnummerformer med omöjligt datum eller fel längd. Sammanlagt 92 exempel.
+- **Egenskaper:** en maskerad text har inget kvar att maskera, också när ett nummer bara maskeras till en del. Maskeringen ger samma resultat varje gång.
+- **Databasen:** `searchText` maskeras, `rawText` är tom, numren finns ingenstans i filens bytes, `meta` får filtrets version, ett omaskerat bygge är oförändrat, och två maskerade byggen är byte-identiska.
+- **Kontrollverktyget:** en omaskerad fil faller på varje kontroll, text i en ledig sida hittas, och bytes i FTS-indexet som liknar en adress redovisas med läge och hex.
 
-Mätt med `tools/privacy_audit.py measure` på den omaskerade `dist/search.db`.
+Alla Python-tester: 237 av 237.
 
-| Kolumn | Telefonnummer | Sidor | E-postadresser | Sidor | Sidor med någon maskering |
-|---|---|---|---|---|---|
-| `searchText` | 46 330 | 4 810 | 309 | 172 | 4 886 |
-| `rawText` | 43 329 | 4 707 | 314 | 180 | 4 791 |
+## 5. Mätning och stickprov
 
-Skillnaden mellan kolumnerna beror på att `rawText` har radbrytningar och utspärrad text som normaliseringen har rättat i `searchText`. Varje kolumn maskeras för sig.
+Mätt med `tools/privacy_audit.py measure` på den omaskerade `dist/search.db`, i `searchText`:
 
-De allra flesta numren hör till företag: butiker, postorder och BBS:er i annonser och listor. Privatpersoners nummer finns i radannonserna. Jag har inte räknat fördelningen.
-
-### Stickprovet
-
-Draget med fast frö av `privacy_audit.py sample`, och sparat med mina bedömningar i `~/dmz-privacy-stickprov/v1/`.
-
-| Stickprov | Antal | Rätt | Falska |
-|---|---|---|---|
-| Telefonträffar | 150 | 150 | 0 |
-| E-postträffar | 60 | 59 | 1 |
-
-- Den falska e-postträffen är brus ur en bild som råkar ha formen av en adress.
-- Tre träffar är delvis maskerade: texttolkningen har delat numret eller adressen så att ett par tecken står kvar efter markeringen.
-- Noll falska av 150 betyder inte noll i hela korpusen. Med 95 % säkerhet ligger andelen under 2 %, alltså under gränsen på 3 %.
-
-Filtret ändrades efter att stickprovet drogs, i fyra små steg. Jag drog inte ett nytt stickprov varje gång. I stället granskade jag de nya reglernas träffar för sig: 82 träffar efter nyckelord och med `*`, 40 träffar efter en siffra och ett mellanslag, 60 nummer hopskrivna med ordet före, och 71 isärdragna e-postadresser. De enda falska fanns bland de hopskrivna: processorbeteckningar och minnesadresser, som sedan undantogs. Två eller tre felskrivna modellbeteckningar av 84 maskeras fortfarande.
-
-### Det som inte maskerades
-
-Ett stickprov på 200 av de 55 224 siffersträngar med skiljetecken som står kvar i den maskerade texten:
-
-| Bedömning | Antal av 200 | Uppskattat i korpusen |
+| Kategori | Träffar | Sidor |
 |---|---|---|
-| Inte ett telefonnummer (priser, modeller, programkod, datum) | 174 | |
-| **Missat telefonnummer med riktnummer** | 6 | cirka 1 700 |
-| Utländskt nummer | 5 | cirka 1 400 |
+| Telefonnummer | 46 331 | 4 810 |
+| Postgironummer | 1 937 | 740 |
+| E-postadresser | 309 | 172 |
+| Personnummerform | 12 | 9 |
+| Någon kategori | | 5 025 |
+
+De allra flesta telefonnumren hör till företag: butiker, postorder och BBS:er i annonser och listor. Privatpersoners nummer finns i radannonserna. Jag har inte räknat fördelningen.
+
+### Stickproven
+
+Dragna med fast frö av `privacy_audit.py sample`, och sparade med mina bedömningar i `~/dmz-privacy-stickprov/`.
+
+| Kategori | Granskade | Rätt | Falska | Gräns |
+|---|---|---|---|---|
+| Telefonnummer | 150 | 150 | 0 | 3 % |
+| Postgironummer | 120, och de 13 som tillkom sist | 133 | 0 | 3 % |
+| E-postadresser | 60 | 59 | 1 | |
+| Personnummerform | alla 12 | 12 | 0 | 3 % |
+
+- **Telefon:** noll falska av 150 betyder med 95 % säkerhet under 2 % i hela korpusen. Tre träffar är delvis maskerade: texttolkningen har delat numret så att ett par siffror står kvar.
+- **Postgiro:** alla 133 är postgironummer efter ordet. En del hör till företag och insamlingar, inte privatpersoner. Regeln skiljer inte på dem.
+- **E-post:** den falska träffen är brus ur en bild som råkar ha formen av en adress. De flesta adresserna är redaktionens egna.
+- **Personnummerform:** åtta står som kontonummer efter postgiro eller pg, det gamla personkontot där kontonumret var personnumret. Fyra står efter "P-nr" i exempeldata till ett registerprogram och kan vara påhittade. Alla tolv har rätt form, och ingen är något annat, till exempel ett artikelnummer.
+
+Filtret ändrades flera gånger efter att telefonstickprovet drogs. Jag drog inte ett nytt varje gång, utan granskade de nya reglernas träffar för sig: 82 efter nyckelord och med `*`, 40 efter en siffra och ett mellanslag, 60 hopskrivna med ordet före, och 71 isärdragna e-postadresser. De enda falska fanns bland de hopskrivna: processorbeteckningar och minnesadresser, som sedan undantogs.
+
+**Känd falsk träff:** en felskriven modellbeteckning i en prislista maskeras som telefonnummer. Den uppstod när regeln för beteckningar gjordes oberoende av å, ä och ö, så att filtret ger samma svar på texten som på `strings`-utdata. Två eller tre liknande fanns redan.
+
+## 6. Det filtret inte tar
+
+### Missade telefonnummer, cirka 3 %
+
+Ett stickprov på 200 av de drygt 50 000 siffersträngar med skiljetecken som står kvar i den maskerade texten gav sex missade telefonnummer med riktnummer. Uppräknat är det cirka 1 700, mot 46 331 maskerade. Osäkerheten är stor: mellan 1 och 6 % med 95 % säkerhet.
+
+Alla sex är skadade av texttolkningen, på fyra sätt:
+
+| Skada | Hur numret ser ut i texten | Varför det inte går att känna igen säkert |
+|---|---|---|
+| En siffra har blivit en bokstav | riktnumret innehåller ett D, O, S eller l | En regel som godtar bokstäver i riktnummer träffar artikelnummer, minnesadresser och programkod. |
+| Riktnumret är delat av ett mellanslag | tre siffror, mellanslag, en siffra och bindestreck | Samma form har prislistor och tabeller, där tal står bredvid varandra. |
+| Numret är avhugget | riktnummer och bara två till fyra siffror | Kortare än ett telefonnummer. Tider, ISSN och intervall har samma form. |
+| En siffra för mycket först | fem siffror före bindestrecket | Riktnummer börjar på 0. Utan den regeln träffas postnummer och artikelnummer. |
+
+Jag har inte gjort reglerna mer aggressiva för dem. Varje sådan regel skulle maskera mer av den text som sökningen är till för: priser, modeller och listningar.
+
+### Utanför kategorierna
+
+Uppskattat ur samma stickprov på 200:
+
+| | Antal av 200 | Uppskattat i korpusen |
+|---|---|---|
+| Utländska nummer | 5 | cirka 1 300 |
 | Nummer utan riktnummer | 1, och 3 osäkra | 300–1 100 |
-| Postgiro eller bankgiro | 10 | cirka 2 800 |
 | ISBN | 1 | |
+| Inte nummer alls (priser, modeller, programkod, datum) | 174 | |
 
-- **De sex missade** är alla skadade av texttolkningen: en siffra har blivit en bokstav, riktnumret är delat mitt i, eller numret är avhugget. Mot 46 330 maskerade ger det en miss på cirka 3,5 %. Osäkerheten är stor: mellan 1 och 6 % med 95 % säkerhet.
-- **Siffrorna är grova.** Sex träffar i ett stickprov bär inte mer än en storleksordning.
+Stickprovet drogs innan postgiro lades till, och tio av de 200 var då postgironummer. De maskeras nu.
 
-### Utanför filtrets två kategorier
-
-Det här bad uppgiften inte om, men det hör till bilden av vad filen innehåller:
-
-- **Postgiro- och bankgironummer.** Radannonser ber ofta om betalning till ett postgiro, och numret står bredvid ett namn. En sökning efter orden postgiro, pg och bankgiro följt av ett nummer ger 1 777 träffar på 601 sidor.
-- **Teckenföljder med personnummers form:** 12 stycken (sex siffror som är ett giltigt datum, bindestreck, fyra siffror). Minst en står som kontonummer i en annons. Jag har inte gått igenom alla tolv.
-- **Nummer utan riktnummer** och **utländska nummer**, enligt tabellen.
+- **Bankgironummer** maskeras inte. Uppgiften gällde postgiro.
+- **Postgironummer utan ordet före,** till exempel i en tabell, maskeras inte.
 - **Namn och postadresser** maskeras inte.
 
-Ett filter i version 2 skulle kunna ta postgiro, bankgiro och personnummerformen. Det är tre väl avgränsade mönster.
-
-## 6. Stoppunkten (D1.5)
+## 7. Stoppreglerna
 
 | Villkor | Utfall |
 |---|---|
-| Andel falska telefonträffar högst 3 % | 0 av 150 |
-| Ingen negativ påverkan på `search_golden.json` | 43 av 43 före och efter, 0 irrelevanta före och efter, samma antal träffar för varje sökord |
+| Högst 3 % falska telefonträffar | 0 av 150 |
+| Högst 3 % falska postgiroträffar | 0 av 133 |
+| Högst 3 % falska personnummerformer | 0 av 12 |
+| Sökfacit inte försämrat | 43 av 43 före och efter, 0 irrelevanta före och efter |
 
-Bygget fick fortsätta.
+**En reservation om facit:** antalet träffar och antalet hittade sidor är detsamma, men träffarnas ordning ändras något, åt båda håll. 15 av 43 sökord får en förväntad sida på en annan plats, oftast en till tre platser bort. "Commodore 128" går från plats 1 till 2, "Amiga" från 6 till 4 och "för" från 32 till 26. Orsaken är att sidorna blir kortare när nummer tas bort, och rangordningen väger in sidans längd. Jag har inte räknat det som försämrat facit, eftersom ingen förväntad sida försvinner och rörelsen går åt båda håll. Vill du räkna det annorlunda är det här stället att säga till.
 
-**En reservation om facit:** träffarnas ordning ändras något, åt båda håll. 14 av 43 sökord får en förväntad sida på en annan plats, oftast en till tre platser bort. "Commodore 128" går från plats 1 till 2 och "Amiga" från 6 till 4. Orsaken är att sidorna blir kortare när nummer byts mot ett ord, och rangordningen väger in sidans längd. Jag bedömer inte det som negativ påverkan, men det är en ändring.
+## 8. Bygget och kontrollen
 
-**En bieffekt som syns i appen:** markeringarna är vanliga ord i indexet. En sökning på "telefon" ger 5 000 sidor i stället för 1 253, och "e-post" 180 i stället för 10. Det går inte att undvika med de markeringar uppgiften anger. En markering utan bokstäver vore osynlig för sökningen, men säger mindre till läsaren.
-
-## 7. Provbygget (inte den slutliga filen)
-
-Ett bygge från PDF:erna med `--privacy-filter` och `--built-at 2026-10-10T00:00:00Z`, lagt utanför repot:
+Byggt från PDF:erna med `--all --privacy-filter --built-at 2026-10-11T00:00:00Z`. Texten maskeras innan den skrivs, och databasen avslutas med `VACUUM`. Ingen befintlig databas har uppdaterats.
 
 | | |
 |---|---|
-| Storlek | 148 246 528 byte |
-| Nummer och sidor | 185 och 11 293 |
-| Maskerat i `searchText` | 309 e-postadresser, 46 330 telefonnummer |
-| `meta` | `privacyFilterVersion` 1, `normalizerVersion` 2, `inventoryDatasetVersion` 2026-10-06-006, `searchSchemaVersion` 1 |
-| Källornas SHA-256 | i tabellen `issues`, som förut |
-| `privacy_audit.py verify` | SQL: 0 träffar i båda kolumnerna. Läsbara teckenföljder och råa bytes: 1 träff, se nedan. |
+| Fil | `dist/search-2026-10-06-006-p1.db` |
+| Storlek | 90 980 352 byte |
+| SHA-256 | `1256339bf39679c21581f1b620f4846918450ad7ba1ddd0cd2913ff0acf5f2e6` |
+| Två byggen | byte-identiska (`cmp`) |
 
-**Den råa sökningen ger inte noll, utan en träff.** Sex bytes inne i FTS-indexets binära data råkar ha formen av en e-postadress. De står mellan styrtecken, finns inte i någon textkolumn och är inte text. Kontrollverktyget redovisar sådana träffar som upplysning i stället för fel, men bara om teckenföljden finns i ett FTS-block och inte i texten. Kravet "noll träffar" är alltså uppfyllt för text, inte bokstavligt för varje byte.
+Metadata i filen:
 
-Filkontrollen hittade också riktiga missar i den första provfilen: sju nummer som stod hopskrivna med ordet före, eller följdes av ett tankstreck. De ledde till de två sista ändringarna i filtret.
+| Nyckel | Värde |
+|---|---|
+| `inventoryDatasetVersion` | 2026-10-06-006 |
+| `normalizerVersion` | 2 |
+| `privacyFilterVersion` | 1 |
+| `searchSchemaVersion` | 1 |
+| `lexiconVersion` | 1 |
+| `tokenizer` | unicode61 remove_diacritics 0 |
+| `issueCount`, `pageCount` | 185, 11293 |
+| `builtAt` | 2026-10-11T00:00:00Z |
 
-Kvar att göra i D2: bygga den slutliga filen två gånger och jämföra byte för byte, köra facit mot den, och importera den i debug-appen. Siffrorna om facit i avsnitt 6 kommer från en provdatabas byggd av den maskerade texten, inte från ett bygge ur PDF:erna.
+Källornas SHA-256 står i tabellen `issues`, en rad per nummer med PDF:ens storlek, ETag och SHA-256, för alla 185.
+
+### Sökfacit
+
+| | Hittar alla förväntade sidor | Irrelevanta träffar |
+|---|---|---|
+| Omaskerat (`dist/search.db`) | 43 av 43 | 0 |
+| Maskerat (`-p1`) | 43 av 43 | 0 |
+
+### Integritetskontrollen
+
+`tools/privacy_audit.py verify`, och dessutom det riktiga verktyget `strings`:
+
+| Kontroll | Träffar |
+|---|---|
+| Filtret på varje rad i `searchText` och `rawText` (SQL) | 0 |
+| `rawText` tom på varje rad | ja |
+| Filtret på `strings -n 4` av filen | 0 |
+| Filtret på filens alla bytes | 0 |
+| FTS-indexet stämmer med texten | ja |
+
+Inga träffar i råa bytes behövde alltså verifieras som binärdata. Verktyget gör den verifieringen när det behövs och redovisar då läge och hex. Ett tidigare provbygge hade en sådan träff: sex bytes i FTS-indexets packade data som råkade ha formen av en e-postadress med en domän på ett enda tecken. Regeln för e-postadresser kräver nu minst två tecken i domänen. Inga adresser i korpusen berördes.
+
+**Kontrollen hittade riktiga fel på vägen,** och det är värt att veta hur:
+
+- Den första råa sökningen visade sju telefonnummer som stod hopskrivna med ordet före, eller följdes av ett tankstreck.
+- `strings` delar texten vid å, ä och ö. Det visade tretton postgironummer som stod efter ett annat skiljetecken än regeln tillät, eller hopskrivna med ordet före.
+- SQL-kontrollen visade ett fall där resten av ett delvis maskerat nummer gav en ny träff.
+
+Alla tre är rättade, och filen är byggd om från grunden efter varje ändring.
+
+### Prov i appen
+
+Importerad i debug-appen genom filväljaren, som en användare gör:
+
+- "Sökindexet är importerat: 185 nummer och 11293 sidor, på 1,6 sekunder."
+- Inställningar visar arkivversion 2026-10-06-006, normalisering version 2, 185 nummer, 11 293 sidor, 91 MB.
+
+| Sökning | Resultat i appen |
+|---|---|
+| telefon | 1 253 sidor i 184 nummer |
+| ordertelefon | 365 sidor i 168 nummer. Utdragen visar `•••` där numren stod. |
+| postgiro | 295 sidor i 144 nummer |
+| personnummer | 88 sidor i 57 nummer |
+| epost | 2 sidor i 2 nummer |
+
+Skärmbild: `docs/screenshots/search-privacy/01-sokutdrag-med-markering.png`. Release-appen är inte rörd. Du importerar själv.
+
+**Två texter stämmer inte längre:** appens inställningssida och backloggens specifikation säger "cirka 150 MB". Filen är 91 MB. Det är en textändring för 1.0.0.
+
+## 9. Uppladdningen
+
+Prerelease i det privata repot `Rognils/dmz-reader`:
+
+| | |
+|---|---|
+| Tagg | `search-index-2026-10-06-006-p1` |
+| Fil | `search-2026-10-06-006-p1.db` |
+| Markerad som | prerelease |
+
+Release-texten innehåller SHA-256 och storlek, arkivversion, `normalizerVersion` och `privacyFilterVersion`, antal nummer och sidor, de fyra maskerade kategorierna, att `rawText` är tom, och att rättigheterna till texten tillhör respektive rättighetsinnehavare.
+
+APK:n är inte uppladdad. Repot är privat.
+
+## 10. Kvar att ta ställning till
+
+- **Facit:** om de små ändringarna i träffarnas ordning är godtagbara.
+- **Markeringen:** `•••` finns också i tidningarnas egen text på 362 sidor.
+- **Bankgiro** och **nummer utan riktnummer:** utanför filtret i dag. Ändras reglerna efter att filen har delats ut publikt blir det `privacyFilterVersion` 2 och en ny fil.
+- **"Cirka 150 MB"** i appens text och i backloggen.

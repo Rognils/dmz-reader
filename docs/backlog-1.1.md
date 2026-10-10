@@ -23,7 +23,7 @@ Idéer som dök upp under arbetet med releasekandidaterna men som inte hör hemm
 - **Besked när sökindexet är äldre än arkivindexet**, med en förklaring av hur ett nytt hämtas.
 - **Hämtning av sökindex från GitHub-release.** Kräver publikt repo. Specifikation:
   - Indexet hämtas aldrig automatiskt och aldrig vid uppstart.
-  - Sök-fliken utan index visar ett kort: "Fulltextsökning kräver ett sökindex på cirka 150 MB." Knapp: "Ladda ned sökindex". Kortet förklarar att allt annat fungerar utan index.
+  - Sök-fliken utan index visar ett kort: "Fulltextsökning kräver ett sökindex på cirka 90 MB." Knapp: "Ladda ned sökindex". Kortet förklarar att allt annat fungerar utan index.
   - Nedladdningen respekterar "Ladda ned endast via wifi", kan återupptas (Range), går via samma överföringsmekanism som PDF (en överföring åt gången) och kontrolleras mot SHA-256 från release-metadata före import.
   - Importen sker med befintlig import-logik. Användardata rörs aldrig.
   - Finns ett nyare index visas en notis i Inställningar, aldrig en automatisk hämtning.
