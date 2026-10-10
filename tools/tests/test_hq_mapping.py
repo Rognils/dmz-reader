@@ -324,8 +324,8 @@ class InventoryFields(unittest.TestCase):
         for bad in ({"0": "a.jpg"}, {"x": "a.jpg"}, {"1": "../a.jpg"}, {"1": "a/b.jpg"}, {"1": "a.gif"}, {"1": 5}, {}, []):
             self.assertTrue(self.errors(self.changed("datormagazin-1993-03", hqPageMap=bad)), bad)
         # 0, 90, 180 och 270 är tillåtna. 0 är standard för en sida som inte nämns.
-        for good in ({"1": 0}, {"1": 90}, {"1": 180}, {"1": 270}):
-            self.assertEqual(self.errors(self.changed("datormagazin-1993-03", hqPageRotation=good)), [], good)
+        for allowed in ({"1": 0}, {"1": 90}, {"1": 180}, {"1": 270}):
+            self.assertEqual(self.errors(self.changed("datormagazin-1993-03", hqPageRotation=allowed)), [], allowed)
         for bad in ({"1": 45}, {"1": 360}, {"1": -90}, {"1": "90"}, {"0": 90}, {}):
             self.assertTrue(self.errors(self.changed("datormagazin-1993-03", hqPageRotation=bad)), bad)
         self.assertEqual(self.errors(self.changed("datormagazin-1993-03", hqPageMap=good)), [])

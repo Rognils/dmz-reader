@@ -4,16 +4,22 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** Appens version följer taggarna (planens G4): 0.6.1 ger 601, 0.7.0 ger 700, 1.0.0 ger 10000. */
+/**
+ * Appens version följer taggarna (planens G4): 0.6.1 ger 601, 0.7.0 ger 700, 1.0.0 ger 10000.
+ * En releasekandidat ligger strax under sin version, så att den färdiga versionen kan
+ * installeras ovanpå: 1.0.0-rc1 ger 9901 och 1.0.0-rc2 ger 9902.
+ */
 class AppVersionTest {
     private fun versionCodeFor(versionName: String): Int {
-        val (major, minor, patch) = versionName.split(".").map { it.toInt() }
-        return major * 10_000 + minor * 100 + patch
+        val candidate = versionName.substringAfter("-rc", "").toIntOrNull()
+        val (major, minor, patch) = versionName.substringBefore("-").split(".").map { it.toInt() }
+        val final = major * 10_000 + minor * 100 + patch
+        return if (candidate == null) final else final - 100 + candidate
     }
 
     @Test
     fun `version name has three numbers and the version code is derived from it`() {
-        assertTrue(BuildConfig.VERSION_NAME, Regex("""\d+\.\d+\.\d+""").matches(BuildConfig.VERSION_NAME))
+        assertTrue(BuildConfig.VERSION_NAME, Regex("""\d+\.\d+\.\d+(-rc[1-9]\d?)?""").matches(BuildConfig.VERSION_NAME))
         assertEquals(versionCodeFor(BuildConfig.VERSION_NAME), BuildConfig.VERSION_CODE)
     }
 
@@ -26,5 +32,10 @@ class AppVersionTest {
         assertEquals(1001, versionCodeFor("0.10.1"))
         assertEquals(1100, versionCodeFor("0.11.0"))
         assertEquals(10_000, versionCodeFor("1.0.0"))
+        assertEquals(9_901, versionCodeFor("1.0.0-rc1"))
+        assertEquals(9_902, versionCodeFor("1.0.0-rc2"))
+        // Kandidaterna ligger över 0.11.0 och under den färdiga versionen.
+        assertTrue(versionCodeFor("0.11.0") < versionCodeFor("1.0.0-rc1"))
+        assertTrue(versionCodeFor("1.0.0-rc9") < versionCodeFor("1.0.0"))
     }
 }
