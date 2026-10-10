@@ -23,9 +23,10 @@ byggs. Ändras en regel eller ordlistan ska NORMALIZER_VERSION höjas.
 Bygget är reproducerbart: samma PDF:er och samma `--built-at` ger en
 identisk fil.
 
-Med `--privacy-filter` maskeras e-postadresser och telefonnummer i båda
-textkolumnerna innan de läggs i databasen (tools/privacy_filter.py), och
-`privacyFilterVersion` skrivs i meta. Det är den varianten som delas ut. Indexet
+Med `--privacy-filter` maskeras e-postadresser, telefonnummer, postgironummer och
+personnummerformer i searchText innan texten läggs i databasen (tools/privacy_filter.py),
+rawText lämnas tom, och `privacyFilterVersion` skrivs i meta. Appen läser inte rawText;
+kolumnen finns kvar så att schemat är detsamma. Det är den varianten som delas ut. Indexet
 byggs alltid från PDF:erna: en färdig databas maskeras aldrig i efterhand,
 eftersom den gamla texten då kan ligga kvar i filens lediga sidor.
 
@@ -397,7 +398,7 @@ def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], 
                    store_raw: bool = True, privacy: bool = False) -> dict:
     """Skriver search.db. `issues` är (inventorypost, manifestpost, utvunnen text) i den ordning de ska in.
 
-    Med `privacy` maskeras e-postadresser och telefonnummer i båda textkolumnerna före skrivningen.
+    Med `privacy` maskeras kontaktuppgifter i searchText före skrivningen, och rawText lämnas tom.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     path.unlink(missing_ok=True)
@@ -408,8 +409,9 @@ def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], 
         searchText, content='pages', content_rowid='id', tokenize='{tokenizer}')""")
     seconds: dict[str, float] = {}
     total_pages = 0
-    masked = {"email": 0, "phone": 0}
-    masked_pages = {"email": 0, "phone": 0}
+    masked = dict.fromkeys(privacy_filter.CATEGORIES, 0)
+    masked_pages = dict.fromkeys(privacy_filter.CATEGORIES, 0)
+    masked_any_pages = 0
     for issue, file, extracted in sorted(issues, key=lambda item: item[0]["issueId"]):
         started = time.monotonic()
         db.execute("INSERT INTO issues (issueId, pageCount, ocrPdfSize, ocrPdfEtag, ocrPdfSha256) "
@@ -420,12 +422,13 @@ def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], 
             if not store_raw:
                 raw = ""
             if privacy:
-                # Kolumnerna maskeras var för sig. Räkningen gäller searchText, som är den appen läser.
-                raw, _ = privacy_filter.mask(raw)
+                # Den omaskerade texten skrivs aldrig till filen: rawText är tom och searchText maskerad.
+                raw = ""
                 search_text, found = privacy_filter.mask(search_text)
                 for kind, count in found.items():
                     masked[kind] += count
                     masked_pages[kind] += 1 if count else 0
+                masked_any_pages += 1 if any(found.values()) else 0
             cursor = db.execute(
                 "INSERT INTO pages (issueId, pageNumber, rawText, searchText) VALUES (?, ?, ?, ?)",
                 (extracted.issue_id, number, raw, search_text))
@@ -454,7 +457,8 @@ def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], 
     db.close()
     return {"path": str(path), "tokenizer": tokenizer, "issues": len(issues), "pages": total_pages,
             "secondsPerIssue": seconds, "masked": masked if privacy else None,
-            "maskedPages": masked_pages if privacy else None}
+            "maskedPages": masked_pages if privacy else None,
+            "maskedAnyPages": masked_any_pages if privacy else None}
 
 
 def usable_issues(wanted: list[str], inventory: dict, manifest: dict, cache_dir: Path, log=print) -> list[tuple[dict, dict, Path]]:
@@ -505,7 +509,7 @@ def main(argv=None) -> int:
     parser.add_argument("--built-at", help="tidsstämpel i meta (standard: nu). Ange för ett reproducerbart bygge.")
     parser.add_argument("--without-raw-text", action="store_true", help="lämna rawText tom (för storleksmätning)")
     parser.add_argument("--privacy-filter", action="store_true",
-                        help="maskera e-postadresser och telefonnummer (varianten som delas ut)")
+                        help="maskera kontaktuppgifter i searchText och lämna rawText tom (varianten som delas ut)")
     arguments = parser.parse_args(argv)
     wanted = list(arguments.issues) + (fetch_pdfs.PILOT_ISSUES if arguments.pilot else [])
     if arguments.all:
@@ -522,9 +526,12 @@ def main(argv=None) -> int:
     print(f"{result['path']}: {result['issues']} nummer, {result['pages']} sidor, {result['tokenizer']}, "
           f"{Path(result['path']).stat().st_size / 1e6:.2f} MB")
     if result["masked"] is not None:
-        print(f"maskerat i searchText (privacyFilterVersion {privacy_filter.PRIVACY_FILTER_VERSION}): "
-              f"{result['masked']['email']} e-postadresser på {result['maskedPages']['email']} sidor, "
-              f"{result['masked']['phone']} telefonnummer på {result['maskedPages']['phone']} sidor")
+        names = {"email": "e-postadresser", "phone": "telefonnummer", "giro": "postgironummer",
+                 "personalNumber": "personnummerformer"}
+        print(f"maskerat i searchText (privacyFilterVersion {privacy_filter.PRIVACY_FILTER_VERSION}), "
+              f"{result['maskedAnyPages']} sidor berörda: "
+              + ", ".join(f"{result['masked'][kind]} {names[kind]} på {result['maskedPages'][kind]} sidor"
+                          for kind in privacy_filter.CATEGORIES))
     return 0
 
 

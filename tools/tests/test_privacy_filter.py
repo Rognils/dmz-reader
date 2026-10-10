@@ -16,8 +16,8 @@ import build_search_index as bsi  # noqa: E402
 import privacy_filter as pf  # noqa: E402
 from test_search_index import LEXICON, fake_issue  # noqa: E402
 
-PHONE = pf.PHONE_MARK
-EMAIL = pf.EMAIL_MARK
+PHONE = EMAIL = GIRO = PNR = pf.MARK
+NOTHING = dict.fromkeys(pf.CATEGORIES, 0)
 
 
 class PhoneNumbersAreMasked(unittest.TestCase):
@@ -85,7 +85,7 @@ class PhoneNumbersAreMasked(unittest.TestCase):
 
     def test_count(self):
         text, found = pf.mask("Tel 08-12 34 56, fax 08-12 34 57. Skriv till anna@example.se.")
-        self.assertEqual(found, {"email": 1, "phone": 2})
+        self.assertEqual(found, {**NOTHING, "email": 1, "phone": 2})
         self.assertEqual(text, f"Tel {PHONE}, fax {PHONE}. Skriv till {EMAIL}.")
 
 
@@ -97,6 +97,8 @@ class EmailAddressesAreMasked(unittest.TestCase):
             "E-post: info@example.se, tel 08-12 34 56": f"E-post: {EMAIL}, tel {PHONE}",
             "(dmz-brev@red.example.se)": f"({EMAIL})",
             "A_B+c@sub-domain.example.org": EMAIL,
+            "anna@d.example.se": EMAIL,
+            "anna@ab.se": EMAIL,
         }
         for text, expected in cases.items():
             with self.subTest(text=text):
@@ -116,7 +118,7 @@ class EmailAddressesAreMasked(unittest.TestCase):
                 self.assertEqual(pf.mask(text)[0], expected)
 
     def test_not_an_address(self):
-        for text in ["user@ host", "pris @ 5 kr", "namn@dator", "@example.se", "10@20",
+        for text in ["user@ host", "pris @ 5 kr", "namn@dator", "@example.se", "10@20", "X@D.MH", "x@d.se",
                      "10 st @ 5 kr per styck", "Skriv @ och sedan namnet på datorn, till exempel sune"]:
             with self.subTest(text=text):
                 self.assertEqual(pf.mask(text)[0], text)
@@ -132,7 +134,7 @@ class OtherNumbersAreLeftAlone(unittest.TestCase):
         "Art.nr 4012-345", "best.nr 0123-4", "v2.04", "v2.04-12345", "Kickstart 1.3/2.0", "version 3.1-40",
         "0900-1700", "kl 08-17", "ISSN: 0283-3379", "ISBN 0-07-882023-5", "ISBN: 0 -0 7 -8 8 2 0 2 3 -5",
         "$0314-$0315", "0281-0282 MEMSTR", "2:201/123.4", "640x512", "14400/v32bis", "300-2400 bps",
-        "Pg 123 45 67-8", "DATA 0 12 - 34 56 7", "10 0 5 4 - 110 2 15",
+        "DATA 0 12 - 34 56 7", "10 0 5 4 - 110 2 15",
         "ring 020 gånger", "Ring 08 10 12", "Bbs 030 2400 bps", "A1200 030-50 MHz",
         "Tel 012345", "ring 0123 gånger", "fax 2400 bps",
         "68EC030-25 5495:-", "68EC030/68882", "($D025/53285)", "$DD00 - 56576", "A4Ö00/040 26444",
@@ -141,18 +143,97 @@ class OtherNumbersAreLeftAlone(unittest.TestCase):
     def test_cases(self):
         for text in self.CASES:
             with self.subTest(text=text):
-                self.assertEqual(pf.mask(text), (text, {"email": 0, "phone": 0}))
+                self.assertEqual(pf.mask(text), (text, NOTHING))
+
+
+class GiroNumbersAreMasked(unittest.TestCase):
+    CASES = {
+        "Sätt in 20 kr på Pg 123 45 67-8, Anna.": f"Sätt in 20 kr på Pg {GIRO}, Anna.",
+        "PG: 12 34 56-7": f"PG: {GIRO}",
+        "pg :1234567-8.": f"pg :{GIRO}.",
+        "Postgiro 12 34 56-7": f"Postgiro {GIRO}",
+        "postgirot 1234-5": f"postgirot {GIRO}",
+        "Betala till postgiro nr 41 41 01-6": f"Betala till postgiro nr {GIRO}",
+        "Postgironummer: 12 34 56-7 Betalning": f"Postgironummer: {GIRO} Betalning",
+        "pg-nr 123 45 67-8 eller": f"pg-nr {GIRO} eller",
+        "PG nr: 123 45 67-8": f"PG nr: {GIRO}",
+        # texttolkningen har spärrat ut ordet eller siffrorna
+        "P O S T G I R O 12 34 56-7": f"P O S T G I R O {GIRO}",
+        "P G 123 4 5 67-8 Skriv": f"P G {GIRO} Skriv",
+        "Pg 12 34 56 - 7": f"Pg {GIRO}",
+        # ett nummer med personnummers form efter pg tas som personnummer
+        "Pg 123 45 67-8, tel 0123-456 78": f"Pg {GIRO}, tel {PHONE}",
+    }
+
+    def test_cases(self):
+        for text, expected in self.CASES.items():
+            with self.subTest(text=text):
+                self.assertEqual(pf.mask(text)[0], expected)
+
+    def test_only_next_to_the_word(self):
+        for text in ["123 45 67-8", "Bankgiro 123-4567", "konto 123 45 67-8", "Epg 123-4", "pg 1-2", "LC24-10 pg",
+                     "sida 12-3", "Pg, sedan 123 45 67-8", "Pg Anna 123 45 67-8", "spg 12 34 56-7",
+                     "på sid 4-5 i pg", "PG 68000", "pg 1993"]:
+            with self.subTest(text=text):
+                self.assertEqual(pf.find(text)["giro"], 0)
+
+
+class PersonalNumberShapesAreMasked(unittest.TestCase):
+    def test_cases(self):
+        cases = {
+            "född 640823-3234 i": f"född {PNR} i",
+            "P-nr: 19640823-3234": f"P-nr: {PNR}",
+            "Pg 640823-3234": f"Pg {PNR}",
+            "640823 - 3234": PNR,
+            "091231+1234": PNR,
+            "20001231-1234.": f"{PNR}.",
+        }
+        for text, expected in cases.items():
+            with self.subTest(text=text):
+                self.assertEqual(pf.mask(text), (expected, {**NOTHING, "personalNumber": 1}))
+
+    def test_other_numbers_with_a_hyphen_are_left_alone(self):
+        # Omöjliga datum, fel längd, och nummer som fortsätter.
+        for text in ["641323-3234", "640832-3234", "640023-3234", "640800-3234", "Org.nr 556123-4567",
+                     "640823-323", "640823-32345", "1640823-3234", "640823 3234", "640823/3234",
+                     "21001231-1234", "Art 123456-7890", "991332-1234", "1986-1996", "ISBN 91-636-0347-0",
+                     "640823-3234567"]:
+            with self.subTest(text=text):
+                self.assertEqual(pf.find(text)["personalNumber"], 0)
+
+
+class TheMark(unittest.TestCase):
+    def test_same_mark_for_every_category_and_no_letters_or_digits(self):
+        self.assertEqual({pf.EMAIL_MARK, pf.PHONE_MARK, pf.GIRO_MARK, pf.PERSONAL_NUMBER_MARK}, {"•••"})
+        self.assertFalse(any(character.isalnum() for character in pf.MARK))
+
+    def test_the_tokenizer_makes_no_token_of_the_mark(self):
+        db = sqlite3.connect(":memory:")
+        self.addCleanup(db.close)
+        db.execute("CREATE VIRTUAL TABLE t USING fts5(x, tokenize='unicode61 remove_diacritics 0')")
+        db.execute("CREATE VIRTUAL TABLE v USING fts5vocab(t, 'row')")
+        db.execute("INSERT INTO t VALUES (?)", (f"Tel: {pf.MARK}, fax {pf.MARK}. {pf.MARK}",))
+        self.assertEqual([row[0] for row in db.execute("SELECT term FROM v ORDER BY term")], ["fax", "tel"])
+        # Bara markeringar: sidan har inga ord alls.
+        db.execute("DELETE FROM t")
+        db.execute("INSERT INTO t VALUES (?)", (f"{pf.MARK} {pf.MARK}",))
+        self.assertEqual(db.execute("SELECT COUNT(*) FROM v").fetchone()[0], 0)
+
+    def test_the_normalizer_leaves_the_mark_alone_and_adds_no_words(self):
+        words = [bsi.Word(10.0 + 30 * index, 10.0, 35.0 + 30 * index, 20.0, text)
+                 for index, text in enumerate(["Tel:", pf.MARK, "eller", pf.MARK])]
+        self.assertEqual(bsi.normalize_page(words, LEXICON), f"Tel: {pf.MARK} eller {pf.MARK}")
 
 
 class Properties(unittest.TestCase):
-    TEXTS = list(PhoneNumbersAreMasked.CASES) + OtherNumbersAreLeftAlone.CASES + [
+    TEXTS = list(PhoneNumbersAreMasked.CASES) + OtherNumbersAreLeftAlone.CASES + list(GiroNumbersAreMasked.CASES) + [
         "Tel 08-123 45 031-12 34 56", "08-12345 6031-12345", "a@b.se08-123456", "",
     ]
 
     def test_masked_text_has_nothing_left_to_mask(self):
         for text in self.TEXTS:
             with self.subTest(text=text):
-                self.assertEqual(pf.find(pf.mask(text)[0]), {"email": 0, "phone": 0})
+                self.assertTrue(pf.is_clean(pf.mask(text)[0]))
 
     def test_masking_is_deterministic(self):
         joined = " | ".join(self.TEXTS)
@@ -164,8 +245,10 @@ class Properties(unittest.TestCase):
 
 class MaskedDatabase(unittest.TestCase):
     PAGES = {
-        "datormagazin-1989-06": ["Amiga 500 säljes, 1 995:-. Tel: 0123-456 78, Anna.", "Commodore 128 och en C-64."],
-        "highscore-1993-17": ["Skriv till red@example.se eller ring 08-12 34 56.", "Nr 12 1993, 499 kr."],
+        "datormagazin-1989-06": ["Amiga 500 säljes, 1 995:-. Tel: 0123-456 78, Anna. Pg 123 45 67-8.",
+                                 "Commodore 128 och en C-64."],
+        "highscore-1993-17": ["Skriv till red@example.se eller ring 08-12 34 56. P-nr 640823-3234.",
+                              "Nr 12 1993, 499 kr."],
     }
 
     def setUp(self):
@@ -179,18 +262,21 @@ class MaskedDatabase(unittest.TestCase):
                                     built_at="2026-10-10T00:00:00Z", lexicon=LEXICON, privacy=privacy)
         return path, result
 
-    def test_both_text_columns_are_masked(self):
+    def test_search_text_is_masked_and_raw_text_is_empty(self):
         path, result = self.build("masked.db", privacy=True)
         db = sqlite3.connect(path)
         self.addCleanup(db.close)
         rows = db.execute("SELECT rawText, searchText FROM pages ORDER BY id").fetchall()
-        self.assertEqual(rows[0][1], f"Amiga 500 säljes, 1 995:-. Tel: {PHONE}, Anna.")
-        self.assertEqual(rows[2][1], f"Skriv till {EMAIL} eller ring {PHONE}.")
+        self.assertEqual(rows[0][1], f"Amiga 500 säljes, 1 995:-. Tel: {PHONE}, Anna. Pg {GIRO}.")
+        self.assertEqual(rows[2][1], f"Skriv till {EMAIL} eller ring {PHONE}. P-nr {PNR}.")
         for raw, search in rows:
-            self.assertEqual(pf.find(raw), {"email": 0, "phone": 0})
-            self.assertEqual(pf.find(search), {"email": 0, "phone": 0})
-        self.assertEqual(result["masked"], {"email": 1, "phone": 2})
-        self.assertEqual(result["maskedPages"], {"email": 1, "phone": 2})
+            self.assertEqual(raw, "")
+            self.assertTrue(pf.is_clean(search))
+        self.assertEqual(result["masked"], {"email": 1, "phone": 2, "giro": 1, "personalNumber": 1})
+        self.assertEqual(result["maskedPages"], {"email": 1, "phone": 2, "giro": 1, "personalNumber": 1})
+        self.assertEqual(result["maskedAnyPages"], 2)
+        # Kolumnen finns kvar: schemat är detsamma som i det omaskerade indexet.
+        self.assertIn("rawText", [row[1] for row in db.execute("PRAGMA table_info(pages)")])
 
     def test_meta_has_the_filter_version(self):
         path, _ = self.build("masked.db", privacy=True)
@@ -212,7 +298,7 @@ class MaskedDatabase(unittest.TestCase):
     def test_the_numbers_are_nowhere_in_the_file(self):
         path, _ = self.build("masked.db", privacy=True)
         data = path.read_bytes()
-        for secret in (b"456 78", b"12 34 56", b"red@example", b"example.se"):
+        for secret in (b"456 78", b"12 34 56", b"red@example", b"example.se", b"45 67-8", b"640823", b"3234"):
             self.assertNotIn(secret, data)
 
     def test_search_still_works_and_snippets_show_the_mark(self):
@@ -221,7 +307,13 @@ class MaskedDatabase(unittest.TestCase):
         self.addCleanup(db.close)
         snippet = db.execute("SELECT snippet(pages_fts, 0, '[', ']', '…', 12) FROM pages_fts "
                              "WHERE pages_fts MATCH 'säljes'").fetchone()[0]
-        self.assertIn(PHONE, snippet)
+        self.assertIn(pf.MARK, snippet)
+        # Markeringen ger inga ord: bara textens egna ord finns i indexet.
+        db.execute("CREATE VIRTUAL TABLE vocabulary USING fts5vocab(pages_fts, 'row')")
+        terms = {row[0] for row in db.execute("SELECT term FROM vocabulary")}
+        self.assertNotIn("telefon", terms)
+        self.assertNotIn("post", terms)
+        self.assertIn("tel", terms)
         self.assertEqual(db.execute("SELECT COUNT(*) FROM pages_fts WHERE pages_fts MATCH '\"Commodore 128\"'")
                          .fetchone()[0], 1)
 

@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
-"""DMZ Reader – maskering av e-postadresser och telefonnummer i sökindexets text.
+"""DMZ Reader – maskering av kontaktuppgifter i sökindexets text.
 
-Tidningarna trycker privatpersoners e-postadresser och telefonnummer i insändare
-och radannonser. I ett sökindex som delas ut blir de lätta att hitta, så de byts
-mot en markering innan texten läggs i databasen:
+Tidningarna trycker privatpersoners e-postadresser, telefonnummer och postgironummer i
+insändare och radannonser. I ett sökindex som delas ut blir de lätta att hitta, så de
+byts mot markeringen ••• innan texten läggs i databasen. Fyra kategorier:
 
-    e-postadresser                      →  [e-post]
-    telefon- och faxnummer i svenska    →  [telefon]
-    format, med riktnummer eller +46
+    e-postadresser
+    telefon- och faxnummer i svenska format, med riktnummer eller +46
+    postgironummer som står direkt efter ordet postgiro, postgirot, pg eller pg-nr
+    teckenföljder med personnummers form: ÅÅMMDD-NNNN och ÅÅÅÅMMDD-NNNN
 
 Ingenting annat maskeras: inte namn, inte postadresser, inte nummer utan riktnummer.
+
+Markeringen är densamma för alla kategorier och har inga bokstäver eller siffror. FTS-indexet
+får därför inga ord av den.
 
 En e-postadress som texttolkningen har dragit isär ("namn@ dator. example.se") maskeras
 från sista sammanhängande biten före @ till toppdomänen. Är namndelen utspärrad står
@@ -56,11 +60,21 @@ import re
 
 PRIVACY_FILTER_VERSION = 1
 
-EMAIL_MARK = "[e-post]"
-PHONE_MARK = "[telefon]"
+# En och samma markering för alla kategorier. Den har inga bokstäver eller siffror, så
+# FTS-indexet får inga ord av den: en sökning på "telefon" ska inte träffa varje maskerat nummer.
+MARK = "•••"
+EMAIL_MARK = PHONE_MARK = GIRO_MARK = PERSONAL_NUMBER_MARK = MARK
 
-# Lokal del, @, och en domän med minst en punkt och en toppdomän av bokstäver.
-_EMAIL = re.compile(r"[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}")
+CATEGORIES = ("email", "phone", "giro", "personalNumber")
+
+# Lokal del, @, och en domän med minst en punkt och en toppdomän av bokstäver. Domänen före
+# toppdomänen ska ha minst två tecken: x@d.se finns inte som adress, men sex bytes med den
+# formen kan uppstå av en slump i en binärfil.
+_EMAIL = re.compile(r"[A-Za-z0-9][A-Za-z0-9._%+-]*@(?P<domain>[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*)\.[A-Za-z]{2,}")
+
+
+def _whole_emails(text: str) -> list[re.Match]:
+    return [match for match in _EMAIL.finditer(text) if len(match.group("domain")) >= 2]
 # Texttolkningen drar ofta isär adresser: "namn@ dator. example.se". Då godtas mellanslag
 # kring @ och inne i domänen, men bara om den slutar på en känd toppdomän inom 25 tecken.
 _EMAIL_SPACED = re.compile(
@@ -199,7 +213,7 @@ def _mask_phones_once(text: str) -> tuple[str, int]:
 
 
 def mask_phones(text: str) -> tuple[str, int]:
-    """Byter telefonnummer mot [telefon]. Ger den nya texten och antalet bytta nummer."""
+    """Byter telefonnummer mot markeringen. Ger den nya texten och antalet bytta nummer."""
     total = 0
     # Ett byte kan frilägga ett nummer som stod tätt intill. Upprepa tills inget mer hittas.
     while True:
@@ -209,28 +223,109 @@ def mask_phones(text: str) -> tuple[str, int]:
         total += count
 
 
+def _blank(text: str, spans: list[tuple[int, int]]) -> str:
+    """Texten med varje spann utbytt mot lika många mellanslag, så att lägena står kvar."""
+    pieces = []
+    last = 0
+    for begin, end in spans:
+        pieces += [text[last:begin], " " * (end - begin)]
+        last = end
+    pieces.append(text[last:])
+    return "".join(pieces)
+
+
+def _replace(text: str, spans: list[tuple[int, int]]) -> str:
+    pieces = []
+    last = 0
+    for begin, end in spans:
+        pieces += [text[last:begin], MARK]
+        last = end
+    pieces.append(text[last:])
+    return "".join(pieces)
+
+
 def email_spans(text: str) -> list[tuple[int, int]]:
     """Var e-postadresserna står i en text, som (början, slut)."""
-    spans = [match.span() for match in _EMAIL.finditer(text)]
-    taken = _EMAIL.sub(lambda match: " " * len(match.group()), text)
-    spans += [match.span() for match in _EMAIL_SPACED.finditer(taken)]
+    spans = [match.span() for match in _whole_emails(text)]
+    spans += [match.span() for match in _EMAIL_SPACED.finditer(_blank(text, spans))]
     return sorted(spans)
 
 
 def mask_emails(text: str) -> tuple[str, int]:
-    """Byter e-postadresser mot [e-post]. Ger den nya texten och antalet bytta adresser."""
-    text, whole = _EMAIL.subn(EMAIL_MARK, text)
-    text, spaced = _EMAIL_SPACED.subn(EMAIL_MARK, text)
-    return text, whole + spaced
+    """Byter e-postadresser mot markeringen. Ger den nya texten och antalet bytta adresser."""
+    spans = email_spans(text)
+    return (_replace(text, spans), len(spans)) if spans else (text, 0)
+
+
+# Personnummer: ÅÅMMDD-NNNN eller ÅÅÅÅMMDD-NNNN, där MMDD är ett möjligt datum. Bindestrecket
+# krävs (eller plustecknet, som används efter hundra års ålder). Sexsiffriga artikelnummer
+# och datum utan fyra slutsiffror har inte den formen.
+_PERSONAL_NUMBER = re.compile(
+    r"(?<![0-9])(?:(?:18|19|20)[0-9]{2}|[0-9]{2})(?:0[1-9]|1[0-2])(?:0[1-9]|[12][0-9]|3[01])"
+    r" ?[-+] ?[0-9]{4}(?![0-9])"
+)
+
+# Postgironummer: bara i direkt anslutning till ordet postgiro, postgirot, pg eller pg-nr.
+# Numret är två till åtta siffror, bindestreck och en kontrollsiffra: 12 34 56-7.
+# Texttolkningen kan ha spärrat ut både ordet och siffrorna.
+_GIRO = re.compile(
+    r"(?<![" + _LETTER + r"])(?:p ?o ?s ?t ?g ?i ?r ?o ?t?|p ?g)"
+    r"(?: ?-? ?(?:n ?r|nummer|konto))?[ .:]{0,3}"
+    r"(?P<number>[0-9](?: ?[0-9]){1,7} ?- ?[0-9])(?![0-9])",
+    re.I,
+)
+
+
+def personal_number_spans(text: str) -> list[tuple[int, int]]:
+    """Var teckenföljder med personnummers form står, som (början, slut)."""
+    return [match.span() for match in _PERSONAL_NUMBER.finditer(text)]
+
+
+def giro_spans(text: str) -> list[tuple[int, int]]:
+    """Var postgironumren står, som (början, slut). Ordet före numret ingår inte."""
+    return [match.span("number") for match in _GIRO.finditer(text)]
+
+
+def mask_personal_numbers(text: str) -> tuple[str, int]:
+    return _PERSONAL_NUMBER.subn(MARK, text)
+
+
+def mask_giro(text: str) -> tuple[str, int]:
+    count = 0
+    pieces = []
+    last = 0
+    for begin, end in giro_spans(text):
+        pieces += [text[last:begin], MARK]
+        last = end
+        count += 1
+    pieces.append(text[last:])
+    return "".join(pieces), count
 
 
 def mask(text: str) -> tuple[str, dict[str, int]]:
     """Maskerar en text. Ger texten och antalet träffar per kategori."""
+    # Personnummer och postgiro först: de har en egen form, som telefonregeln annars kunde ta en bit av.
+    text, personal = mask_personal_numbers(text)
+    text, giro = mask_giro(text)
     text, emails = mask_emails(text)
     text, phones = mask_phones(text)
-    return text, {"email": emails, "phone": phones}
+    return text, {"email": emails, "phone": phones, "giro": giro, "personalNumber": personal}
+
+
+def all_spans(text: str) -> list[tuple[str, int, int]]:
+    """Alla träffar i en text som (kategori, början, slut), i ett pass per kategori. För stickprov och kontroller."""
+    spans = [("personalNumber", start, end) for start, end in personal_number_spans(text)]
+    spans += [("giro", start, end) for start, end in giro_spans(text)]
+    spans += [("email", start, end) for start, end in email_spans(text)]
+    spans += [("phone", start, end) for start, end in phone_spans(text)]
+    return spans
 
 
 def find(text: str) -> dict[str, int]:
     """Antalet träffar per kategori i en text, utan att ändra den. Används av kontrollerna."""
     return mask(text)[1]
+
+
+def is_clean(text: str) -> bool:
+    """Sant om filtret inte hittar något i texten."""
+    return not any(find(text).values())

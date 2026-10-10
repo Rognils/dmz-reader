@@ -13,8 +13,9 @@ import privacy_audit as audit  # noqa: E402
 from test_search_index import LEXICON, fake_issue  # noqa: E402
 
 PAGES = {
-    "datormagazin-1989-06": ["Amiga 500 säljes, 1 995:-. Tel: 0123-456 78, Anna.", "Commodore 128 och en C-64."],
-    "highscore-1993-17": ["Skriv till red@example.se eller ring 08-12 34 56.", "Nr 12 1993, 499 kr."],
+    "datormagazin-1989-06": ["Amiga 500 säljes, 1 995:-. Tel: 0123-456 78, Anna. Pg 123 45 67-8.",
+                             "Commodore 128 och en C-64."],
+    "highscore-1993-17": ["Skriv till red@example.se eller ring 08-12 34 56. P-nr 640823-3234.", "Nr 12 1993, 499 kr."],
 }
 
 
@@ -34,7 +35,8 @@ class Audit(unittest.TestCase):
         result = audit.measure(self.build("plain.db", privacy=False))
         self.assertEqual(result["totalPages"], 4)
         for column in ("rawText", "searchText"):
-            self.assertEqual((result[column]["email"], result[column]["phone"], result[column]["pages"]), (1, 2, 2))
+            self.assertEqual((result[column]["email"], result[column]["phone"], result[column]["giro"],
+                              result[column]["personalNumber"], result[column]["pages"]), (1, 2, 1, 1, 2))
 
     def test_masked_file_is_clean_and_untouched_by_the_check(self):
         path = self.build("masked.db", privacy=True)
@@ -47,6 +49,7 @@ class Audit(unittest.TestCase):
         self.assertTrue(any(problem.startswith("meta:") for problem in problems))
         self.assertTrue(any(problem.startswith("SQL: searchText") for problem in problems))
         self.assertTrue(any(problem.startswith("SQL: rawText") for problem in problems))
+        self.assertTrue(any(problem.startswith("rawText:") for problem in problems))
         self.assertTrue(any(problem.startswith("strings:") for problem in problems))
         self.assertTrue(any(problem.startswith("råa bytes:") for problem in problems))
 
@@ -55,13 +58,30 @@ class Audit(unittest.TestCase):
         path = self.build("masked.db", privacy=True)
         db = sqlite3.connect(path)
         row, block = db.execute("SELECT id, block FROM pages_fts_data ORDER BY id DESC LIMIT 1").fetchone()
-        db.execute("UPDATE pages_fts_data SET block = ? WHERE id = ?", (block + b"\x01\x02X@D.MH\x03", row))
+        db.execute("UPDATE pages_fts_data SET block = ? WHERE id = ?", (block + b"\x01\x02XY@DE.MH\x03", row))
         db.commit()
         db.close()
         notes = []
         problems = [problem for problem in audit.verify(path, notes=notes) if not problem.startswith("FTS:")]
         self.assertEqual(problems, [])
-        self.assertTrue(any("sammanträffande" in note for note in notes))
+        # Träffen redovisas med läge och hex, inte som text.
+        note = next(note for note in notes if note.startswith("råa bytes: binärdata"))
+        self.assertIn("58 59 40 44 45 2e 4d 48", note)
+        self.assertNotIn("XY@DE.MH", note)
+        self.assertRegex(note, r"byte \d+ \(sida \d+ i filen, 8 byte\)")
+
+    def test_text_in_a_free_page_is_an_error_even_though_no_column_has_it(self):
+        import sqlite3
+        path = self.build("masked.db", privacy=True)
+        # En tabell utanför schemat med ett nummer i klartext: finns i filen men inte i pages.
+        db = sqlite3.connect(path)
+        db.execute("CREATE TABLE rest (x TEXT)")
+        db.execute("INSERT INTO rest VALUES ('Tel 0123-456 78')")
+        db.commit()
+        db.close()
+        problems = audit.verify(path)
+        self.assertTrue(any(problem.startswith("råa bytes: träff utanför") for problem in problems), problems)
+        self.assertTrue(any(problem.startswith("strings:") for problem in problems), problems)
 
     def test_text_updated_after_the_build_is_found_in_the_file(self):
         # En databas som maskeras i efterhand kan ha den gamla texten kvar i lediga sidor.
@@ -80,13 +100,15 @@ class Audit(unittest.TestCase):
 
     def test_sample_refuses_to_write_inside_the_repository(self):
         with self.assertRaises(SystemExit):
-            audit.sample(self.build("plain.db", privacy=False), audit.REPO_ROOT / "docs" / "stickprov", 5, 5, 5)
+            audit.sample(self.build("plain.db", privacy=False), audit.REPO_ROOT / "docs" / "stickprov", {})
 
     def test_sample_writes_outside(self):
         out = Path(self.directory.name) / "stickprov"
-        sizes = audit.sample(self.build("plain.db", privacy=False), out, 5, 5, 5)
+        sizes = audit.sample(self.build("plain.db", privacy=False), out, {"phone": 5, "email": 5, "giro": 5, "near": 5})
         self.assertEqual(sizes["phone"], {"population": 2, "sample": 2})
         self.assertEqual(sizes["email"], {"population": 1, "sample": 1})
+        self.assertEqual(sizes["giro"], {"population": 1, "sample": 1})
+        self.assertEqual(sizes["personalNumber"], {"population": 1, "sample": 1})
         self.assertTrue((out / "phone.json").is_file())
 
 
