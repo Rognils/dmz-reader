@@ -78,3 +78,22 @@ fun ComposeTestRule.scrollToNodeWhenLoaded(
         throw AssertionError("Listan fick aldrig noden inom $timeoutMillis ms: ${last?.message}", last ?: e)
     }
 }
+
+/**
+ * Väntar [millis] och låter appen rita under tiden.
+ *
+ * Under en ComposeTestRule ritar Compose bara om när testet gör något: letar efter en nod,
+ * väntar på ett villkor eller ber om stillhet. Sover testtråden med Thread.sleep står skärmen
+ * still, och ett tillstånd som ändras under sömnen (en bild som blir färdig) syns inte förrän
+ * efteråt. På en riktig skärm ritas varje bildruta. Ett test som väntar på att appen ska göra
+ * något med det som visas, till exempel räkna en sida som läst, ska därför vänta så här.
+ */
+fun ComposeTestRule.letAppRun(millis: Long) {
+    val end = android.os.SystemClock.elapsedRealtime() + millis
+    while (true) {
+        waitForIdle()
+        val left = end - android.os.SystemClock.elapsedRealtime()
+        if (left <= 0) return
+        Thread.sleep(minOf(50L, left))
+    }
+}
