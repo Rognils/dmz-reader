@@ -50,7 +50,12 @@ class FakeScanSource : ScanSource {
     @Volatile
     var offline = false
 
+    /** Extra väntan före varje hämtning, för tester som vill hinna göra något medan den pågår. */
+    @Volatile
+    var slowMillis = 0L
+
     override suspend fun fetch(url: String, target: File, onProgress: (bytes: Long, total: Long?) -> Unit): Long {
+        if (slowMillis > 0) delay(slowMillis)
         if (offline) throw ScanFetchException(ScanFailure.NETWORK, "inget nät (test)")
         fetched += url.substringAfterLast('/')
         val bitmap = Bitmap.createBitmap(1800, 2550, Bitmap.Config.ARGB_8888)
@@ -183,7 +188,7 @@ class HqDeviceTest {
         tapZone(0.85f)
         waitForPage("Sida 2 av 28")
         waitFor { status() == "HQ" }
-        Thread.sleep(1_000)
+        rule.letAppRun(1_000)
         assertEquals(listOf("DMZ_1986-01-001.jpg", "DMZ_1986-01-002.jpg"), source.fetched.toList())
         waitFor { tagged("page-full-2") }
 
@@ -229,8 +234,11 @@ class HqDeviceTest {
         waitFor { status() == "HQ" }
         assertEquals(3, source.fetched.size)
 
-        // Läspositionen och de lästa sidorna förs som vanligt i HQ-läge.
-        Thread.sleep(2_500)
+        // Läspositionen och de lästa sidorna förs som vanligt i HQ-läge. Sidan räknas som läst när
+        // den har visats färdig i 1,5 sekunder, så testet väntar först på bilden och låter sedan
+        // appen rita under väntan (se letAppRun).
+        waitFor { tagged("page-full-3") }
+        rule.letAppRun(2_500)
         rule.onNodeWithContentDescription("Stäng läsaren").performClick()
         waitFor { exists("Fortsätt på sida 3") }
         val state = readingState(context, issueId)!!

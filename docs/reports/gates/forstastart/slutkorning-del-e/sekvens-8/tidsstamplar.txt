@@ -1,0 +1,13 @@
+2026-10-11 00:31:04.643 sekvens 8 börjar
+2026-10-11 00:31:04.644 release-appen före:  versionName=1.0.0-rc2  lastUpdateTime=2026-10-10 12:37:52 
+2026-10-11 00:31:04.952 testpaketet avinstallerat
+2026-10-11 00:31:05.343 debug-appen avinstallerad
+2026-10-11 00:31:05.586 installerar debug-appen
+Success
+2026-10-11 00:31:06.786 installerar testpaketet
+Success
+2026-10-11 00:31:07.159 installationen klar
+2026-10-11 00:31:07.160 device_test.sh startar
+2026-10-11 00:35:09.097 device_test.sh klar, slutstatus 0
+2026-10-11 00:35:11.100 release-appen efter:  versionName=1.0.0-rc2  lastUpdateTime=2026-10-10 12:37:52 
+2026-10-11 00:35:11.379 sekvens 8 klar

@@ -1,0 +1,15 @@
+pump=false runda=1 toggleRightAfterPageTurn: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1393 ms, median=1281 ms
+pump=false runda=1 rapidTogglesAfterPageTurn: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=950 ms, median=851 ms
+pump=false runda=1 toggleInTheMiddleOfTheWindow: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=109 ms, median=57 ms
+pump=false runda=1 offAndOnInTheMiddleOfTheWindow: Tests run: 1,  Failures: 1 | 27 sidor, tappade=[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28], över 2500 ms=0, längsta=null ms, median=null ms
+pump=false runda=1 toggleWhileFetching: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=897 ms, median=746 ms
+pump=false runda=1 toggleWhenFetchFails: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1368 ms, median=1270 ms
+pump=false runda=1 failRetryThenOffAndOn: Tests run: 1,  Failures: 1 | 27 sidor, tappade=[4, 7, 15, 21, 25, 26, 28], över 2500 ms=0, längsta=1094 ms, median=1047 ms
+pump=false runda=2 toggleRightAfterPageTurn: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1366 ms, median=1308 ms
+pump=false runda=2 rapidTogglesAfterPageTurn: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=952 ms, median=852 ms
+pump=false runda=2 toggleInTheMiddleOfTheWindow: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=110 ms, median=56 ms
+pump=false runda=2 offAndOnInTheMiddleOfTheWindow: Tests run: 1,  Failures: 1 | 27 sidor, tappade=[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28], över 2500 ms=0, längsta=null ms, median=null ms
+pump=false runda=2 toggleWhileFetching: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=847 ms, median=745 ms
+pump=false runda=2 toggleWhenFetchFails: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1367 ms, median=1267 ms
+pump=false runda=2 failRetryThenOffAndOn: Tests run: 1,  Failures: 1 | 27 sidor, tappade=[3, 6, 11, 17, 19, 22, 23, 24, 25, 27, 28], över 2500 ms=0, längsta=1097 ms, median=1050 ms
+KLART

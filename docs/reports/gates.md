@@ -2,7 +2,7 @@
 
 Datum: 2026-10-10 · Gren: `release/1.0-gates` (från `main`, inte mergad) · App oförändrad, 1.0.0-rc2
 
-**Uppdaterad 2026-10-10** med Gustavs svar (del C), det privata GitHub-repot, undantaget för testdatabaserna och den sista grindkörningen. Grindkörningen gav 9 av 10 i sista omgången, så grenen är inte mergad och förstastartsfrågan är inte stängd. Det som återstår innan v1.0.0 och de beslut du behöver ta står sist i rapporten.
+**Uppdaterad 2026-10-10** med Gustavs svar (del C), det privata GitHub-repot, undantaget för testdatabaserna och den sista grindkörningen. HQ-felet från den sista grindkörningen är utrett (del E): det låg i testet. Efter rättningen gav tio rena sekvenser 10 av 10, grenen är mergad och förstastartsfrågan är stängd. Det som återstår innan v1.0.0 och de beslut du behöver ta står sist i rapporten.
 
 Ingen appkod, ingen datamodell och inga assets är ändrade. Release-appen `se.c64.dmzreader` är inte rörd: den är 1.0.0-rc2 med samma installationstid före och efter varje körning. Inget är pushat, och ingen historik är omskriven.
 
@@ -501,7 +501,7 @@ Efter att skriptet och gitleaks gav rent (134 commits, 0 fynd, 0 läckor):
 
 ## Den sista grindkörningen
 
-**Utfall: inte 10 av 10. Grenen är inte mergad, och jag har stannat före 1.0.0-rc3.**
+**Utfall då: inte 10 av 10.** *Fortsättningen står i del E: HQ-felet låg i testet, och efter rättningen blev det 10 av 10.*
 
 Tre omgångar med tio rena sekvenser var (avinstallera debug-appen, installera, hela `device_test.sh`):
 
@@ -567,13 +567,100 @@ Tre orsaker är belagda och rättade i testkoden: listrullningen, den avbrutna v
 
 ---
 
+## DEL E – HQ-felet: utrett, och förstastartsfrågan stängd
+
+*Tillagt 2026-10-11.*
+
+**Klassning: felet låg i testet, inte i appen. Appen räknar sidor rätt i HQ-läge.** Det ligger närmast (c) i uppgiften, med skillnaden att felet gick att återskapa när jag väl visste hur. Testet är rättat, och tio rena sekvenser av tio är gröna. `release/1.0-gates` och `fix/hq-seen-pages` är mergade till `main`, som är pushad.
+
+### Hur en sida räknas som läst
+
+- Varje sidbild rapporterar vad som visas: ingenting, förhandsbild eller färdig bild (`ZoomablePages.kt`).
+- En klocka per skärm (`PageReadTimer`) går bara när alla skärmens sidor visas färdiga och appen är i förgrunden. Efter 1,5 sekunder räknas sidorna som lästa och skrivs till `IssueUserState` genom en skrivkö.
+- Klockan nollställs bara när skärmen byter sidor. **Ett byte av HQ-läge nollställer den inte:** den pausar medan den nya bilden laddas och fortsätter sedan. Fall (a) i uppgiften, att tiden börjar om vid bytet, stämmer alltså inte med koden.
+- `lastPage` och `maxPageReached` förs för sig och påverkas inte av HQ-läget.
+
+### Orsaken
+
+Under en `ComposeTestRule` ritar Compose bara om skärmen när testet gör något: letar efter en nod, väntar på ett villkor eller ber om stillhet. Sover testtråden med `Thread.sleep` står skärmen still.
+
+HQ-testet väntade tills HQ-raden visade "HQ" och sov sedan i 2,5 sekunder. HQ-bilden blir färdig strax efter att raden ändras. Hann den inte ritas innan testet somnade fick appen aldrig veta att sidan visades färdig, klockan stod still, och sidan räknades inte.
+
+Den tillfälliga loggningen visar det för en tappad sida (`hq-stresstest/tappad-sida-med-loggning.txt`): bilden sattes 0,2 sekunder efter det sista bytet, men rapporten att den visades kom först sex sekunder senare, när testet gick vidare.
+
+### Stresstestet
+
+`HqSeenStressDeviceTest`, sju varianter. Varje körning går igenom sidorna 2–28 och mäter tiden från det sista bytet av HQ-läge tills sidan står som läst i databasen. Två körningar per variant ger 54 sidor.
+
+| Variant | Med ritning under väntan | Med sovande testtråd |
+|---|---|---|
+| HQ på direkt efter sidbytet | 54 lästa, längst 1,6 s | 54 lästa |
+| Fem snabba byten efter sidbytet | 54 lästa, längst 1,2 s | 54 lästa |
+| HQ på mitt i lästiden | 54 lästa, längst 0,3 s | 54 lästa |
+| HQ av och på mitt i lästiden | 54 lästa, längst 1,4 s | **0 lästa, 54 tappade** |
+| Byte medan HQ-hämtningen pågår | 54 lästa, längst 1,0 s | 54 lästa |
+| Byte när HQ-hämtningen misslyckas | 54 lästa, längst 1,5 s | 54 lästa |
+| Fel, nytt försök, HQ av och på (det fallna testets förlopp) | 54 lästa, längst 1,4 s | **36 lästa, 18 tappade** |
+
+Med ritning under väntan räknades alla 378 sidorna, ingen senare än 1,6 sekunder efter bytet. Med sovande testtråd tappas sidor i de två varianter där testet somnar medan en bild laddas.
+
+Att "HQ på mitt i lästiden" räknas efter 0,3 sekunder visar att klockan fortsätter över bytet i stället för att börja om.
+
+### Kontroll utan testram
+
+För att inte bara lita på testmiljön körde jag debug-appen utan instrumentering och styrde den med `adb`: åtta sidor i HQ-läge, där HQ slogs av och på 0,7 sekunder efter varje sidbyte.
+
+- **8 av 8 sidor räknades som lästa** och skrevs till databasen.
+- Färdig bild rapporterades som visad 10–40 ms efter att den sattes.
+- Klockan löste ut 1,5–1,9 sekunder efter sidbytet varje gång.
+
+Underlag: `hq-stresstest/utan-testram.txt`. Kontrollen hämtade åtta skanningar från arkivets FTP, cirka 40 MB. Det var mer än jag hade tänkt mig.
+
+### Rättningen
+
+Bara testkod:
+
+- `DeviceTestSupport.letAppRun(millis)` väntar och låter appen rita under tiden.
+- `HqDeviceTest` väntar på att HQ-bilden visas och använder sedan `letAppRun` i stället för `Thread.sleep`.
+- `HqSeenStressDeviceTest` ligger kvar och körs på begäran (`-e dmzStress true`). Med `-e dmzPump false` återskapar det felet.
+
+Den tillfälliga loggningen är borttagen. Ingen fil under `app/src/main` är ändrad av grenarna.
+
+Jag gick igenom de övriga testernas sovpauser. Ingen annan väntar på att en sida ska räknas som läst direkt efter att en bild har börjat laddas, så jag har inte ändrat dem.
+
+### De tio sekvenserna
+
+| | |
+|---|---|
+| Testkod | `3d728d6` |
+| Gröna | **10 av 10** |
+| Per sekvens | 76 tester (69 som förut och 7 stresstester som hoppas över), omstartstestet och tvångsstoppstestet |
+| Release-appen | 1.0.0-rc2 med uppdateringstiden 2026-10-10 12:37:52 före och efter varje sekvens |
+
+Underlag: `docs/reports/gates/forstastart/slutkorning-del-e/`.
+
+### Förstastartsfrågan
+
+Stängd. Fyra orsaker till ostadiga tester är belagda och rättade, alla i testkoden:
+
+| Orsak | Rättning |
+|---|---|
+| Testerna rullade till en nod innan listan hade innehåll | `scrollToNodeWhenLoaded` |
+| Skriptet väntade i fyra minuter på ett test som redan fallit | avbruten väntan |
+| Wifi tappar en gång till efter flygplansläget | flygplanstestet väntar ut tappet |
+| Compose ritar inte om medan testtråden sover | `letAppRun` i HQ-testet |
+
+Ett fel är fortfarande oförklarat: ritningsfelet i bokmärkestestet, som inträffade en gång i sekvens 9 i del A och inte sedan dess på 38 hela sviter. Det står i backloggen under ostadiga tester.
+
+---
+
 ## Kvar innan v1.0.0 kan taggas
 
-1. **Ditt beslut om HQ-felet och om grenen.** Tre vägar: utreda om felet är en appbugg innan något annat görs, merga testrättningarna ändå och gå vidare till rc3, eller köra fler sekvenser först. Jag lutar åt att utreda: det gäller om lästa sidor räknas rätt i HQ-läge.
-2. **1.0.0-rc3:** meningen på Om-sidan, feltexterna, `LICENSE`, `NOTICE.md` och `README.md`. Ändringarna är förberedda på grenen `release/1.0-rc3` men varken byggda, testade eller installerade.
-3. **Det maskerade sökindexet:** filtret och kontrollverktyget är klara på grenen `tools/privacy-filter` med gröna tester, och ett provbygge klarar filkontrollen. Ingenting är mergat, och ingen fil är uppladdad. Se `docs/reports/search-privacy.md` på den grenen.
-4. Veckans användning enligt checklistan i `rc1.md`.
-5. Bygga och signera 1.0.0 (versionCode 10000), och kontrollera certifikatets fingeravtryck.
+*Uppdaterad 2026-10-11. Läget för rc3 och sökindexet står i `docs/reports/rc3.md` och `docs/reports/search-privacy.md`.*
+
+1. Veckans användning enligt checklistan i `rc1.md`.
+2. Dina beslut före en publik release, nedan.
+3. Bygga och signera 1.0.0 (versionCode 10000), och kontrollera certifikatets fingeravtryck.
 
 ## Beslut du behöver ta före en publik release
 
@@ -594,6 +681,7 @@ Tre orsaker är belagda och rättade i testkoden: listrullningen, den avbrutna v
 - `app/src/androidTest/java/se/c64/dmzreader/DeviceTestSupport.kt` och tio testklasser (listrullningen)
 - `app/src/androidTest/java/se/c64/dmzreader/OfflineDeviceTest.kt` (väntan på nätet efter flygplansläget)
 - `tools/device_test.sh` (avbruten väntan)
+- `app/src/androidTest/java/se/c64/dmzreader/HqDeviceTest.kt` och `HqSeenStressDeviceTest.kt` (ritning under väntan, stresstest)
 - `tools/prepush_check.sh` (ny)
 - `docs/backlog-1.1.md` (tre punkter från del C)
 - `docs/reports/gates.md` och `docs/reports/gates/forstastart/` (15 sekvenser, mätningen av vanlig start och den upprepade körningen av bokmärkestestet)
