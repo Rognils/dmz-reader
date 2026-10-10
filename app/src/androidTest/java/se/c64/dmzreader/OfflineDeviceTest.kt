@@ -68,26 +68,35 @@ class OfflineDeviceTest {
     /**
      * Efter flygplansläget tar det en stund innan nätet är att lita på. Nästa test ska inte börja innan dess.
      *
-     * På testtelefonen ansluter wifi inom ett par sekunder, tappar anslutningen igen 5–8 sekunder
-     * senare och är tillbaka efter ytterligare cirka 20. Under tiden går trafiken över mobilnätet.
-     * En nedladdning som börjar i det läget bryts när nätet byts under den. Nätet räknas därför som
-     * tillbaka först när ett och samma nät har varit bekräftat i 20 sekunder i följd.
+     * På testtelefonen ansluter wifi inom ett par sekunder, tappar anslutningen en gång till någon gång
+     * under den första halvminuten (uppmätt 5–24 sekunder efter anslutningen) och är tillbaka cirka
+     * 20 sekunder senare. Under tiden går trafiken över mobilnätet. En nedladdning som pågår när
+     * nätet byts bryts. Det andra tappet har kommit i varje körning, så testet väntar ut det:
+     * nätet räknas som tillbaka när wifi har tappats och sedan varit bekräftat i 10 sekunder.
+     * Kommer inget tapp räcker 45 sekunder med ett och samma bekräftade nät.
      */
     private fun waitForNetwork() {
         val connectivity = context.getSystemService(ConnectivityManager::class.java)
-        val deadline = System.currentTimeMillis() + 90_000
+        val deadline = System.currentTimeMillis() + 120_000
         var stableNetwork: Network? = null
+        var stableIsWifi = false
         var stableSince = 0L
+        var wifiWasLost = false
         while (System.currentTimeMillis() < deadline) {
             val network = connectivity.activeNetwork
             val capabilities = connectivity.getNetworkCapabilities(network)
             val validated = capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
+            val wifi = capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
             val now = System.currentTimeMillis()
             if (!validated || network != stableNetwork) {
+                if (stableIsWifi) wifiWasLost = true
                 stableNetwork = network.takeIf { validated }
+                stableIsWifi = validated && wifi
                 stableSince = now
-            } else if (now - stableSince >= 20_000) {
-                return
+            } else {
+                val stable = now - stableSince
+                if (wifiWasLost && stableIsWifi && stable >= 10_000) return
+                if (stable >= 45_000) return
             }
             Thread.sleep(500)
         }
