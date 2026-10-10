@@ -23,6 +23,13 @@ byggs. Ändras en regel eller ordlistan ska NORMALIZER_VERSION höjas.
 Bygget är reproducerbart: samma PDF:er och samma `--built-at` ger en
 identisk fil.
 
+Med `--privacy-filter` maskeras e-postadresser, telefonnummer, postgironummer och
+personnummerformer i searchText innan texten läggs i databasen (tools/privacy_filter.py),
+rawText lämnas tom, och `privacyFilterVersion` skrivs i meta. Appen läser inte rawText;
+kolumnen finns kvar så att schemat är detsamma. Det är den varianten som delas ut. Indexet
+byggs alltid från PDF:erna: en färdig databas maskeras aldrig i efterhand,
+eftersom den gamla texten då kan ligga kvar i filens lediga sidor.
+
 Kör:  python3 tools/build_search_index.py --pilot --diacritics 0 -o cache/search/search-rd0.db
 """
 
@@ -44,6 +51,7 @@ from pathlib import Path
 from typing import Container, Iterable, NamedTuple
 
 import fetch_pdfs
+import privacy_filter
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 INVENTORY_PATH = REPO_ROOT / "data" / "archive_inventory.json"
@@ -387,8 +395,11 @@ def tokenizer_spec(diacritics: int) -> str:
 
 def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], *, diacritics: int,
                    dataset_version: str, built_at: str, lexicon: Container[str],
-                   store_raw: bool = True) -> dict:
-    """Skriver search.db. `issues` är (inventorypost, manifestpost, utvunnen text) i den ordning de ska in."""
+                   store_raw: bool = True, privacy: bool = False) -> dict:
+    """Skriver search.db. `issues` är (inventorypost, manifestpost, utvunnen text) i den ordning de ska in.
+
+    Med `privacy` maskeras kontaktuppgifter i searchText före skrivningen, och rawText lämnas tom.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     path.unlink(missing_ok=True)
     tokenizer = tokenizer_spec(diacritics)
@@ -398,6 +409,9 @@ def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], 
         searchText, content='pages', content_rowid='id', tokenize='{tokenizer}')""")
     seconds: dict[str, float] = {}
     total_pages = 0
+    masked = dict.fromkeys(privacy_filter.CATEGORIES, 0)
+    masked_pages = dict.fromkeys(privacy_filter.CATEGORIES, 0)
+    masked_any_pages = 0
     for issue, file, extracted in sorted(issues, key=lambda item: item[0]["issueId"]):
         started = time.monotonic()
         db.execute("INSERT INTO issues (issueId, pageCount, ocrPdfSize, ocrPdfEtag, ocrPdfSha256) "
@@ -405,13 +419,23 @@ def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], 
                    (extracted.issue_id, extracted.page_count, file["size"], file["etag"], file.get("sha256")))
         for number, (raw, parts) in enumerate(zip(extracted.raw_pages, extracted.parts), 1):
             search_text = assemble(parts, lexicon)
+            if not store_raw:
+                raw = ""
+            if privacy:
+                # Den omaskerade texten skrivs aldrig till filen: rawText är tom och searchText maskerad.
+                raw = ""
+                search_text, found = privacy_filter.mask(search_text)
+                for kind, count in found.items():
+                    masked[kind] += count
+                    masked_pages[kind] += 1 if count else 0
+                masked_any_pages += 1 if any(found.values()) else 0
             cursor = db.execute(
                 "INSERT INTO pages (issueId, pageNumber, rawText, searchText) VALUES (?, ?, ?, ?)",
-                (extracted.issue_id, number, raw if store_raw else "", search_text))
+                (extracted.issue_id, number, raw, search_text))
             db.execute("INSERT INTO pages_fts (rowid, searchText) VALUES (?, ?)", (cursor.lastrowid, search_text))
         total_pages += extracted.page_count
         seconds[extracted.issue_id] = extracted.seconds + time.monotonic() - started
-    db.executemany("INSERT INTO meta (key, value) VALUES (?, ?)", sorted({
+    meta = {
         "searchSchemaVersion": str(SEARCH_SCHEMA_VERSION),
         "inventoryDatasetVersion": dataset_version,
         "normalizerVersion": str(NORMALIZER_VERSION),
@@ -423,13 +447,18 @@ def build_database(path: Path, issues: list[tuple[dict, dict, ExtractedIssue]], 
         "pdftotextMode": PDFTOTEXT_MODE,
         "issueCount": str(len(issues)),
         "pageCount": str(total_pages),
-    }.items()))
+    }
+    if privacy:
+        meta["privacyFilterVersion"] = str(privacy_filter.PRIVACY_FILTER_VERSION)
+    db.executemany("INSERT INTO meta (key, value) VALUES (?, ?)", sorted(meta.items()))
     db.execute("INSERT INTO pages_fts (pages_fts) VALUES ('optimize')")
     db.commit()
     db.execute("VACUUM")
     db.close()
     return {"path": str(path), "tokenizer": tokenizer, "issues": len(issues), "pages": total_pages,
-            "secondsPerIssue": seconds}
+            "secondsPerIssue": seconds, "masked": masked if privacy else None,
+            "maskedPages": masked_pages if privacy else None,
+            "maskedAnyPages": masked_any_pages if privacy else None}
 
 
 def usable_issues(wanted: list[str], inventory: dict, manifest: dict, cache_dir: Path, log=print) -> list[tuple[dict, dict, Path]]:
@@ -450,7 +479,8 @@ def usable_issues(wanted: list[str], inventory: dict, manifest: dict, cache_dir:
 
 
 def build(wanted: list[str], output: Path, *, diacritics: int, built_at: str, cache_dir: Path = CACHE_DIR,
-          inventory_path: Path = INVENTORY_PATH, store_raw: bool = True, log=print) -> dict:
+          inventory_path: Path = INVENTORY_PATH, store_raw: bool = True, privacy: bool = False,
+          log=print) -> dict:
     inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
     manifest = fetch_pdfs.load_manifest(cache_dir)
     extracted = []
@@ -460,7 +490,7 @@ def build(wanted: list[str], output: Path, *, diacritics: int, built_at: str, ca
             log(f"  {item.issue_id}: text och lägen skiljer sig på sidorna {item.mismatched_pages}")
         extracted.append((issue, file, item))
     result = build_database(output, extracted, diacritics=diacritics, dataset_version=inventory["datasetVersion"],
-                            built_at=built_at, lexicon=load_lexicon(), store_raw=store_raw)
+                            built_at=built_at, lexicon=load_lexicon(), store_raw=store_raw, privacy=privacy)
     result["pageCounts"] = {item.issue_id: item.page_count for _, _, item in extracted}
     result["mismatchedPages"] = {item.issue_id: item.mismatched_pages for _, _, item in extracted
                                  if item.mismatched_pages}
@@ -478,6 +508,8 @@ def main(argv=None) -> int:
     parser.add_argument("-o", "--output", type=Path, required=True)
     parser.add_argument("--built-at", help="tidsstämpel i meta (standard: nu). Ange för ett reproducerbart bygge.")
     parser.add_argument("--without-raw-text", action="store_true", help="lämna rawText tom (för storleksmätning)")
+    parser.add_argument("--privacy-filter", action="store_true",
+                        help="maskera kontaktuppgifter i searchText och lämna rawText tom (varianten som delas ut)")
     arguments = parser.parse_args(argv)
     wanted = list(arguments.issues) + (fetch_pdfs.PILOT_ISSUES if arguments.pilot else [])
     if arguments.all:
@@ -487,11 +519,19 @@ def main(argv=None) -> int:
         parser.error("ange issueId, --pilot eller --all")
     built_at = arguments.built_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     result = build(wanted, arguments.output, diacritics=arguments.diacritics, built_at=built_at,
-                   inventory_path=arguments.inventory, store_raw=not arguments.without_raw_text)
+                   inventory_path=arguments.inventory, store_raw=not arguments.without_raw_text,
+                   privacy=arguments.privacy_filter)
     if len(result["pageCounts"]) != len(wanted):
         print(f"VARNING: {len(wanted) - len(result['pageCounts'])} nummer hoppades över", file=sys.stderr)
     print(f"{result['path']}: {result['issues']} nummer, {result['pages']} sidor, {result['tokenizer']}, "
           f"{Path(result['path']).stat().st_size / 1e6:.2f} MB")
+    if result["masked"] is not None:
+        names = {"email": "e-postadresser", "phone": "telefonnummer", "giro": "postgironummer",
+                 "personalNumber": "personnummerformer"}
+        print(f"maskerat i searchText (privacyFilterVersion {privacy_filter.PRIVACY_FILTER_VERSION}), "
+              f"{result['maskedAnyPages']} sidor berörda: "
+              + ", ".join(f"{result['masked'][kind]} {names[kind]} på {result['maskedPages'][kind]} sidor"
+                          for kind in privacy_filter.CATEGORIES))
     return 0
 
 
