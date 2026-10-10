@@ -2,7 +2,7 @@
 
 Datum: 2026-10-10 · Gren: `release/1.0-gates` (från `main`, inte mergad) · App oförändrad, 1.0.0-rc2
 
-**Uppdaterad 2026-10-10** med Gustavs svar (del C), förberedelsen av ett privat GitHub-repo (del D), undantaget för testdatabaserna och den sista grindkörningen. Det som återstår innan v1.0.0 och de beslut du behöver ta står sist i rapporten.
+**Uppdaterad 2026-10-10** med Gustavs svar (del C), det privata GitHub-repot, undantaget för testdatabaserna och den sista grindkörningen. Grindkörningen gav 9 av 10 i sista omgången, så grenen är inte mergad och förstastartsfrågan är inte stängd. Det som återstår innan v1.0.0 och de beslut du behöver ta står sist i rapporten.
 
 Ingen appkod, ingen datamodell och inga assets är ändrade. Release-appen `se.c64.dmzreader` är inte rörd: den är 1.0.0-rc2 med samma installationstid före och efter varje körning. Inget är pushat, och ingen historik är omskriven.
 
@@ -399,6 +399,8 @@ En sak utöver det du frågade om: **kön är tyst.** Är arkivet nere ett dygn 
 
 ## DEL D – Privat GitHub-repo
 
+*Läget när det här avsnittet skrevs. Repot skapades senare, se "Undantaget för testdatabaserna, och det privata repot".*
+
 **Repot är inte skapat och ingenting är pushat.** Kontrollen i steg 3 slår, och uppgiften säger att jag då ska stanna. Eftersom utfallet var känt i förväg skapade jag inte heller ett tomt repo.
 
 ### Steg 1 – inloggningen
@@ -484,18 +486,94 @@ Prövat i ett tillfälligt repo med planterade filer: det stoppade för en PDF, 
 
 Hemligheter söker skriptet inte efter. Det gör gitleaks.
 
-PUSHRESULTAT
+### Repot
+
+Efter att skriptet och gitleaks gav rent (134 commits, 0 fynd, 0 läckor):
+
+- `Rognils/dmz-reader` skapades som **privat**, utan README, licens eller `.gitignore` från GitHub.
+- `main` och de 18 taggarna pushades. Inga andra grenar.
+- Kontroll efteråt: `gh repo view` visar `PRIVATE`, och `git ls-remote` är identisk med lokalt för `main`, `HEAD` och alla 18 taggarna.
+- Inga releaser är skapade. Ingen APK och inget sökindex är uppladdat.
+
+`main` på GitHub är `aa8eadc` (1.0.0-rc2). Grenen `release/1.0-gates` är inte pushad.
+
+---
+
+## Den sista grindkörningen
+
+**Utfall: inte 10 av 10. Grenen är inte mergad, och jag har stannat före 1.0.0-rc3.**
+
+Tre omgångar med tio rena sekvenser var (avinstallera debug-appen, installera, hela `device_test.sh`):
+
+| Omgång | Testkod | Gröna | Föll på |
+|---|---|---|---|
+| 1 | `bb15a6c` | 1 av 2, sedan avbruten | nedladdningstestet efter flygplanstestet |
+| 2 | `d3a2066`, första rättningen | 8 av 10 | samma, i sekvens 9 och 10 |
+| 3 | `817d35d`, andra rättningen | **9 av 10** | ett HQ-test, i sekvens 5 |
+
+Release-appen var 1.0.0-rc2 med samma uppdateringstid före och efter varje sekvens, och det yttre fingeravtrycket var identiskt i alla 22.
+
+### Felet i omgång 1 och 2: wifi tappar efter flygplansläget
+
+`OfflineDeviceTest` slår på och av flygplansläge. Nästa test, `ReaderDeviceTest.readDownloadTurnPageAndClose`, hämtar 1986 nr 1 från arkivet. Loggen visar samma förlopp i alla tre fallen:
+
+1. Flygplansläget stängs av. Wifi ansluter efter 2–3 sekunder.
+2. Wifi tappar anslutningen en gång till (`onDebugErrorAlert 14` från wifi-drivrutinen) och är tillbaka cirka 20 sekunder senare.
+3. Föll det andra tappet under nästa tests nedladdning bröts den, och testet väntade i 120 sekunder på en läsare som aldrig öppnades.
+
+Det andra tappet kom i **alla 22 sekvenser**, mellan 1 och 24 sekunder efter att wifi anslutit. Det är telefonens beteende. Troligen förklarar det också läsartestet som föll en gång under v0.10.1 utan belagd orsak, men den loggen finns inte kvar.
+
+**Rättningen, bara i testkoden:** flygplanstestet väntar efter sig tills wifi har tappats och sedan varit bekräftat i 10 sekunder (eller 45 sekunder om inget tapp kommer). Den första rättningen, 20 sekunders stabilt nät, räckte inte eftersom tappet kan komma senare än så. I omgång 3 väntade testet ut tappet i alla tio sekvenserna, och nedladdningstestet gick igenom varje gång.
+
+### Vad appen gjorde med den avbrutna nedladdningen
+
+Du bad mig kontrollera det. I alla tre fallen (omgång 1 sekvens 2, omgång 2 sekvens 9 och 10):
+
+- **Nedladdningen gick till fel direkt.** Appen loggade `nedladdningen avslutades med NetworkError(Software caused connection abort)` 0,12–0,18 sekunder efter att wifi försvann. Läs-vägen visar då feltexten och knappen "Försök igen".
+- **Den blev inte hängande** och stod inte kvar som pågående eller köad.
+- **Den fortsatte inte av sig själv** när wifi kom tillbaka. Det är så Läs fungerar i dag, och står redan i backloggen.
+- **Den återupptogs vid nästa försök.** I omgång 2 hämtade nästa test samma nummer två minuter senare, och appen loggade `nedladdad, 15105472 byte, återupptagen=true`: resten begärdes med Range, och filen blev hel.
+
+Det är i sin ordning enligt ditt kriterium. Texten "Försök igen" på skärmen syns inte i loggen; att den visas följer av koden, där ett nätverksfel alltid ger det läget.
+
+Underlag: `nathandelser.txt` i varje sekvens under `docs/reports/gates/forstastart/slutkorning-omgang-1/`, `slutkorning-omgang-2/` och `slutkorning/`.
+
+### Felet i omgång 3: en sida räknades inte som läst i HQ-läge
+
+`HqDeviceTest.hqPageNextPageAndOfflineFromCache` föll i sekvens 5 på sin näst sista kontroll: sida 3 skulle stå som läst efter 2,5 sekunder i HQ-läge, och gjorde det inte. Läspositionen var rätt (sida 3).
+
+Vad loggen visar:
+
+- Testet hade just slagit av HQ och på igen på sida 3. Det gör det i varje körning.
+- HQ-bilden var klar 2,7 sekunder innan läsaren stängdes. Sidan ska räknas som läst efter 1,5. I de nio gröna sekvenserna var tiden 2,9–3,0 sekunder, så marginalen var något mindre här, men fortfarande över en sekund.
+- Jag har jämfört renderingen av sida 3 i alla tio sekvenserna (antal förhandsbilder, antal fullständiga bilder och ordningen mellan dem). Den fallna sekvensen har samma mönster som två av de gröna. Loggen pekar alltså inte ut någon orsak.
+
+**Jag kan inte säga om felet ligger i testet eller i appen.** Appen räknar en sida som läst när den har visats färdigrenderad i 1,5 sekunder. Om ett snabbt byte av HQ-läge under pågående rendering kan lämna sidan märkt som "inte färdig" är det en appbugg: en sida som läses i HQ-läge räknas då inte. Jag har läst koden utan att hitta en sådan väg, men jag har inte heller kunnat utesluta den.
+
+Samma test gick igenom 25 gånger av 25 när jag körde det ensamt efteråt (`slutkorning/hq-upprepning.txt`), och felet finns inte i någon tidigare logg.
+
+**Jag har inte rättat något för det här felet.** Appens rader under testet ligger i `slutkorning/sekvens-5/hq-testet.txt`.
+
+### Läget
+
+| | Antal sekvenser | Helt gröna |
+|---|---|---|
+| Före alla rättningar (sekvens 1–5) | 5 | 4 |
+| Efter listrullningen (6–15) | 10 | 9 |
+| Sista körningen, omgång 1–3 | 22 | 18 |
+
+Tre orsaker är belagda och rättade i testkoden: listrullningen, den avbrutna väntan i skriptet och wifi-tappet. Två fel är oförklarade och har inträffat en gång var: ritningsfelet i bokmärkestestet (sekvens 9 i del A) och HQ-testet ovan.
+
 
 ---
 
 ## Kvar innan v1.0.0 kan taggas
 
-1. Ditt besked om de två testdatabaserna, och därefter det privata repot (del D, steg 2–5).
-2. Ditt beslut om den här grenen ska mergas. Den innehåller testrättningarna från del A, men en av tio sekvenser efter rättningen föll på ett annat, oförklarat fel. De fem senaste är gröna.
-3. Om förslagen i del C ska in i 1.0.0 (meningen på Om-sidan och de två feltexterna). I så fall en rc3, eller direkt i 1.0.0 med ett eget prov.
-4. `LICENSE` och `README.md` i repots rot.
-5. Veckans användning enligt checklistan i `rc1.md`.
-6. Bygga och signera 1.0.0 (versionCode 10000), och kontrollera certifikatets fingeravtryck.
+1. **Ditt beslut om HQ-felet och om grenen.** Tre vägar: utreda om felet är en appbugg innan något annat görs, merga testrättningarna ändå och gå vidare till rc3, eller köra fler sekvenser först. Jag lutar åt att utreda: det gäller om lästa sidor räknas rätt i HQ-läge.
+2. **1.0.0-rc3:** meningen på Om-sidan, feltexterna, `LICENSE`, `NOTICE.md` och `README.md`. Ändringarna är förberedda på grenen `release/1.0-rc3` men varken byggda, testade eller installerade.
+3. **Det maskerade sökindexet:** filtret och kontrollverktyget är klara på grenen `tools/privacy-filter` med gröna tester, och ett provbygge klarar filkontrollen. Ingenting är mergat, och ingen fil är uppladdad. Se `docs/reports/search-privacy.md` på den grenen.
+4. Veckans användning enligt checklistan i `rc1.md`.
+5. Bygga och signera 1.0.0 (versionCode 10000), och kontrollera certifikatets fingeravtryck.
 
 ## Beslut du behöver ta före en publik release
 
@@ -514,7 +592,9 @@ PUSHRESULTAT
 ## Ändrade filer i den här grenen
 
 - `app/src/androidTest/java/se/c64/dmzreader/DeviceTestSupport.kt` och tio testklasser (listrullningen)
+- `app/src/androidTest/java/se/c64/dmzreader/OfflineDeviceTest.kt` (väntan på nätet efter flygplansläget)
 - `tools/device_test.sh` (avbruten väntan)
+- `tools/prepush_check.sh` (ny)
 - `docs/backlog-1.1.md` (tre punkter från del C)
 - `docs/reports/gates.md` och `docs/reports/gates/forstastart/` (15 sekvenser, mätningen av vanlig start och den upprepade körningen av bokmärkestestet)
 

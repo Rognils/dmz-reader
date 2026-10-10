@@ -1,0 +1,20 @@
+2026-10-10 17:23:39.249 Fingeravtryck före…
+2026-10-10 17:23:39.806 Lägger testernas PDF på telefonen…
+2026-10-10 17:23:40.241 Hela sviten…
+2026-10-10 17:28:01.696 1) readDownloadTurnPageAndClose(se.c64.dmzreader.ReaderDeviceTest)
+2026-10-10 17:28:01.697 androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 120000 ms
+2026-10-10 17:28:01.698 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:901)
+2026-10-10 17:28:01.699 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:500)
+2026-10-10 17:28:01.699 	at se.c64.dmzreader.ReaderDeviceTest.waitFor(ReaderDeviceTest.kt:71)
+2026-10-10 17:28:01.700 FAILURES!!!
+2026-10-10 17:28:01.701 Tests run: 69,  Failures: 1
+2026-10-10 17:28:01.701 Omstartstestet (tvångsstopp mellan delarna)…
+2026-10-10 17:28:15.933 OK (1 test)
+2026-10-10 17:28:23.016 OK (1 test)
+2026-10-10 17:28:27.094 Lässession vid tvångsstopp…
+2026-10-10 17:29:02.792 Appen är tvångsstoppad efter cirka 30 s läsning.
+2026-10-10 17:29:09.225 OK (1 test)
+2026-10-10 17:29:09.276 TVÅNGSSTOPP läste 30 s före stoppet, sparad aktiv tid 30 s, sida 1–2
+2026-10-10 17:29:13.360 Fingeravtryck efter…
+2026-10-10 17:29:13.874 ANVÄNDARENS APP ÄR INTE STARTAD, UPPDATERAD ELLER UTBYTT (yttre fingeravtryck, identiska): slut/sekvens-9/fingeravtryck/before.txt
+2026-10-10 17:29:13.875   Innehållet i appens filer går inte att läsa i ett release-bygge. Testerna körs i se.c64.dmzreader.debug.
