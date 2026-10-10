@@ -172,8 +172,9 @@ run -e dmzTestRoot restart -e class "$NAMESPACE.BackupVersionDeviceTest" >/dev/n
 echo "Lässession vid tvångsstopp…"
 STATS=$NAMESPACE.StatisticsDeviceTest
 adb logcat -c
+# Utskriften sparas, så att det syns varför läsaren inte öppnades om det skulle hända.
 adb shell am instrument -w -e dmzTestRoot forcestop -e dmzKeepRoot true -e dmzPhase 1 \
-    -e class "$STATS#forceStopPhase1Read" "$RUNNER" >/dev/null 2>&1 &
+    -e class "$STATS#forceStopPhase1Read" "$RUNNER" > "$OUT/forcestop-del1.txt" 2>&1 &
 phase1=$!
 started=""
 for _ in $(seq 1 240); do
@@ -192,6 +193,10 @@ if [ "${started:-0}" -ge 1 ]; then
     adb logcat -d -s DmzStatistics | grep -o "TVÅNGSSTOPP.*" || true
 else
     echo "Läsaren öppnades aldrig i den första delen." >&2
+    echo "--- testets utskrift:" >&2
+    cat "$OUT/forcestop-del1.txt" >&2 || true
+    echo "--- loggen (DmzStatistics och DmzTest):" >&2
+    adb logcat -d -s DmzStatistics DmzTest | tail -15 >&2 || true
     adb shell am force-stop "$TEST_PACKAGE"
     status=1
 fi
