@@ -2,7 +2,7 @@
 
 Datum: 2026-10-10 · Gren: `release/1.0-gates` (från `main`, inte mergad) · App oförändrad, 1.0.0-rc2
 
-**Uppdaterad 2026-10-10 med Gustavs svar (del C) och förberedelsen av ett privat GitHub-repo (del D).** Det som återstår innan v1.0.0 och de beslut du behöver ta står sist i rapporten. Repot är inte skapat och ingenting är pushat: kontrollen före push slår på två testdatabaser i historiken, och uppgiften säger att jag då ska stanna.
+**Uppdaterad 2026-10-10** med Gustavs svar (del C), förberedelsen av ett privat GitHub-repo (del D), undantaget för testdatabaserna och den sista grindkörningen. Det som återstår innan v1.0.0 och de beslut du behöver ta står sist i rapporten.
 
 Ingen appkod, ingen datamodell och inga assets är ändrade. Release-appen `se.c64.dmzreader` är inte rörd: den är 1.0.0-rc2 med samma installationstid före och efter varje körning. Inget är pushat, och ingen historik är omskriven.
 
@@ -140,7 +140,7 @@ Kontrollerat i hela historiken:
 | Sökt | Fynd |
 |---|---|
 | `*.pdf` | 0 |
-| `search.db` och andra `*.db` | 2 filer, båda testdatabaser med påhittad text (57 kB var) |
+| `search.db` och andra `*.db` | 2 filer, båda testdatabaser (57 kB var). *Rättat: jag skrev "med påhittad text". Det stämmer inte helt, se "Undantaget för testdatabaserna" nedan.* |
 | `*.jks`, `*.keystore`, `*.p12`, `*.pem`, `*.key` | 0 |
 | `gradle.properties` med lösenord | 0. Den enda som finns är projektets egen, med fem bygginställningar. |
 | Säkerhetskopior ur appen | 0 |
@@ -198,7 +198,7 @@ Jag har sett igenom dem efter personliga uppgifter: 128 på kontaktkartor nu, oc
 ### OK
 
 - **Arkivindexet** (`data/archive_inventory.json`, 209 kB): bara metadata. Fälten är identitet, år, etiketter, adresser, storlekar, ETag, sidantal, flaggor och HQ-mappning. Ingen tidningstext.
-- **Testdatabaserna** `fts_test.db` och `search_test.db`: påhittad text, och bara i debug-bygget.
+- **Testdatabaserna** `fts_test.db` och `search_test.db`: bara i debug-bygget. *Rättat: de innehåller korta ordagranna utdrag ur tidningarna, inte bara påhittad text. De hör alltså till punkt 5, se "Undantaget för testdatabaserna" nedan.*
 - **`data/hq_mapping_report.json`**: filnamn och poäng.
 - **Typsnitten** Archivo och IBM Plex Mono har sina OFL-licenser med i appen.
 - **Om-texten** nämner Gustav vid namn, som du har bestämt.
@@ -422,7 +422,7 @@ Körda 2026-10-10 på hela historiken: 132 commits, 18 grenar, 18 taggar.
 | Säkerhetskopior ur appen, APK-filer | 0 |
 | **`*.db`** | **2 träffar** |
 
-Träffarna är `app/src/debug/assets/fts_test.db` och `app/src/debug/assets/search_test.db`. Det är samma två filer som del B klassade som OK: testdatabaser på 57 kB var, med påhittad text, som bara följer med debug-bygget. Ingen av dem är `search.db`.
+Träffarna är `app/src/debug/assets/fts_test.db` och `app/src/debug/assets/search_test.db`. Det är samma två filer som del B klassade som OK: testdatabaser på 57 kB var, som bara följer med debug-bygget. *(Del B kallade texten påhittad. Det är rättat i nästa avsnitt.)* Ingen av dem är `search.db`.
 
 Jag bedömer dem som ofarliga, men regeln lyder "inga `*.db` någonstans i historiken, och om något slår: pusha inte". Undantaget är ditt att göra. Vill du ha bort dem krävs omskriven historik, och det avråder jag från för två testfiler.
 
@@ -439,6 +439,52 @@ Repot är 127 MB, varav skärmbilderna drygt 100 MB. Det går att pusha som det 
 ### Steg 5 och 6
 
 Inte gjorda. Inga releaser är skapade, och varken APK eller `search.db` är uppladdad.
+
+---
+
+## Undantaget för testdatabaserna, och det privata repot
+
+*Tillagt 2026-10-10, efter ditt besked att fortsätta.*
+
+### Testdatabaserna är inte helt syntetiska
+
+Du bad mig bekräfta att ingen text i de två filerna kommer från tidningarna. **Det går inte att bekräfta.** Jag jämförde varje sida i testdatabaserna med samma sida i det riktiga sökindexet:
+
+| Fil | Tabeller och rader | Text | Ordagrant ur tidningarna |
+|---|---|---|---|
+| `fts_test.db` | `pages` 8, `issues` 3, `meta` 6, `selftest` 11, FTS-tabeller | 1 986 tecken | 265 tecken på 3 sidor |
+| `search_test.db` | `pages` 263 (250 tomma), `issues` 6, `meta` 11, FTS-tabeller | 1 180 tecken | 652 tecken på 8 sidor |
+
+"Ordagrant" är sammanhängande stycken på minst 20 tecken som finns på samma sida i arkivet. Det rör sig om enstaka meningar: en mening ur en artikel, en rubrik, en rad ur en annons. Resten är skrivet för testerna. Ingen av filerna har någon e-postadress eller något telefonnummer.
+
+Samma meningar står i källkoden till `tools/build_fts_testdb.py` och `tools/build_search_testdb.py`, som filerna byggs av. Påståendet i del B att texten var påhittad kom från skriptens egna kommentarer. Jag hade inte jämfört med arkivet.
+
+**Ditt beslut:** filerna tillåts som korta utdrag, i samma kategori som textutdragen i testfacit (punkt 5). Historiken skrivs inte om. Att byta texten mot påhittad framåt står i backloggen.
+
+### Uttryckligt undantag
+
+| Sökväg | Storlek | SHA-256 | I historiken |
+|---|---|---|---|
+| `app/src/debug/assets/fts_test.db` | 57 344 byte | `fd2c4f406d47f6ba801362723400cfe86060fd10971907c1aa92a2fd4ee3a9b1` | en version, nuvarande |
+| `app/src/debug/assets/search_test.db` | 57 344 byte | `4ca5e7676674b33c47adb70ab3e7410bdbdd2793bc3a6cb30985df128e90bf10` | nuvarande, sedan FAS 11 |
+| `app/src/debug/assets/search_test.db` | 57 344 byte | `ab45b068dc56678022dc128e70595b38ae6e8d7a43ad2af777c8297f0d124c27` | äldre version från FAS 9 |
+
+Den äldre versionen har samma text som den nuvarande. Skillnaden är arkivversionen i `meta` (005 i stället för 006).
+
+### `tools/prepush_check.sh`
+
+Skriptet går igenom varje fil i varje commit på alla grenar och taggar och avslutar med fel om det hittar:
+
+- en `*.db` som inte är en av de tre raderna ovan, med exakt den sökvägen och kontrollsumman
+- `*.pdf`, nyckelfiler (`*.jks`, `*.keystore`, `*.p12`, `*.pem`, `*.key`), `*.apk` eller `*.aab`
+- en säkerhetskopia ur appen: filnamnet `dmz-reader-backup*`, eller en JSON-fil med fältet `backupFormat`
+- en fil över 50 MB
+
+Prövat i ett tillfälligt repo med planterade filer: det stoppade för en PDF, en främmande databas, en kopia av en tillåten testdatabas under ett annat namn, en säkerhetskopia, en nyckelfil och en fil på 53 MB, även när filerna var borttagna i en senare commit.
+
+Hemligheter söker skriptet inte efter. Det gör gitleaks.
+
+PUSHRESULTAT
 
 ---
 

@@ -56,5 +56,6 @@ Idéer som dök upp under arbetet med releasekandidaterna men som inte hör hemm
 
 - **Fingeravtryck av användarens data i release-bygget.** Ett release-bygge går inte att läsa med `run-as`, så testerna kan bara visa att appen inte har startats eller bytts ut. En kontrollsumma som appen själv visar under Diagnostik vore ett alternativ.
 - **Nyp-zoom i prov av release-varianten.** Går inte att göra med adb. Kräver ett instrumenterat test mot rc-varianten.
+- **Påhittad text i testdatabaserna.** `fts_test.db`, `search_test.db` och skripten `tools/build_fts_testdb.py` och `tools/build_search_testdb.py` innehåller korta ordagranna meningar ur tidningarna. Byt dem mot påhittad text, så att nya versioner inte innehåller tidningstext, och lägg de nya kontrollsummorna i `tools/prepush_check.sh`. Äldre versioner ligger kvar i historiken.
 - **Ostadiga tester.** Ett läsartest som hämtar från arkivet föll en gång utan belagd orsak under v0.10.1. Tester som beror på nätet kunde skiljas från resten av sviten.
 - **Uppdatering av Kotlin-pluginen** (lint påpekar att 2.4.21 finns).
