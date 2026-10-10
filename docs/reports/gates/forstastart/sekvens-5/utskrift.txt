@@ -1,0 +1,57 @@
+2026-10-10 13:50:11.750 Fingeravtryck före…
+2026-10-10 13:50:12.336 Lägger testernas PDF på telefonen…
+2026-10-10 13:50:12.799 Hela sviten…
+2026-10-10 13:52:38.647 OK (69 tests)
+2026-10-10 13:52:38.648 Omstartstestet (tvångsstopp mellan delarna)…
+2026-10-10 13:52:53.140 OK (1 test)
+2026-10-10 13:53:00.189 OK (1 test)
+2026-10-10 13:53:04.275 Lässession vid tvångsstopp…
+2026-10-10 13:57:25.595 Läsaren öppnades aldrig i den första delen.
+2026-10-10 13:57:25.596 --- testets utskrift:
+2026-10-10 13:57:25.597 
+2026-10-10 13:57:25.597 se.c64.dmzreader.StatisticsDeviceTest:
+2026-10-10 13:57:25.598 Error in forceStopPhase1Read(se.c64.dmzreader.StatisticsDeviceTest):
+2026-10-10 13:57:25.599 java.lang.AssertionError: No node found that matches ContentDescription = 'Datormagazin 1986 Nr 1' (ignoreCase: false) in scrollable container
+2026-10-10 13:57:25.600 Semantics of the node:
+2026-10-10 13:57:25.601 Node #176 at (l=0.0, t=128.0, r=1440.0, b=2756.0)px
+2026-10-10 13:57:25.601 CollectionInfo = 'CollectionInfo(rowCount=-1, columnCount=-1)'
+2026-10-10 13:57:25.602 IsTraversalGroup = 'true'
+2026-10-10 13:57:25.603 Shape = 'androidx.compose.foundation.VerticalScrollableClipShape@9ea2886'
+2026-10-10 13:57:25.604 VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+2026-10-10 13:57:25.604 Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+2026-10-10 13:57:25.605 Has 3 children
+2026-10-10 13:57:25.606 Selector used: (((ScrollToIndex is defined) && (ScrollBy is defined)) && ((HorizontalScrollAxisRange is defined) || (VerticalScrollAxisRange is defined)))
+2026-10-10 13:57:25.607 
+2026-10-10 13:57:25.607 	at androidx.compose.ui.test.ActionsKt.performScrollToNode(Actions.kt:258)
+2026-10-10 13:57:25.608 	at se.c64.dmzreader.StatisticsDeviceTest.openReader(StatisticsDeviceTest.kt:89)
+2026-10-10 13:57:25.609 	at se.c64.dmzreader.StatisticsDeviceTest.forceStopPhase1Read(StatisticsDeviceTest.kt:201)
+2026-10-10 13:57:25.610 
+2026-10-10 13:57:25.610 
+2026-10-10 13:57:25.611 Time: 2,419
+2026-10-10 13:57:25.612 There was 1 failure:
+2026-10-10 13:57:25.612 1) forceStopPhase1Read(se.c64.dmzreader.StatisticsDeviceTest)
+2026-10-10 13:57:25.613 java.lang.AssertionError: No node found that matches ContentDescription = 'Datormagazin 1986 Nr 1' (ignoreCase: false) in scrollable container
+2026-10-10 13:57:25.614 Semantics of the node:
+2026-10-10 13:57:25.614 Node #176 at (l=0.0, t=128.0, r=1440.0, b=2756.0)px
+2026-10-10 13:57:25.615 CollectionInfo = 'CollectionInfo(rowCount=-1, columnCount=-1)'
+2026-10-10 13:57:25.616 IsTraversalGroup = 'true'
+2026-10-10 13:57:25.616 Shape = 'androidx.compose.foundation.VerticalScrollableClipShape@9ea2886'
+2026-10-10 13:57:25.617 VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+2026-10-10 13:57:25.618 Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+2026-10-10 13:57:25.618 Has 3 children
+2026-10-10 13:57:25.619 Selector used: (((ScrollToIndex is defined) && (ScrollBy is defined)) && ((HorizontalScrollAxisRange is defined) || (VerticalScrollAxisRange is defined)))
+2026-10-10 13:57:25.620 
+2026-10-10 13:57:25.621 	at androidx.compose.ui.test.ActionsKt.performScrollToNode(Actions.kt:258)
+2026-10-10 13:57:25.621 	at se.c64.dmzreader.StatisticsDeviceTest.openReader(StatisticsDeviceTest.kt:89)
+2026-10-10 13:57:25.622 	at se.c64.dmzreader.StatisticsDeviceTest.forceStopPhase1Read(StatisticsDeviceTest.kt:201)
+2026-10-10 13:57:25.623 
+2026-10-10 13:57:25.623 FAILURES!!!
+2026-10-10 13:57:25.624 Tests run: 1,  Failures: 1
+2026-10-10 13:57:25.625 
+2026-10-10 13:57:25.625 
+2026-10-10 13:57:25.626 --- loggen (DmzStatistics och DmzTest):
+2026-10-10 13:57:25.723 --------- beginning of main
+2026-10-10 13:57:25.724 10-10 13:53:05.789  7183  7183 I DmzTest : Isolerad lagring: /data/user/0/se.c64.dmzreader.debug/app_dmz_test/forcestop
+2026-10-10 13:57:29.994 Fingeravtryck efter…
+2026-10-10 13:57:30.323 ANVÄNDARENS APP ÄR INTE STARTAD, UPPDATERAD ELLER UTBYTT (yttre fingeravtryck, identiska): forstastart/sekvens-5/fingeravtryck/before.txt
+2026-10-10 13:57:30.324   Innehållet i appens filer går inte att läsa i ett release-bygge. Testerna körs i se.c64.dmzreader.debug.

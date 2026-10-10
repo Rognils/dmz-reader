@@ -1,0 +1,9 @@
+== A. Redan installerad debug-app (efter sekvens 15), första vanliga starten: appens vanliga lagring är tom
+installerad, tom vanlig lagring | LaunchState: COLD TotalTime: 1027 WaitTime: 1029 | biblioteket synligt i UI-trädet inom 3763 ms (upplösning cirka 1 s) | +1s27ms
+== B. Samma app, andra och tredje starten (kall process, lagringen finns)
+installerad, andra starten | LaunchState: COLD TotalTime: 1144 WaitTime: 1146 | biblioteket synligt i UI-trädet inom 3859 ms (upplösning cirka 1 s) | +1s144ms
+installerad, tredje starten | LaunchState: COLD TotalTime: 1031 WaitTime: 1035 | biblioteket synligt i UI-trädet inom 3754 ms (upplösning cirka 1 s) | +1s31ms
+== C. Ren installation: avinstallera, installera, första starten
+Success
+ren installation, första starten | LaunchState: COLD TotalTime: 1329 WaitTime: 1331 | biblioteket synligt i UI-trädet inom 4156 ms (upplösning cirka 1 s) | +1s329ms
+ren installation, andra starten | LaunchState: COLD TotalTime: 1090 WaitTime: 1093 | biblioteket synligt i UI-trädet inom 3849 ms (upplösning cirka 1 s) | +1s90ms

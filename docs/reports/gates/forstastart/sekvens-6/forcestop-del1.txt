@@ -1,0 +1,3 @@
+
+se.c64.dmzreader.StatisticsDeviceTest:INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0
