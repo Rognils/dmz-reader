@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -39,6 +38,7 @@ import androidx.navigation.navArgument
 import se.c64.dmzreader.AppContainer
 import se.c64.dmzreader.BuildConfig
 import se.c64.dmzreader.ui.about.AboutScreen
+import se.c64.dmzreader.ui.components.BarChartIcon
 import se.c64.dmzreader.ui.favorites.FavoritesScreen
 import se.c64.dmzreader.ui.favorites.FavoritesViewModel
 import se.c64.dmzreader.ui.issue.IssueScreen
@@ -104,7 +104,7 @@ private val tabs = listOf(
     Tab(Routes.LIBRARY_TAB, "Bibliotek", Icons.AutoMirrored.Filled.List),
     Tab(Routes.SEARCH, "Sök", Icons.Filled.Search),
     Tab(Routes.FAVORITES, "Favoriter", Icons.Filled.Favorite),
-    Tab(Routes.STATISTICS, "Statistik", Icons.Filled.Info),
+    Tab(Routes.STATISTICS, "Statistik", BarChartIcon),
 )
 
 @Composable
