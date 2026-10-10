@@ -299,7 +299,7 @@ Poängen för varje kontrollerad sida står i `data/hq_mapping_report.json`. `ma
 
 ## Köra appens tester på telefonen (`device_test.sh`)
 
-De instrumenterade testerna körs aldrig mot appens riktiga data. Testpaketet har en egen testkörare, `se.c64.dmzreader.IsolatedTestRunner`, som startar appen med en egen databas, egna inställningar, eget `filesDir` och eget `cacheDir` under `app_dmz_test/`. Katalogen tas bort när körningen är klar. Den vanliga testköraren finns inte i testpaketet, så testerna går inte att starta mot riktig data av misstag.
+De instrumenterade testerna körs aldrig mot appens riktiga data. De körs i utvecklingsbygget, som har ett eget app-ID (`se.c64.dmzreader.debug`, "DMZ Reader DEV") och ligger bredvid användarens app (`se.c64.dmzreader`) utan att dela något med den (ADR 0023). Testpaketet har dessutom en egen testkörare, `se.c64.dmzreader.IsolatedTestRunner`, som startar appen med en egen databas, egna inställningar, eget `filesDir` och eget `cacheDir` under `app_dmz_test/`. Katalogen tas bort när körningen är klar. Den vanliga testköraren finns inte i testpaketet, så testerna går inte att starta mot riktig data av misstag.
 
 ```bash
 ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
@@ -308,7 +308,9 @@ adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 tools/device_test.sh            # hela sviten, omstartstestet och tvångsstoppet
 ```
 
-Skriptet tar ett fingeravtryck av användarens data före och efter (SHA-256 för databasen efter checkpoint, radantal per tabell, och namn, storlek, tid och SHA-256 för filerna i läs-cachen, nedladdningarna och `filesDir/data`) och avslutar med fel om något skiljer sig.
+Skriptet tar ett fingeravtryck av användarens app (`se.c64.dmzreader`) före och efter (SHA-256 för databasen efter checkpoint, radantal per tabell, och namn, storlek, tid och SHA-256 för filerna i läs-cachen, nedladdningarna och `filesDir/data`) och avslutar med fel om något skiljer sig.
+
+Fingeravtrycket kräver att användarens app går att läsa med `run-as`, alltså att den är ett debug-bygge. Är den ett release-bygge hoppas fingeravtrycket över, och skriptet säger det. `tools/device_test.sh KATALOG --fingerprint NAMN` tar bara ett fingeravtryck.
 
 PDF:en som testerna läser i läggs på telefonen från datorns `cache/pdf/`, i `/data/local/tmp/dmz-test-pdfs/`, och tas bort efteråt. Två tester prövar själva nedladdningen och hämtar 1986 nr 1 (15 MB) från arkivet.
 
@@ -329,7 +331,7 @@ Ett enskilt test utan fingeravtryck:
 
 ```bash
 adb shell am instrument -w -e class se.c64.dmzreader.StatisticsDeviceTest \
-    se.c64.dmzreader.test/se.c64.dmzreader.IsolatedTestRunner
+    se.c64.dmzreader.debug.test/se.c64.dmzreader.IsolatedTestRunner
 ```
 
 Kör aldrig `./gradlew connectedDebugAndroidTest`: det avinstallerar appen, och därmed användarens data.

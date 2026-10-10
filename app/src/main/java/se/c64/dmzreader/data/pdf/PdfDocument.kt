@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.pdf.PdfRenderer
+import android.os.Debug
 import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.util.Log
@@ -24,6 +25,8 @@ import java.io.Closeable
 import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.RejectedExecutionException
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.TimeUnit
 
 /** En genomförd rendering och hur lång tid den tog. */
 data class RenderRecord(val kind: String, val pageNumber: Int, val width: Int, val height: Int, val millis: Long)
@@ -56,6 +59,14 @@ class PdfDocument private constructor(
 
     // Sidor som har renderats sedan PDF:en senast öppnades. Bara renderartråden rör den.
     private val pagesRenderedSinceOpen = HashSet<Int>()
+
+    private val scheduler = dispatcher.executor as ScheduledExecutorService
+
+    // Räknas upp för varje rendering. Bara renderartråden rör den.
+    private var renderGeneration = 0L
+
+    /** Appens native heap när filen senast öppnades. Jämförs med läget före varje rendering. */
+    private var nativeHeapAtOpen = nativeHeapBytes()
     private val pageSizes = arrayOfNulls<PageSize>(pageCount)
     private val whitePaint = Paint().apply { color = Color.WHITE }
 
@@ -111,7 +122,7 @@ class PdfDocument private constructor(
             val started = SystemClock.elapsedRealtime()
             // PdfRenderer ritar på genomskinlig botten. Tidningssidor ska vara vita.
             bitmap.eraseColor(Color.WHITE)
-            beforeRendering(pageNumber)
+            beforeRendering(listOf(pageNumber))
             usePage(pageNumber) { page ->
                 page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
             }
@@ -127,8 +138,8 @@ class PdfDocument private constructor(
         renderOwned(width, height, { RenderUrgency.CURRENT }) { bitmap ->
             val started = SystemClock.elapsedRealtime()
             val canvas = Canvas(bitmap)
+            beforeRendering(placements.map { it.pageNumber })
             for (placement in placements) {
-                beforeRendering(placement.pageNumber)
                 usePage(placement.pageNumber) { page ->
                     canvas.drawRect(
                         placement.left,
@@ -207,7 +218,27 @@ class PdfDocument private constructor(
         } catch (e: Throwable) {
             task.done.completeExceptionally(e)
         }
+        releaseWhenIdle()
     }
+
+    /**
+     * Släpper PDF-motorns sparade bilder när ingenting har ritats på en stund och de är stora.
+     * En sida i 600 dpi kan hålla över 600 MB så länge den är den senast ritade. När den väl
+     * visas behövs det inte längre: nästa zoom eller panorering avkodar sidan igen.
+     */
+    private fun releaseWhenIdle() {
+        val generation = ++renderGeneration
+        try {
+            scheduler.schedule({
+                val idle = generation == renderGeneration && synchronized(waiting) { waiting.isEmpty() }
+                if (idle && !closed && nativeHeapBytes() - nativeHeapAtOpen > REOPEN_ABOVE_BYTES) reopen("idle")
+            }, IDLE_RELEASE_MILLIS, TimeUnit.MILLISECONDS)
+        } catch (e: RejectedExecutionException) {
+            // PDF:en håller på att stängas.
+        }
+    }
+
+    private fun nativeHeapBytes(): Long = Debug.getNativeHeapAllocatedSize()
 
     private inline fun <T> usePage(pageNumber: Int, block: (PdfRenderer.Page) -> T): T {
         check(!closed) { "PDF:en är stängd" }
@@ -217,22 +248,38 @@ class PdfDocument private constructor(
 
     /**
      * PDF-motorn sparar avkodade bilder för varje sida den har ritat, så länge
-     * dokumentet är öppet. För nummer skannade i hög upplösning växer det med
-     * tiotals MB per sida. Efter [REOPEN_AFTER_PAGES] olika sidor öppnas därför
-     * filen om, vilket släpper det sparade.
+     * dokumentet är öppet. Filen öppnas därför om, vilket släpper det sparade, i två fall:
+     *
+     * - efter [REOPEN_AFTER_PAGES] olika sidor, som håller minnet nere för vanliga nummer
+     * - när det sparade har vuxit över [REOPEN_ABOVE_BYTES] och hör till andra sidor än
+     *   dem som ska ritas nu, eller när ingenting har ritats på [IDLE_RELEASE_MILLIS]. Sidor skannade i 600 dpi (1995 nr 15) kostar 150–250 MB
+     *   styck, och fyra sådana är för mycket. Då sparas bara den sida som visas.
+     *
+     * Sidorna som ritas i samma anrop ([pages], ett uppslag) får alltid ligga kvar
+     * tillsammans, så att panorering i ett uppslag inte avkodar om båda sidorna varje gång.
+     * Tillväxten mäts på hela appens native heap sedan filen öppnades. Den innehåller
+     * också appens egna bilder, så gränsen har marginal för dem.
      */
-    private fun beforeRendering(pageNumber: Int) {
-        if (pageNumber in pagesRenderedSinceOpen) return
-        if (pagesRenderedSinceOpen.size >= REOPEN_AFTER_PAGES) {
-            val started = SystemClock.elapsedRealtime()
-            runCatching { renderer.close() }
-            runCatching { descriptor.close() }
-            descriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-            renderer = PdfRenderer(descriptor)
-            pagesRenderedSinceOpen.clear()
-            Log.d(LOG_TAG, "reopen ms=${SystemClock.elapsedRealtime() - started}")
-        }
-        pagesRenderedSinceOpen += pageNumber
+    private fun beforeRendering(pages: List<Int>) {
+        val newPages = pages.filter { it !in pagesRenderedSinceOpen }
+        val tooMany = newPages.isNotEmpty() && pagesRenderedSinceOpen.size + newPages.size > REOPEN_AFTER_PAGES
+        val grown = nativeHeapBytes() - nativeHeapAtOpen
+        val tooLarge = grown > REOPEN_ABOVE_BYTES && pagesRenderedSinceOpen.any { it !in pages }
+        if (tooMany || tooLarge) reopen(if (tooLarge) "size" else "pages")
+        pagesRenderedSinceOpen += pages
+    }
+
+    /** Stänger och öppnar filen, vilket släpper allt PDF-motorn har sparat. Körs bara på renderartråden. */
+    private fun reopen(reason: String) {
+        val started = SystemClock.elapsedRealtime()
+        val grown = nativeHeapBytes() - nativeHeapAtOpen
+        runCatching { renderer.close() }
+        runCatching { descriptor.close() }
+        descriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+        renderer = PdfRenderer(descriptor)
+        pagesRenderedSinceOpen.clear()
+        nativeHeapAtOpen = nativeHeapBytes()
+        Log.d(LOG_TAG, "reopen ms=${SystemClock.elapsedRealtime() - started} reason=$reason grownMb=${grown / 1_000_000}")
     }
 
     private fun logRender(kind: String, pageNumber: Int, width: Int, height: Int, started: Long) {
@@ -261,6 +308,12 @@ class PdfDocument private constructor(
 
         /** Antal olika sidor som renderas innan filen öppnas om. */
         const val REOPEN_AFTER_PAGES = 4
+
+        /** Så mycket får native heap växa efter att filen öppnats, innan andra sidors sparade bilder släpps. */
+        const val REOPEN_ABOVE_BYTES = 192L * 1024 * 1024
+
+        /** Så länge efter den senaste renderingen släpps stora sparade bilder. */
+        const val IDLE_RELEASE_MILLIS = 3_000L
         private val renderLog = ArrayList<RenderRecord>()
 
         /** De senaste renderingarna, för mätning av renderingstider. */
@@ -270,7 +323,7 @@ class PdfDocument private constructor(
 
         /** Öppnar en PDF. Kastar ett undantag om filen inte är en läsbar PDF. */
         suspend fun open(file: File): PdfDocument {
-            val dispatcher = Executors.newSingleThreadExecutor { runnable ->
+            val dispatcher = Executors.newSingleThreadScheduledExecutor { runnable ->
                 Thread(runnable, "pdf-renderer")
             }.asCoroutineDispatcher()
             return try {

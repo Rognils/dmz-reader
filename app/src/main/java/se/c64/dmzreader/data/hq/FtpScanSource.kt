@@ -54,7 +54,7 @@ class FtpScanSource(
     /** Sant medan en anslutning är öppen. */
     val connected: Boolean get() = client != null
 
-    override suspend fun fetch(url: String, target: File, onProgress: (bytes: Long, total: Long?) -> Unit) {
+    override suspend fun fetch(url: String, target: File, onProgress: (bytes: Long, total: Long?) -> Unit): Long =
         lock.withLock {
             closeJob?.cancel()
             try {
@@ -63,9 +63,8 @@ class FtpScanSource(
                 closeLater()
             }
         }
-    }
 
-    private suspend fun transfer(url: String, target: File, onProgress: (Long, Long?) -> Unit) {
+    private suspend fun transfer(url: String, target: File, onProgress: (Long, Long?) -> Unit): Long {
         val uri = try {
             URI(url)
         } catch (e: Exception) {
@@ -80,8 +79,7 @@ class FtpScanSource(
         var reused = client != null
         while (true) {
             try {
-                retrieve(connect(uri.host, port), path, target, onProgress)
-                return
+                return retrieve(connect(uri.host, port), path, target, onProgress)
             } catch (e: CancellationException) {
                 // En avbruten överföring lämnar anslutningen i ett okänt läge.
                 disconnect("avbruten hämtning")
@@ -137,7 +135,8 @@ class FtpScanSource(
         return created
     }
 
-    private suspend fun retrieve(ftp: FTPClient, path: String, target: File, onProgress: (Long, Long?) -> Unit) {
+    private suspend fun retrieve(ftp: FTPClient, path: String, target: File, onProgress: (Long, Long?) -> Unit): Long {
+        // Filens storlek enligt servern (SIZE). Utan den går det inte att veta att hela filen kom fram.
         val total = try {
             ftp.getSize(path)?.trim()?.toLongOrNull()
         } catch (e: IOException) {
@@ -145,17 +144,20 @@ class FtpScanSource(
         } catch (e: Exception) {
             null
         }
-        if (total == null && ftp.replyCode == FTPReply.FILE_UNAVAILABLE) {
-            throw ScanFetchException(ScanFailure.NOT_FOUND, "Skanningen finns inte i arkivet.")
+        if (total == null) {
+            throw when (ftp.replyCode) {
+                FTPReply.FILE_UNAVAILABLE -> ScanFetchException(ScanFailure.NOT_FOUND, "Skanningen finns inte i arkivet.")
+                else -> ScanFetchException(ScanFailure.SERVER, "Arkivet uppger inte filens storlek (kod ${ftp.replyCode}).")
+            }
         }
         var offset = if (target.isFile) target.length() else 0L
-        if (total != null && offset > total) {
+        if (offset > total) {
             target.delete()
             offset = 0
         }
-        if (total != null && offset == total && total > 0) {
+        if (offset == total && total > 0) {
             onProgress(offset, total)
-            return
+            return total
         }
         ftp.restartOffset = offset
         val input = ftp.retrieveFileStream(path) ?: throw when (ftp.replyCode) {
@@ -184,10 +186,14 @@ class FtpScanSource(
         if (!ftp.completePendingCommand()) {
             throw ScanFetchException(ScanFailure.SERVER, "Överföringen avslutades med ett fel (kod ${ftp.replyCode}).")
         }
-        if (total != null && received != total) {
+        // Servern kan säga att allt gick bra fast överföringen tog slut i förtid. Storleken avgör.
+        if (received != total || target.length() != total) {
+            // För många byte går inte att fortsätta på. För få ligger kvar och fortsätts nästa gång.
+            if (target.length() > total) target.delete()
             throw ScanFetchException(ScanFailure.NETWORK, "Överföringen bröts: $received av $total byte kom fram.")
         }
-        onProgress(received, total ?: received)
+        onProgress(received, total)
+        return total
     }
 
     private fun disconnect(reason: String) {

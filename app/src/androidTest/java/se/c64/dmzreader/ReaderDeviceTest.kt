@@ -43,7 +43,7 @@ import java.io.File
  * begärs med argumentet dmzVerify, eftersom de hämtar stora filer:
  *
  *   adb shell am instrument -w -e class se.c64.dmzreader.ReaderDeviceTest \
- *     -e dmzVerify true se.c64.dmzreader.test/se.c64.dmzreader.IsolatedTestRunner
+ *     -e dmzVerify true se.c64.dmzreader.debug.test/se.c64.dmzreader.IsolatedTestRunner
  */
 @RunWith(AndroidJUnit4::class)
 class ReaderDeviceTest {
@@ -91,7 +91,8 @@ class ReaderDeviceTest {
         // Numret kan ligga längre ned i rutnätet än det som ryms på skärmen.
         rule.onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription(cover))
         rule.onNodeWithContentDescription(cover).performClick()
-        waitFor { exists("Läs") }
+        // Knappen heter "Fortsätt på sida N" när numret har läsdata.
+        waitFor { exists("Läs") || rule.onAllNodes(hasText("Fortsätt på sida", substring = true)).fetchSemanticsNodes().isNotEmpty() }
     }
 
     private fun tapZone(fractionX: Float) {
@@ -377,6 +378,86 @@ class ReaderDeviceTest {
         rule.onNodeWithText("Flytta uppslag").performClick()
         waitForPage("Sida 6–7 av 28")
         rule.activityRule.scenario.onActivity { it.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED }
+    }
+
+    /**
+     * Minnet på en enskild tung sida: 1995 nr 15, sida 15, vars skanning är arkivets största.
+     * Bläddrar dit sida för sida och mäter före zoom, vid högsta zoom och under panorering.
+     */
+    @Test
+    fun verifyMemoryOnPage15() {
+        assumeTrue(verifying())
+        assumeTrue(File(pdfDirectory, "datormagazin-1995-15.pdf").isFile)
+        openReader("Datormagazin", 1995, 14, "Nr 15")
+        showControls()
+        repeat(14) { tapZone(0.85f); waitForCurrentPageInFullResolution() }
+        waitForPage("Sida 15 av ")
+        tapZone(0.5f) // dölj kontrollerna
+        Thread.sleep(3_000)
+        logMemory("p15-before")
+        Thread.sleep(4_000)
+        zoomToMaximum()
+        logMemory("p15-maxzoom")
+        repeat(4) { step ->
+            rule.onNodeWithTag("reader").performTouchInput {
+                if (step % 2 == 0) swipeUp(startY = height * 0.7f, endY = height * 0.3f) else swipeLeft(startX = width * 0.7f, endX = width * 0.3f)
+            }
+            settle(expectHighRes = true)
+            logMemory("p15-pan$step")
+        }
+        Thread.sleep(6_000)
+        logMemory("p15-held")
+    }
+
+    /**
+     * Minnet när ett nummer öppnas direkt på en tung sida, som med "Fortsätt på sida 15":
+     * 1995 nr 15, sida 15. Mäter direkt efter öppningen och en stund senare.
+     */
+    @Test
+    fun verifyMemoryOpenedOnPage15() {
+        assumeTrue(verifying())
+        assumeTrue(File(pdfDirectory, "datormagazin-1995-15.pdf").isFile)
+        kotlinx.coroutines.runBlocking {
+            appContainer(context).database.issueUserStateDao().upsert(
+                se.c64.dmzreader.data.db.IssueUserState(issueId = "datormagazin-1995-15", lastPage = 15, maxPageReached = 15, updatedAt = System.currentTimeMillis()),
+            )
+        }
+        PdfDocument.clearRenderLog()
+        openIssue("Datormagazin", 1995, 14, "Nr 15")
+        rule.onNodeWithText("Fortsätt på sida 15").performClick()
+        waitFor(900_000) { readerShown() }
+        if (arguments.getString("dmzControls") != "false") {
+            showControls()
+            waitForPage("Sida 15 av ")
+            tapZone(0.5f) // dölj kontrollerna
+        }
+        Thread.sleep(1_000)
+        logMemory("open15-before")
+        Thread.sleep(8_000)
+        logMemory("open15-maxzoom")
+        Thread.sleep(8_000)
+        logMemory("open15-pan3")
+        Thread.sleep(6_000)
+        logMemory("open15-held")
+        // PDF-motorns sparade bilder ska vara släppta när läsaren har stått still. Före rättningen
+        // i 1.0-rc1 låg native heap kvar på cirka 640 MB här.
+        val nativeMb = Debug.getNativeHeapAllocatedSize() / (1024 * 1024)
+        assertTrue("native heap är $nativeMb MB", nativeMb < 300)
+    }
+
+    /** Minnet sida för sida genom de första 22 sidorna i 1995 nr 15, där sidorna 12–20 är skannade i hög upplösning. */
+    @Test
+    fun verifyMemoryPageByPage() {
+        assumeTrue(verifying())
+        assumeTrue(File(pdfDirectory, "datormagazin-1995-15.pdf").isFile)
+        openReader("Datormagazin", 1995, 14, "Nr 15")
+        showControls()
+        tapZone(0.5f)
+        for (page in 2..22) {
+            tapZone(0.85f)
+            Thread.sleep(3_500)
+            logMemory("walk-p$page")
+        }
     }
 
     private companion object {

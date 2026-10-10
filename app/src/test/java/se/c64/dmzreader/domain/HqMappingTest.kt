@@ -79,6 +79,8 @@ class HqMappingTest {
         assertEquals(90, hqScanFor(rotated, 1, 28)!!.rotation)
         assertEquals(180, hqScanFor(rotated, 5, 28)!!.rotation)
         assertEquals(0, hqScanFor(rotated, 2, 28)!!.rotation)
+        // 0 får stå uttryckligen och betyder detsamma som att sidan inte nämns.
+        assertEquals(0, hqScanFor(info(rotation = """{"1":0}"""), 1, 28)!!.rotation)
         // Ogiltiga värden och trasig text ger ingen vridning.
         assertEquals(0, hqScanFor(info(rotation = """{"1":45}"""), 1, 28)!!.rotation)
         assertEquals(0, hqScanFor(info(rotation = "inte json"), 1, 28)!!.rotation)

@@ -49,7 +49,10 @@ class HqRepositoryTest {
         /** Anropas när filen är färdigskriven, medan överföringen fortfarande håller sin tur. */
         var onFinished: () -> Unit = {}
 
-        override suspend fun fetch(url: String, target: File, onProgress: (Long, Long?) -> Unit) {
+        /** Så många byte skrivs, när källan ska lämna en kortare fil än den uppger. null betyder hela filen. */
+        var writeOnly: Int? = null
+
+        override suspend fun fetch(url: String, target: File, onProgress: (Long, Long?) -> Unit): Long {
             val now = running.incrementAndGet()
             peak.updateAndGet { maxOf(it, now) }
             try {
@@ -61,9 +64,10 @@ class HqRepositoryTest {
                 onProgress(bytes.size / 2L, bytes.size.toLong())
                 gate?.await()
                 delay(delayMillis)
-                target.writeBytes(bytes)
+                target.writeBytes(writeOnly?.let { bytes.copyOf(it) } ?: bytes)
                 onProgress(bytes.size.toLong(), bytes.size.toLong())
                 onFinished()
+                return bytes.size.toLong()
             } finally {
                 running.decrementAndGet()
             }
@@ -126,7 +130,7 @@ class HqRepositoryTest {
     @Test
     fun `an unexpected error is a failure, not a crash`() = runBlocking {
         val broken = object : ScanSource {
-            override suspend fun fetch(url: String, target: File, onProgress: (Long, Long?) -> Unit) = error("oväntat")
+            override suspend fun fetch(url: String, target: File, onProgress: (Long, Long?) -> Unit): Long = error("oväntat")
         }
         val result = HqRepository(cache, broken, transfers).page(issueId, scan(1))
         assertEquals(ScanFailure.SERVER, (result as HqResult.Failure).failure)
@@ -209,6 +213,37 @@ class HqRepositoryTest {
         source.gate = null
         assertTrue(repository.page(issueId, scan(1)) is HqResult.Success)
         assertFalse(cache.partFile(issueId, "sida-1.jpg").exists())
+    }
+
+    @Test
+    fun `a download that came up short is not shown as a complete page`() = runBlocking {
+        // Källan säger att allt gick bra, men filen är kortare än servern uppgav.
+        source.writeOnly = 1_000
+        val result = repository.page(issueId, scan(1))
+        assertEquals(ScanFailure.NETWORK, (result as HqResult.Failure).failure)
+        assertFalse(repository.isCached(issueId, scan(1)))
+        assertFalse(cache.file(issueId, "sida-1.jpg").exists())
+        assertEquals(1_000L, cache.partFile(issueId, "sida-1.jpg").length())
+        // Nästa försök, med hela filen, lyckas.
+        source.writeOnly = null
+        val retried = repository.page(issueId, scan(1)) as HqResult.Success
+        assertArrayEquals(content(scan(1).url), retried.file.readBytes())
+        assertEquals(2, source.fetched.size)
+    }
+
+    @Test
+    fun `a truncated file in the cache is detected and fetched again`() = runBlocking {
+        val first = repository.page(issueId, scan(1)) as HqResult.Success
+        val whole = first.file.readBytes()
+        // Filen i cachen kortas bakom ryggen på appen.
+        first.file.writeBytes(whole.copyOf(whole.size / 3))
+        assertFalse(repository.isCached(issueId, scan(1)))
+
+        val again = repository.page(issueId, scan(1)) as HqResult.Success
+        assertFalse(again.fromCache)
+        assertArrayEquals(whole, again.file.readBytes())
+        assertEquals(2, source.fetched.size)
+        assertTrue((repository.page(issueId, scan(1)) as HqResult.Success).fromCache)
     }
 
     @Test

@@ -1,0 +1,4 @@
+MEMORY open15-before pssKb=924656 javaHeapKb=10179 nativeHeapKb=793521 maxJavaKb=262144
+MEMORY open15-maxzoom pssKb=870119 javaHeapKb=8666 nativeHeapKb=640200 maxJavaKb=262144
+MEMORY open15-pan3 pssKb=857495 javaHeapKb=7782 nativeHeapKb=640076 maxJavaKb=262144
+MEMORY open15-held pssKb=857488 javaHeapKb=7782 nativeHeapKb=640077 maxJavaKb=262144

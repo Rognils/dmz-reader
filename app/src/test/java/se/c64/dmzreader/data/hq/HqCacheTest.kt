@@ -26,7 +26,7 @@ class HqCacheTest {
         val part = partFile(issueId, name)
         part.parentFile!!.mkdirs()
         part.writeBytes(ByteArray(size))
-        return commit(issueId, name)
+        return commit(issueId, name, size.toLong())
     }
 
     @Test
@@ -113,12 +113,63 @@ class HqCacheTest {
     }
 
     @Test
-    fun `an empty file is not a cached page`() {
+    fun `a file without a recorded size is not a cached page`() {
+        // En fil som hamnat i katalogen på annat sätt än genom en verifierad hämtning.
         val cache = cache()
-        val file = cache.file("x", "tom.jpg")
+        val file = cache.file("x", "okand.jpg")
         file.parentFile!!.mkdirs()
+        file.writeBytes(ByteArray(100))
+        assertNull(cache.cached("x", "okand.jpg"))
+        assertFalse(file.exists())
         file.writeBytes(ByteArray(0))
-        assertNull(cache.cached("x", "tom.jpg"))
+        assertNull(cache.cached("x", "okand.jpg"))
+    }
+
+    @Test
+    fun `a truncated file in the cache is detected and removed`() {
+        val cache = cache()
+        val file = cache.add("x", "a.jpg", 400)
+        assertEquals(file, cache.cached("x", "a.jpg"))
+        // Filen kortas, som efter ett diskfel eller en avbruten skrivning.
+        file.writeBytes(ByteArray(250))
+        assertNull(cache.cached("x", "a.jpg"))
+        assertFalse(file.exists())
+        // Uppgiften om storleken är också borta, så att nästa hämtning börjar rent.
+        assertEquals(0L, cache.sizeBytes())
+        // Detsamma gäller en fil som blivit längre.
+        val other = cache.add("x", "b.jpg", 400)
+        other.appendBytes(ByteArray(10))
+        assertNull(cache.cached("x", "b.jpg"))
+    }
+
+    @Test
+    fun `a download of the wrong size is never moved into the cache`() {
+        val cache = cache()
+        val part = cache.partFile("x", "a.jpg")
+        part.parentFile!!.mkdirs()
+        part.writeBytes(ByteArray(250))
+        for (expected in listOf(400L, 249L, 0L, -1L)) {
+            try {
+                cache.commit("x", "a.jpg", expected)
+                org.junit.Assert.fail("skulle ha vägrat för $expected")
+            } catch (e: java.io.IOException) {
+                // väntat
+            }
+        }
+        assertFalse(cache.file("x", "a.jpg").exists())
+        assertNull(cache.cached("x", "a.jpg"))
+        // Det hämtade ligger kvar som .part, så att hämtningen kan fortsätta.
+        assertEquals(250L, part.length())
+        assertEquals(cache.file("x", "a.jpg"), cache.commit("x", "a.jpg", 250L))
+        assertEquals(cache.file("x", "a.jpg"), cache.cached("x", "a.jpg"))
+    }
+
+    @Test
+    fun `removing a page for space removes its recorded size too`() {
+        val cache = cache(maxBytes = 500)
+        cache.add("x", "a.jpg", 400)
+        cache.add("x", "b.jpg", 400)
+        assertEquals(listOf("b.jpg", "b.jpg.size"), File(root, "hq/x").list()!!.sorted())
     }
 
     @Test

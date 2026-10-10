@@ -1,0 +1,4 @@
+<resources>
+    <!-- Provvarianten av release har eget namn och app-ID (se.c64.dmzreader.rc). -->
+    <string name="app_name">DMZ Reader RC</string>
+</resources>

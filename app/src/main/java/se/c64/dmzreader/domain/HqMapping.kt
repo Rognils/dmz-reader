@@ -31,7 +31,7 @@ data class HqIssueInfo(
     val scanPageCount: Int?,
     /** hqPageMap som JSON-text: {"1": "fil.jpg", "2": null}. null när numret följer huvudregeln. */
     val pageMapJson: String? = null,
-    /** hqPageRotation som JSON-text: {"1": 90}. Bara sidor som ska vridas finns med. */
+    /** hqPageRotation som JSON-text: {"1": 90}. Tillåtna värden är 0, 90, 180 och 270. En sida som inte nämns har 0. */
     val pageRotationJson: String? = null,
 )
 

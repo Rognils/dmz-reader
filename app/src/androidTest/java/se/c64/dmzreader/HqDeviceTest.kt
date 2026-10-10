@@ -50,7 +50,7 @@ class FakeScanSource : ScanSource {
     @Volatile
     var offline = false
 
-    override suspend fun fetch(url: String, target: File, onProgress: (bytes: Long, total: Long?) -> Unit) {
+    override suspend fun fetch(url: String, target: File, onProgress: (bytes: Long, total: Long?) -> Unit): Long {
         if (offline) throw ScanFetchException(ScanFailure.NETWORK, "inget nät (test)")
         fetched += url.substringAfterLast('/')
         val bitmap = Bitmap.createBitmap(1800, 2550, Bitmap.Config.ARGB_8888)
@@ -74,6 +74,7 @@ class FakeScanSource : ScanSource {
             output.write(bytes, bytes.size / 2, bytes.size - bytes.size / 2)
         }
         onProgress(bytes.size.toLong(), bytes.size.toLong())
+        return bytes.size.toLong()
     }
 }
 
