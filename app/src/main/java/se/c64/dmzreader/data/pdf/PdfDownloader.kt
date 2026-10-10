@@ -6,6 +6,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.job
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import se.c64.dmzreader.data.network.UserAgentInterceptor
 import okhttp3.Request
 import okhttp3.Response
 import java.io.File
@@ -211,7 +212,8 @@ class PdfDownloader(
          * En egen klient för PDF:er, skild från bildladdarens. Ingen total
          * tidsgräns: en fil på flera hundra MB får ta den tid den tar.
          */
-        fun createHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        fun createHttpClient(logUserAgent: ((String) -> Unit)? = null): OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(UserAgentInterceptor(log = logUserAgent))
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .callTimeout(0, TimeUnit.SECONDS)
