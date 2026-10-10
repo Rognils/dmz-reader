@@ -43,7 +43,7 @@ Sökning på titel, år och nummer fungerar direkt. För att söka i tidningarna
 
 Efter importen kan du ta bort den hämtade filen. Allt annat i appen fungerar utan sökindex.
 
-**E-postadresser och telefonnummer är maskerade i sökindexet.** De visas som `[e-post]` och `[telefon]` i sökträffarnas utdrag, och det går inte att söka på dem. I tidningarna är ingenting maskerat: sidorna visas som de trycktes.
+**Kontaktuppgifter är maskerade i sökindexet.** I sökträffarnas utdrag betyder `•••` att en kontaktuppgift har tagits bort: ett telefonnummer, en e-postadress, ett postgironummer eller ett personnummer. Det går inte att söka på dem. Tidningarna i läsaren är oförändrade: sidorna visas som de trycktes.
 
 ## Licens
 
