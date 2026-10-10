@@ -89,7 +89,7 @@ class ReaderDeviceTest {
         val cover = "$publication $year $label"
         waitFor { rule.onAllNodes(hasScrollToNodeAction()).fetchSemanticsNodes().isNotEmpty() }
         // Numret kan ligga längre ned i rutnätet än det som ryms på skärmen.
-        rule.onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription(cover))
+        rule.scrollToNodeWhenLoaded(hasContentDescription(cover))
         rule.onNodeWithContentDescription(cover).performClick()
         // Knappen heter "Fortsätt på sida N" när numret har läsdata.
         waitFor { exists("Läs") || rule.onAllNodes(hasText("Fortsätt på sida", substring = true)).fetchSemanticsNodes().isNotEmpty() }

@@ -1,0 +1,12 @@
+yttre fingeravtryck: se.c64.dmzreader går inte att läsa med run-as (release-bygge)
+== paketet (version, installation, signatur)
+dataDir=/data/user/0/se.c64.dmzreader
+firstInstallTime=2026-10-10 11:13:39
+lastUpdateTime=2026-10-10 12:37:52
+signatures=PackageSignatures{3d36fca version:2, signatures:[6e0637d8], past signatures:[]}
+versionCode=9902 minSdk=26 targetSdk=37
+versionName=1.0.0-rc2
+== senaste gången appen syntes eller stoppades (usagestats)
+time="2026-10-10 12:39:11" type=ACTIVITY_STOPPED package=se.c64.dmzreader
+== processen (ska inte vara igång)
+ingen process

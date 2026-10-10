@@ -125,7 +125,7 @@ class HqDeviceTest {
         waitFor { rule.onAllNodes(hasContentDescription(year, substring = true)).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithContentDescription(year, substring = true).performClick()
         waitFor { rule.onAllNodes(hasScrollToNodeAction()).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription("Datormagazin 1986 Nr 1"))
+        rule.scrollToNodeWhenLoaded(hasContentDescription("Datormagazin 1986 Nr 1"))
         rule.onNodeWithContentDescription("Datormagazin 1986 Nr 1").performClick()
         waitFor { exists("Läs") }
         rule.onNodeWithText("Läs").performClick()

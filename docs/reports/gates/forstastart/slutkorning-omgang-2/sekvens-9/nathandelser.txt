@@ -1,0 +1,23 @@
+10-10 17:24:46.417 17265 17280 I TestRunner: started: downloadThenReadInAirplaneModeThenRemove(se.c64.dmzreader.OfflineDeviceTest)
+10-10 17:24:47.788 17265 17283 D DmzNet  : User-Agent: DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader) · GET dmzarkivet.se/pdf/198601.pdf
+10-10 17:24:48.692  2968  2968 I PhoneGlobals: Turning radio off - airplane
+10-10 17:24:48.732  1603  2649 D ConnectivityService: [280 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTED to DISCONNECTED
+10-10 17:24:48.813  1603  2649 D ConnectivityService: [278 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTED to DISCONNECTED
+10-10 17:24:48.865  1603  2649 D ConnectivityService: [281 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTED to DISCONNECTED
+10-10 17:24:51.449  2968  2968 I PhoneGlobals: Turning radio on - airplane
+10-10 17:24:53.334  1603  2649 D ConnectivityService: [282 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTING
+10-10 17:24:53.471  1603  2649 D ConnectivityService: [282 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTED
+10-10 17:24:53.524  1603  2649 D ConnectivityService: [283 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTING
+10-10 17:24:53.564  1603  2649 D ConnectivityService: [283 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTED
+10-10 17:24:55.947  1603  2649 D ConnectivityService: [284 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTING
+10-10 17:24:56.032  1603  2649 D ConnectivityService: [284 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTED
+10-10 17:25:14.566 17265 17280 I TestRunner: finished: downloadThenReadInAirplaneModeThenRemove(se.c64.dmzreader.OfflineDeviceTest)
+10-10 17:25:14.568 17265 17280 I TestRunner: started: readDownloadTurnPageAndClose(se.c64.dmzreader.ReaderDeviceTest)
+10-10 17:25:15.723 17265 17402 D DmzNet  : User-Agent: DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader) · GET dmzarkivet.se/pdf/198601.pdf
+10-10 17:25:17.299  1603  5104 W WifiVendorHal: onDebugErrorAlert 14
+10-10 17:25:17.326  1603  2649 D ConnectivityService: [283 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTED to DISCONNECTED
+10-10 17:25:17.468 17265 17265 I DmzPdf  : datormagazin-1986-01: nedladdningen avslutades med NetworkError(message=Software caused connection abort)
+10-10 17:25:35.960  1603  2649 D ConnectivityService: [285 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTING
+10-10 17:25:37.097  1603  2649 D ConnectivityService: [285 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTED
+10-10 17:27:15.999 17265 17280 E TestRunner: failed: readDownloadTurnPageAndClose(se.c64.dmzreader.ReaderDeviceTest)
+10-10 17:27:16.000 17265 17280 I TestRunner: finished: readDownloadTurnPageAndClose(se.c64.dmzreader.ReaderDeviceTest)

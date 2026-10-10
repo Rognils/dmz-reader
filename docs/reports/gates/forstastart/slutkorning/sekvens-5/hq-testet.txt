@@ -1,0 +1,121 @@
+10-10 17:54:10.282 26500 26515 I TestRunner: started: hqPageNextPageAndOfflineFromCache(se.c64.dmzreader.HqDeviceTest)
+10-10 17:54:11.753 26500 26691 D DmzReader: pageSizes pages=28 ms=239
+10-10 17:54:11.769 26500 26500 D InsetsController: Setting requestedVisibleTypes to 496 (was 503)
+10-10 17:54:11.889 26500 26691 D DmzReader: render kind=page page=1 size=360x507 ms=91
+10-10 17:54:12.095 26500 26691 D DmzReader: render kind=page page=1 size=1440x2030 ms=206
+10-10 17:54:12.147 26500 26691 D DmzReader: render kind=page page=2 size=360x512 ms=51
+10-10 17:54:12.254 26500 26691 D DmzReader: render kind=page page=2 size=1440x2050 ms=106
+10-10 17:54:12.258 26500 26500 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-001.jpg, 729797 byte på 222 ms
+10-10 17:54:12.361 26500 26542 D DmzReader: hq overview DMZ_1986-01-001.jpg 360x507 ms=22
+10-10 17:54:12.377 26500 26542 D DmzReader: hq overview DMZ_1986-01-001.jpg 360x510 ms=15
+10-10 17:54:12.425 26500 26542 D DmzReader: hq overview DMZ_1986-01-001.jpg 1440x2040 ms=47
+10-10 17:54:12.476 26500 26500 D DmzReader: pageturn pages=[2] prerendered=FULL
+10-10 17:54:12.577 26500 26691 D DmzReader: render kind=page page=3 size=360x507 ms=84
+10-10 17:54:12.688 26500 26691 D DmzReader: render kind=page page=3 size=1440x2030 ms=112
+10-10 17:54:12.738 26500 26500 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-002.jpg, 730728 byte på 211 ms
+10-10 17:54:12.756 26500 26691 D DmzReader: render kind=page page=4 size=360x512 ms=59
+10-10 17:54:12.822 26500 26542 D DmzReader: hq overview DMZ_1986-01-002.jpg 360x512 ms=20
+10-10 17:54:12.839 26500 26542 D DmzReader: hq overview DMZ_1986-01-002.jpg 360x510 ms=16
+10-10 17:54:12.865 26500 26691 D DmzReader: render kind=page page=4 size=1440x2050 ms=108
+10-10 17:54:12.893 26500 26542 D DmzReader: hq overview DMZ_1986-01-002.jpg 1440x2040 ms=54
+10-10 17:54:13.973 26500 26608 D DmzReader: hq region DMZ_1986-01-002.jpg 1440x3120 ms=72
+10-10 17:54:14.113 26500 26608 D DmzReader: hq region DMZ_1986-01-002.jpg 1440x3120 ms=72
+10-10 17:54:14.225 26500 26500 D DmzReader: pageturn pages=[2] prerendered=FULL
+10-10 17:54:14.299 26500 26691 D DmzReader: render kind=page page=3 size=360x507 ms=58
+10-10 17:54:14.388 26500 26500 D DmzReader: pageturn pages=[3] prerendered=PREVIEW
+10-10 17:54:14.406 26500 26691 D DmzReader: render kind=page page=3 size=1440x2030 ms=106
+10-10 17:54:14.433 26500 26500 I DmzHq   : HQ misslyckades: datormagazin-1986-01/DMZ_1986-01-003.jpg: inget nät (test)
+10-10 17:54:14.468 26500 26691 D DmzReader: render kind=page page=4 size=360x512 ms=55
+10-10 17:54:14.577 26500 26691 D DmzReader: render kind=page page=4 size=1440x2050 ms=108
+10-10 17:54:14.593 26500 26691 D DmzReader: reopen ms=8 reason=pages grownMb=107
+10-10 17:54:14.647 26500 26691 D DmzReader: render kind=page page=5 size=360x510 ms=62
+10-10 17:54:14.755 26500 26691 D DmzReader: render kind=page page=5 size=1440x2042 ms=108
+10-10 17:54:14.878 26500 26500 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-003.jpg, 731169 byte på 232 ms
+10-10 17:54:14.987 26500 26608 D DmzReader: hq overview DMZ_1986-01-003.jpg 360x507 ms=38
+10-10 17:54:15.008 26500 26608 D DmzReader: hq overview DMZ_1986-01-003.jpg 360x510 ms=20
+10-10 17:54:15.109 26500 26691 D DmzReader: render kind=page page=3 size=360x510 ms=77
+10-10 17:54:15.156 26500 26519 D DmzReader: hq overview DMZ_1986-01-003.jpg 360x507 ms=18
+10-10 17:54:15.160 26500 26691 D DmzReader: render kind=page page=3 size=360x507 ms=49
+10-10 17:54:15.208 26500 26519 D DmzReader: hq overview DMZ_1986-01-003.jpg 1440x2040 ms=52
+10-10 17:54:15.217 26500 26691 D DmzReader: render kind=page page=2 size=360x512 ms=57
+10-10 17:54:15.324 26500 26691 D DmzReader: render kind=page page=2 size=1440x2050 ms=107
+10-10 17:54:17.900 26500 26500 D InsetsController: Setting requestedVisibleTypes to 503 (was 496)
+10-10 17:54:18.426 26500 26515 E TestRunner: failed: hqPageNextPageAndOfflineFromCache(se.c64.dmzreader.HqDeviceTest)
+10-10 17:54:18.427 26500 26515 E TestRunner: ----- begin exception -----
+10-10 17:54:18.427 26500 26515 E TestRunner: java.lang.AssertionError
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.Assert.fail(Assert.java:87)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.Assert.assertTrue(Assert.java:42)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.Assert.assertTrue(Assert.java:53)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at se.c64.dmzreader.HqDeviceTest.hqPageNextPageAndOfflineFromCache(HqDeviceTest.kt:238)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:426)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:448)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(Unknown Source:8)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(Unknown Source:4)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:689)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(Unknown Source:8)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(Unknown Source:2)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:686)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(Unknown Source:8)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(Unknown Source:4)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:98)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:256)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:54)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlockingImpl(Builders.kt:30)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.BuildersKt.runBlockingImpl(Unknown Source:1)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK(Builders.concurrent.kt:172)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.BuildersKt.runBlockingK(Unknown Source:1)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.BuildersKt__Builders_concurrentKt.runBlockingK$default(Builders.concurrent.kt:157)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.BuildersKt.runBlockingK$default(Unknown Source:1)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:1)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:665)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:447)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+10-10 17:54:18.427 26500 26515 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2627)
+10-10 17:54:18.427 26500 26515 E TestRunner: ----- end exception -----
+10-10 17:54:18.428 26500 26515 I TestRunner: finished: hqPageNextPageAndOfflineFromCache(se.c64.dmzreader.HqDeviceTest)

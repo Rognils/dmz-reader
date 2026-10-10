@@ -20,6 +20,13 @@ Idéer som dök upp under arbetet med releasekandidaterna men som inte hör hemm
 ## Sökning
 
 - **Besked när sökindexet är äldre än arkivindexet**, med en förklaring av hur ett nytt hämtas.
+- **Hämtning av sökindex från GitHub-release.** Kräver publikt repo. Specifikation:
+  - Indexet hämtas aldrig automatiskt och aldrig vid uppstart.
+  - Sök-fliken utan index visar ett kort: "Fulltextsökning kräver ett sökindex på cirka 150 MB." Knapp: "Ladda ned sökindex". Kortet förklarar att allt annat fungerar utan index.
+  - Nedladdningen respekterar "Ladda ned endast via wifi", kan återupptas (Range), går via samma överföringsmekanism som PDF (en överföring åt gången) och kontrolleras mot SHA-256 från release-metadata före import.
+  - Importen sker med befintlig import-logik. Användardata rörs aldrig.
+  - Finns ett nyare index visas en notis i Inställningar, aldrig en automatisk hämtning.
+  - Källan är GitHub-release, aldrig arkivservern. Inget token i appen.
 - **Innehållsanalys och frågor på naturligt språk.** Planens avsnitt "Senare". Kräver ett eget beslut, bland annat om var en modell körs.
 
 ## Bokmärken, statistik och läsdata
@@ -39,10 +46,16 @@ Idéer som dök upp under arbetet med releasekandidaterna men som inte hör hemm
 - **Länk till källkoden** i `about_sv.md` när repot är publikt. Bara en textändring.
 - **Licenser för tredjepartsbibliotek** på Om-sidan (Apache Commons Net, OkHttp, Coil, AndroidX, kotlinx).
 - **Engelsk översättning** av appen och Om-texten.
+- **Om-sidans tillbakapil i ett fast toppfält,** så att den inte rullar bort med texten.
+
+## Tillgänglighet
+
+- **TalkBack-genomgång med riktig skärmläsare.** Hittills är innehållsbeskrivningarna bara prövade genom testerna, inte genom att använda appen med TalkBack.
 
 ## Utveckling och test
 
 - **Fingeravtryck av användarens data i release-bygget.** Ett release-bygge går inte att läsa med `run-as`, så testerna kan bara visa att appen inte har startats eller bytts ut. En kontrollsumma som appen själv visar under Diagnostik vore ett alternativ.
 - **Nyp-zoom i prov av release-varianten.** Går inte att göra med adb. Kräver ett instrumenterat test mot rc-varianten.
+- **Påhittad text i testdatabaserna.** `fts_test.db`, `search_test.db` och skripten `tools/build_fts_testdb.py` och `tools/build_search_testdb.py` innehåller korta ordagranna meningar ur tidningarna. Byt dem mot påhittad text, så att nya versioner inte innehåller tidningstext, och lägg de nya kontrollsummorna i `tools/prepush_check.sh`. Äldre versioner ligger kvar i historiken.
 - **Ostadiga tester.** Ett läsartest som hämtar från arkivet föll en gång utan belagd orsak under v0.10.1. Tester som beror på nätet kunde skiljas från resten av sviten.
 - **Uppdatering av Kotlin-pluginen** (lint påpekar att 2.4.21 finns).

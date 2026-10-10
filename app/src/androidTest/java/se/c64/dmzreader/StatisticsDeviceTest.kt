@@ -86,7 +86,7 @@ class StatisticsDeviceTest {
         waitFor { rule.onAllNodes(hasContentDescription(yearCard, substring = true)).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithContentDescription(yearCard, substring = true).performClick()
         waitFor { rule.onAllNodes(hasScrollToNodeAction()).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription("Datormagazin 1986 Nr 1"))
+        rule.scrollToNodeWhenLoaded(hasContentDescription("Datormagazin 1986 Nr 1"))
         rule.onNodeWithContentDescription("Datormagazin 1986 Nr 1").performClick()
         waitFor { exists("Lässtatus") }
         rule.onNode(hasText("Läs") or hasText("Fortsätt på sida", substring = true)).performClick()
@@ -152,12 +152,12 @@ class StatisticsDeviceTest {
         assertTrue(exists("27 % sidor"))
         screenshot("testdata")
 
-        rule.onNodeWithTag("statistics").performScrollToNode(hasTestTag("statistics-other"))
+        rule.scrollToNodeWhenLoaded(hasTestTag("statistics-other"), container = hasTestTag("statistics"))
         assertTrue(exists("Datormagazin 1986 · 38 sidor"))
         screenshot("testdata-ovrigt")
 
         // Ett tryck på en årgång öppnar årgångsvyn.
-        rule.onNodeWithTag("statistics").performScrollToNode(hasTestTag("year-datormagazin-1986"))
+        rule.scrollToNodeWhenLoaded(hasTestTag("year-datormagazin-1986"), container = hasTestTag("statistics"))
         rule.onNodeWithTag("year-datormagazin-1986").performClick()
         waitFor { exists("/ 4 lästa", substring = true) }
     }

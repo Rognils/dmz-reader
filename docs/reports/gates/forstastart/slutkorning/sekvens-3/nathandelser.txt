@@ -1,0 +1,22 @@
+10-10 17:45:51.781 23454 23467 I TestRunner: started: downloadThenReadInAirplaneModeThenRemove(se.c64.dmzreader.OfflineDeviceTest)
+10-10 17:45:53.097 23454 23643 D DmzNet  : User-Agent: DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader) · GET dmzarkivet.se/pdf/198601.pdf
+10-10 17:45:54.048  2968  2968 I PhoneGlobals: Turning radio off - airplane
+10-10 17:45:54.103  1603  2649 D ConnectivityService: [296 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTED to DISCONNECTED
+10-10 17:45:54.184  1603  2649 D ConnectivityService: [297 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTED to DISCONNECTED
+10-10 17:45:54.289  1603  2649 D ConnectivityService: [294 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTED to DISCONNECTED
+10-10 17:45:56.724  2968  2968 I PhoneGlobals: Turning radio on - airplane
+10-10 17:45:58.667  1603  2649 D ConnectivityService: [298 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTING
+10-10 17:45:58.808  1603  2649 D ConnectivityService: [298 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTED
+10-10 17:45:58.840  1603  2649 D ConnectivityService: [299 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTING
+10-10 17:45:59.970  1603  2649 D ConnectivityService: [299 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTED
+10-10 17:46:01.370  1603  2649 D ConnectivityService: [300 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTING
+10-10 17:46:01.423  1603  2649 D ConnectivityService: [300 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTED
+10-10 17:46:22.403  1603  5104 W WifiVendorHal: onDebugErrorAlert 14
+10-10 17:46:22.417  1603  2649 D ConnectivityService: [299 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTED to DISCONNECTED
+10-10 17:46:41.074  1603  2649 D ConnectivityService: [301 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTING
+10-10 17:46:42.184  1603  2649 D ConnectivityService: [301 WIFI] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTED
+10-10 17:46:52.916 23454 23467 I TestRunner: finished: downloadThenReadInAirplaneModeThenRemove(se.c64.dmzreader.OfflineDeviceTest)
+10-10 17:46:52.919 23454 23467 I TestRunner: started: readDownloadTurnPageAndClose(se.c64.dmzreader.ReaderDeviceTest)
+10-10 17:46:54.122 23454 24186 D DmzNet  : User-Agent: DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader) · GET dmzarkivet.se/pdf/198601.pdf
+10-10 17:46:57.201 23454 23454 I DmzPdf  : datormagazin-1986-01: nedladdad, 15105472 byte, återupptagen=false
+10-10 17:46:59.162 23454 23467 I TestRunner: finished: readDownloadTurnPageAndClose(se.c64.dmzreader.ReaderDeviceTest)

@@ -1,0 +1,1 @@
+25 körningar av BookmarkDeviceTest#createBookmarkInReaderAndOpenItFromFavorites i rad efter sekvens 10: 25 godkända, 0 fallna.

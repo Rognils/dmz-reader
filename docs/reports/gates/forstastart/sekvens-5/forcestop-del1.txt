@@ -1,0 +1,41 @@
+
+se.c64.dmzreader.StatisticsDeviceTest:
+Error in forceStopPhase1Read(se.c64.dmzreader.StatisticsDeviceTest):
+java.lang.AssertionError: No node found that matches ContentDescription = 'Datormagazin 1986 Nr 1' (ignoreCase: false) in scrollable container
+Semantics of the node:
+Node #176 at (l=0.0, t=128.0, r=1440.0, b=2756.0)px
+CollectionInfo = 'CollectionInfo(rowCount=-1, columnCount=-1)'
+IsTraversalGroup = 'true'
+Shape = 'androidx.compose.foundation.VerticalScrollableClipShape@9ea2886'
+VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+Has 3 children
+Selector used: (((ScrollToIndex is defined) && (ScrollBy is defined)) && ((HorizontalScrollAxisRange is defined) || (VerticalScrollAxisRange is defined)))
+
+	at androidx.compose.ui.test.ActionsKt.performScrollToNode(Actions.kt:258)
+	at se.c64.dmzreader.StatisticsDeviceTest.openReader(StatisticsDeviceTest.kt:89)
+	at se.c64.dmzreader.StatisticsDeviceTest.forceStopPhase1Read(StatisticsDeviceTest.kt:201)
+
+
+Time: 2,419
+There was 1 failure:
+1) forceStopPhase1Read(se.c64.dmzreader.StatisticsDeviceTest)
+java.lang.AssertionError: No node found that matches ContentDescription = 'Datormagazin 1986 Nr 1' (ignoreCase: false) in scrollable container
+Semantics of the node:
+Node #176 at (l=0.0, t=128.0, r=1440.0, b=2756.0)px
+CollectionInfo = 'CollectionInfo(rowCount=-1, columnCount=-1)'
+IsTraversalGroup = 'true'
+Shape = 'androidx.compose.foundation.VerticalScrollableClipShape@9ea2886'
+VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+Has 3 children
+Selector used: (((ScrollToIndex is defined) && (ScrollBy is defined)) && ((HorizontalScrollAxisRange is defined) || (VerticalScrollAxisRange is defined)))
+
+	at androidx.compose.ui.test.ActionsKt.performScrollToNode(Actions.kt:258)
+	at se.c64.dmzreader.StatisticsDeviceTest.openReader(StatisticsDeviceTest.kt:89)
+	at se.c64.dmzreader.StatisticsDeviceTest.forceStopPhase1Read(StatisticsDeviceTest.kt:201)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

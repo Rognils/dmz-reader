@@ -1,6 +1,10 @@
 package se.c64.dmzreader
 
 import android.content.Context
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.performScrollToNode
 import kotlinx.coroutines.runBlocking
 import se.c64.dmzreader.data.db.IssueUserState
 import java.io.File
@@ -41,4 +45,36 @@ fun hasLocalPdf(context: Context, issueId: String): Boolean =
 
 fun readingState(context: Context, issueId: String): IssueUserState? = runBlocking {
     appContainer(context).database.issueUserStateDao().get(issueId)
+}
+
+/**
+ * Rullar till [target] i en rullande lista eller ett rutnät ([container]), och väntar
+ * först på att innehållet har lästs in.
+ *
+ * Listorna i appen fylls från databasen en kort stund efter att vyn har ritats. Ett test
+ * som rullar direkt när listan syns kan därför hitta en lista som ännu saknar sina rader,
+ * och faller då med "No node found … in scrollable container". Det hände ungefär en gång
+ * på tio i en nystartad process med tom lagring (utredningen före 1.0.0,
+ * docs/reports/gates.md). Här görs försöket om tills noden finns eller tiden är ute.
+ */
+fun ComposeTestRule.scrollToNodeWhenLoaded(
+    target: SemanticsMatcher,
+    container: SemanticsMatcher = hasScrollToNodeAction(),
+    timeoutMillis: Long = 15_000,
+) {
+    var last: AssertionError? = null
+    try {
+        waitUntil(timeoutMillis) {
+            try {
+                onNode(container).performScrollToNode(target)
+                true
+            } catch (e: AssertionError) {
+                last = e
+                false
+            }
+        }
+    } catch (e: androidx.compose.ui.test.ComposeTimeoutException) {
+        // Det ursprungliga felet säger vad som saknades, vilket tidsgränsen inte gör.
+        throw AssertionError("Listan fick aldrig noden inom $timeoutMillis ms: ${last?.message}", last ?: e)
+    }
 }
