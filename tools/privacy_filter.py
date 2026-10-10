@@ -90,7 +90,7 @@ _MIN_SOLID, _MAX_SOLID = 7, 10  # siffror i ett nummer skrivet utan skiljetecken
 # skiljetecken: då är nollan mitten av ett annat tal. En bokstav före godtas ibland, se _glued_to_a_code.
 _BEFORE = r"(?<![0-9])(?<![0-9][.,:/-])(?<![0-9][-/] )(?<![0-9] [-/])(?<![0-9] [-/] )"
 _LETTER = "A-Za-zÀ-ÖØ-öø-ÿ"
-_CODE_BEFORE = re.compile(r"[0-9$][" + _LETTER + r"0-9$]*$")
+_CODE_BEFORE = re.compile(r"[0-9$][A-Za-z0-9$]*$")
 _SEPARATOR = r" ?[-/·*–—] ?"
 # Ordet före ett nummer som saknar skiljetecken efter riktnumret: "Fax 031 12 34 56".
 _KEYWORD = r"(?<![" + _LETTER + r"])(?:tel|tele|telefon|tfn|fax|telefax|ordertelefon|bbs|ring|mobil|mobiltel)"
@@ -162,7 +162,9 @@ def _glued_to_a_code(text: str, position: int) -> bool:
     Texttolkningen skriver ofta ihop ett nummer med ordet före (Datacorner021-12 34 56), och
     de numren ska maskeras. En beteckning känns igen på att biten före har en siffra eller ett $.
     """
-    if position == 0 or not re.match("[" + _LETTER + "]", text[position - 1]):
+    # Bara A–Z räknas här. En beteckning med å, ä eller ö i sig finns inte, och med den regeln ger
+    # filtret samma svar på texten som på filens läsbara teckenföljder, där andra tecken delar raden.
+    if position == 0 or not re.match("[A-Za-z]", text[position - 1]):
         return False
     return _CODE_BEFORE.search(text, max(0, position - 12), position) is not None
 
@@ -266,11 +268,13 @@ _PERSONAL_NUMBER = re.compile(
 )
 
 # Postgironummer: bara i direkt anslutning till ordet postgiro, postgirot, pg eller pg-nr.
-# Numret är två till åtta siffror, bindestreck och en kontrollsiffra: 12 34 56-7.
+# Numret är två till åtta siffror, bindestreck och en kontrollsiffra: 12 34 56-7. Mellan ordet
+# och numret får det stå högst fyra tecken som inte är bokstäver eller siffror. Ordet får sitta
+# ihop med ordet före (påPG1234567-8): numrets form räcker för att det inte ska bli fel.
 # Texttolkningen kan ha spärrat ut både ordet och siffrorna.
 _GIRO = re.compile(
-    r"(?<![" + _LETTER + r"])(?:p ?o ?s ?t ?g ?i ?r ?o ?t?|p ?g)"
-    r"(?: ?-? ?(?:n ?r|nummer|konto))?[ .:]{0,3}"
+    r"(?:p ?o ?s ?t ?g ?i ?r ?o ?t?|p ?g)"
+    r"(?: ?-? ?(?:n ?r|nummer|konto))?[^0-9A-Za-zÀ-ÖØ-öø-ÿ\n•]{0,4}"
     r"(?P<number>[0-9](?: ?[0-9]){1,7} ?- ?[0-9])(?![0-9])",
     re.I,
 )

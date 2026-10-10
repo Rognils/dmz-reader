@@ -39,9 +39,9 @@ SEED = 20261010
 PAGE_SIZE = 4096
 # Siffersträngar med skiljetecken som kan vara nummer filtret inte tog.
 NEAR_MISS = re.compile(r"(?<![0-9])[0-9][0-9 /()+·*-]{5,16}[0-9](?![0-9])")
-# Det verktyget strings räknar som läsbart: minst fyra tecken i följd som går att skriva ut.
-# Bytes över 127 tas med, så att svenska bokstäver inte delar texten.
-PRINTABLE = re.compile(rb"[\x20-\x7e\x80-\xff]{4,}")
+# Det verktyget strings räknar som läsbart: minst fyra ASCII-tecken i följd som går att skriva ut.
+# Svenska bokstäver och andra tecken utanför ASCII delar alltså raden, precis som i strings.
+PRINTABLE = re.compile(rb"[\x20-\x7e]{4,}")
 
 
 def open_readonly(path: Path) -> sqlite3.Connection:
@@ -150,8 +150,7 @@ def verify(path: Path, expected_version: int = pf.PRIVACY_FILTER_VERSION, notes:
     check.close()
 
     data = path.read_bytes()
-    # Texten ligger som UTF-8 i filen. Bytes som inte är giltig UTF-8 blir ersättningstecken och stör inte.
-    strings = "\n".join(match.group().decode("utf-8", errors="replace") for match in PRINTABLE.finditer(data))
+    strings = "\n".join(match.group().decode("ascii") for match in PRINTABLE.finditer(data))
     in_strings = pf.all_spans(strings)
     # Råa bytes: varje byte som inte är giltig UTF-8 behålls som ett eget tecken, så att läget i filen går att räkna ut.
     raw = data.decode("utf-8", errors="surrogateescape")

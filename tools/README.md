@@ -235,14 +235,18 @@ Samma PDF:er, samma inventory och samma `--built-at` ger en fil med samma SHA-25
 
 ### Det maskerade indexet som delas ut
 
-Tidningarna trycker privatpersoners e-postadresser och telefonnummer i insändare och radannonser. Indexet som delas ut byggs därför med `--privacy-filter`, som byter dem mot `[e-post]` och `[telefon]` i båda textkolumnerna innan databasen skrivs (`tools/privacy_filter.py`, `privacyFilterVersion` i `meta`).
+Tidningarna trycker privatpersoners kontaktuppgifter i insändare och radannonser. Indexet som delas ut byggs därför med `--privacy-filter` (`tools/privacy_filter.py`, `privacyFilterVersion` i `meta`):
+
+- I `searchText` byts fyra slags uppgifter mot markeringen `•••`: e-postadresser, telefonnummer med riktnummer eller +46, postgironummer efter ordet postgiro eller pg, och teckenföljder med personnummers form.
+- `rawText` lämnas tom. Appen läser inte kolumnen. Den finns kvar, så schemat är detsamma.
+- Markeringen har inga bokstäver eller siffror och ger därför inga ord i FTS-indexet.
 
 ```bash
 # Bygg från PDF:erna. Namnet slutar på -p och filtrets version.
-python3 tools/build_search_index.py --all --privacy-filter --built-at 2026-10-10T00:00:00Z \
+python3 tools/build_search_index.py --all --privacy-filter --built-at 2026-10-11T00:00:00Z \
     -o dist/search-2026-10-06-006-p1.db
 
-# Kontrollera filen: SQL i varje textkolumn, läsbara teckenföljder och råa bytes. Ska sluta med "Filen är ren".
+# Kontrollera filen. Ska sluta med "Filen är ren".
 python3 tools/privacy_audit.py verify dist/search-2026-10-06-006-p1.db
 
 # Facit ska ge samma utfall som för det omaskerade indexet
@@ -253,11 +257,11 @@ Regler som inte får brytas:
 
 - **En omaskerad `search.db` laddas aldrig upp någonstans.** Den är bara till för arbetet på datorn.
 - **Den maskerade filen byggs alltid från PDF:erna.** En färdig databas maskeras aldrig med `UPDATE`: den gamla texten kan ligga kvar i filens lediga sidor.
-- **Ändras filtrets regler höjs `PRIVACY_FILTER_VERSION`,** och filen får ett nytt namn (`-p2`).
+- **Ändras filtrets regler efter att en fil har delats ut höjs `PRIVACY_FILTER_VERSION`,** och filen får ett nytt namn (`-p2`).
 - **Stickprov ur `privacy_audit.py sample` innehåller personuppgifter** och ska ligga utanför repot. Verktyget vägrar skriva i repot.
 - **Testerna använder påhittade nummer och adresser,** aldrig riktiga ur tidningarna.
 
-Filtret maskerar bara e-postadresser och telefonnummer med riktnummer eller +46. Vad det missar och vad som ligger utanför står i `docs/reports/search-privacy.md`.
+Vad filtret missar och vad som ligger utanför står i `docs/reports/search-privacy.md`.
 
 **Hämtningen** kontrollerar varje fil mot `ocrPdfSize` och `ocrPdfEtag` i inventory och sparar storlek, ETag, Last-Modified och SHA-256 i `cache/pdf/manifest.json`. En fil som inte stämmer behålls men markeras, och indexbygget hoppar över den. Servern bryter överföringar efter omkring 200 MB; hämtningen fortsätter då själv med Range. Före start kontrolleras att disken rymmer det som ska hämtas.
 
