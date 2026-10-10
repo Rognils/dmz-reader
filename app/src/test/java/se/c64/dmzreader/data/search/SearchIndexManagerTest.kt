@@ -100,7 +100,7 @@ class SearchIndexManagerTest {
 
         val page26 = ranked.first { pages.getValue(it.rowId).pageNumber == 26 }
         val snippet = manager.snippet(page26.rowId, "\"högtalare\"")!!
-        assertTrue(snippet, snippet.startsWith("Nya ${SNIPPET_OPEN}högtalare$SNIPPET_CLOSE är ett bra sätt"))
+        assertTrue(snippet, snippet.startsWith("Nya ${SNIPPET_OPEN}högtalare$SNIPPET_CLOSE gör stor skillnad"))
         // En rad som inte matchar frågan ger inget utdrag.
         val other = pages.values.first { it.issueId == "datormagazin-1986-01" && it.pageNumber == 4 }
         assertNull(manager.snippet(other.rowId, "\"högtalare\""))

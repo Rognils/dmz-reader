@@ -25,6 +25,9 @@ DEFAULT_OUTPUT = REPO_ROOT / "app" / "src" / "debug" / "assets" / "fts_test.db"
 TOKENIZER = "unicode61"
 SOFT_HYPHEN = "­"
 
+# All text här är påhittad för testerna. Ingenting är hämtat ur tidningarna, och så ska det förbli:
+# filen versionshanteras och följer med debug-bygget.
+#
 # (issueId, pageNumber, rawText). rawText efterliknar det pdftotext ger:
 # radbrytningar, mjuka bindestreck vid avstavning och, på en sida, utspärrad text.
 PAGES = [
@@ -50,20 +53,20 @@ PAGES = [
      "Vi har testat sex kort till Amiga, från det enklaste med 68030 till "
      "det snabbaste med 68060. Skillnaden märks direkt när Amiga startar."),
     ("datormagazin-1995-14", 26,
-     "N y a  h ö g t a l a r e  ä r  e t t  b r a  s ä t t  a t t  f å  m e r\n"
-     "i n l e v e l s e  n ä r  d u  s p e l a r  d a t o r s p e l .\n\n"
-     "Vi har testat sju högtalare och en ryggsäck för att se om reklamen "
-     "stämmer. Bästa högtalare i testet låter förvånansvärt bra."),
+     "B r a  h ö g t a l a r e  g ö r  s t o r  s k i l l n a d  f ö r\n"
+     "d e n  s o m  s p e l a r  o f t a .\n\n"
+     "Vi har lyssnat på sex par högtalare i redaktionens källare under en "
+     "vecka. Bästa högtalare i testet låter förvånansvärt bra."),
     ("datormagazin-1995-14", 27,
      "Så testade vi\n\nVarje par högtalare har fått spela samma musik och "
      "samma spel i ett vanligt arbetsrum. Vi har lyssnat efter bas, "
      f"dis{SOFT_HYPHEN}\nkant och hur ljudet håller ihop på hög volym. Priset "
      "avgör inte allt: det näst billigaste paret hörde till de bästa."),
     ("datormagazin-1995-14", 43,
-     "Månadens PC-diskett\n\nAllt för den som tycker om gamla actionspel. "
-     "Upphovsmannen beskriver noggrant i en textfil hur varje nivå är byggd. "
-     "Enbart för flera spelare, inga monster. Min far får säkert svårt att "
-     "förstå vad som är roligt med det här."),
+     "Månadens läsardiskett\n\nTre små spel för regniga dagar, alla skrivna "
+     "av läsare. Det första är ett pussel med fallande klossar. Min far får "
+     "säkert svårt att sluta spela det andra, som går ut på att parkera en "
+     "lastbil på en trång gård."),
     ("highscore-1993-17", 3,
      "Nyheter från spelvärlden\n\nHösten bjuder på flera stora titlar. Äventyrsspel "
      "är fortfarande populärast bland våra läsare, tätt följt av plattformsspel. "

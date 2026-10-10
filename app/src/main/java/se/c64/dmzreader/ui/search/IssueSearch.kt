@@ -199,7 +199,7 @@ class IssueSearchViewModel(
     fun closeBar() = local.update { it.copy(barVisible = false) }
 }
 
-/** "Sida 26 · …Nya högtalare är ett bra sätt…", med sökordet i accentfärg. */
+/** "Sida 26 · …Nya högtalare gör stor skillnad…", med sökordet i accentfärg. */
 fun snippetText(pageNumber: Int, snippet: String?, accent: Color, secondary: Color): AnnotatedString = buildAnnotatedString {
     withStyle(SpanStyle(color = secondary)) { append("Sida $pageNumber") }
     if (snippet != null) {
