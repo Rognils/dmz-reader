@@ -196,8 +196,12 @@ Inga. Ändringarna är texter och testdata.
 
 ## 11. Vad som återstår före v1.0.0
 
-1. **Det maskerade sökindexet** (del G): se `docs/reports/search-privacy.md`.
+*Uppdaterad efter del G. Det maskerade sökindexet är byggt, kontrollerat och upplagt som prerelease i det privata repot (`docs/reports/search-privacy.md`).*
+
+1. **Importera det maskerade sökindexet i din app** och använd det under veckan. Filen heter `search-2026-10-06-006-p1.db` och finns i `dist/` och som prerelease `search-index-2026-10-06-006-p1`.
 2. **Veckans användning** enligt checklistan i `rc1.md`.
-3. **Dina beslut före en publik release**, listade sist i `docs/reports/gates.md`: omslagen i appen, skärmbilderna, textutdragen och ordlistan, arbetsfilerna, e-postadressen i historiken, arbetsdokumenten, och om historiken ska publiceras som den är.
-4. **Bygga och signera 1.0.0** (versionCode 10000), kontrollera certifikatet, och uppdatera din app.
-5. **Släppa:** göra repot publikt, och lägga APK:n och det maskerade sökindexet som releaser.
+3. **Ta ställning till det som står sist i `search-privacy.md`:** de små ändringarna i träffarnas ordning, att `•••` också finns i tidningarnas egen text, och om bankgiro och nummer utan riktnummer ska maskeras.
+4. **Dina beslut före en publik release**, listade sist i `docs/reports/gates.md`: omslagen i appen, skärmbilderna, textutdragen och ordlistan, arbetsfilerna, e-postadressen i historiken, arbetsdokumenten, och om historiken ska publiceras som den är.
+5. **Två textändringar i appen för 1.0.0:** "cirka 150 MB" om sökindexet i Inställningar (filen är 91 MB), och länken till källkoden i Om-texten när repot är publikt.
+6. **Bygga och signera 1.0.0** (versionCode 10000), kontrollera certifikatet, och uppdatera din app.
+7. **Släppa:** göra repot publikt, och lägga APK:n och sökindexet som releaser.
