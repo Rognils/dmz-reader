@@ -233,6 +233,32 @@ python3 -m unittest discover -s tools/tests
 
 Samma PDF:er, samma inventory och samma `--built-at` ger en fil med samma SHA-256. Utan `--built-at` används klockslaget, och då skiljer sig filen i `meta.builtAt`.
 
+### Det maskerade indexet som delas ut
+
+Tidningarna trycker privatpersoners e-postadresser och telefonnummer i insändare och radannonser. Indexet som delas ut byggs därför med `--privacy-filter`, som byter dem mot `[e-post]` och `[telefon]` i båda textkolumnerna innan databasen skrivs (`tools/privacy_filter.py`, `privacyFilterVersion` i `meta`).
+
+```bash
+# Bygg från PDF:erna. Namnet slutar på -p och filtrets version.
+python3 tools/build_search_index.py --all --privacy-filter --built-at 2026-10-10T00:00:00Z \
+    -o dist/search-2026-10-06-006-p1.db
+
+# Kontrollera filen: SQL i varje textkolumn, läsbara teckenföljder och råa bytes. Ska sluta med "Filen är ren".
+python3 tools/privacy_audit.py verify dist/search-2026-10-06-006-p1.db
+
+# Facit ska ge samma utfall som för det omaskerade indexet
+python3 tools/search_pilot.py evaluate --db dist/search-2026-10-06-006-p1.db
+```
+
+Regler som inte får brytas:
+
+- **En omaskerad `search.db` laddas aldrig upp någonstans.** Den är bara till för arbetet på datorn.
+- **Den maskerade filen byggs alltid från PDF:erna.** En färdig databas maskeras aldrig med `UPDATE`: den gamla texten kan ligga kvar i filens lediga sidor.
+- **Ändras filtrets regler höjs `PRIVACY_FILTER_VERSION`,** och filen får ett nytt namn (`-p2`).
+- **Stickprov ur `privacy_audit.py sample` innehåller personuppgifter** och ska ligga utanför repot. Verktyget vägrar skriva i repot.
+- **Testerna använder påhittade nummer och adresser,** aldrig riktiga ur tidningarna.
+
+Filtret maskerar bara e-postadresser och telefonnummer med riktnummer eller +46. Vad det missar och vad som ligger utanför står i `docs/reports/search-privacy.md`.
+
 **Hämtningen** kontrollerar varje fil mot `ocrPdfSize` och `ocrPdfEtag` i inventory och sparar storlek, ETag, Last-Modified och SHA-256 i `cache/pdf/manifest.json`. En fil som inte stämmer behålls men markeras, och indexbygget hoppar över den. Servern bryter överföringar efter omkring 200 MB; hämtningen fortsätter då själv med Range. Före start kontrolleras att disken rymmer det som ska hämtas.
 
 **Texten** tas ut med `pdftotext -raw`, som följer den ordning OCR-programmet skrev texten i och därför håller ihop spalterna. `rawText` är den texten orörd. `searchText` byggs av samma ordbitar med deras lägen på sidan (`pdftotext -raw -bbox`):
