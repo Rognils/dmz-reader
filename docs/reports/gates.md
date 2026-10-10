@@ -2,7 +2,7 @@
 
 Datum: 2026-10-10 · Gren: `release/1.0-gates` (från `main`, inte mergad) · App oförändrad, 1.0.0-rc2
 
-**Vad som återstår innan v1.0.0 kan taggas:** Gustavs svar om omslag, skärmbilder, FTP-kontot och serverlistningen; dina beslut om e-postadressen i historiken och om arbetsdokumenten ska bli publika; LICENSE och README; ditt beslut om den här grenen ska mergas trots ett kvarstående, sällsynt testfel; och veckans användning enligt checklistan i `rc1.md`.
+**Uppdaterad 2026-10-10 med Gustavs svar (del C) och förberedelsen av ett privat GitHub-repo (del D).** Det som återstår innan v1.0.0 och de beslut du behöver ta står sist i rapporten. Repot är inte skapat och ingenting är pushat: kontrollen före push slår på två testdatabaser i historiken, och uppgiften säger att jag då ska stanna.
 
 Ingen appkod, ingen datamodell och inga assets är ändrade. Release-appen `se.c64.dmzreader` är inte rörd: den är 1.0.0-rc2 med samma installationstid före och efter varje körning. Inget är pushat, och ingen historik är omskriven.
 
@@ -153,11 +153,13 @@ Kontrollerat i hela historiken:
 
 `.gitignore` täcker allt känsligt som finns i arbetskatalogen: `cache/` (16 GB), `dist/` (418 MB), `samples/` (281 MB), `app/build/`, `.venv/`, `local.properties`. Ingenting är ospårat utan att vara ignorerat. Nyckeln och lösenorden ligger utanför katalogen.
 
-### BESLUT – Gustav
+### BESLUT – material från arkivet
 
-**1. Omslagen.** 185 miniatyrer i `data/covers/` (WebP, 600 pixlar breda, 16,7 MB). De följer med i appen och är 62 % av APK:ns innehåll.
+*Rubriken hette "BESLUT – Gustav". Efter hans svar (del C) är punkterna 3 och 4 OK, och punkterna 1, 2, 5 och 6 är dina beslut. Han blockerar ingenting, men han äger inte materialet och hans svar är inget upphovsrättsligt tillstånd.*
 
-**2. Skärmbilderna.** 167 bilder i `docs/screenshots/`, 98 MB i trädet och 102 MB i historiken.
+**1. Omslagen.** *Ditt beslut.* 185 miniatyrer i `data/covers/` (WebP, 600 pixlar breda, 16,7 MB). De följer med i appen och är 62 % av APK:ns innehåll.
+
+**2. Skärmbilderna.** *Ditt beslut.* 167 bilder i `docs/screenshots/`, 98 MB i trädet och 102 MB i historiken.
 
 - 123 visar omslag eller tidningssidor. 56 av dem visar sidor i läsaren, flera som helsida eller utsnitt i hög upplösning.
 - `docs/screenshots/covers/contact_sheet.png` visar alla 185 omslag i en bild.
@@ -166,11 +168,11 @@ Kontrollerat i hela historiken:
 
 Jag har sett igenom dem efter personliga uppgifter: 128 på kontaktkartor nu, och de 39 från rc1 och rc2 valde jag själv ut när de togs. Ingen visar filväljaren, andra appar eller annat än DMZ Reader. Statusraden visar klockslag och batteri, ingen operatör.
 
-**3. Arkivets FTP-konto.** Användarnamn och lösenord (`dmz` / `dmz`) står i klartext i `tools/config.json` och `app/build.gradle.kts`, och följer med i APK:n. Planen kallar kontot publikt, men det är Gustavs server och hans sak att avgöra om det ska stå i ett öppet repo.
+**3. Arkivets FTP-konto.** *OK efter Gustavs svar: appen får köras mot servern.* Användarnamn och lösenord (`dmz` / `dmz`) står i klartext i `tools/config.json` och `app/build.gradle.kts`, och följer med i APK:n. Planen kallar kontot publikt, men det är Gustavs server och hans sak att avgöra om det ska stå i ett öppet repo.
 
-**4. Listningen av servern.** `data/raw_listing.json` (1,4 MB) innehåller varje filnamn, storlek och ändringstid i arkivets 191 FTP-kataloger. `data/https_probe.json` (128 kB) innehåller ETag och storlek för varje PDF. Arkivindexet har adresser till varje PDF, omslag och skanning.
+**4. Listningen av servern.** *OK efter Gustavs svar, med en reservation: han har godkänt att appen använder servern, inte uttryckligen att en fullständig fillista publiceras. Arkivindexet behövs av appen, men `raw_listing.json` och `https_probe.json` är arbetsfiler som kan lämnas utanför ett publikt repo utan kostnad.* `data/raw_listing.json` (1,4 MB) innehåller varje filnamn, storlek och ändringstid i arkivets 191 FTP-kataloger. `data/https_probe.json` (128 kB) innehåller ETag och storlek för varje PDF. Arkivindexet har adresser till varje PDF, omslag och skanning.
 
-**5. Korta textutdrag ur tidningarna.**
+**5. Korta textutdrag ur tidningarna.** *Ditt beslut.*
 
 | Fil | Innehåll |
 |---|---|
@@ -179,9 +181,9 @@ Jag har sett igenom dem efter personliga uppgifter: 128 på kontaktkartor nu, oc
 | `tools/testdata/search_golden.json` | 43 sökord med förväntade sidor och mina anteckningar, cirka 3 700 tecken, till största delen min egen text |
 | `docs/reports/fas-8a.md` med flera | ett tiotal korta citat som exempel på textuttag |
 
-**6. Ordlistan.** `tools/data/normalizer_lexicon_v1.txt` är 144 377 ord som förekommer i tidningarnas text, ett per rad (1,3 MB). Ingen löpande text, men härledd ur OCR-texten.
+**6. Ordlistan.** *Ditt beslut.* `tools/data/normalizer_lexicon_v1.txt` är 144 377 ord som förekommer i tidningarnas text, ett per rad (1,3 MB). Ingen löpande text, men härledd ur OCR-texten.
 
-### BESLUT – ditt
+### BESLUT – projektet
 
 **7. E-postadressen i historiken.** Alla 130 commits har `Rognils <117741407+Rognils@users.noreply.github.com>` som författare. Den blir publik med repot.
 
@@ -273,7 +275,7 @@ Tredjepartsbibliotekens licenser (Apache 2.0 för AndroidX, OkHttp, Coil, Common
 
 ### De tre lägena
 
-Ingenting av detta är gjort.
+Ingenting av detta är gjort. *Efter Gustavs svar är läge 3 inte aktuellt, och valet mellan läge 1 och 2 är ditt, inte hans. Följderna för hans server i läge 2 gäller fortfarande.*
 
 **Läge 1 – Gustav godkänner allt, även omslag i appen.**
 
@@ -303,10 +305,171 @@ Ingenting av detta är gjort.
 
 ---
 
+## DEL C – Gustavs svar
+
+### Gustavs svar
+
+Gustav Almström, som driver DMZArkivet, har svarat. I sammanfattning:
+
+- Appen får köras mot hans server.
+- Han har inget emot att datan används. Han äger den inte själv, så svaret är inget upphovsrättsligt tillstånd.
+- Servern går på hans hemmauppkoppling. Vid strul kan den vara nere upp till någon dag.
+- Han erbjuder sig att föra över data om projektet vill hosta den själv. Det är inte aktuellt nu.
+
+### Ändrad klassificering
+
+| Fråga | Före | Efter |
+|---|---|---|
+| Serveranvändning: FTP-kontot, adresserna i arkivindexet, klientidentifieringen | BESLUT (Gustav) | **OK** |
+| Listningen av servern (`raw_listing.json`, `https_probe.json`) | BESLUT (Gustav) | **OK**, med reservationen i punkt 4 ovan |
+| Omslagen i appen och i repot | BESLUT (Gustav) | **BESLUT (ditt)** |
+| Sökindexet `search.db` som publik fil | inte bedömt | **BESLUT (ditt)**, se nedan |
+| Skärmbilder, textutdrag och ordlista | BESLUT (Gustav) | **BESLUT (ditt)** |
+| Upphovsrätten till tidningsmaterialet | öppen | **öppen, oförändrad** |
+
+Ingenting är BLOCKERANDE. Upphovsrätten är en egen fråga som Gustavs svar inte löser: rättigheterna ligger hos tidningarnas utgivare och upphovsmän, och ingen av dem har tillfrågats. Det som finns i dag är Om-sidans erbjudande att ta bort material på begäran. Jag kan inte bedöma den juridiska risken.
+
+### Bedömning av search.db
+
+Granskad: `dist/search.db`, arkivversion 2026-10-06-006, 148 877 312 byte, SHA-256 `9da0dbd60a15c15e5e0b9f81fc8549dbcfcc2b596c61faf8642901193965a6ec`. Allt nedan är räknat i filen. Ingen text är utskriven eller citerad.
+
+| | |
+|---|---|
+| Nummer | 185 av 185 |
+| Sidor | 11 293, lika många som arkivindexets sidantal för varje nummer |
+| Text som den kom ur PDF:erna (`rawText`) | 54 985 023 tecken |
+| Samma text normaliserad för sökning (`searchText`) | 54 647 855 tecken |
+| Sidor med text | 11 211, det vill säga 99,3 % |
+| Sidor utan text | 82 (ytterligare 65 har under 50 tecken) |
+
+Filens tabeller:
+
+- `pages`: en rad per sida med nummer, sidnummer och de två textkolumnerna. Cirka 113 MB av filen.
+- `pages_fts` med fyra hjälptabeller: FTS5-indexet över `searchText`. Resten av filen, cirka 36 MB.
+- `issues`: en rad per nummer med sidantal och PDF:ens storlek, ETag och SHA-256. Det är härkomsten: vilken fil texten kom ur.
+- `meta`: elva rader. Byggdatum, verktygets namn och version, arkivversion, antal nummer och sidor, normaliserarens och ordlistans version, pdftotext-läget, schemaversion, SQLite-version och tokenizer.
+
+**Finns något som inte är tidningstext eller ren metadata? Nej.** `meta` innehåller inga sökvägar, datornamn, användarnamn eller adresser. Jag sökte också i texten efter spår av byggmiljön: teckenföljden `/home/` finns på fyra sidor i två nummer från 1995 och mitt användarnamn på tre sidor från 1991–1994, och i båda fallen är det tidningarnas egen text.
+
+Två saker att väga in i beslutet:
+
+1. **Filen är hela arkivets text.** Omslagen är 185 förminskade bilder. Sökindexet är den fullständiga texten i alla 185 nummer, 55 miljoner tecken, i en form som går att kopiera och söka i. Upphovsrättsligt väger det tyngre än omslagen.
+2. **Texten innehåller det tidningarna tryckte, även personuppgifter.** 150 sidor har något som ser ut som en e-postadress och 916 sidor något som ser ut som ett telefonnummer. Det är insändare, radannonser och redaktionsrutor, med privatpersoners namn och adresser från 1986 och framåt. Samma uppgifter finns redan i arkivets PDF:er, men ett sökbart index på GitHub gör dem lättare att hitta. Siffrorna är mönsterträffar, inte en genomgång.
+
+### Förslag: hosting av search.db
+
+- **Aldrig i git.** `dist/` är ignorerad, och kontrollen före push söker efter `*.db` i hela historiken.
+- **Release-fil på GitHub**, namngiven efter arkivversionen: `search-2026-10-06-006.db`. Storleken, 149 MB, ryms med god marginal i gränsen för release-filer.
+- **SHA-256 i release-texten**, tillsammans med arkivversion, antal nummer och sidor, och vilken app-version indexet passar.
+- **Ett nytt index är en ny release-fil**, inte en ersättning. Äldre filer ligger kvar så att en äldre app kan få ett index som stämmer med dess arkivindex.
+- **Appen behåller manuell import i 1.0.** Användaren hämtar filen i webbläsaren och väljer den under Inställningar, som i dag.
+- **Automatisk hämtning läggs i backloggen för 1.1** och förutsätter publikt repo: release-filer i ett privat repo kräver inloggning. Inget token i appen, någonsin.
+
+Så länge repot är privat finns filen bara hos dig. Den laddas inte upp i den här uppgiften.
+
+### Förslag för 1.0.0: när arkivet är nere
+
+Ingenting av detta är ändrat. Båda förslagen är ändringar i appen och kräver ett nytt bygge.
+
+**a. En mening på Om-sidan**, sist i avsnittet "Tack, Gustav!", före länken:
+
+> DMZArkivet körs på en privat uppkoppling, så ibland kan arkivet vara otillgängligt en stund. Nummer som du har laddat ned går alltid att läsa.
+
+Den andra meningen är mitt tillägg. Den säger vad användaren kan göra under tiden.
+
+**b. Felmeddelandena i dag.** Lästa ur koden, inte framkallade på telefonen. Anslutning vägras, tidsgräns och DNS-fel behandlas lika i båda flödena: alla är IO-fel och ger samma text.
+
+| Flöde | När arkivet inte svarar | Text i dag |
+|---|---|---|
+| PDF via Läs | efter högst 15 s | "Det gick inte att nå arkivet. Kontrollera att telefonen har nät och försök igen." Knapp: Försök igen. |
+| PDF via nedladdningskön | – | Inget meddelande. Numret står kvar som "Köad" och systemet försöker igen senare. |
+| HQ | efter tidsgränsen | "HQ gick inte att hämta: arkivet nås inte. Kontrollera att telefonen har nät. PDF-sidan visas." Knapp: Försök igen. |
+| HQ, servern svarar men avvisar | genast | "HQ gick inte att hämta: arkivet svarade med ett fel. PDF-sidan visas." |
+
+Texterna säger alltså redan att det är arkivet som inte nås, men de pekar bara på telefonens nät. Ingen av dem säger att arkivet kan vara nere eller att det hämtade ligger kvar. Förslag:
+
+- **PDF:** "Det gick inte att nå arkivet. Kontrollera att telefonen har nät. Arkivet kan också vara tillfälligt otillgängligt. Det som redan har hämtats ligger kvar, så nedladdningen fortsätter där den slutade när du försöker igen."
+- **HQ:** "HQ gick inte att hämta: arkivet nås inte just nu. Kontrollera att telefonen har nät. Arkivet kan också vara tillfälligt otillgängligt. PDF-sidan visas."
+
+Att nedladdningen fortsätter där den slutade stämmer med hur appen fungerar: den ofullständiga filen sparas och nästa försök begär resten.
+
+En sak utöver det du frågade om: **kön är tyst.** Är arkivet nere ett dygn står numren som "Köad" hela tiden, utan förklaring. Ett besked efter några misslyckade försök vore en ny funktion och hör hemma i 1.1. Jag har inte lagt in det i backloggen utan att du har sagt till.
+
+---
+
+## DEL D – Privat GitHub-repo
+
+**Repot är inte skapat och ingenting är pushat.** Kontrollen i steg 3 slår, och uppgiften säger att jag då ska stanna. Eftersom utfallet var känt i förväg skapade jag inte heller ett tomt repo.
+
+### Steg 1 – inloggningen
+
+`gh auth status`: inloggad på github.com som **Rognils**, protokoll https. Tokenets behörigheter är `gist`, `read:org`, `repo` och `workflow`. `repo` räcker för att skapa privata repon och pusha.
+
+### Steg 2 – finns repot?
+
+`gh repo view Rognils/dmz-reader`: finns inte.
+
+### Steg 3 – kontrollerna före push
+
+Körda 2026-10-10 på hela historiken: 132 commits, 18 grenar, 18 taggar.
+
+| Kontroll | Utfall |
+|---|---|
+| gitleaks 8.30.1, alla grenar (114 commits; de 18 sammanfogningarna räknas inte) | 0 läckor |
+| Filer över 50 MB | 0. Den största är en skärmbild på 4,9 MB. |
+| `*.pdf` | 0 |
+| `*.jks`, `*.keystore`, `*.p12`, `*.pem`, `*.key` | 0 |
+| Säkerhetskopior ur appen, APK-filer | 0 |
+| **`*.db`** | **2 träffar** |
+
+Träffarna är `app/src/debug/assets/fts_test.db` och `app/src/debug/assets/search_test.db`. Det är samma två filer som del B klassade som OK: testdatabaser på 57 kB var, med påhittad text, som bara följer med debug-bygget. Ingen av dem är `search.db`.
+
+Jag bedömer dem som ofarliga, men regeln lyder "inga `*.db` någonstans i historiken, och om något slår: pusha inte". Undantaget är ditt att göra. Vill du ha bort dem krävs omskriven historik, och det avråder jag från för två testfiler.
+
+### Steg 4 – vad som skulle pushas
+
+- **`main` och alla 18 taggar.** Alla taggar pekar på commits som nås från `main`.
+- **Grenarna:** 17 av 18 är redan mergade till `main` och tillför ingenting utöver sitt namn. Förslag: pusha inga av dem.
+
+  `feature/fas-0-archive-analysis`, `feature/fas-0b-inventory`, `feature/fas-1-android-foundation`, `feature/fas-2-library`, `feature/fas-3-reader`, `feature/fas-4-reading-state`, `feature/fas-5-offline`, `feature/fas-6-personal-library`, `feature/fas-7-inventory-import`, `feature/fas-8a-search-pilot`, `feature/fas-8b-search-index`, `feature/fas-9-fulltext`, `feature/fas-10-statistics`, `feature/fas-11-hq`, `release/1.0-rc`, `release/1.0-rc2`
+- **`release/1.0-gates`** är den enda som inte är mergad. Mergas den följer den med `main`. Annars föreslår jag att den pushas som egen gren, så att rapporten finns i repot.
+
+Repot är 127 MB, varav skärmbilderna drygt 100 MB. Det går att pusha som det är.
+
+### Steg 5 och 6
+
+Inte gjorda. Inga releaser är skapade, och varken APK eller `search.db` är uppladdad.
+
+---
+
+## Kvar innan v1.0.0 kan taggas
+
+1. Ditt besked om de två testdatabaserna, och därefter det privata repot (del D, steg 2–5).
+2. Ditt beslut om den här grenen ska mergas. Den innehåller testrättningarna från del A, men en av tio sekvenser efter rättningen föll på ett annat, oförklarat fel. De fem senaste är gröna.
+3. Om förslagen i del C ska in i 1.0.0 (meningen på Om-sidan och de två feltexterna). I så fall en rc3, eller direkt i 1.0.0 med ett eget prov.
+4. `LICENSE` och `README.md` i repots rot.
+5. Veckans användning enligt checklistan i `rc1.md`.
+6. Bygga och signera 1.0.0 (versionCode 10000), och kontrollera certifikatets fingeravtryck.
+
+## Beslut du behöver ta före en publik release
+
+- **Omslag i appen:** behålla de 185 inbyggda omslagen (läge 1) eller hämta dem från arkivet (läge 2, kräver en ny releasekandidat och lägger 233 MB per användare på Gustavs uppkoppling).
+- **search.db som publik release-fil:** hela arkivets text, med de personuppgifter tidningarna tryckte. Alternativet är att fulltextsökningen inte erbjuds publikt.
+- **Skärmbilderna:** 123 av 167 visar omslag eller sidor. Behålla, tunna ut eller lämna utanför det publika repot.
+- **Textutdragen och ordlistan** i `data/` och `tools/`.
+- **Arbetsfilerna `raw_listing.json` och `https_probe.json`:** med eller utan.
+- **E-postadressen** `117741407+Rognils@users.noreply.github.com` i alla commits.
+- **Arbetsdokumenten:** plan, ADR:er och fasrapporter publika eller inte.
+- **Historiken:** publicera den som den är, eller en ny första commit. Flera av punkterna ovan går bara att ändra med det senare.
+- **Upphovsrätten:** om ett erbjudande att ta bort material på begäran räcker för dig. Gustavs svar ändrar inte den frågan.
+
+---
+
 ## Ändrade filer i den här grenen
 
 - `app/src/androidTest/java/se/c64/dmzreader/DeviceTestSupport.kt` och tio testklasser (listrullningen)
 - `tools/device_test.sh` (avbruten väntan)
+- `docs/backlog-1.1.md` (tre punkter från del C)
 - `docs/reports/gates.md` och `docs/reports/gates/forstastart/` (15 sekvenser, mätningen av vanlig start och den upprepade körningen av bokmärkestestet)
 
 Ingen fil under `app/src/main` är ändrad.
