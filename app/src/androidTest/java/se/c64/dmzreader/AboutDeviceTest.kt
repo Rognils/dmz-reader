@@ -47,6 +47,9 @@ class AboutDeviceTest {
         assertTrue(described("Inställningar"))
         rule.onNodeWithContentDescription("Om DMZ Reader").performClick()
         assertAboutShown()
+        // Som inställningarna visas sidan utan bottenfältet.
+        rule.onNodeWithText("Statistik").assertDoesNotExist()
+        rule.onNodeWithText("Bibliotek").assertDoesNotExist()
 
         // Tillbaka leder till biblioteket.
         rule.onNodeWithContentDescription("Tillbaka").performClick()

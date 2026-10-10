@@ -91,7 +91,7 @@ private object Routes {
     fun issue(issueId: String) = "issue/$issueId"
 
     /** Vyer som visas utan bottenfält. */
-    val withoutBottomBar = setOf(SETTINGS, DIAGNOSTICS, READER)
+    val withoutBottomBar = setOf(SETTINGS, DIAGNOSTICS, ABOUT, READER)
 }
 
 /** Värdet på sidargumentet när ingen sida är begärd. */

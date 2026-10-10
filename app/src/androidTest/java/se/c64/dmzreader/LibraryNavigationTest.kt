@@ -117,6 +117,10 @@ class LibraryNavigationTest {
         waitForText("HighScore")
         rule.onNodeWithText("HighScore").performClick()
         waitForText("14 nummer")
+        // Årgångskortet ska vara färdigt (sammanslaget till en nod) innan det trycks på.
+        rule.waitUntil(timeoutMillis = 10_000) {
+            rule.onAllNodes(hasContentDescription("HighScore 1993, 6 nummer", substring = true)).fetchSemanticsNodes().isNotEmpty()
+        }
         rule.onNodeWithContentDescription("HighScore 1993, 6 nummer", substring = true).performClick()
         waitForDescription("HighScore 1993 Nr 17")
         rule.onNodeWithContentDescription("HighScore 1993 Nr 17").performClick()
