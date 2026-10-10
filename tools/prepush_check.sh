@@ -11,10 +11,11 @@
 #   - *.apk och *.aab
 #   - filer över 50 MB
 #
-# Undantagen är appens två testdatabaser. De innehåller korta ordagranna utdrag ur
-# tidningarna och inga personuppgifter (docs/reports/gates.md, del A i uppgiften om
-# privat repo). En ny version av någon av dem måste läggas till här för hand, efter
-# att innehållet har granskats.
+# Undantagen är appens två testdatabaser. De nuvarande versionerna har bara påhittad text
+# (docs/reports/rc3.md). De tre äldre versionerna, som ligger kvar i historiken, innehåller
+# korta ordagranna utdrag ur tidningarna och inga personuppgifter (docs/reports/gates.md).
+# En ny version av någon av dem måste läggas till här för hand, efter att innehållet har
+# granskats: ingen text ur tidningarna.
 #
 # Hemligheter söks inte här. Kör gitleaks för det.
 #
@@ -30,6 +31,8 @@ MAX_BYTES=$((50 * 1024 * 1024))
 
 # sökväg och SHA-256, åtskilda av ett mellanslag
 ALLOWED_DB="
+app/src/debug/assets/fts_test.db 0c689be27c9766237bf909d429b2f536076d43fac7778181b670aed30184da73
+app/src/debug/assets/search_test.db d82ecd840e1cc536b102fc6b9ea8e0bfbdd36a9602a2db8bc33b055b2b6034bc
 app/src/debug/assets/fts_test.db fd2c4f406d47f6ba801362723400cfe86060fd10971907c1aa92a2fd4ee3a9b1
 app/src/debug/assets/search_test.db 4ca5e7676674b33c47adb70ab3e7410bdbdd2793bc3a6cb30985df128e90bf10
 app/src/debug/assets/search_test.db ab45b068dc56678022dc128e70595b38ae6e8d7a43ad2af777c8297f0d124c27

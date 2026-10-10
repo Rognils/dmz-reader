@@ -3,7 +3,10 @@
 
 Filen app/src/debug/assets/search_test.db har samma tabeller och samma
 tokenizer som dist/search.db (plan D2) och skrivs med samma kod, men innehåller
-bara ett tiotal påhittade sidor. Den är liten, deterministisk och
+bara ett tiotal påhittade sidor. All text är skriven för testerna. Ingenting är
+hämtat ur tidningarna, och så ska det förbli: filen versionshanteras och följer
+med debug-bygget. Kontrollsumman står i tools/prepush_check.sh och måste läggas
+dit på nytt när texten ändras. Den är liten, deterministisk och
 versionshanteras, till skillnad från det riktiga indexet.
 
 Innehållet är valt för testerna:
@@ -29,28 +32,28 @@ BUILT_AT = "2026-10-09T00:00:00Z"
 # issueId → {sida: text}
 PAGES = {
     "datormagazin-1986-01": {
-        4: "Lagom till julhandeln förra året introducerades Commodore 128 personal computer. "
-           "En uppföljare till den gamla Commodore 64, som funnits fyra år i marknaden.",
-        6: "INFILTRATOR Slå ihop helikoptersimulatorn Super Huey med luftstriderna i Sky Fox.",
-        25: "The Anatomy of the C-64. For two years a best seller. C-64 internals with ROM listings.",
+        4: "Före jul introducerades nya Commodore 128 i butikerna. "
+           "Den är tänkt som efterföljare till Commodore 64, som många redan har hemma.",
+        6: "FLYGSPEL En helikopter och ett jaktplan turas om att försvara basen mot fienden.",
+        25: "En handbok om C-64 för den som vill förstå maskinen. C-64 beskrivs kapitel för kapitel.",
     },
     "datormagazin-1989-06": {
-        46: "C64, bandsp, joyst, org spel. Pris 1500 kr. C128D, band 1530, joyst, tidn, disk.",
+        46: "C64 med bandspelare, två styrspakar och fem spel säljes. Pris 900 kr. Även en C128D med diskar.",
         47: "Säljes: C 64 med diskdrive 1541 och tio spel. Amiga 500 köpes.",
     },
     "datormagazin-1993-03": {
-        12: "Trumpcard 500 AT. Sveriges mest prisvärda hårddisk för A500, snabb och tyst. Amiga 1200.",
+        12: "En tyst hårddisk för A500 som är lätt att montera själv. Passar även Amiga 1200.",
     },
     "datormagazin-1995-14": {
-        20: "Sju tips inför turboköpet. Till Amiga 1200 finns ett antal olika turbokort.",
-        26: "Nya högtalare är ett bra sätt att få mer inlevelse när du spelar datorspel. "
-            "Vi har testat sju högtalare och en ryggsäck för att se om reklamen stämmer.",
+        20: "Fem saker att tänka på före köpet. Det finns flera turbokort att välja på till Amiga 1200.",
+        26: "Nya högtalare gör stor skillnad för den som spelar ofta. "
+            "Vi har lyssnat på sex par högtalare i redaktionens källare under en vecka.",
         27: "Högtalare för Amiga: ljudet är klart bättre än i de inbyggda. Bästa högtalare i testet.",
         28: "Den billigaste högtalaren i testet saknar bas. Amiga-ägare får nöja sig med mindre.",
         29: "Sammanfattning av testet: köp hellre ett par bra högtalare än ett nytt spel.",
     },
     "highscore-1993-17": {
-        6: "Mikael Roth från Stockholm är europeisk mästare på TV-spel. Finalen hölls i Wiens tekniska museum.",
+        6: "Årets vinnare i TV-spel kommer från en liten stad i norr. Finalen hölls på ett museum i huvudstaden.",
     },
     # Finns inte i inventory. Träffar här ska döljas i appen (plan D3).
     "datormagazin-1999-01": {

@@ -89,7 +89,7 @@ class SearchDbTest {
     fun `search uses normalised text not raw text`() {
         // Sidan 26 har utspärrad rubrik i rawText, och sidan 14 ett ord avstavat med mjukt bindestreck.
         assertTrue(hits("högtalare").contains("datormagazin-1995-14:26"))
-        assertTrue(db.search("högtalare").first { it.pageNumber == 26 }.snippet.startsWith("Nya [högtalare] är"))
+        assertTrue(db.search("högtalare").first { it.pageNumber == 26 }.snippet.startsWith("Bra [högtalare] gör"))
         assertEquals(listOf("datormagazin-1988-07:14"), hits("uppmärksamhet"))
     }
 

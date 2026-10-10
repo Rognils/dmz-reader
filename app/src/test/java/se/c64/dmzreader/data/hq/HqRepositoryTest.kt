@@ -120,7 +120,12 @@ class HqRepositoryTest {
             assertTrue(result.message, result.message.endsWith("PDF-sidan visas."))
             assertFalse("tekniskt fel" in result.message)
         }
-        assertTrue("nät" in hqFailureMessage(ScanFailure.NETWORK))
+        assertEquals(
+            "HQ gick inte att hämta. Det gick inte att nå DMZArkivet. Kontrollera din internetanslutning och " +
+                "försök igen. Arkivet körs på en privat server och kan ibland vara tillfälligt otillgängligt. " +
+                "PDF-sidan visas.",
+            hqFailureMessage(ScanFailure.NETWORK),
+        )
         assertTrue("finns inte" in hqFailureMessage(ScanFailure.NOT_FOUND))
         // Efter ett fel går det att försöka igen.
         source.failure = null

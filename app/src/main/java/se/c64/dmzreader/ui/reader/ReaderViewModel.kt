@@ -30,6 +30,7 @@ import se.c64.dmzreader.domain.HqIssueInfo
 import se.c64.dmzreader.domain.downloadProgressText
 import se.c64.dmzreader.domain.hqScanFor
 import se.c64.dmzreader.domain.hqSupported
+import se.c64.dmzreader.data.network.ARCHIVE_UNREACHABLE_MESSAGE
 import se.c64.dmzreader.data.pdf.DownloadProgress
 import se.c64.dmzreader.data.pdf.DownloadResult
 import se.c64.dmzreader.data.pdf.PdfDocument
@@ -131,8 +132,9 @@ data class PageTurn(val pages: List<Int>, val quality: PageQuality?)
 
 /** Felmeddelanden för en misslyckad nedladdning. */
 fun downloadFailureMessage(result: DownloadResult): String = when (result) {
+    // Det som redan har hämtats ligger kvar i .part-filen, och nästa försök begär resten med Range.
     is DownloadResult.NetworkError ->
-        "Det gick inte att nå arkivet. Kontrollera att telefonen har nät och försök igen."
+        "$ARCHIVE_UNREACHABLE_MESSAGE Nedladdningen kan återupptas där den slutade."
     is DownloadResult.InsufficientSpace ->
         "Det finns inte plats för numret. Det behövs ${fileSizeText(result.requiredBytes)}, " +
             "och ${fileSizeText(result.availableBytes) ?: "0 MB"} är ledigt."

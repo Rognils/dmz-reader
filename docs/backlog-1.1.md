@@ -5,6 +5,7 @@ Idéer som dök upp under arbetet med releasekandidaterna men som inte hör hemm
 ## Läsning och nedladdning
 
 - **Läs fortsätter själv när servern bryter.** Arkivservern bryter överföringar vid cirka 200 MB. Nedladdningskön fortsätter av sig själv, men Läs visar ett fel och kräver "Försök igen". Berör 1995 nr 15 och några till.
+- **Besked när kön väntar på arkivet.** Är arkivet nere står ett köat nummer som "Köad" utan förklaring, och systemet försöker igen i tysthet. Efter några misslyckade försök borde nummervyn säga att arkivet inte går att nå just nu och att nedladdningen fortsätter av sig själv.
 - **Lägre minnestopp på de tyngsta sidorna.** Medan en sida i 600 dpi ritas behövs cirka 900 MB under ett par sekunder. Det går inte att undvika med PdfRenderer. En annan PDF-motor, eller förrenderade sidor, vore ett större beslut.
 - **Snabbare första zoom efter stillhet.** Efter tre sekunder utan rendering släpps den visade sidans avkodade bilder, och nästa zoom tar cirka två sekunder på de tyngsta sidorna. Tiden kunde anpassas efter hur mycket minne telefonen har.
 - **Prov på äldre Android.** Android 8–13 är oprövat. En emulatorkörning av sviten per version.

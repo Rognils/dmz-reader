@@ -39,7 +39,17 @@ class ReaderLogicTest {
 
     @Test
     fun `failure messages are in plain swedish`() {
-        assertTrue(downloadFailureMessage(DownloadResult.NetworkError("x")).contains("Kontrollera att telefonen har nät"))
+        assertEquals(
+            "Det gick inte att nå DMZArkivet. Kontrollera din internetanslutning och försök igen. " +
+                "Arkivet körs på en privat server och kan ibland vara tillfälligt otillgängligt. " +
+                "Nedladdningen kan återupptas där den slutade.",
+            downloadFailureMessage(DownloadResult.NetworkError("Connection refused")),
+        )
+        // Det tekniska felet visas inte, och texten är densamma vad som än gick fel på vägen.
+        assertEquals(
+            downloadFailureMessage(DownloadResult.NetworkError("timeout")),
+            downloadFailureMessage(DownloadResult.NetworkError("Unable to resolve host")),
+        )
         assertEquals(
             "Det finns inte plats för numret. Det behövs 619,4 MB, och 120,0 MB är ledigt.",
             downloadFailureMessage(DownloadResult.InsufficientSpace(619_436_374, 120_000_000)),
