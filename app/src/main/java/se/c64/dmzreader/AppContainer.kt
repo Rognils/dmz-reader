@@ -284,6 +284,10 @@ class AppContainer(private val context: Context) {
         }
     }
 
+    /** Om-sidans text ur appens assets (about_sv.md). */
+    fun readAboutText(): String =
+        context.assets.open(se.c64.dmzreader.ui.about.ABOUT_ASSET).bufferedReader().use { it.readText() }
+
     private companion object {
         const val BUNDLED_INVENTORY = "archive_inventory.json"
     }

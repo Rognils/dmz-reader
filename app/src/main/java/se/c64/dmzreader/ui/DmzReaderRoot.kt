@@ -37,6 +37,8 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import se.c64.dmzreader.AppContainer
+import se.c64.dmzreader.BuildConfig
+import se.c64.dmzreader.ui.about.AboutScreen
 import se.c64.dmzreader.ui.favorites.FavoritesScreen
 import se.c64.dmzreader.ui.favorites.FavoritesViewModel
 import se.c64.dmzreader.ui.issue.IssueScreen
@@ -74,6 +76,7 @@ private object Routes {
     const val STATISTICS = "statistics"
     const val SETTINGS = "settings"
     const val DIAGNOSTICS = "settings/diagnostics"
+    const val ABOUT = "about"
     const val READER = "reader/{issueId}?page={page}&q={q}"
 
     /**
@@ -168,6 +171,7 @@ fun DmzReaderRoot(container: AppContainer) {
                         onOpenIssue = { navController.navigate(Routes.issue(it)) },
                         onContinueReading = { navController.navigate(Routes.reader(it)) },
                         onOpenSettings = { navController.navigate(Routes.SETTINGS) },
+                        onOpenAbout = { navController.navigate(Routes.ABOUT) },
                     )
                 }
                 composable(
@@ -385,6 +389,14 @@ fun DmzReaderRoot(container: AppContainer) {
                     searchIndexViewModel = searchIndexViewModel,
                     onBack = { navController.popBackStack() },
                     onOpenDiagnostics = { navController.navigate(Routes.DIAGNOSTICS) },
+                    onOpenAbout = { navController.navigate(Routes.ABOUT) },
+                )
+            }
+            composable(Routes.ABOUT) {
+                AboutScreen(
+                    readText = container::readAboutText,
+                    version = BuildConfig.VERSION_NAME,
+                    onBack = { navController.popBackStack() },
                 )
             }
             composable(Routes.DIAGNOSTICS) {
