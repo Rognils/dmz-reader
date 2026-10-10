@@ -39,6 +39,11 @@ class FtpScanSource(
     private val idleCloseMillis: Long = IDLE_CLOSE_MILLIS,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val timeoutMillis: Int = TIMEOUT_MILLIS,
+    /**
+     * Hur appen presenterar sig för servern, eller null. Skickas med CLNT efter inloggningen,
+     * men bara om servern annonserar stöd för det. FTP har ingen User-Agent.
+     */
+    private val clientIdentity: String? = null,
     private val log: (String) -> Unit = {},
 ) : ScanSource {
     private val lock = Mutex()
@@ -117,6 +122,7 @@ class FtpScanSource(
             if (!created.login(account.user, account.password)) {
                 throw ScanFetchException(ScanFailure.SERVER, "Arkivet godtog inte inloggningen (kod ${created.replyCode}).")
             }
+            identify(created)
             created.enterLocalPassiveMode()
             if (!created.setFileType(FTP.BINARY_FILE_TYPE)) {
                 throw ScanFetchException(ScanFailure.SERVER, "Arkivet stöder inte binär överföring (kod ${created.replyCode}).")
@@ -133,6 +139,29 @@ class FtpScanSource(
         connectionsOpened++
         log("FTP ansluten till $key (anslutning $connectionsOpened)")
         return created
+    }
+
+    /**
+     * Talar om för servern vilken klient det är (CLNT), om servern säger sig stödja det i FEAT.
+     * Det är en artighet och får aldrig påverka hämtningen: saknas FEAT eller CLNT, eller nekar
+     * servern kommandot, fortsätter anslutningen som om ingenting hade hänt. Inga omförsök.
+     */
+    private fun identify(ftp: FTPClient) {
+        val identity = clientIdentity ?: return
+        try {
+            if (!ftp.hasFeature("CLNT")) {
+                log("FTP-servern annonserar inte CLNT; klienten presenteras inte")
+                return
+            }
+            val reply = ftp.sendCommand("CLNT", identity)
+            log(
+                if (FTPReply.isPositiveCompletion(reply)) "FTP-servern stöder CLNT; klienten presenterad som $identity"
+                else "FTP-servern annonserar CLNT men svarade $reply; fortsätter utan",
+            )
+        } catch (e: Exception) {
+            // Är anslutningen bruten märks det i nästa kommando, som hanterar det som vanligt.
+            log("FTP: klienten kunde inte presenteras (${e.javaClass.simpleName}); fortsätter utan")
+        }
     }
 
     private suspend fun retrieve(ftp: FTPClient, path: String, target: File, onProgress: (Long, Long?) -> Unit): Long {

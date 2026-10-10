@@ -310,7 +310,7 @@ tools/device_test.sh            # hela sviten, omstartstestet och tvångsstoppet
 
 Skriptet tar ett fingeravtryck av användarens app (`se.c64.dmzreader`) före och efter (SHA-256 för databasen efter checkpoint, radantal per tabell, och namn, storlek, tid och SHA-256 för filerna i läs-cachen, nedladdningarna och `filesDir/data`) och avslutar med fel om något skiljer sig.
 
-Fingeravtrycket kräver att användarens app går att läsa med `run-as`, alltså att den är ett debug-bygge. Är den ett release-bygge hoppas fingeravtrycket över, och skriptet säger det. `tools/device_test.sh KATALOG --fingerprint NAMN` tar bara ett fingeravtryck.
+Fingeravtrycket av filernas innehåll kräver att användarens app går att läsa med `run-as`, alltså att den är ett debug-bygge. Är den ett release-bygge tas i stället ett yttre fingeravtryck: version, installationstid, signatur, senaste gången appen syntes och om processen är igång. Det visar att testerna inte har startat, uppdaterat eller bytt ut appen, och skriptet säger vilket slag av fingeravtryck som togs. `tools/device_test.sh KATALOG --fingerprint NAMN` tar bara ett fingeravtryck.
 
 PDF:en som testerna läser i läggs på telefonen från datorns `cache/pdf/`, i `/data/local/tmp/dmz-test-pdfs/`, och tas bort efteråt. Två tester prövar själva nedladdningen och hämtar 1986 nr 1 (15 MB) från arkivet.
 

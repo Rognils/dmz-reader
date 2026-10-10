@@ -56,14 +56,30 @@ class FtpScanSourceTest {
     @Volatile
     private var sizeUnsupported = false
 
+    /** Vad servern svarar på FEAT: en lista med funktioner, eller null för "okänt kommando". */
+    @Volatile
+    private var features: List<String>? = null
+
+    /** Svarskoden på CLNT. */
+    @Volatile
+    private var clntReply = 200
+
     // Binärt innehåll med alla bytevärden, radslut och NUL: det avslöjar en textöverföring.
     private val pageOne = ByteArray(200_000) { (it * 31 + it / 7).toByte() }
     private val pageTwo = ByteArray(50_000) { (it * 17).toByte() }
     private val directory = "/Original Scans/198601-Original"
 
     private fun url(name: String) = "ftp://localhost:${server.serverControlPort}/Original%20Scans/198601-Original/$name"
-    private fun source(idleCloseMillis: Long = 30_000, user: String = "dmz", password: String = "dmz") =
-        FtpScanSource(FtpAccount(user, password), scope, idleCloseMillis, timeoutMillis = 5_000, log = { log += it })
+    private val identity = "DMZReader/1.0.0-test (Android; +https://github.com/Rognils/dmz-reader)"
+
+    private fun source(
+        idleCloseMillis: Long = 30_000,
+        user: String = "dmz",
+        password: String = "dmz",
+        clientIdentity: String? = null,
+    ) = FtpScanSource(
+        FtpAccount(user, password), scope, idleCloseMillis, timeoutMillis = 5_000, clientIdentity = clientIdentity, log = { log += it },
+    )
 
     @Before
     fun start() {
@@ -86,6 +102,21 @@ class FtpScanSourceTest {
         })
         server.setCommandHandler(CommandNames.TYPE, object : TypeCommandHandler() {
             override fun handleCommand(command: Command, session: Session) { note(command); super.handleCommand(command, session) }
+        })
+        // FEAT och CLNT finns inte i den falska servern. Här svarar de som testet bestämmer.
+        // Raderna i FEAT-svaret skiljs med CRLF och börjar med mellanslag, som hos en riktig server.
+        server.setCommandHandler("FEAT", object : org.mockftpserver.core.command.CommandHandler {
+            override fun handleCommand(command: Command, session: Session) {
+                note(command)
+                val list = features
+                if (list == null) session.sendReply(500, "Unknown command") else session.sendReply(211, (listOf("Features:") + list.map { " $it" } + "End").joinToString("\r\n"))
+            }
+        })
+        server.setCommandHandler("CLNT", object : org.mockftpserver.core.command.CommandHandler {
+            override fun handleCommand(command: Command, session: Session) {
+                note(command)
+                session.sendReply(clntReply, if (clntReply == 200) "Noted" else "Not understood")
+            }
         })
         // Den falska servern svarar på REST men skickar ändå hela filen. Här följs REST, som på en riktig server.
         var restartAt = 0
@@ -357,6 +388,98 @@ class FtpScanSourceTest {
         source.fetch(url("DMZ_1986-01-002.jpg"), File(work, "2.part")) { _, _ -> }
         assertArrayEquals(pageTwo, File(work, "2.part").readBytes())
         assertEquals(2, source.connectionsOpened)
+        source.close()
+    }
+
+    // --- Klienten presenterar sig med CLNT, när servern säger sig stödja det ---
+
+    private fun fetchPageTwo(source: FtpScanSource, name: String): File {
+        val target = File(work, name)
+        runBlocking { assertEquals(pageTwo.size.toLong(), source.fetch(url("DMZ_1986-01-002.jpg"), target) { _, _ -> }) }
+        assertArrayEquals(pageTwo, target.readBytes())
+        return target
+    }
+
+    @Test
+    fun `the client names itself with CLNT when the server announces it`() = runBlocking {
+        features = listOf("MDTM", "CLNT", "SIZE", "UTF8")
+        val source = source(clientIdentity = identity)
+        fetchPageTwo(source, "a.part")
+        // Efter inloggningen och före överföringen, en gång per anslutning.
+        assertEquals(
+            listOf("USER dmz", "FEAT", "CLNT $identity", "TYPE I", "PASV", "RETR $directory/DMZ_1986-01-002.jpg"),
+            commands.filterNot { it.startsWith("REST") },
+        )
+        fetchPageTwo(source, "b.part")
+        assertEquals(1, commands.count { it.startsWith("CLNT") })
+        assertTrue(log.any { "stöder CLNT" in it })
+        source.close()
+    }
+
+    @Test
+    fun `without CLNT in FEAT nothing is sent and the page is fetched as usual`() = runBlocking {
+        features = listOf("MDTM", "SIZE", "UTF8")
+        val source = source(clientIdentity = identity)
+        fetchPageTwo(source, "a.part")
+        assertTrue("FEAT" in commands)
+        assertEquals(0, commands.count { it.startsWith("CLNT") })
+        assertEquals(1, source.connectionsOpened)
+        source.close()
+    }
+
+    @Test
+    fun `a server that does not know FEAT is used as usual`() = runBlocking {
+        features = null
+        val source = source(clientIdentity = identity)
+        fetchPageTwo(source, "a.part")
+        assertEquals(1, commands.count { it == "FEAT" })
+        assertEquals(0, commands.count { it.startsWith("CLNT") })
+        assertEquals(1, source.connectionsOpened)
+        source.close()
+    }
+
+    @Test
+    fun `a refused CLNT changes nothing and is not tried again`() = runBlocking {
+        features = listOf("CLNT")
+        for (reply in listOf(500, 502, 530, 550)) {
+            commands.clear()
+            clntReply = reply
+            val source = source(clientIdentity = identity)
+            fetchPageTwo(source, "nekad-$reply.part")
+            fetchPageTwo(source, "nekad-$reply-b.part")
+            // Ett försök per anslutning, ingen ny anslutning och inget avbrott.
+            assertEquals("$reply", 1, commands.count { it.startsWith("CLNT") })
+            assertEquals("$reply", 1, source.connectionsOpened)
+            assertTrue(source.connected)
+            source.close()
+        }
+    }
+
+    @Test
+    fun `without an identity neither FEAT nor CLNT is sent`() = runBlocking {
+        features = listOf("CLNT")
+        val source = source()
+        fetchPageTwo(source, "a.part")
+        assertEquals(0, commands.count { it == "FEAT" || it.startsWith("CLNT") })
+        source.close()
+    }
+
+    @Test
+    fun `resume, missing files and errors work the same with CLNT`() = runBlocking {
+        features = listOf("CLNT")
+        val source = source(clientIdentity = identity)
+        val target = File(work, "halv.part")
+        target.writeBytes(pageOne.copyOf(120_000))
+        source.fetch(url("DMZ_1986-01-001.jpg"), target) { _, _ -> }
+        assertArrayEquals(pageOne, target.readBytes())
+        try {
+            source.fetch(url("DMZ_1986-01-099.jpg"), File(work, "x.part")) { _, _ -> }
+            fail("skulle ha kastat")
+        } catch (e: ScanFetchException) {
+            assertEquals(ScanFailure.NOT_FOUND, e.failure)
+        }
+        assertEquals(1, source.connectionsOpened)
+        assertEquals(1, commands.count { it.startsWith("CLNT") })
         source.close()
     }
 

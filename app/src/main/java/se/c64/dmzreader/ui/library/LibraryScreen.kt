@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -139,6 +140,7 @@ fun LibraryScreen(
     onOpenIssue: (issueId: String) -> Unit,
     onContinueReading: (issueId: String) -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenAbout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -151,7 +153,7 @@ fun LibraryScreen(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        fullWidth("header") { LibraryHeader(onOpenSettings) }
+        fullWidth("header") { LibraryHeader(onOpenSettings, onOpenAbout) }
 
         when {
             state.errorMessage != null && state.publications.isEmpty() -> fullWidth("error") {
@@ -213,7 +215,7 @@ private fun LazyGridScope.fullWidth(key: String, content: @Composable () -> Unit
 }
 
 @Composable
-private fun LibraryHeader(onOpenSettings: () -> Unit) {
+private fun LibraryHeader(onOpenSettings: () -> Unit, onOpenAbout: () -> Unit) {
     Row(verticalAlignment = Alignment.Top) {
         Column(modifier = Modifier.weight(1f)) {
             MonoLabel("READY.", color = DmzColors.Accent)
@@ -222,6 +224,13 @@ private fun LibraryHeader(onOpenSettings: () -> Unit) {
                 text = "DMZ Reader",
                 style = MaterialTheme.typography.displaySmall,
                 color = DmzColors.TextPrimary,
+            )
+        }
+        IconButton(onClick = onOpenAbout, modifier = Modifier.size(48.dp)) {
+            Icon(
+                imageVector = Icons.Outlined.Info,
+                contentDescription = "Om DMZ Reader",
+                tint = DmzColors.TextSecondary,
             )
         }
         IconButton(onClick = onOpenSettings, modifier = Modifier.size(48.dp)) {

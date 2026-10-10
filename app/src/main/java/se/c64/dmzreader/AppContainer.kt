@@ -24,6 +24,7 @@ import se.c64.dmzreader.data.hq.HqRepository
 import se.c64.dmzreader.data.hq.ScanSource
 import se.c64.dmzreader.data.inventory.InventoryManager
 import se.c64.dmzreader.data.inventory.InventoryLoadResult
+import se.c64.dmzreader.data.network.ClientIdentity
 import se.c64.dmzreader.data.network.CoverImageLoader
 import se.c64.dmzreader.data.offline.LocalStateStore
 import se.c64.dmzreader.data.offline.OfflineRepository
@@ -72,7 +73,10 @@ class AppContainer(private val context: Context) {
     }
 
     private val pdfCache by lazy { PdfCache(File(context.cacheDir, "pdf")) }
-    private val pdfHttpClient by lazy { PdfDownloader.createHttpClient() }
+    private val pdfHttpClient by lazy {
+        // I debug-bygget loggas vilken User-Agent som skickas till arkivet.
+        PdfDownloader.createHttpClient(logUserAgent = if (BuildConfig.DEBUG) { message -> Log.d("DmzNet", message) } else null)
+    }
 
     /** En PDF-överföring åt gången i hela appen: "Läs" och nedladdningskön delar på den. */
     private val transferCoordinator = TransferCoordinator()
@@ -89,6 +93,7 @@ class AppContainer(private val context: Context) {
     var scanSource: ScanSource = FtpScanSource(
         account = FtpAccount(BuildConfig.ARCHIVE_FTP_USER, BuildConfig.ARCHIVE_FTP_PASSWORD),
         scope = scope,
+        clientIdentity = ClientIdentity.userAgent,
         log = { Log.i("DmzHq", it) },
     )
 
@@ -278,6 +283,10 @@ class AppContainer(private val context: Context) {
             _inventoryStatus.value = InventoryStatus.Done(result)
         }
     }
+
+    /** Om-sidans text ur appens assets (about_sv.md). */
+    fun readAboutText(): String =
+        context.assets.open(se.c64.dmzreader.ui.about.ABOUT_ASSET).bufferedReader().use { it.readText() }
 
     private companion object {
         const val BUNDLED_INVENTORY = "archive_inventory.json"

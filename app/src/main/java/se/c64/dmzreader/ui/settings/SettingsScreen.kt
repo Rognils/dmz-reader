@@ -298,6 +298,7 @@ fun SettingsScreen(
     searchIndexViewModel: SearchIndexViewModel,
     onBack: () -> Unit,
     onOpenDiagnostics: () -> Unit,
+    onOpenAbout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val storage by viewModel.state.collectAsStateWithLifecycle()
@@ -444,6 +445,31 @@ fun SettingsScreen(
                         Spacer(Modifier.height(2.dp))
                         Text(
                             "Arkivindex, databas och test av textsökningen",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = DmzColors.TextSecondary,
+                        )
+                    }
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null,
+                        tint = DmzColors.Label,
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(12.dp))
+            Panel(
+                modifier = Modifier.clickable(role = Role.Button, onClick = onOpenAbout).testTag("open-about"),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("Om DMZ Reader", style = MaterialTheme.typography.titleMedium, color = DmzColors.TextPrimary)
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            "Om appen, DMZArkivet och materialet",
                             style = MaterialTheme.typography.bodyMedium,
                             color = DmzColors.TextSecondary,
                         )

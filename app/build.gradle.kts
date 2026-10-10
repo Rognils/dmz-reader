@@ -16,8 +16,8 @@ android {
         targetSdk = 37
         // Följer taggarna (planens G4): 0.6.1 ger 601, 0.7.0 ger 700, 1.0.0 ger 10000.
         // En releasekandidat ligger strax under sin version: 1.0.0-rc1 ger 9901, rc2 ger 9902.
-        versionCode = 9901
-        versionName = "1.0.0-rc1"
+        versionCode = 9902
+        versionName = "1.0.0-rc2"
         // Egen testkörare: testerna körs mot isolerad lagring, aldrig mot användarens data.
         testInstrumentationRunner = "se.c64.dmzreader.IsolatedTestRunner"
         // Arkivets publika FTP-konto, för HQ-skanningarna (planens A2, ADR 0009).

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -37,6 +36,9 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import se.c64.dmzreader.AppContainer
+import se.c64.dmzreader.BuildConfig
+import se.c64.dmzreader.ui.about.AboutScreen
+import se.c64.dmzreader.ui.components.BarChartIcon
 import se.c64.dmzreader.ui.favorites.FavoritesScreen
 import se.c64.dmzreader.ui.favorites.FavoritesViewModel
 import se.c64.dmzreader.ui.issue.IssueScreen
@@ -74,6 +76,7 @@ private object Routes {
     const val STATISTICS = "statistics"
     const val SETTINGS = "settings"
     const val DIAGNOSTICS = "settings/diagnostics"
+    const val ABOUT = "about"
     const val READER = "reader/{issueId}?page={page}&q={q}"
 
     /**
@@ -88,7 +91,7 @@ private object Routes {
     fun issue(issueId: String) = "issue/$issueId"
 
     /** Vyer som visas utan bottenfält. */
-    val withoutBottomBar = setOf(SETTINGS, DIAGNOSTICS, READER)
+    val withoutBottomBar = setOf(SETTINGS, DIAGNOSTICS, ABOUT, READER)
 }
 
 /** Värdet på sidargumentet när ingen sida är begärd. */
@@ -101,7 +104,7 @@ private val tabs = listOf(
     Tab(Routes.LIBRARY_TAB, "Bibliotek", Icons.AutoMirrored.Filled.List),
     Tab(Routes.SEARCH, "Sök", Icons.Filled.Search),
     Tab(Routes.FAVORITES, "Favoriter", Icons.Filled.Favorite),
-    Tab(Routes.STATISTICS, "Statistik", Icons.Filled.Info),
+    Tab(Routes.STATISTICS, "Statistik", BarChartIcon),
 )
 
 @Composable
@@ -168,6 +171,7 @@ fun DmzReaderRoot(container: AppContainer) {
                         onOpenIssue = { navController.navigate(Routes.issue(it)) },
                         onContinueReading = { navController.navigate(Routes.reader(it)) },
                         onOpenSettings = { navController.navigate(Routes.SETTINGS) },
+                        onOpenAbout = { navController.navigate(Routes.ABOUT) },
                     )
                 }
                 composable(
@@ -385,6 +389,14 @@ fun DmzReaderRoot(container: AppContainer) {
                     searchIndexViewModel = searchIndexViewModel,
                     onBack = { navController.popBackStack() },
                     onOpenDiagnostics = { navController.navigate(Routes.DIAGNOSTICS) },
+                    onOpenAbout = { navController.navigate(Routes.ABOUT) },
+                )
+            }
+            composable(Routes.ABOUT) {
+                AboutScreen(
+                    readText = container::readAboutText,
+                    version = BuildConfig.VERSION_NAME,
+                    onBack = { navController.popBackStack() },
                 )
             }
             composable(Routes.DIAGNOSTICS) {
