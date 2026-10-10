@@ -1,8 +1,8 @@
 # Fasrapport – FAS RC: härdning inför 1.0 (1.0.0-rc1)
 
-Datum: 2026-10-10 · Gren: `release/1.0-rc`, mergad till `main` efter steg 8 · App 1.0.0-rc1 (versionCode 9901)
+Datum: 2026-10-10 · Gren: `release/1.0-rc`, mergad till `main` och taggad `v1.0.0-rc1` · App 1.0.0-rc1 (versionCode 9901)
 
-**Läge: steg 1–8 är klara. Steg 9 (flytten av din data) och steg 10 (taggen) väntar på ditt besked "kör flytten".** Avsnitt 9 fylls i efter flytten.
+**Läge: alla tio steg är klara.** Din data är flyttad till release-bygget (avsnitt 9), och en checklista inför v1.0.0 finns i avsnitt 12.
 
 ## 1. Sammanfattning
 
@@ -12,7 +12,7 @@ Datum: 2026-10-10 · Gren: `release/1.0-rc`, mergad till `main` efter steg 8 · 
 - **Tre appar i stället för en:** utveckling och tester körs i `se.c64.dmzreader.debug`, provet i `se.c64.dmzreader.rc`, och din app `se.c64.dmzreader` har inte berörts.
 - **Release-nyckeln** är skapad, och release och rc signeras med den.
 - **RC-varianten** (krympt med R8, release-nyckeln) är provad på telefonen bredvid din app, även på mobildata. Inga krascher.
-- **Flytten** är övad med testdata från debug-appen till rc-appen. Allt kom över.
+- **Flytten** är övad med testdata från debug-appen till rc-appen, och därefter gjord med din data. Allt kom över.
 
 ## 2. Din data
 
@@ -24,7 +24,7 @@ Appdatan kopierades till `~/dmz-backup-före-rc/` först (IssueUserState 2, Book
 
 Ett undantag i förloppet: den första svitkörningen (63 av 63 godkända) avbröts därefter av ett fel i skriptet, eftersom jag ändrade filen medan den kördes. Dess fingeravtryck efter togs därför inte. Nästa fingeravtryck, taget direkt därefter, var identiskt med det före.
 
-På telefonen finns nu, utöver din app: `DMZ Reader DEV` (debug, med testernas och flyttövningens data), `DMZ Reader RC` (rc, med flyttövningens data och sökindexet) och det gamla testpaketet `se.c64.dmzreader.test` från tidigare faser. De två sista tas bort i steg 9 om du vill.
+Det här gäller fram till flytten i steg 9. Efter den är din app release-bygget, och på telefonen finns därutöver bara `DMZ Reader DEV` med sitt testpaket.
 
 ## 3. Steg 1 – minnet
 
@@ -98,7 +98,7 @@ Mätfilerna ligger i `docs/reports/rc1/minne/`.
 
 En avbruten hämtning (nät av, sidbyte, processdöd) lämnar bara `.part`, som aldrig lämnas ut som en sida. Nya JVM-tester mot MockFtpServer: servern bryter mitt i med felkod, servern bryter mitt i men svarar "klart", server utan SIZE, och hela kedjan genom cachen. Dessutom: en trunkerad fil i cachen upptäcks och hämtas om, och en hämtning av fel storlek flyttas aldrig in.
 
-**Steg 3 – nytt search.db.** Byggt för arkivversion 2026-10-06-006 med normalizerVersion 2 och ordlista 1. Facit: 43 av 43 sökord hittar alla förväntade sidor, 0 irrelevanta träffar. Sidornas text är identisk med det förra indexet (samma kontrollsumma över alla 11 293 sidor); bara `meta` skiljer.
+**Steg 3 – nytt search.db.** Byggt för arkivversion 2026-10-06-006 med normalizerVersion 2 och ordlista 1. Facit: 43 av 43 sökord hittar alla förväntade sidor, inga falska positiva bland facits kontrollerade träffar. Sidornas text är identisk med det förra indexet (samma kontrollsumma över alla 11 293 sidor); bara `meta` skiljer.
 
 - `dist/search.db`: 148 877 312 byte, SHA-256 `9da0dbd6…65a6ec`
 - det förra ligger kvar som `dist/search-2026-10-06-005.db`
@@ -202,19 +202,90 @@ Ett Python-test som jag ändrade i början av fasen föll på ett variabelnamn i
 
 ## 9. Steg 9 – flytten av din data
 
-*Inte gjord. Väntar på "kör flytten".*
+Gjord 2026-10-10 efter ditt besked. Din app är nu release 1.0.0-rc1, signerad med release-nyckeln.
 
-Det jag kommer att göra, i ordning:
+### Före avinstallationen
 
-1. Exportera en säkerhetskopia genom din apps gränssnitt, till Download, och hämta den till `~/dmz-backup-före-rc/`. Jämföra antalen i filen med databasen.
-2. Ta en ny direktkopia av appdatan med `run-as tar`.
-3. Avinstallera den gamla appen (och det gamla testpaketet).
-4. Installera release 1.0.0-rc1, signerad med release-nyckeln.
-5. Importera säkerhetskopian och `search.db`. Kontrollera antalen, Fortsätt läsa och bokmärkena.
-6. Kontrollera nätverksåtkomst och notisbehörighet, och säga till om du behöver göra något för hand.
-7. Ta bort filerna ur Download.
+Du hade använt appen sedan FAS 11, så läget var ett annat än vid fasens början: en tredje session, och 1991 nr 15 på sida 19.
 
-Det här följer inte med och hämtas på nytt vid behov: de två numren i läs-cachen (1988 nr 1 och 1991 nr 15). Du har inga nedladdade nummer och inga bokmärken i dag.
+**Inställningar som inte ingår i säkerhetskopian** (lästa ur appens DataStore och i gränssnittet):
+
+| Inställning | Värde före | Efter flytten |
+|---|---|---|
+| Ladda ned endast via wifi | på (standardvärdet, aldrig ändrat) | på |
+| Vald publikation i biblioteket | Datormagazin | Datormagazin (standardvärdet) |
+| Frågan om notiser vid första nedladdningen | redan visad | inte visad: appen frågar igen vid första nedladdningen |
+| Aktivt arkivindex | det inbyggda, 2026-10-06-006 | det inbyggda, 2026-10-06-006 |
+| Senaste export | ingen | 2026-10-10, från min kontrollexport |
+
+Appen har inget sparat sorteringsval. Sorteringen i sökningen väljs för stunden.
+
+**Exporten** gjordes genom appens gränssnitt, med mappen Download vald uttryckligen. Appen svarade "2 nummer med data, 0 bokmärken och 3 lässessioner". Filen hämtades med `adb pull` och jämfördes fält för fält med databasen, läst med `run-as`:
+
+| | Säkerhetskopian | Databasen |
+|---|---|---|
+| backupFormat | 2 | – |
+| Favoriter | 0 | 0 |
+| Bokmärken | 0 | 0 |
+| Sessioner | 3 | 3 |
+| Lästid | 124 s | 124 s |
+| Nummer med läsdata | 2 | 2 |
+| Lästa sidor | 9 | 9 |
+
+Läsposition, lästa sidor och varje session stämde också post för post. En ny direktkopia av appdatan togs med `run-as tar` (201 MB). Först därefter avinstallerades appen.
+
+### Efter importen
+
+Appen svarade "2 nya nummer, 0 uppdaterade, 0 nya bokmärken, 0 uppdaterade och 3 nya sessioner".
+
+| Kontroll i release-appen | Före | Efter |
+|---|---|---|
+| Fortsätt läsa | 1991 nr 15, sida 19 av 80, "7 av 80 lästa" | samma |
+| Statistik: påbörjade nummer | 2 | 2 |
+| Statistik: lästa sidor | 9 | 9 |
+| Statistik: lästid | 2 min | 2 min |
+| Favoriter och bokmärken | 0 och 0 | 0 och 0 |
+| Fortsätt läsa öppnar | – | 1991 nr 15 på sida 19 |
+| Sökindex | arkivversion 005 | arkivversion 006, 185 nummer och 11 293 sidor, ingen versionsnotis |
+
+**Min kontroll lämnade ett spår i din data.** När jag öppnade Fortsätt läsa för att se att rätt sida visades räknades sida 19 som läst, och en session på 12 sekunder sparades. Det syns i en kontrollexport jag gjorde efteråt:
+
+| | Före flytten | Efter flytten och min kontroll |
+|---|---|---|
+| Lästa sidor | 9 | 10 (sida 19 i 1991 nr 15 tillkom) |
+| Sessioner | 3 | 4 (en på 12 s tillkom) |
+| Lästid | 124 s | 136 s |
+
+Alla tre ursprungliga sessioner finns kvar oförändrade, och 1988 nr 1 är orört. Inget annat skiljer. Det går inte att ta bort spåret utifrån, eftersom release-bygget inte kan läsas med `run-as`.
+
+### Behörigheter och nätverk
+
+- Nätverket fungerar: appen hämtade 1991 nr 15 (25 MB) direkt efter flytten. Ingen nätverksspärr finns för appen.
+- Notisbehörigheten var inte beviljad efter installationen. Jag beviljade den med adb. Vad den var satt till i den gamla appen kunde jag inte se i efterhand, så om du hade nekat den får du stänga av den igen.
+- Du behöver inte göra något för hand.
+
+### Städning
+
+- Båda säkerhetskopiorna och `search.db` är borttagna ur telefonens Download.
+- `DMZ Reader RC` och det gamla testpaketet `se.c64.dmzreader.test` är avinstallerade.
+- `DMZ Reader DEV` (med sitt testpaket) ligger kvar.
+- På datorn, i `~/dmz-backup-före-rc/flytt/`: säkerhetskopian, kontrollexporten efter flytten, direktkopian av appdatan med kontrollsumma, inställningsfilen och jämförelserna.
+
+### Tider
+
+| | |
+|---|---|
+| Från att appen startades för export till bekräftad import | 2 min 33 s |
+| Därav från avinstallation till bekräftad import | 56 s |
+| Till att sökindexet var importerat | 3 min 13 s |
+| Allt, med kontroller, kontrollexport och städning | 5 min 28 s |
+
+### Det som inte följde med
+
+- Läs-cachen: 1988 nr 1 hämtas igen när du öppnar det. 1991 nr 15 är redan hämtat igen, av min kontroll.
+- Fingeravtryck av din data kan inte längre tas, eftersom release-bygget inte går att läsa med `run-as`. Testerna körs i `DMZ Reader DEV`, som är en annan app.
+
+Skärmbilder före och efter finns i `docs/screenshots/rc1/flytt/`.
 
 ## 10. Skapade och ändrade filer
 
@@ -230,4 +301,48 @@ Det här följer inte med och hämtas på nytt vid behov: de två numren i läs-
 
 ## 12. Checklista inför v1.0.0
 
-*Skrivs klart efter flytten.*
+Använd appen som vanligt i en vecka. Bocka av det här under tiden, och anteckna allt som känns fel eller långsamt.
+
+**Läsa**
+- [ ] Läs ett helt nummer från början till slut, med bläddring både med tryck och svep.
+- [ ] Zooma och panorera på en sida med liten text, och i ett uppslag i liggande läge.
+- [ ] Stäng appen mitt i ett nummer och öppna den nästa dag: Fortsätt läsa visar rätt nummer och sida.
+- [ ] Läs ett nummer ur den äldre PDF-generationen (till exempel 1993–1995) och ett ur den nyare (1986–1991).
+
+**Nedladdning**
+- [ ] Ladda ned två eller tre nummer med "Ladda ned" och läs ett av dem utan nät (flygplansläge).
+- [ ] Ta bort ett nedladdat nummer och se att utrymmet under Inställningar → Lagring minskar.
+- [ ] Öppna ett stort nummer (1995 nr 15, 563 MB) med Läs och se att det laddas klart med "Försök igen" när servern bryter.
+- [ ] Svara på frågan om notiser vid första nedladdningen, och se att förloppet visas som notis.
+
+**Sökning**
+- [ ] Sök på ett ord, en fras inom citattecken och ett ord med stjärna (till exempel amig*).
+- [ ] Öppna en träff och bläddra mellan träffarna i numret.
+- [ ] Använd "Sök i numret" inifrån läsaren.
+
+**HQ**
+- [ ] Slå på HQ på en sida med liten text och jämför med PDF-sidan vid samma zoom.
+- [ ] Bläddra några sidor i HQ-läge, och gå sedan tillbaka till en av dem utan nät.
+- [ ] Prova HQ på ett liggande omslag (till exempel 1987 nr 4–5, sida 1) och se att det ligger rätt.
+- [ ] Prova HQ över mobildata en gång.
+
+**Bokmärken och favoriter**
+- [ ] Sätt ett bokmärke med titel och anteckning, och öppna det från Favoriter.
+- [ ] Ta bort ett bokmärke och ångra.
+- [ ] Markera ett par nummer som favoriter.
+
+**Statistik**
+- [ ] Se att lästiden och antalet lästa sidor verkar rimliga efter veckan.
+- [ ] Läs en gång över midnatt, om det faller sig så, och se att tiden hamnar på rätt dag.
+
+**Säkerhetskopia**
+- [ ] Gör en export i slutet av veckan (välj mappen uttryckligen) och spara filen utanför telefonen.
+
+**Minne och stabilitet**
+- [ ] Bläddra snabbt genom ett tjugotal sidor i 1995 nr 15. Appen ska inte stängas av systemet.
+- [ ] Notera om appen någon gång kraschar, hänger sig eller startar om, och vad du gjorde då.
+
+**Inför taggen v1.0.0**
+- [ ] Nyckeln och lösenordet finns kvar på platsen utanför datorn.
+- [ ] Bestäm om `DMZ Reader DEV` ska ligga kvar på telefonen.
+- [ ] Bestäm om spåret efter min kontroll (sida 19 och sessionen på 12 sekunder) ska ligga kvar.

@@ -60,9 +60,13 @@ Flytten övades från utvecklingsbygget (`se.c64.dmzreader.debug`, debug-nyckeln
 - Filväljaren öppnades i telefonens rotkatalog vid exporten, inte i Download, eftersom den minns var den senast användes. Filen hamnade därför utanför Download första gången. Välj katalogen uttryckligen.
 - Appen bekräftar exporten även då. Kontrollera att filen faktiskt ligger där du tror innan den gamla appen avinstalleras.
 
-## Den riktiga flytten
+## Den riktiga flytten (2026-10-10)
 
-Samma steg, med två tillägg:
+Gjord från debug-bygget 0.11.0 till release 1.0.0-rc1. Antalen före och efter, inställningarna och tiderna står i `docs/reports/rc1.md`, avsnitt 9. Från avinstallation till bekräftad import gick det 56 sekunder.
+
+En sak att tänka på nästa gång: att öppna Fortsätt läsa för att kontrollera sidan räknas som läsning. Kontrollen lade till en läst sida och en kort session. Läs av sidan i biblioteket i stället, där den står på kortet.
+
+Samma steg som i övningen, med två tillägg:
 
 - Före avinstallationen tas också en direktkopia av appens data med `adb exec-out "run-as se.c64.dmzreader tar cf - ."`. Det går bara så länge den installerade appen är ett debug-bygge.
 - Efter flytten kan appen behöva nätverksåtkomst och notisbehörighet på nytt, eftersom behörigheterna hör till installationen.
