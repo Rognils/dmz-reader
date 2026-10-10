@@ -121,6 +121,21 @@ class MarkdownTest {
     }
 
     @Test
+    fun `the about text says that the archive runs on a private connection`() {
+        val headings = blocks.filterIsInstance<Heading>()
+        val start = blocks.indexOf(headings.single { it.plainText == "Tack, Gustav!" })
+        // Meningen står sist i stycket under rubriken, före länken till arkivet.
+        val paragraph = blocks[start + 1] as Paragraph
+        assertTrue(
+            paragraph.plainText,
+            paragraph.plainText.endsWith(
+                "Stort tack! DMZArkivet körs på en privat uppkoppling, så ibland kan arkivet vara tillfälligt otillgängligt.",
+            ),
+        )
+        assertEquals("dmzarkivet.se", (blocks[start + 2] as Paragraph).plainText)
+    }
+
+    @Test
     fun `the about text shows the version of the build`() {
         assertTrue(blocks.any { it is Paragraph && it.plainText == "Version ${BuildConfig.VERSION_NAME}" })
         assertFalse(blocks.any { "{version}" in it.plainText })

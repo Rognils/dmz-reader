@@ -6,7 +6,7 @@ DMZ Reader är gratis och innehåller ingen reklam, inga köp, inga användarkon
 
 ## Tack, Gustav!
 
-DMZArkivet byggs och underhålls av Gustav Almström, som lagt ner ett omfattande arbete på att samla in, skanna, OCR-behandla och tillgängliggöra de gamla tidningarna. Utan DMZArkivet hade den här appen inte funnits. Stort tack!
+DMZArkivet byggs och underhålls av Gustav Almström, som lagt ner ett omfattande arbete på att samla in, skanna, OCR-behandla och tillgängliggöra de gamla tidningarna. Utan DMZArkivet hade den här appen inte funnits. Stort tack! DMZArkivet körs på en privat uppkoppling, så ibland kan arkivet vara tillfälligt otillgängligt.
 
 [dmzarkivet.se](https://dmzarkivet.se)
 

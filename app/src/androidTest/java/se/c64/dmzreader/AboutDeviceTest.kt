@@ -38,6 +38,11 @@ class AboutDeviceTest {
         waitFor { rule.onAllNodes(hasTestTag("about")).fetchSemanticsNodes().isNotEmpty() && exists("Tack, Gustav!") }
         rule.onNodeWithText("Om DMZ Reader").assertIsDisplayed()
         rule.onNodeWithText("Tack, Gustav!").performScrollTo().assertIsDisplayed()
+        // Stycket under rubriken slutar med upplysningen om att arkivet kan vara nere.
+        rule.onNodeWithText(
+            "DMZArkivet körs på en privat uppkoppling, så ibland kan arkivet vara tillfälligt otillgängligt.",
+            substring = true,
+        ).performScrollTo().assertIsDisplayed()
     }
 
     @Test

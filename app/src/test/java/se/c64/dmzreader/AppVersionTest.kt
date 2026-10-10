@@ -7,7 +7,7 @@ import org.junit.Test
 /**
  * Appens version följer taggarna (planens G4): 0.6.1 ger 601, 0.7.0 ger 700, 1.0.0 ger 10000.
  * En releasekandidat ligger strax under sin version, så att den färdiga versionen kan
- * installeras ovanpå: 1.0.0-rc1 ger 9901 och 1.0.0-rc2 ger 9902.
+ * installeras ovanpå: 1.0.0-rc1 ger 9901, 1.0.0-rc2 ger 9902 och 1.0.0-rc3 ger 9903.
  */
 class AppVersionTest {
     private fun versionCodeFor(versionName: String): Int {
@@ -34,6 +34,7 @@ class AppVersionTest {
         assertEquals(10_000, versionCodeFor("1.0.0"))
         assertEquals(9_901, versionCodeFor("1.0.0-rc1"))
         assertEquals(9_902, versionCodeFor("1.0.0-rc2"))
+        assertEquals(9_903, versionCodeFor("1.0.0-rc3"))
         // Kandidaterna ligger över 0.11.0 och under den färdiga versionen.
         assertTrue(versionCodeFor("0.11.0") < versionCodeFor("1.0.0-rc1"))
         assertTrue(versionCodeFor("1.0.0-rc9") < versionCodeFor("1.0.0"))

@@ -1,6 +1,7 @@
 package se.c64.dmzreader.data.hq
 
 import kotlinx.coroutines.CancellationException
+import se.c64.dmzreader.data.network.ARCHIVE_UNREACHABLE_MESSAGE
 import se.c64.dmzreader.data.pdf.DownloadProgress
 import se.c64.dmzreader.data.pdf.TransferCoordinator
 import se.c64.dmzreader.domain.HqScan
@@ -70,7 +71,7 @@ class HqRepository(
 
 /** Felmeddelandet för en HQ-sida som inte gick att hämta. PDF-sidan visas i stället. */
 fun hqFailureMessage(failure: ScanFailure): String = when (failure) {
-    ScanFailure.NETWORK -> "HQ gick inte att hämta: arkivet nås inte. Kontrollera att telefonen har nät. PDF-sidan visas."
+    ScanFailure.NETWORK -> "HQ gick inte att hämta. $ARCHIVE_UNREACHABLE_MESSAGE PDF-sidan visas."
     ScanFailure.NOT_FOUND -> "HQ gick inte att hämta: skanningen finns inte i arkivet. PDF-sidan visas."
     ScanFailure.SERVER -> "HQ gick inte att hämta: arkivet svarade med ett fel. PDF-sidan visas."
 }
