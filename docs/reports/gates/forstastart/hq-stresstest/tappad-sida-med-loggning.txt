@@ -1,0 +1,38 @@
+10-10 23:19:27.153 16751 16765 I DmzStress: fel-nytt-forsok-av-pa page=4 hq=true status=HQ countedAfterMs=946
+10-10 23:19:27.246 16751 16751 D DmzSeen : shown page=3 quality=null
+10-10 23:19:27.246 16751 16751 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-10 23:19:27.247 16751 16751 D DmzSeen : full dispose page=3 1440x2030 key=151373789 sameAsCurrent=true
+10-10 23:19:27.259 16751 16751 D DmzSeen : screen index=4 pages=[5] was=[4] landscape=false
+10-10 23:19:27.260 16751 16751 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=1500 hq=true
+10-10 23:19:27.354 16751 16751 D DmzSeen : shown page=7 quality=null
+10-10 23:19:27.355 16751 16751 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=1406 hq=true
+10-10 23:19:27.421 16751 16751 D DmzSeen : shown page=7 quality=PREVIEW
+10-10 23:19:27.421 16751 16751 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=1339 hq=true
+10-10 23:19:27.524 16751 16897 D DmzSeen : full set page=7 1440x2036 key=151373789
+10-10 23:19:27.563 16751 16751 D DmzSeen : shown page=7 quality=FULL
+10-10 23:19:27.563 16751 16751 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=1197 hq=true
+10-10 23:19:27.773 16751 16751 D DmzSeen : full dispose page=5 1440x2042 key=151373789 sameAsCurrent=true
+10-10 23:19:27.775 16751 16751 D DmzSeen : shown page=5 quality=FULL
+10-10 23:19:27.775 16751 16751 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=985 hq=true
+10-10 23:19:27.783 16751 16751 D DmzSeen : shown page=5 quality=null
+10-10 23:19:27.783 16751 16751 D DmzSeen : timer screen=[5] readable=false foreground=true quality=[null] remaining=null hq=true
+10-10 23:19:27.828 16751 16751 D DmzSeen : toggleHq from=true page=5
+10-10 23:19:27.864 16751 16751 D DmzSeen : shown page=5 quality=PREVIEW
+10-10 23:19:27.864 16751 16751 D DmzSeen : timer screen=[5] readable=false foreground=true quality=[PREVIEW] remaining=null hq=false
+10-10 23:19:27.864 16751 16751 D DmzSeen : full dispose page=4 1440x2040 key=60666261 sameAsCurrent=true
+10-10 23:19:27.865 16751 16751 D DmzSeen : shown page=4 quality=FULL
+10-10 23:19:27.865 16751 16751 D DmzSeen : timer screen=[5] readable=false foreground=true quality=[PREVIEW] remaining=null hq=false
+10-10 23:19:27.873 16751 16751 D DmzSeen : shown page=5 quality=null
+10-10 23:19:27.873 16751 16751 D DmzSeen : timer screen=[5] readable=false foreground=true quality=[null] remaining=null hq=false
+10-10 23:19:27.873 16751 16751 D DmzSeen : shown page=4 quality=null
+10-10 23:19:27.873 16751 16751 D DmzSeen : timer screen=[5] readable=false foreground=true quality=[null] remaining=null hq=false
+10-10 23:19:27.939 16751 16751 D DmzSeen : toggleHq from=false page=5
+10-10 23:19:28.043 16751 16751 D DmzSeen : shown page=5 quality=PREVIEW
+10-10 23:19:28.043 16751 16751 D DmzSeen : timer screen=[5] readable=false foreground=true quality=[PREVIEW] remaining=null hq=true
+10-10 23:19:28.150 16751 16773 D DmzSeen : full set page=5 1440x2040 key=179605765
+10-10 23:19:28.271 16751 16897 D DmzSeen : full set page=4 1440x2050 key=151373789
+10-10 23:19:34.139 16751 16751 D DmzSeen : shown page=5 quality=FULL
+10-10 23:19:34.139 16751 16751 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=977 hq=true
+10-10 23:19:34.140 16751 16751 D DmzSeen : shown page=4 quality=FULL
+10-10 23:19:34.140 16751 16751 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=977 hq=true
+10-10 23:19:34.194 16751 16765 I DmzStress: fel-nytt-forsok-av-pa page=5 hq=true status=HQ countedAfterMs=ALDRIG

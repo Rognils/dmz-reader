@@ -1,0 +1,346 @@
+10-10 23:59:58.535 20943 20943 D DmzSeen : toggleHq from=false page=1
+10-10 23:59:58.928 20943 20972 I DmzHq   : FTP-servern stöder CLNT; klienten presenterad som DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader)
+10-10 23:59:58.952 20943 20972 I DmzHq   : FTP ansluten till dmzarkivet.se:21 (anslutning 1)
+10-10 23:59:59.460 20943 20943 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-001.jpg, 5084150 byte på 923 ms
+10-10 23:59:59.511 20943 20943 D DmzSeen : full dispose page=1 1440x2030 key=226268527 sameAsCurrent=true
+10-10 23:59:59.512 20943 20943 D DmzSeen : shown page=1 quality=FULL
+10-10 23:59:59.512 20943 20943 D DmzSeen : timer screen=[1] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-10 23:59:59.520 20943 20943 D DmzSeen : shown page=1 quality=null
+10-10 23:59:59.521 20943 20943 D DmzSeen : timer screen=[1] readable=false foreground=true quality=[null] remaining=null hq=true
+10-10 23:59:59.603 20943 20943 D DmzSeen : shown page=1 quality=PREVIEW
+10-10 23:59:59.603 20943 20943 D DmzSeen : timer screen=[1] readable=false foreground=true quality=[PREVIEW] remaining=null hq=true
+10-10 23:59:59.707 20943 20943 D DmzSeen : full set page=1 1440x2030 key=77521588
+10-10 23:59:59.731 20943 20943 D DmzSeen : shown page=1 quality=FULL
+10-10 23:59:59.732 20943 20943 D DmzSeen : timer screen=[1] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:02.997 20943 20943 D DmzSeen : shown page=3 quality=null
+10-11 00:00:02.997 20943 20943 D DmzSeen : timer screen=[1] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:03.104 20943 20943 D DmzSeen : shown page=3 quality=PREVIEW
+10-11 00:00:03.104 20943 20943 D DmzSeen : timer screen=[1] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:03.196 20943 20943 D DmzSeen : full set page=3 1440x2030 key=226268527
+10-11 00:00:03.227 20943 20943 D DmzSeen : shown page=3 quality=FULL
+10-11 00:00:03.227 20943 20943 D DmzSeen : timer screen=[1] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:03.229 20943 20943 D DmzSeen : shown page=4 quality=null
+10-11 00:00:03.229 20943 20943 D DmzSeen : timer screen=[1] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:03.334 20943 20943 D DmzSeen : shown page=4 quality=PREVIEW
+10-11 00:00:03.334 20943 20943 D DmzSeen : timer screen=[1] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:03.335 20943 20943 D DmzSeen : screen index=1 pages=[2] was=[1] landscape=false
+10-11 00:00:03.336 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=1500 hq=true
+10-11 00:00:03.398 20943 20943 D DmzSeen : toggleHq from=true page=2
+10-11 00:00:03.432 20943 20943 D DmzSeen : full dispose page=1 1440x2030 key=77521588 sameAsCurrent=true
+10-11 00:00:03.433 20943 20943 D DmzSeen : shown page=1 quality=FULL
+10-11 00:00:03.433 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=1404 hq=false
+10-11 00:00:03.433 20943 20943 D DmzSeen : full set page=4 1440x2050 key=226268527
+10-11 00:00:03.445 20943 20943 D DmzSeen : toggleHq from=false page=2
+10-11 00:00:03.446 20943 20943 D DmzSeen : shown page=1 quality=null
+10-11 00:00:03.447 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=1390 hq=true
+10-11 00:00:03.447 20943 20943 D DmzSeen : shown page=4 quality=FULL
+10-11 00:00:03.447 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=1390 hq=true
+10-11 00:00:03.459 20943 20972 I DmzHq   : FTP stängd (avbruten hämtning)
+10-11 00:00:03.530 20943 20943 D DmzSeen : shown page=1 quality=PREVIEW
+10-11 00:00:03.530 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=1306 hq=true
+10-11 00:00:03.720 20943 20972 I DmzHq   : FTP-servern stöder CLNT; klienten presenterad som DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader)
+10-11 00:00:03.724 20943 20943 D DmzSeen : full set page=1 1440x2030 key=226268527
+10-11 00:00:03.736 20943 20943 D DmzSeen : shown page=1 quality=FULL
+10-11 00:00:03.736 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=1101 hq=true
+10-11 00:00:03.744 20943 20972 I DmzHq   : FTP ansluten till dmzarkivet.se:21 (anslutning 2)
+10-11 00:00:04.104 20943 20943 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-002.jpg, 5688938 byte på 658 ms
+10-11 00:00:04.151 20943 20943 D DmzSeen : full dispose page=2 1440x2050 key=226268527 sameAsCurrent=true
+10-11 00:00:04.152 20943 20943 D DmzSeen : shown page=2 quality=FULL
+10-11 00:00:04.152 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=685 hq=true
+10-11 00:00:04.160 20943 20943 D DmzSeen : shown page=2 quality=null
+10-11 00:00:04.160 20943 20943 D DmzSeen : timer screen=[2] readable=false foreground=true quality=[null] remaining=null hq=true
+10-11 00:00:04.365 20943 20943 D DmzSeen : shown page=2 quality=PREVIEW
+10-11 00:00:04.366 20943 20943 D DmzSeen : timer screen=[2] readable=false foreground=true quality=[PREVIEW] remaining=null hq=true
+10-11 00:00:04.503 20943 20943 D DmzSeen : full set page=2 1440x2049 key=128050024
+10-11 00:00:04.540 20943 20943 D DmzSeen : shown page=2 quality=FULL
+10-11 00:00:04.540 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=677 hq=true
+10-11 00:00:05.218 20943 20943 D DmzSeen : timer fired collected=[2]
+10-11 00:00:05.218 20943 20943 D DmzSeen : markRead pages=[2] hasNew=true seenBefore=1 unreadMarked=false
+10-11 00:00:05.224 20943 20972 D DmzSeen : written pagesRead=[2]
+10-11 00:00:07.906 20943 20943 D DmzSeen : shown page=5 quality=null
+10-11 00:00:07.906 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:08.008 20943 20943 D DmzSeen : shown page=5 quality=PREVIEW
+10-11 00:00:08.008 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:08.103 20943 20943 D DmzSeen : full set page=5 1440x2042 key=226268527
+10-11 00:00:08.122 20943 20943 D DmzSeen : shown page=5 quality=FULL
+10-11 00:00:08.123 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:08.140 20943 20943 D DmzSeen : shown page=1 quality=null
+10-11 00:00:08.141 20943 20943 D DmzSeen : timer screen=[2] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:08.143 20943 20943 D DmzSeen : full dispose page=1 1440x2030 key=226268527 sameAsCurrent=true
+10-11 00:00:08.227 20943 20943 D DmzSeen : screen index=2 pages=[3] was=[2] landscape=false
+10-11 00:00:08.228 20943 20943 D DmzSeen : timer screen=[3] readable=true foreground=true quality=[FULL] remaining=1500 hq=true
+10-11 00:00:08.319 20943 20943 D DmzSeen : toggleHq from=true page=3
+10-11 00:00:08.348 20943 20964 I DmzHq   : FTP stängd (avbruten hämtning)
+10-11 00:00:08.351 20943 20943 D DmzSeen : full dispose page=2 1440x2049 key=128050024 sameAsCurrent=true
+10-11 00:00:08.353 20943 20943 D DmzSeen : shown page=2 quality=FULL
+10-11 00:00:08.353 20943 20943 D DmzSeen : timer screen=[3] readable=true foreground=true quality=[FULL] remaining=1375 hq=false
+10-11 00:00:08.362 20943 20943 D DmzSeen : shown page=2 quality=null
+10-11 00:00:08.363 20943 20943 D DmzSeen : timer screen=[3] readable=true foreground=true quality=[FULL] remaining=1365 hq=false
+10-11 00:00:08.364 20943 20943 D DmzSeen : toggleHq from=false page=3
+10-11 00:00:08.474 20943 20943 D DmzSeen : shown page=2 quality=PREVIEW
+10-11 00:00:08.475 20943 20943 D DmzSeen : timer screen=[3] readable=true foreground=true quality=[FULL] remaining=1253 hq=true
+10-11 00:00:08.569 20943 20943 D DmzSeen : full set page=2 1440x2050 key=226268527
+10-11 00:00:08.588 20943 20964 I DmzHq   : FTP-servern stöder CLNT; klienten presenterad som DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader)
+10-11 00:00:08.591 20943 20943 D DmzSeen : shown page=2 quality=FULL
+10-11 00:00:08.591 20943 20943 D DmzSeen : timer screen=[3] readable=true foreground=true quality=[FULL] remaining=1136 hq=true
+10-11 00:00:08.612 20943 20964 I DmzHq   : FTP ansluten till dmzarkivet.se:21 (anslutning 3)
+10-11 00:00:08.953 20943 20943 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-003.jpg, 5138164 byte på 588 ms
+10-11 00:00:09.007 20943 20943 D DmzSeen : full dispose page=3 1440x2030 key=226268527 sameAsCurrent=true
+10-11 00:00:09.008 20943 20943 D DmzSeen : shown page=3 quality=FULL
+10-11 00:00:09.008 20943 20943 D DmzSeen : timer screen=[3] readable=true foreground=true quality=[FULL] remaining=719 hq=true
+10-11 00:00:09.015 20943 20943 D DmzSeen : shown page=3 quality=null
+10-11 00:00:09.015 20943 20943 D DmzSeen : timer screen=[3] readable=false foreground=true quality=[null] remaining=null hq=true
+10-11 00:00:09.118 20943 20943 D DmzSeen : shown page=3 quality=PREVIEW
+10-11 00:00:09.118 20943 20943 D DmzSeen : timer screen=[3] readable=false foreground=true quality=[PREVIEW] remaining=null hq=true
+10-11 00:00:09.261 20943 20943 D DmzSeen : full set page=3 1440x2030 key=95726666
+10-11 00:00:09.276 20943 20943 D DmzSeen : shown page=3 quality=FULL
+10-11 00:00:09.276 20943 20943 D DmzSeen : timer screen=[3] readable=true foreground=true quality=[FULL] remaining=713 hq=true
+10-11 00:00:09.991 20943 20943 D DmzSeen : timer fired collected=[3]
+10-11 00:00:09.991 20943 20943 D DmzSeen : markRead pages=[3] hasNew=true seenBefore=2 unreadMarked=false
+10-11 00:00:09.997 20943 20964 D DmzSeen : written pagesRead=[3]
+10-11 00:00:12.819 20943 20943 D DmzSeen : shown page=6 quality=null
+10-11 00:00:12.819 20943 20943 D DmzSeen : timer screen=[3] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:12.926 20943 20943 D DmzSeen : shown page=6 quality=PREVIEW
+10-11 00:00:12.926 20943 20943 D DmzSeen : timer screen=[3] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:13.022 20943 20943 D DmzSeen : full set page=6 1440x2092 key=226268527
+10-11 00:00:13.039 20943 20943 D DmzSeen : shown page=6 quality=FULL
+10-11 00:00:13.040 20943 20943 D DmzSeen : timer screen=[3] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:13.057 20943 20943 D DmzSeen : shown page=2 quality=null
+10-11 00:00:13.058 20943 20943 D DmzSeen : timer screen=[3] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:13.061 20943 20943 D DmzSeen : full dispose page=2 1440x2050 key=226268527 sameAsCurrent=true
+10-11 00:00:13.146 20943 20943 D DmzSeen : screen index=3 pages=[4] was=[3] landscape=false
+10-11 00:00:13.147 20943 20943 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=1500 hq=true
+10-11 00:00:13.236 20943 20943 D DmzSeen : toggleHq from=true page=4
+10-11 00:00:13.266 20943 20964 I DmzHq   : FTP stängd (avbruten hämtning)
+10-11 00:00:13.267 20943 20943 D DmzSeen : full dispose page=3 1440x2030 key=95726666 sameAsCurrent=true
+10-11 00:00:13.268 20943 20943 D DmzSeen : shown page=3 quality=FULL
+10-11 00:00:13.269 20943 20943 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=1379 hq=false
+10-11 00:00:13.279 20943 20943 D DmzSeen : shown page=3 quality=null
+10-11 00:00:13.280 20943 20943 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=1368 hq=false
+10-11 00:00:13.281 20943 20943 D DmzSeen : toggleHq from=false page=4
+10-11 00:00:13.359 20943 20943 D DmzSeen : shown page=3 quality=PREVIEW
+10-11 00:00:13.359 20943 20943 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=1288 hq=true
+10-11 00:00:13.449 20943 20943 D DmzSeen : full set page=3 1440x2030 key=226268527
+10-11 00:00:13.461 20943 20943 D DmzSeen : shown page=3 quality=FULL
+10-11 00:00:13.461 20943 20943 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=1187 hq=true
+10-11 00:00:13.521 20943 20964 I DmzHq   : FTP-servern stöder CLNT; klienten presenterad som DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader)
+10-11 00:00:13.544 20943 20964 I DmzHq   : FTP ansluten till dmzarkivet.se:21 (anslutning 4)
+10-11 00:00:13.950 20943 20943 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-004.jpg, 4665969 byte på 668 ms
+10-11 00:00:13.989 20943 20943 D DmzSeen : full dispose page=4 1440x2050 key=226268527 sameAsCurrent=true
+10-11 00:00:13.990 20943 20943 D DmzSeen : shown page=4 quality=FULL
+10-11 00:00:13.990 20943 20943 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=658 hq=true
+10-11 00:00:13.998 20943 20943 D DmzSeen : shown page=4 quality=null
+10-11 00:00:13.998 20943 20943 D DmzSeen : timer screen=[4] readable=false foreground=true quality=[null] remaining=null hq=true
+10-11 00:00:14.163 20943 20943 D DmzSeen : shown page=4 quality=PREVIEW
+10-11 00:00:14.164 20943 20943 D DmzSeen : timer screen=[4] readable=false foreground=true quality=[PREVIEW] remaining=null hq=true
+10-11 00:00:14.298 20943 20943 D DmzSeen : full set page=4 1440x2048 key=168826555
+10-11 00:00:14.325 20943 20943 D DmzSeen : shown page=4 quality=FULL
+10-11 00:00:14.325 20943 20943 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=650 hq=true
+10-11 00:00:14.976 20943 20943 D DmzSeen : timer fired collected=[4]
+10-11 00:00:14.976 20943 20943 D DmzSeen : markRead pages=[4] hasNew=true seenBefore=3 unreadMarked=false
+10-11 00:00:14.981 20943 20964 D DmzSeen : written pagesRead=[4]
+10-11 00:00:17.737 20943 20943 D DmzSeen : shown page=7 quality=null
+10-11 00:00:17.737 20943 20943 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:17.822 20943 20943 D DmzSeen : shown page=7 quality=PREVIEW
+10-11 00:00:17.822 20943 20943 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:17.913 20943 20943 D DmzSeen : full set page=7 1440x2036 key=226268527
+10-11 00:00:17.923 20943 20943 D DmzSeen : shown page=7 quality=FULL
+10-11 00:00:17.923 20943 20943 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:17.972 20943 20943 D DmzSeen : shown page=3 quality=null
+10-11 00:00:17.973 20943 20943 D DmzSeen : timer screen=[4] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:17.977 20943 20943 D DmzSeen : full dispose page=3 1440x2030 key=226268527 sameAsCurrent=true
+10-11 00:00:18.066 20943 20943 D DmzSeen : screen index=4 pages=[5] was=[4] landscape=false
+10-11 00:00:18.067 20943 20943 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=1500 hq=true
+10-11 00:00:18.155 20943 20943 D DmzSeen : toggleHq from=true page=5
+10-11 00:00:18.184 20943 20943 D DmzSeen : full dispose page=4 1440x2048 key=168826555 sameAsCurrent=true
+10-11 00:00:18.185 20943 20943 D DmzSeen : shown page=4 quality=FULL
+10-11 00:00:18.186 20943 20943 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=1381 hq=false
+10-11 00:00:18.187 20943 20968 I DmzHq   : FTP stängd (avbruten hämtning)
+10-11 00:00:18.199 20943 20943 D DmzSeen : shown page=4 quality=null
+10-11 00:00:18.199 20943 20943 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=1368 hq=false
+10-11 00:00:18.201 20943 20943 D DmzSeen : toggleHq from=false page=5
+10-11 00:00:18.312 20943 20943 D DmzSeen : shown page=4 quality=PREVIEW
+10-11 00:00:18.312 20943 20943 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=1254 hq=true
+10-11 00:00:18.407 20943 20943 D DmzSeen : full set page=4 1440x2050 key=226268527
+10-11 00:00:18.421 20943 20968 I DmzHq   : FTP-servern stöder CLNT; klienten presenterad som DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader)
+10-11 00:00:18.425 20943 20943 D DmzSeen : shown page=4 quality=FULL
+10-11 00:00:18.425 20943 20943 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=1142 hq=true
+10-11 00:00:18.445 20943 20968 I DmzHq   : FTP ansluten till dmzarkivet.se:21 (anslutning 5)
+10-11 00:00:19.567 20943 20943 D DmzSeen : timer fired collected=[5]
+10-11 00:00:19.567 20943 20943 D DmzSeen : markRead pages=[5] hasNew=true seenBefore=4 unreadMarked=false
+10-11 00:00:19.570 20943 20970 D DmzSeen : written pagesRead=[5]
+10-11 00:00:20.403 20943 20943 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-005.jpg, 4535695 byte på 2202 ms
+10-11 00:00:20.458 20943 20943 D DmzSeen : full dispose page=5 1440x2042 key=226268527 sameAsCurrent=true
+10-11 00:00:20.459 20943 20943 D DmzSeen : shown page=5 quality=FULL
+10-11 00:00:20.459 20943 20943 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:20.465 20943 20943 D DmzSeen : shown page=5 quality=null
+10-11 00:00:20.465 20943 20943 D DmzSeen : timer screen=[5] readable=false foreground=true quality=[null] remaining=null hq=true
+10-11 00:00:20.596 20943 20943 D DmzSeen : shown page=5 quality=PREVIEW
+10-11 00:00:20.597 20943 20943 D DmzSeen : timer screen=[5] readable=false foreground=true quality=[PREVIEW] remaining=null hq=true
+10-11 00:00:20.693 20943 20943 D DmzSeen : full set page=5 1440x2041 key=208962445
+10-11 00:00:20.714 20943 20943 D DmzSeen : shown page=5 quality=FULL
+10-11 00:00:20.715 20943 20943 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:22.663 20943 20943 D DmzSeen : shown page=8 quality=null
+10-11 00:00:22.664 20943 20943 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:22.764 20943 20943 D DmzSeen : shown page=8 quality=PREVIEW
+10-11 00:00:22.765 20943 20943 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:22.862 20943 20943 D DmzSeen : full set page=8 1440x2095 key=226268527
+10-11 00:00:22.884 20943 20943 D DmzSeen : shown page=4 quality=null
+10-11 00:00:22.884 20943 20943 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:22.888 20943 20943 D DmzSeen : shown page=8 quality=FULL
+10-11 00:00:22.889 20943 20943 D DmzSeen : timer screen=[5] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:22.889 20943 20943 D DmzSeen : full dispose page=4 1440x2050 key=226268527 sameAsCurrent=true
+10-11 00:00:22.974 20943 20943 D DmzSeen : screen index=5 pages=[6] was=[5] landscape=false
+10-11 00:00:22.975 20943 20943 D DmzSeen : timer screen=[6] readable=true foreground=true quality=[FULL] remaining=1500 hq=true
+10-11 00:00:23.065 20943 20943 D DmzSeen : toggleHq from=true page=6
+10-11 00:00:23.094 20943 20943 D DmzSeen : full dispose page=5 1440x2041 key=208962445 sameAsCurrent=true
+10-11 00:00:23.096 20943 20943 D DmzSeen : shown page=5 quality=FULL
+10-11 00:00:23.096 20943 20943 D DmzSeen : timer screen=[6] readable=true foreground=true quality=[FULL] remaining=1379 hq=false
+10-11 00:00:23.101 20943 20970 I DmzHq   : FTP stängd (avbruten hämtning)
+10-11 00:00:23.109 20943 20943 D DmzSeen : shown page=5 quality=null
+10-11 00:00:23.109 20943 20943 D DmzSeen : timer screen=[6] readable=true foreground=true quality=[FULL] remaining=1365 hq=false
+10-11 00:00:23.111 20943 20943 D DmzSeen : toggleHq from=false page=6
+10-11 00:00:23.220 20943 20943 D DmzSeen : shown page=5 quality=PREVIEW
+10-11 00:00:23.220 20943 20943 D DmzSeen : timer screen=[6] readable=true foreground=true quality=[FULL] remaining=1254 hq=true
+10-11 00:00:23.311 20943 20943 D DmzSeen : full set page=5 1440x2042 key=226268527
+10-11 00:00:23.321 20943 20943 D DmzSeen : shown page=5 quality=FULL
+10-11 00:00:23.321 20943 20943 D DmzSeen : timer screen=[6] readable=true foreground=true quality=[FULL] remaining=1153 hq=true
+10-11 00:00:23.376 20943 20970 I DmzHq   : FTP-servern stöder CLNT; klienten presenterad som DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader)
+10-11 00:00:23.400 20943 20970 I DmzHq   : FTP ansluten till dmzarkivet.se:21 (anslutning 6)
+10-11 00:00:23.766 20943 20943 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-006.jpg, 5459184 byte på 654 ms
+10-11 00:00:23.814 20943 20943 D DmzSeen : full dispose page=6 1440x2092 key=226268527 sameAsCurrent=true
+10-11 00:00:23.815 20943 20943 D DmzSeen : shown page=6 quality=FULL
+10-11 00:00:23.815 20943 20943 D DmzSeen : timer screen=[6] readable=true foreground=true quality=[FULL] remaining=660 hq=true
+10-11 00:00:23.822 20943 20943 D DmzSeen : shown page=6 quality=null
+10-11 00:00:23.823 20943 20943 D DmzSeen : timer screen=[6] readable=false foreground=true quality=[null] remaining=null hq=true
+10-11 00:00:23.998 20943 20943 D DmzSeen : shown page=6 quality=PREVIEW
+10-11 00:00:23.998 20943 20943 D DmzSeen : timer screen=[6] readable=false foreground=true quality=[PREVIEW] remaining=null hq=true
+10-11 00:00:24.145 20943 20943 D DmzSeen : full set page=6 1440x2093 key=198982569
+10-11 00:00:24.159 20943 20943 D DmzSeen : shown page=6 quality=FULL
+10-11 00:00:24.159 20943 20943 D DmzSeen : timer screen=[6] readable=true foreground=true quality=[FULL] remaining=652 hq=true
+10-11 00:00:24.813 20943 20943 D DmzSeen : timer fired collected=[6]
+10-11 00:00:24.813 20943 20943 D DmzSeen : markRead pages=[6] hasNew=true seenBefore=5 unreadMarked=false
+10-11 00:00:24.820 20943 20970 D DmzSeen : written pagesRead=[6]
+10-11 00:00:27.550 20943 20943 D DmzSeen : shown page=9 quality=null
+10-11 00:00:27.550 20943 20943 D DmzSeen : timer screen=[6] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:27.661 20943 20943 D DmzSeen : shown page=9 quality=PREVIEW
+10-11 00:00:27.661 20943 20943 D DmzSeen : timer screen=[6] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:27.752 20943 20943 D DmzSeen : full set page=9 1440x2044 key=226268527
+10-11 00:00:27.761 20943 20943 D DmzSeen : shown page=9 quality=FULL
+10-11 00:00:27.761 20943 20943 D DmzSeen : timer screen=[6] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:27.786 20943 20943 D DmzSeen : shown page=5 quality=null
+10-11 00:00:27.786 20943 20943 D DmzSeen : timer screen=[6] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:27.790 20943 20943 D DmzSeen : full dispose page=5 1440x2042 key=226268527 sameAsCurrent=true
+10-11 00:00:27.881 20943 20943 D DmzSeen : screen index=6 pages=[7] was=[6] landscape=false
+10-11 00:00:27.882 20943 20943 D DmzSeen : timer screen=[7] readable=true foreground=true quality=[FULL] remaining=1500 hq=true
+10-11 00:00:27.972 20943 20943 D DmzSeen : toggleHq from=true page=7
+10-11 00:00:27.998 20943 20943 D DmzSeen : full dispose page=6 1440x2093 key=198982569 sameAsCurrent=true
+10-11 00:00:27.999 20943 20943 D DmzSeen : shown page=6 quality=FULL
+10-11 00:00:28.000 20943 20943 D DmzSeen : timer screen=[7] readable=true foreground=true quality=[FULL] remaining=1382 hq=false
+10-11 00:00:28.006 20943 20972 I DmzHq   : FTP stängd (avbruten hämtning)
+10-11 00:00:28.008 20943 20943 D DmzSeen : shown page=6 quality=null
+10-11 00:00:28.008 20943 20943 D DmzSeen : timer screen=[7] readable=true foreground=true quality=[FULL] remaining=1373 hq=false
+10-11 00:00:28.020 20943 20943 D DmzSeen : toggleHq from=false page=7
+10-11 00:00:28.129 20943 20943 D DmzSeen : shown page=6 quality=PREVIEW
+10-11 00:00:28.130 20943 20943 D DmzSeen : timer screen=[7] readable=true foreground=true quality=[FULL] remaining=1252 hq=true
+10-11 00:00:28.226 20943 20943 D DmzSeen : full set page=6 1440x2092 key=226268527
+10-11 00:00:28.241 20943 20943 D DmzSeen : shown page=6 quality=FULL
+10-11 00:00:28.241 20943 20943 D DmzSeen : timer screen=[7] readable=true foreground=true quality=[FULL] remaining=1141 hq=true
+10-11 00:00:28.249 20943 20972 I DmzHq   : FTP-servern stöder CLNT; klienten presenterad som DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader)
+10-11 00:00:28.273 20943 20972 I DmzHq   : FTP ansluten till dmzarkivet.se:21 (anslutning 7)
+10-11 00:00:28.609 20943 20943 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-007.jpg, 4757772 byte på 589 ms
+10-11 00:00:28.653 20943 20943 D DmzSeen : full dispose page=7 1440x2036 key=226268527 sameAsCurrent=true
+10-11 00:00:28.654 20943 20943 D DmzSeen : shown page=7 quality=FULL
+10-11 00:00:28.654 20943 20943 D DmzSeen : timer screen=[7] readable=true foreground=true quality=[FULL] remaining=727 hq=true
+10-11 00:00:28.661 20943 20943 D DmzSeen : shown page=7 quality=null
+10-11 00:00:28.661 20943 20943 D DmzSeen : timer screen=[7] readable=false foreground=true quality=[null] remaining=null hq=true
+10-11 00:00:28.839 20943 20943 D DmzSeen : shown page=7 quality=PREVIEW
+10-11 00:00:28.839 20943 20943 D DmzSeen : timer screen=[7] readable=false foreground=true quality=[PREVIEW] remaining=null hq=true
+10-11 00:00:28.974 20943 20943 D DmzSeen : full set page=7 1440x2035 key=245622255
+10-11 00:00:28.988 20943 20943 D DmzSeen : shown page=7 quality=FULL
+10-11 00:00:28.988 20943 20943 D DmzSeen : timer screen=[7] readable=true foreground=true quality=[FULL] remaining=721 hq=true
+10-11 00:00:29.710 20943 20943 D DmzSeen : timer fired collected=[7]
+10-11 00:00:29.710 20943 20943 D DmzSeen : markRead pages=[7] hasNew=true seenBefore=6 unreadMarked=false
+10-11 00:00:29.716 20943 20972 D DmzSeen : written pagesRead=[7]
+10-11 00:00:32.466 20943 20943 D DmzSeen : shown page=10 quality=null
+10-11 00:00:32.466 20943 20943 D DmzSeen : timer screen=[7] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:32.569 20943 20943 D DmzSeen : shown page=10 quality=PREVIEW
+10-11 00:00:32.569 20943 20943 D DmzSeen : timer screen=[7] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:32.666 20943 20943 D DmzSeen : full set page=10 1440x2075 key=226268527
+10-11 00:00:32.681 20943 20943 D DmzSeen : shown page=10 quality=FULL
+10-11 00:00:32.681 20943 20943 D DmzSeen : timer screen=[7] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:32.705 20943 20943 D DmzSeen : shown page=6 quality=null
+10-11 00:00:32.705 20943 20943 D DmzSeen : timer screen=[7] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:32.709 20943 20943 D DmzSeen : full dispose page=6 1440x2092 key=226268527 sameAsCurrent=true
+10-11 00:00:32.800 20943 20943 D DmzSeen : screen index=7 pages=[8] was=[7] landscape=false
+10-11 00:00:32.801 20943 20943 D DmzSeen : timer screen=[8] readable=true foreground=true quality=[FULL] remaining=1500 hq=true
+10-11 00:00:32.881 20943 20943 D DmzSeen : toggleHq from=true page=8
+10-11 00:00:32.904 20943 20943 D DmzSeen : full dispose page=7 1440x2035 key=245622255 sameAsCurrent=true
+10-11 00:00:32.905 20943 20943 D DmzSeen : shown page=7 quality=FULL
+10-11 00:00:32.905 20943 20943 D DmzSeen : timer screen=[8] readable=true foreground=true quality=[FULL] remaining=1395 hq=false
+10-11 00:00:32.913 20943 20943 D DmzSeen : shown page=7 quality=null
+10-11 00:00:32.913 20943 20943 D DmzSeen : timer screen=[8] readable=true foreground=true quality=[FULL] remaining=1388 hq=false
+10-11 00:00:32.922 20943 20943 D DmzSeen : toggleHq from=false page=8
+10-11 00:00:32.923 20943 20964 I DmzHq   : FTP stängd (avbruten hämtning)
+10-11 00:00:33.025 20943 20943 D DmzSeen : shown page=7 quality=PREVIEW
+10-11 00:00:33.025 20943 20943 D DmzSeen : timer screen=[8] readable=true foreground=true quality=[FULL] remaining=1275 hq=true
+10-11 00:00:33.113 20943 20943 D DmzSeen : full set page=7 1440x2036 key=226268527
+10-11 00:00:33.125 20943 20943 D DmzSeen : shown page=7 quality=FULL
+10-11 00:00:33.126 20943 20943 D DmzSeen : timer screen=[8] readable=true foreground=true quality=[FULL] remaining=1175 hq=true
+10-11 00:00:33.151 20943 20964 I DmzHq   : FTP-servern stöder CLNT; klienten presenterad som DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader)
+10-11 00:00:33.177 20943 20964 I DmzHq   : FTP ansluten till dmzarkivet.se:21 (anslutning 8)
+10-11 00:00:33.607 20943 20943 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-008.jpg, 5304862 byte på 684 ms
+10-11 00:00:33.648 20943 20943 D DmzSeen : full dispose page=8 1440x2095 key=226268527 sameAsCurrent=true
+10-11 00:00:33.649 20943 20943 D DmzSeen : shown page=8 quality=FULL
+10-11 00:00:33.649 20943 20943 D DmzSeen : timer screen=[8] readable=true foreground=true quality=[FULL] remaining=652 hq=true
+10-11 00:00:33.654 20943 20943 D DmzSeen : shown page=8 quality=null
+10-11 00:00:33.655 20943 20943 D DmzSeen : timer screen=[8] readable=false foreground=true quality=[null] remaining=null hq=true
+10-11 00:00:33.747 20943 20943 D DmzSeen : shown page=8 quality=PREVIEW
+10-11 00:00:33.747 20943 20943 D DmzSeen : timer screen=[8] readable=false foreground=true quality=[PREVIEW] remaining=null hq=true
+10-11 00:00:33.891 20943 20943 D DmzSeen : full set page=8 1440x2095 key=123814916
+10-11 00:00:33.904 20943 20943 D DmzSeen : shown page=8 quality=FULL
+10-11 00:00:33.904 20943 20943 D DmzSeen : timer screen=[8] readable=true foreground=true quality=[FULL] remaining=646 hq=true
+10-11 00:00:34.552 20943 20943 D DmzSeen : timer fired collected=[8]
+10-11 00:00:34.552 20943 20943 D DmzSeen : markRead pages=[8] hasNew=true seenBefore=7 unreadMarked=false
+10-11 00:00:34.556 20943 20964 D DmzSeen : written pagesRead=[8]
+10-11 00:00:37.387 20943 20943 D DmzSeen : shown page=11 quality=null
+10-11 00:00:37.388 20943 20943 D DmzSeen : timer screen=[8] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:37.499 20943 20943 D DmzSeen : shown page=11 quality=PREVIEW
+10-11 00:00:37.499 20943 20943 D DmzSeen : timer screen=[8] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:37.600 20943 20943 D DmzSeen : shown page=7 quality=null
+10-11 00:00:37.600 20943 20943 D DmzSeen : timer screen=[8] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:37.602 20943 20943 D DmzSeen : full set page=11 1440x2021 key=226268527
+10-11 00:00:37.603 20943 20943 D DmzSeen : full dispose page=7 1440x2036 key=226268527 sameAsCurrent=true
+10-11 00:00:37.613 20943 20943 D DmzSeen : shown page=11 quality=FULL
+10-11 00:00:37.613 20943 20943 D DmzSeen : timer screen=[8] readable=true foreground=true quality=[FULL] remaining=null hq=true
+10-11 00:00:37.696 20943 20943 D DmzSeen : screen index=8 pages=[9] was=[8] landscape=false
+10-11 00:00:37.697 20943 20943 D DmzSeen : timer screen=[9] readable=true foreground=true quality=[FULL] remaining=1500 hq=true
+10-11 00:00:37.789 20943 20943 D DmzSeen : toggleHq from=true page=9
+10-11 00:00:37.818 20943 20943 D DmzSeen : full dispose page=8 1440x2095 key=123814916 sameAsCurrent=true
+10-11 00:00:37.820 20943 20943 D DmzSeen : shown page=8 quality=FULL
+10-11 00:00:37.821 20943 20943 D DmzSeen : timer screen=[9] readable=true foreground=true quality=[FULL] remaining=1377 hq=false
+10-11 00:00:37.823 20943 20971 I DmzHq   : FTP stängd (avbruten hämtning)
+10-11 00:00:37.834 20943 20943 D DmzSeen : shown page=8 quality=null
+10-11 00:00:37.835 20943 20943 D DmzSeen : timer screen=[9] readable=true foreground=true quality=[FULL] remaining=1363 hq=false
+10-11 00:00:37.841 20943 20943 D DmzSeen : toggleHq from=false page=9
+10-11 00:00:37.898 20943 20943 D DmzSeen : shown page=8 quality=PREVIEW
+10-11 00:00:37.899 20943 20943 D DmzSeen : timer screen=[9] readable=true foreground=true quality=[FULL] remaining=1299 hq=true
+10-11 00:00:37.999 20943 20943 D DmzSeen : full set page=8 1440x2095 key=226268527
+10-11 00:00:38.014 20943 20943 D DmzSeen : shown page=8 quality=FULL
+10-11 00:00:38.014 20943 20943 D DmzSeen : timer screen=[9] readable=true foreground=true quality=[FULL] remaining=1183 hq=true
+10-11 00:00:38.135 20943 20971 I DmzHq   : FTP-servern stöder CLNT; klienten presenterad som DMZReader/1.0.0-rc2 (Android; +https://github.com/Rognils/dmz-reader)
+10-11 00:00:38.159 20943 20971 I DmzHq   : FTP ansluten till dmzarkivet.se:21 (anslutning 9)
+10-11 00:00:38.502 20943 20943 I DmzHq   : HQ hämtad: datormagazin-1986-01/DMZ_1986-01-009.jpg, 4934340 byte på 659 ms
+10-11 00:00:38.545 20943 20943 D DmzSeen : full dispose page=9 1440x2044 key=226268527 sameAsCurrent=true
+10-11 00:00:38.545 20943 20943 D DmzSeen : shown page=9 quality=FULL
+10-11 00:00:38.546 20943 20943 D DmzSeen : timer screen=[9] readable=true foreground=true quality=[FULL] remaining=652 hq=true
+10-11 00:00:38.551 20943 20943 D DmzSeen : shown page=9 quality=null
+10-11 00:00:38.551 20943 20943 D DmzSeen : timer screen=[9] readable=false foreground=true quality=[null] remaining=null hq=true
+10-11 00:00:38.721 20943 20943 D DmzSeen : shown page=9 quality=PREVIEW
+10-11 00:00:38.721 20943 20943 D DmzSeen : timer screen=[9] readable=false foreground=true quality=[PREVIEW] remaining=null hq=true
+10-11 00:00:38.862 20943 20943 D DmzSeen : full set page=9 1440x2045 key=231478008
+10-11 00:00:38.883 20943 20943 D DmzSeen : shown page=9 quality=FULL
+10-11 00:00:38.883 20943 20943 D DmzSeen : timer screen=[9] readable=true foreground=true quality=[FULL] remaining=646 hq=true
+10-11 00:00:39.530 20943 20943 D DmzSeen : timer fired collected=[9]
+10-11 00:00:39.531 20943 20943 D DmzSeen : markRead pages=[9] hasNew=true seenBefore=8 unreadMarked=false
+10-11 00:00:39.536 20943 20971 D DmzSeen : written pagesRead=[9]

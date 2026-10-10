@@ -1,0 +1,15 @@
+pump=true runda=1 toggleRightAfterPageTurn: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1594 ms, median=1448 ms
+pump=true runda=1 rapidTogglesAfterPageTurn: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1143 ms, median=985 ms
+pump=true runda=1 toggleInTheMiddleOfTheWindow: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=189 ms, median=147 ms
+pump=true runda=1 offAndOnInTheMiddleOfTheWindow: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1347 ms, median=1217 ms
+pump=true runda=1 toggleWhileFetching: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=965 ms, median=764 ms
+pump=true runda=1 toggleWhenFetchFails: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1407 ms, median=1335 ms
+pump=true runda=1 failRetryThenOffAndOn: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1267 ms, median=1100 ms
+pump=true runda=2 toggleRightAfterPageTurn: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1564 ms, median=1496 ms
+pump=true runda=2 rapidTogglesAfterPageTurn: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1150 ms, median=986 ms
+pump=true runda=2 toggleInTheMiddleOfTheWindow: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=329 ms, median=162 ms
+pump=true runda=2 offAndOnInTheMiddleOfTheWindow: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1371 ms, median=1202 ms
+pump=true runda=2 toggleWhileFetching: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=967 ms, median=776 ms
+pump=true runda=2 toggleWhenFetchFails: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1451 ms, median=1291 ms
+pump=true runda=2 failRetryThenOffAndOn: OK (1 test) | 27 sidor, tappade=[], över 2500 ms=0, längsta=1375 ms, median=1142 ms
+KLART
