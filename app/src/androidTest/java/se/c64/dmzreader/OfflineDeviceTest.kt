@@ -1,6 +1,7 @@
 package se.c64.dmzreader
 
 import android.net.ConnectivityManager
+import android.net.Network
 import android.net.NetworkCapabilities
 import android.os.ParcelFileDescriptor
 import android.provider.Settings
@@ -64,19 +65,30 @@ class OfflineDeviceTest {
         if (!enabled) waitForNetwork()
     }
 
-    /** Efter flygplansläget tar det några sekunder innan nätet är tillbaka. Nästa test ska inte börja utan nät. */
+    /**
+     * Efter flygplansläget tar det en stund innan nätet är att lita på. Nästa test ska inte börja innan dess.
+     *
+     * På testtelefonen ansluter wifi inom ett par sekunder, tappar anslutningen igen 5–8 sekunder
+     * senare och är tillbaka efter ytterligare cirka 20. Under tiden går trafiken över mobilnätet.
+     * En nedladdning som börjar i det läget bryts när nätet byts under den. Nätet räknas därför som
+     * tillbaka först när ett och samma nät har varit bekräftat i 20 sekunder i följd.
+     */
     private fun waitForNetwork() {
         val connectivity = context.getSystemService(ConnectivityManager::class.java)
-        val deadline = System.currentTimeMillis() + 40_000
-        // Wifi kan ansluta, tappa och ansluta igen de första sekunderna. Nätet räknas
-        // som tillbaka först när det har varit bekräftat i fem sekunder i följd.
-        var validatedSince: Long? = null
+        val deadline = System.currentTimeMillis() + 90_000
+        var stableNetwork: Network? = null
+        var stableSince = 0L
         while (System.currentTimeMillis() < deadline) {
-            val capabilities = connectivity.getNetworkCapabilities(connectivity.activeNetwork)
+            val network = connectivity.activeNetwork
+            val capabilities = connectivity.getNetworkCapabilities(network)
             val validated = capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
             val now = System.currentTimeMillis()
-            validatedSince = if (validated) validatedSince ?: now else null
-            if (validatedSince != null && now - validatedSince >= 5_000) return
+            if (!validated || network != stableNetwork) {
+                stableNetwork = network.takeIf { validated }
+                stableSince = now
+            } else if (now - stableSince >= 20_000) {
+                return
+            }
             Thread.sleep(500)
         }
     }
