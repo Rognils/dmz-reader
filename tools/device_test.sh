@@ -20,7 +20,8 @@
 # Testerna körs i utvecklingsbygget (se.c64.dmzreader.debug), som ligger bredvid
 # användarens app (se.c64.dmzreader) och inte delar något med den. Fingeravtrycket
 # tas av användarens app, och kräver att den går att läsa med run-as (ett debug-bygge).
-# Finns ingen sådan app på telefonen hoppas fingeravtrycket över, och det sägs i utskriften.
+# Är användarens app ett release-bygge tas i stället ett yttre fingeravtryck (version,
+# installationstid, signatur, senaste start och om processen är igång), och det sägs i utskriften.
 #
 # Kräver en ansluten telefon med utvecklingsbygget och testpaketet installerade:
 #   ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
@@ -58,8 +59,18 @@ mkdir -p "$OUT"
 fingerprint() {
     local name=$1 work
     if ! adb shell "run-as $PACKAGE true" >/dev/null 2>&1; then
-        echo "inget fingeravtryck: $PACKAGE finns inte på telefonen eller går inte att läsa med run-as (release-bygge)" > "$OUT/$name.txt"
-        echo "  OBS: $PACKAGE går inte att läsa med run-as. Fingeravtrycket hoppas över." >&2
+        # Ett release-bygge går inte att läsa inifrån. Då tas ett yttre fingeravtryck: det visar
+        # om appen har bytts ut, uppdaterats, startats eller fått sin data rensad, men inte
+        # innehållet i dess filer. Testerna körs i en annan app, som inte kommer åt dem.
+        {
+            echo "yttre fingeravtryck: $PACKAGE går inte att läsa med run-as (release-bygge)"
+            echo "== paketet (version, installation, signatur)"
+            adb shell dumpsys package "$PACKAGE" | grep -E "versionCode=|versionName=|firstInstallTime=|lastUpdateTime=|signatures=|dataDir=" | sed 's/^ *//' | sort -u
+            echo "== senaste gången appen syntes eller stoppades (usagestats)"
+            adb shell dumpsys usagestats | grep -E "package=$PACKAGE " | grep -E "type=(ACTIVITY_RESUMED|ACTIVITY_PAUSED|ACTIVITY_STOPPED)" | tail -1 | sed 's/^ *//' | cut -d" " -f1-4
+            echo "== processen (ska inte vara igång)"
+            adb shell pidof "$PACKAGE" || echo "ingen process"
+        } > "$OUT/$name.txt"
         return
     fi
     adb shell am force-stop "$PACKAGE"
@@ -127,8 +138,9 @@ finish() {
     echo "Fingeravtryck efter…"
     fingerprint after
     if diff -u "$OUT/before.txt" "$OUT/after.txt" > "$OUT/diff.txt"; then
-        if grep -q "^inget fingeravtryck" "$OUT/before.txt"; then
-            echo "INGET FINGERAVTRYCK TOGS (användarens app går inte att läsa med run-as)."
+        if grep -q "^yttre fingeravtryck" "$OUT/before.txt"; then
+            echo "ANVÄNDARENS APP ÄR INTE STARTAD, UPPDATERAD ELLER UTBYTT (yttre fingeravtryck, identiska): $OUT/before.txt"
+            echo "  Innehållet i appens filer går inte att läsa i ett release-bygge. Testerna körs i $TEST_PACKAGE."
         else
             echo "ANVÄNDARENS DATA ÄR OFÖRÄNDRAD (fingeravtrycken är identiska): $OUT/before.txt"
         fi
