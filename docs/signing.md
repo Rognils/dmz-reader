@@ -71,7 +71,11 @@ De kan ligga bredvid varandra på telefonen och delar ingen data. Testerna körs
 
 ## Säkerhetskopiera nyckeln
 
-**Kopiera nyckelfilen och lösenorden till en plats utanför datorn**, till exempel en lösenordshanterare eller ett krypterat USB-minne. Det behövs två saker: filen `dmz-reader-release.jks` och lösenordet ur `~/.gradle/gradle.properties`. Den ena är oanvändbar utan den andra.
+Nyckelfilen och lösenorden ska finnas på en plats utanför datorn. Det behövs två saker: filen `dmz-reader-release.jks` och lösenordet ur `~/.gradle/gradle.properties`. Den ena är oanvändbar utan den andra.
+
+**2026-10-10:** nyckeln och lösenorden är säkerhetskopierade utanför datorn av ägaren, och kopian är kontrollerad med `sha256sum`. Platsen anges inte här.
+
+Gör om kopian om nyckeln eller lösenordet någon gång byts.
 
 ## Om nyckeln tappas bort
 
