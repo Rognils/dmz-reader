@@ -104,7 +104,7 @@ class OfflineDeviceTest {
         waitFor { rule.onAllNodes(hasContentDescription(yearCard, substring = true)).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithContentDescription(yearCard, substring = true).performClick()
         waitFor { rule.onAllNodes(hasScrollToNodeAction()).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription("Datormagazin 1986 Nr 1"))
+        rule.scrollToNodeWhenLoaded(hasContentDescription("Datormagazin 1986 Nr 1"))
         rule.onNodeWithContentDescription("Datormagazin 1986 Nr 1").performClick()
         waitFor { exists("Ladda ned") }
 

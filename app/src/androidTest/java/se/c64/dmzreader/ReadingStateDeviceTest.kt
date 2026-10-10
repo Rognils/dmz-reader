@@ -80,7 +80,7 @@ class ReadingStateDeviceTest {
         rule.onNodeWithContentDescription(yearCard, substring = true).performClick()
         val cover = "$publication $year $label"
         waitFor { rule.onAllNodes(hasScrollToNodeAction()).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription(cover))
+        rule.scrollToNodeWhenLoaded(hasContentDescription(cover))
         rule.onNodeWithContentDescription(cover).performClick()
         waitFor { exists("Lässtatus") }
     }

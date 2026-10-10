@@ -3,7 +3,6 @@ package se.c64.dmzreader
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.hasContentDescription
-import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -97,8 +96,7 @@ class LibraryNavigationTest {
         waitForYear(22)
 
         // Rulla ned till sista numret, som inte syns från början.
-        rule.onNode(hasScrollToNodeAction())
-            .performScrollToNode(hasContentDescription("Datormagazin 1993 Nr 22"))
+        rule.scrollToNodeWhenLoaded(hasContentDescription("Datormagazin 1993 Nr 22"))
         rule.onNodeWithContentDescription("Datormagazin 1993 Nr 22").assertIsDisplayed()
         rule.onNodeWithContentDescription("Datormagazin 1993 Nr 22").performClick()
         waitForReadButton()

@@ -123,11 +123,11 @@ class HqRealDeviceTest {
         rule.onNodeWithText("Datormagazin").performClick()
         val yearCard = "Datormagazin $year, "
         waitFor { rule.onAllNodes(hasContentDescription(yearCard, substring = true)).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription(yearCard, substring = true))
+        rule.scrollToNodeWhenLoaded(hasContentDescription(yearCard, substring = true))
         rule.onNodeWithContentDescription(yearCard, substring = true).performClick()
         val cover = "Datormagazin $year $label"
         waitFor { rule.onAllNodes(hasScrollToNodeAction()).fetchSemanticsNodes().isNotEmpty() && !described("Inställningar") }
-        rule.onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription(cover))
+        rule.scrollToNodeWhenLoaded(hasContentDescription(cover))
         rule.onNodeWithContentDescription(cover).performClick()
         // Knappen heter "Läs" för ett oläst nummer och "Fortsätt på sida N" annars.
         waitFor { exists("Fortsätt på sida $page") || exists("Läs") }

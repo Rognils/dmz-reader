@@ -164,11 +164,11 @@ class FullTextDeviceTest {
         // Sex sidor i indexet, men en hör till ett nummer som inte finns i arkivindexet och döljs.
         waitFor { textOf("hit-summary") == "5 sidor i 3 nummer" }
         // 1993 nr 3 har en annan filstorlek i testindexet än i arkivindexet.
-        rule.onNodeWithTag("search").performScrollToNode(hasTestTag("group-datormagazin-1993-03"))
+        rule.scrollToNodeWhenLoaded(hasTestTag("group-datormagazin-1993-03"), container = hasTestTag("search"))
         assertTrue(exists("Sökindexet gäller en äldre version av filen"))
 
         // Äldst först: 1989 nr 6 kommer före 1995 nr 14.
-        rule.onNodeWithTag("search").performScrollToNode(hasTestTag("hit-summary"))
+        rule.scrollToNodeWhenLoaded(hasTestTag("hit-summary"), container = hasTestTag("search"))
         rule.onNodeWithText("Äldst först").performClick()
         rule.waitForIdle()
         val order = rule.onAllNodes(hasTestTag("group-datormagazin-1989-06") or hasTestTag("group-datormagazin-1995-14"))

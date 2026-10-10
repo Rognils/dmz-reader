@@ -180,6 +180,8 @@ started=""
 for _ in $(seq 1 240); do
     started=$(adb logcat -d -s DmzStatistics | grep -c "LÄSER sidbyte" || true)
     [ "$started" -ge 1 ] && break
+    # Har testet redan avslutats utan att läsa har det fallit. Då är det ingen idé att vänta.
+    kill -0 $phase1 2>/dev/null || break
     sleep 1
 done
 if [ "${started:-0}" -ge 1 ]; then

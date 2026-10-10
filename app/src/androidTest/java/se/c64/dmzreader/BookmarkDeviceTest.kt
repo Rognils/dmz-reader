@@ -89,7 +89,7 @@ class BookmarkDeviceTest {
         waitFor { rule.onAllNodes(hasContentDescription(yearCard, substring = true)).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithContentDescription(yearCard, substring = true).performClick()
         waitFor { rule.onAllNodes(hasScrollToNodeAction()).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription("Datormagazin 1986 Nr 1"))
+        rule.scrollToNodeWhenLoaded(hasContentDescription("Datormagazin 1986 Nr 1"))
         rule.onNodeWithContentDescription("Datormagazin 1986 Nr 1").performClick()
         waitFor { exists("Läs") }
         rule.onNodeWithText("Läs").performClick()
@@ -129,7 +129,7 @@ class BookmarkDeviceTest {
         // Fliken Favoriter: bokmärket står under sitt nummer, med anteckningen.
         rule.onNodeWithText("Favoriter").performClick()
         waitFor { rule.onAllNodes(hasTestTag("favorites")).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNodeWithTag("favorites").performScrollToNode(hasText("Sida $page · Testbokmärke"))
+        rule.scrollToNodeWhenLoaded(hasText("Sida $page · Testbokmärke"), container = hasTestTag("favorites"))
         assertTrue(exists("Skapat av ett test"))
         rule.onNodeWithText("Sida $page · Testbokmärke").performClick()
 
