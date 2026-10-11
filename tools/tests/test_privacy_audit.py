@@ -91,7 +91,7 @@ class Audit(unittest.TestCase):
         db = sqlite3.connect(path)
         db.execute("PRAGMA secure_delete = OFF")
         db.execute("UPDATE pages SET rawText = '', searchText = 'borta'")
-        db.execute("INSERT INTO meta (key, value) VALUES ('privacyFilterVersion', '2')")
+        db.execute("INSERT INTO meta (key, value) VALUES ('privacyFilterVersion', '3')")
         db.commit()
         db.close()
         problems = audit.verify(path)

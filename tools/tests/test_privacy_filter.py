@@ -210,7 +210,7 @@ class BankgiroNumbersAreMasked(unittest.TestCase):
                 self.assertEqual(pf.find(text)["bankgiro"], 0)
 
 
-class LocalPhoneNumbersAreMasked(unittest.TestCase):
+class NumbersInContextAreMasked(unittest.TestCase):
     CASES = {
         "Tel 12 34 56": f"Tel {PHONE}",
         "Tel: 123 45, Anna": f"Tel: {PHONE}, Anna",
@@ -234,7 +234,58 @@ class LocalPhoneNumbersAreMasked(unittest.TestCase):
                 self.assertEqual(pf.mask(text)[0], expected)
 
     def test_counted_as_its_own_category(self):
-        self.assertEqual(pf.mask("Tel 12 34 56, fax 0123-456 78")[1], {**NOTHING, "localPhone": 1, "phone": 1})
+        self.assertEqual(pf.mask("Tel 12 34 56, fax 0123-456 78")[1], {**NOTHING, "contextPhone": 1, "phone": 1})
+        self.assertEqual(pf.mask("Tel: 009 45 12345678")[1], {**NOTHING, "contextPhone": 1})
+
+    # Utländska nummer i olika skrivsätt. Hela uttrycket tas, och det som följer står kvar.
+    FOREIGN = {
+        "Tel: 009 45 12345678 Fax": f"Tel: {PHONE} Fax",
+        "tel: 009-1-212 555 0123. Fax": f"tel: {PHONE}. Fax",
+        "Fax: +45 1234 5678 Pris": f"Fax: {PHONE} Pris",
+        "Tel +1 (416) 555-0123.": f"Tel {PHONE}.",
+        "Tel: (613) 555-0123, Kanada": f"Tel: {PHONE}, Kanada",
+        "tel: 009 44 53 354 0123, fax: 009 44 53 354 0124": f"tel: {PHONE}, fax: {PHONE}",
+        "fax 0045/12 34 56 78.": f"fax {PHONE}.",
+        "Tel: 00944-123-456789 England": f"Tel: {PHONE} England",
+        "Telefon: +47 12 34 56 78 (Norge)": f"Telefon: {PHONE} (Norge)",
+        "Tel: 009 47 2 12 34 56, Oslo": f"Tel: {PHONE}, Oslo",
+        "BBS +358-0-123 4567 2400 bps": f"BBS {PHONE} 2400 bps",
+        "Tel: + 49 30 1234567 Berlin": f"Tel: {PHONE} Berlin",
+        "Tel: +46 8 123 45 67, fax +46 8 123 45 68": f"Tel: {PHONE}, fax {PHONE}",
+        "Tel (08) 12 34 56 eller": f"Tel {PHONE} eller",
+        # parentesen sitter tätt intill siffrorna
+        "Tel:00949-(0)1234/567 89. Fax:00949· (0)1234/567 80 Här": f"Tel:{PHONE}. Fax:{PHONE} Här",
+        "Fax: +49(0)1234-56789, Bonn": f"Fax: {PHONE}, Bonn",
+    }
+
+    def test_foreign_numbers_are_taken_whole(self):
+        for text, expected in self.FOREIGN.items():
+            with self.subTest(text=text):
+                self.assertEqual(pf.mask(text)[0], expected)
+
+    def test_what_follows_the_number_is_left(self):
+        cases = {
+            # ord
+            "Tel: 009 45 12345678 eller skriv": f"Tel: {PHONE} eller skriv",
+            # priser och antal
+            "Tel 12 34 56 1895:-": f"Tel {PHONE} 1895:-",
+            "Tel: 009 45 12345678 495 kr": f"Tel: {PHONE} 495 kr",
+            "fax 12 34 56 10 st": f"fax {PHONE} 10 st",
+            # årtal
+            "Telefon 12 34 56 1993 års modell": f"Telefon {PHONE} 1993 års modell",
+            "Tel: 009 47 2 12 34 56 1995": f"Tel: {PHONE} 1995",
+            # hastigheter och tider
+            "BBS 123456 14400/v32bis": f"BBS {PHONE} 14400/v32bis",
+            "BBS 12 34 56 2400 22.00-08.00": f"BBS {PHONE} 2400 22.00-08.00",
+            "Tel: 12 34 56 16.00-18.00": f"Tel: {PHONE} 16.00-18.00",
+            "Tel: 12 34 56 24 timmar": f"Tel: {PHONE} 24 timmar",
+            # nästa nummer, och en annan kolumn i en lista
+            "Tel 12 34 56 031-12 34 56": f"Tel {PHONE} {PHONE}",
+            "BBS 1234567 7 X X": f"BBS {PHONE} 7 X X",
+        }
+        for text, expected in cases.items():
+            with self.subTest(text=text):
+                self.assertEqual(pf.mask(text)[0], expected)
 
     def test_numbers_near_the_words_that_are_not_phone_numbers(self):
         for text in [
@@ -246,7 +297,8 @@ class LocalPhoneNumbersAreMasked(unittest.TestCase):
             "modem 2400/1200", "modem 1200 75", "fax 640x480", "tel 12.345", "BBS 1.200 kr", "Telefon 100-200 kr",
             "modem 12345 kr", "fax 12 34 56:-", "BBS 12 345 st", "modem 16800 baud",
             # för få eller för många siffror, årtal och intervall
-            "Tel 1234", "fax 123", "BBS 24 timmar", "tel 1993-94", "Tel 123456789", "fax 1990-1995",
+            "Tel 1234", "fax 123", "BBS 24 timmar", "tel 1993-94", "Tel 1234567890123456", "fax 1990-1995",
+            "modem 300 1200 2400", "fax 00-tal", "tel 007 är", "Tel: 00 12 kr", "Tel (se nedan)", "Tel + moms",
             # inte direkt efter ordet
             "Tel Anna 12 34 56", "Telefon, kvällstid 12 34 56", "ring 12 34 56", "nummer 12 34 56", "12 34 56",
         ]:
@@ -303,7 +355,7 @@ class TheMark(unittest.TestCase):
 
 class Properties(unittest.TestCase):
     TEXTS = list(PhoneNumbersAreMasked.CASES) + OtherNumbersAreLeftAlone.CASES + list(GiroNumbersAreMasked.CASES) + [
-        *BankgiroNumbersAreMasked.CASES, *LocalPhoneNumbersAreMasked.CASES,
+        *BankgiroNumbersAreMasked.CASES, *NumbersInContextAreMasked.CASES, *NumbersInContextAreMasked.FOREIGN,
         "Tel 12 34 56 78 90 12", "Bankgiro 123-4567-8", "fax 123 45 67 89",
         "Tel 08-123 45 031-12 34 56", "08-12345 6031-12345", "a@b.se08-123456", "",
         # Ett nummer som bara maskeras till en del får inte ge en ny träff på resten.
@@ -320,7 +372,7 @@ class Properties(unittest.TestCase):
         self.assertEqual(pf.mask(joined), pf.mask(joined))
 
     def test_version(self):
-        self.assertEqual(pf.PRIVACY_FILTER_VERSION, 2)
+        self.assertEqual(pf.PRIVACY_FILTER_VERSION, 3)
 
 
 class MaskedDatabase(unittest.TestCase):
@@ -364,7 +416,7 @@ class MaskedDatabase(unittest.TestCase):
         db = sqlite3.connect(path)
         self.addCleanup(db.close)
         meta = dict(db.execute("SELECT key, value FROM meta"))
-        self.assertEqual(meta["privacyFilterVersion"], "2")
+        self.assertEqual(meta["privacyFilterVersion"], "3")
         self.assertEqual(meta["normalizerVersion"], "2")
         self.assertEqual(meta["inventoryDatasetVersion"], "2026-10-06-006")
 

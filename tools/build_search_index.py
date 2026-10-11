@@ -526,7 +526,7 @@ def main(argv=None) -> int:
     print(f"{result['path']}: {result['issues']} nummer, {result['pages']} sidor, {result['tokenizer']}, "
           f"{Path(result['path']).stat().st_size / 1e6:.2f} MB")
     if result["masked"] is not None:
-        names = {"email": "e-postadresser", "phone": "telefonnummer", "localPhone": "telefonnummer utan riktnummer",
+        names = {"email": "e-postadresser", "phone": "telefonnummer", "contextPhone": "nummer efter tel, fax och liknande ord",
                  "giro": "postgironummer", "bankgiro": "bankgironummer", "personalNumber": "personnummerformer"}
         print(f"maskerat i searchText (privacyFilterVersion {privacy_filter.PRIVACY_FILTER_VERSION}), "
               f"{result['maskedAnyPages']} sidor berörda: "

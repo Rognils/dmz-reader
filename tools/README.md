@@ -237,27 +237,27 @@ Samma PDF:er, samma inventory och samma `--built-at` ger en fil med samma SHA-25
 
 Tidningarna trycker privatpersoners kontaktuppgifter i insändare och radannonser. Indexet som delas ut byggs därför med `--privacy-filter` (`tools/privacy_filter.py`, `privacyFilterVersion` i `meta`):
 
-- I `searchText` byts sex slags uppgifter mot markeringen `•••`: e-postadresser, telefonnummer med riktnummer eller +46, telefonnummer utan riktnummer efter tel, fax, bbs och liknande ord, postgironummer efter ordet postgiro eller pg, bankgironummer efter ordet bankgiro eller bg, och teckenföljder med personnummers form.
+- I `searchText` byts sex slags uppgifter mot markeringen `•••`: e-postadresser, telefonnummer med riktnummer eller +46, hela nummeruttrycket efter tel, fax, bbs och liknande ord (också utländska nummer och nummer utan riktnummer), postgironummer efter ordet postgiro eller pg, bankgironummer efter ordet bankgiro eller bg, och teckenföljder med personnummers form.
 - `rawText` lämnas tom. Appen läser inte kolumnen. Den finns kvar, så schemat är detsamma.
 - Markeringen har inga bokstäver eller siffror och ger därför inga ord i FTS-indexet.
 
 ```bash
 # Bygg från PDF:erna. Namnet slutar på -p och filtrets version.
 python3 tools/build_search_index.py --all --privacy-filter --built-at 2026-10-11T00:00:00Z \
-    -o dist/search-2026-10-06-006-p2.db
+    -o dist/search-2026-10-06-006-p3.db
 
 # Kontrollera filen. Ska sluta med "Filen är ren".
-python3 tools/privacy_audit.py verify dist/search-2026-10-06-006-p2.db
+python3 tools/privacy_audit.py verify dist/search-2026-10-06-006-p3.db
 
 # Facit ska ge samma utfall som för det omaskerade indexet
-python3 tools/search_pilot.py evaluate --db dist/search-2026-10-06-006-p2.db
+python3 tools/search_pilot.py evaluate --db dist/search-2026-10-06-006-p3.db
 ```
 
 Regler som inte får brytas:
 
 - **En omaskerad `search.db` laddas aldrig upp någonstans.** Den är bara till för arbetet på datorn.
 - **Den maskerade filen byggs alltid från PDF:erna.** En färdig databas maskeras aldrig med `UPDATE`: den gamla texten kan ligga kvar i filens lediga sidor.
-- **Ändras filtrets regler efter att en fil har delats ut höjs `PRIVACY_FILTER_VERSION`,** och filen får ett nytt namn (`-p3`).
+- **Ändras filtrets regler efter att en fil har delats ut höjs `PRIVACY_FILTER_VERSION`,** och filen får ett nytt namn (`-p4`).
 - **Stickprov ur `privacy_audit.py sample` innehåller personuppgifter** och ska ligga utanför repot. Verktyget vägrar skriva i repot.
 - **Testerna använder påhittade nummer och adresser,** aldrig riktiga ur tidningarna.
 
