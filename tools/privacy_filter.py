@@ -7,10 +7,15 @@ byts mot markeringen ••• innan texten läggs i databasen. Fyra kategorier:
 
     e-postadresser
     telefon- och faxnummer i svenska format, med riktnummer eller +46
+    telefonnummer utan riktnummer, direkt efter tel, telefon, tfn, fax, telefax, bbs eller modem
     postgironummer som står direkt efter ordet postgiro, postgirot, pg eller pg-nr
+    bankgironummer som står direkt efter ordet bankgiro, bankgirot, bg eller bg-nr
     teckenföljder med personnummers form: ÅÅMMDD-NNNN och ÅÅÅÅMMDD-NNNN
 
-Ingenting annat maskeras: inte namn, inte postadresser, inte nummer utan riktnummer.
+Ingenting annat maskeras: inte namn och inte postadresser. Nummer maskeras bara i sitt
+sammanhang, aldrig med en regel som tar alla siffergrupper av en viss längd.
+
+Version 2 lade till bankgiro och telefonnummer utan riktnummer.
 
 Markeringen är densamma för alla kategorier och har inga bokstäver eller siffror. FTS-indexet
 får därför inga ord av den.
@@ -58,14 +63,14 @@ from __future__ import annotations
 
 import re
 
-PRIVACY_FILTER_VERSION = 1
+PRIVACY_FILTER_VERSION = 2
 
 # En och samma markering för alla kategorier. Den har inga bokstäver eller siffror, så
 # FTS-indexet får inga ord av den: en sökning på "telefon" ska inte träffa varje maskerat nummer.
 MARK = "•••"
 EMAIL_MARK = PHONE_MARK = GIRO_MARK = PERSONAL_NUMBER_MARK = MARK
 
-CATEGORIES = ("email", "phone", "giro", "personalNumber")
+CATEGORIES = ("email", "phone", "localPhone", "giro", "bankgiro", "personalNumber")
 
 # Lokal del, @, och en domän med minst en punkt och en toppdomän av bokstäver. Domänen före
 # toppdomänen ska ha minst två tecken: x@d.se finns inte som adress, men sex bytes med den
@@ -306,23 +311,117 @@ def mask_giro(text: str) -> tuple[str, int]:
     return "".join(pieces), count
 
 
+# Bankgironummer: bara i direkt anslutning till ordet bankgiro, bankgirot, bg eller bg-nr.
+# Numret är tre eller fyra siffror, bindestreck och fyra siffror: 123-4567, 1234-5678.
+_BANKGIRO = re.compile(
+    r"(?:b ?a ?n ?k ?g ?i ?r ?o ?t?|(?<![" + _LETTER + r"])b ?g)"
+    r"(?: ?-? ?(?:n ?r|nummer|konto))?[^0-9A-Za-zÀ-ÖØ-öø-ÿ\n•]{0,4}"
+    r"(?P<number>[0-9](?: ?[0-9]){2,3} ?- ?[0-9](?: ?[0-9]){3})(?![0-9])(?! ?- ?[0-9])",
+    re.I,
+)
+
+# Telefonnummer utan riktnummer: bara direkt efter ordet tel, telefon, tfn, fax, telefax, bbs
+# eller modem, med eventuell punkt och eventuellt kolon. Ordet ska stå för sig: telefonmodem
+# och BBS-program räknas inte.
+_LOCAL_KEYWORD = re.compile(
+    r"(?<![" + _LETTER + r"0-9-])(?:telefon|telefax|tel|tfn|fax|bbs|modem)(?![" + _LETTER + r"0-9-])\.? ?:? ?(?=[0-9])",
+    re.I,
+)
+_MIN_LOCAL, _MAX_LOCAL = 5, 8
+_LOCAL_GROUP_SEPARATOR = re.compile(r" ?- ?| ")
+# Modemhastigheter står ofta just efter orden modem, fax och bbs.
+_SPEEDS = frozenset({"12000", "14400", "16800", "19200", "21600", "24000", "26400", "28800", "31200", "33600",
+                     "38400", "57600", "64000", "115200"})
+_NOT_LOCAL_AFTER = re.compile(r":-| ?(?:kr|sek|st|mb|kb|mhz|bps|baud|bit|tkn|cps|dpi|hz|khz|ms)\b| ?%|/|[.,:][0-9]|x[0-9]", re.I)
+
+
+def bankgiro_spans(text: str) -> list[tuple[int, int]]:
+    """Var bankgironumren står, som (början, slut). Ordet före numret ingår inte."""
+    return [match.span("number") for match in _BANKGIRO.finditer(text)]
+
+
+def local_phone_spans(text: str) -> list[tuple[int, int]]:
+    """Var telefonnummer utan riktnummer står efter tel, fax och liknande ord, som (början, slut)."""
+    spans = []
+    for keyword in _LOCAL_KEYWORD.finditer(text):
+        begin = position = keyword.end()
+        digits = 0
+        end = None
+        first = True
+        while True:
+            group = _GROUP.match(text, position)
+            if group is None:
+                break
+            length = len(group.group())
+            # Ett nummer i ett stycke, eller grupper om högst tre siffror: 12345, 12 34 56, 123 45.
+            if digits + length > _MAX_LOCAL or (length > 3 and not first):
+                break
+            if _NOT_LOCAL_AFTER.match(text, group.end()):
+                break
+            digits += length
+            end = group.end()
+            if first and length > 3:
+                break
+            first = False
+            separator = _LOCAL_GROUP_SEPARATOR.match(text, end)
+            if separator is None or not text[separator.end():separator.end() + 1].isdigit():
+                break
+            position = separator.end()
+        if end is None or not _MIN_LOCAL <= digits <= _MAX_LOCAL:
+            continue
+        number = text[begin:end]
+        if number in _SPEEDS:
+            continue
+        # Numret får inte fortsätta i fler siffror, och inte vara början på ett intervall eller ett bråk.
+        if text[end:end + 1].isdigit() or re.match(r" ?[-/] ?[0-9]", text[end:]):
+            continue
+        spans.append((begin, end))
+    return spans
+
+
+def mask_bankgiro(text: str) -> tuple[str, int]:
+    spans = bankgiro_spans(text)
+    return (_replace(text, spans), len(spans)) if spans else (text, 0)
+
+
+def mask_local_phones(text: str) -> tuple[str, int]:
+    spans = local_phone_spans(text)
+    return (_replace(text, spans), len(spans)) if spans else (text, 0)
+
+
 def mask(text: str) -> tuple[str, dict[str, int]]:
     """Maskerar en text. Ger texten och antalet träffar per kategori."""
-    # Personnummer och postgiro först: de har en egen form, som telefonregeln annars kunde ta en bit av.
+    # Personnummer och giro först: de har en egen form, som telefonregeln annars kunde ta en bit av.
     text, personal = mask_personal_numbers(text)
     text, giro = mask_giro(text)
+    text, bankgiro = mask_bankgiro(text)
     text, emails = mask_emails(text)
     text, phones = mask_phones(text)
-    return text, {"email": emails, "phone": phones, "giro": giro, "personalNumber": personal}
+    # Sist: nummer utan riktnummer, bland det som står kvar efter ordet.
+    text, local = mask_local_phones(text)
+    return text, {"email": emails, "phone": phones, "localPhone": local, "giro": giro, "bankgiro": bankgiro,
+                  "personalNumber": personal}
 
 
 def all_spans(text: str) -> list[tuple[str, int, int]]:
-    """Alla träffar i en text som (kategori, början, slut), i ett pass per kategori. För stickprov och kontroller."""
-    spans = [("personalNumber", start, end) for start, end in personal_number_spans(text)]
-    spans += [("giro", start, end) for start, end in giro_spans(text)]
-    spans += [("email", start, end) for start, end in email_spans(text)]
-    spans += [("phone", start, end) for start, end in phone_spans(text)]
-    return spans
+    """Alla träffar i en text som (kategori, början, slut), med lägen i den ursprungliga texten.
+
+    Kategorierna tas i samma ordning som i mask(), och det som redan är taget fylls med
+    markeringens tecken innan nästa kategori söks. För stickprov och kontroller.
+    """
+    found = []
+    for kind, spans_of in (("personalNumber", personal_number_spans), ("giro", giro_spans),
+                           ("bankgiro", bankgiro_spans), ("email", email_spans), ("phone", phone_spans),
+                           ("localPhone", local_phone_spans)):
+        spans = spans_of(text)
+        found += [(kind, start, end) for start, end in spans]
+        pieces = []
+        last = 0
+        for start, end in sorted(spans):
+            pieces += [text[last:start], MARK[0] * (end - start)]
+            last = end
+        text = "".join(pieces) + text[last:]
+    return found
 
 
 def find(text: str) -> dict[str, int]:

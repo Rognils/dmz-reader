@@ -23,7 +23,7 @@ byggs. Ändras en regel eller ordlistan ska NORMALIZER_VERSION höjas.
 Bygget är reproducerbart: samma PDF:er och samma `--built-at` ger en
 identisk fil.
 
-Med `--privacy-filter` maskeras e-postadresser, telefonnummer, postgironummer och
+Med `--privacy-filter` maskeras e-postadresser, telefonnummer, post- och bankgironummer och
 personnummerformer i searchText innan texten läggs i databasen (tools/privacy_filter.py),
 rawText lämnas tom, och `privacyFilterVersion` skrivs i meta. Appen läser inte rawText;
 kolumnen finns kvar så att schemat är detsamma. Det är den varianten som delas ut. Indexet
@@ -526,11 +526,11 @@ def main(argv=None) -> int:
     print(f"{result['path']}: {result['issues']} nummer, {result['pages']} sidor, {result['tokenizer']}, "
           f"{Path(result['path']).stat().st_size / 1e6:.2f} MB")
     if result["masked"] is not None:
-        names = {"email": "e-postadresser", "phone": "telefonnummer", "giro": "postgironummer",
-                 "personalNumber": "personnummerformer"}
+        names = {"email": "e-postadresser", "phone": "telefonnummer", "localPhone": "telefonnummer utan riktnummer",
+                 "giro": "postgironummer", "bankgiro": "bankgironummer", "personalNumber": "personnummerformer"}
         print(f"maskerat i searchText (privacyFilterVersion {privacy_filter.PRIVACY_FILTER_VERSION}), "
               f"{result['maskedAnyPages']} sidor berörda: "
-              + ", ".join(f"{result['masked'][kind]} {names[kind]} på {result['maskedPages'][kind]} sidor"
+              + ", ".join(f"{result['masked'][kind]} {names.get(kind, kind)} på {result['maskedPages'][kind]} sidor"
                           for kind in privacy_filter.CATEGORIES))
     return 0
 
