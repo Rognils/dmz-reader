@@ -282,8 +282,9 @@ class HqDeviceTest {
 
     /**
      * Manuell kontroll: körs bara mot arkivets egen PDF, av tools/manual_archive_file_test.sh.
-     * Med det påhittade testnumret blir testmiljön aldrig stilla i liggande läge, och testet
-     * hänger sig. Orsaken är inte utredd (docs/reports/pre-1.0-del3.md).
+     * Med det påhittade testnumret hänger sig testet ungefär var fjärde gång: testmiljön väntar på
+     * att appen ska bli stilla, fast den redan är det. Med arkivfilen händer det inte
+     * (docs/reports/github-sidan-2.md).
      */
     @Test
     fun hqInLandscapeShowsSinglePage() {

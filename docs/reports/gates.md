@@ -255,7 +255,7 @@ available by DMZArkivet (https://dmzarkivet.se).
 En Android-app för att läsa Datormagazin och HighScore från
 [DMZArkivet](https://dmzarkivet.se). Gratis, utan reklam, konton eller spårning.
 
-DMZArkivet byggs och underhålls av Gustav Almström. Appen är ett fristående
+DMZArkivet byggs och underhålls av Gustav. Appen är ett fristående
 projekt och hämtar tidningarna direkt från arkivet.
 
 ## Licens
@@ -311,7 +311,7 @@ Ingenting av detta är gjort. *Efter Gustavs svar är läge 3 inte aktuellt, och
 
 ### Gustavs svar
 
-Gustav Almström, som driver DMZArkivet, har svarat. I sammanfattning:
+Gustav, som driver DMZArkivet, har svarat. I sammanfattning:
 
 - Appen får köras mot hans server.
 - Han har inget emot att datan används. Han äger den inte själv, så svaret är inget upphovsrättsligt tillstånd.

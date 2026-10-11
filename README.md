@@ -35,9 +35,9 @@ Kräver Android 8.0 eller senare.
 
 ## Tack, Gustav!
 
-DMZArkivet byggs och underhålls av Gustav Almström, som har lagt ner ett omfattande arbete på att samla in, skanna, OCR-behandla och tillgängliggöra de gamla tidningarna. Utan DMZArkivet hade den här appen inte funnits.
+Ett stort tack till Gustav bakom DMZArkivet för arbetet med att samla in, skanna, OCR-behandla och tillgängliggöra de gamla tidningarna. Utan DMZArkivet hade den här appen inte funnits.
 
-DMZ Reader är ett fristående projekt. Appen hämtar tidningarna direkt från arkivet när du läser eller laddar ned dem.
+DMZ Reader är ett fristående projekt och inte en officiell app från DMZArkivet. Appen hämtar tidningarna direkt från arkivet när du läser eller laddar ned dem.
 
 **Arkivet körs på en privat uppkoppling**, så ibland kan det vara tillfälligt otillgängligt. Nummer som du redan har laddat ned går att läsa ändå. En nedladdning som bryts fortsätter där den slutade när arkivet går att nå igen.
 

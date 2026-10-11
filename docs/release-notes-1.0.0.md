@@ -45,7 +45,7 @@ Sökindexet tillämpar automatisk maskering av igenkända telefon- och faxnummer
 
 ## Om arkivet
 
-Tidningarna hämtas direkt från DMZArkivet, som byggs och underhålls av Gustav Almström. **Arkivet körs på en privat uppkoppling**, så ibland kan det vara tillfälligt otillgängligt. Nummer som du redan har laddat ned går att läsa ändå, och en nedladdning som bryts fortsätter där den slutade.
+Tidningarna hämtas direkt från DMZArkivet, som byggs och underhålls av Gustav. DMZ Reader är ett fristående projekt och inte en officiell app från DMZArkivet. **Arkivet körs på en privat uppkoppling**, så ibland kan det vara tillfälligt otillgängligt. Nummer som du redan har laddat ned går att läsa ändå, och en nedladdning som bryts fortsätter där den slutade.
 
 ## Licens
 

@@ -146,7 +146,9 @@ class MarkdownTest {
     fun `the about text says what the app is and thanks the archive`() {
         val text = blocks.joinToString("\n") { it.plainText }
         assertTrue("ingen reklam, inga köp, inga användarkonton och ingen spårning eller analys" in text)
-        assertTrue("DMZArkivet byggs och underhålls av Gustav Almström" in text)
+        assertTrue("DMZArkivet byggs och underhålls av Gustav, som lagt ner" in text)
+        assertFalse("Almström" in text)
+        assertTrue("DMZ Reader är ett fristående projekt och inte en officiell app från DMZArkivet." in text)
         assertTrue("under MIT-licensen, som bara gäller DMZ Readers källkod" in text)
         // Fem rubriker och nio stycken, varav två är en ensam länk.
         assertEquals(14, blocks.size)
