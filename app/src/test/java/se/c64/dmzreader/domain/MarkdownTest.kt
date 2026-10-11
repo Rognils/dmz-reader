@@ -113,9 +113,14 @@ class MarkdownTest {
     }
 
     @Test
-    fun `the about text links to the archive and the shop, and nowhere else`() {
+    fun `the about text links to the archive, the shop and the project, and nowhere else`() {
         assertEquals(
-            listOf(Link("dmzarkivet.se", "https://dmzarkivet.se"), Link("shop.datormagazin.se", "https://shop.datormagazin.se")),
+            listOf(
+                Link("dmzarkivet.se", "https://dmzarkivet.se"),
+                Link("shop.datormagazin.se", "https://shop.datormagazin.se"),
+                Link("kontakta projektet via GitHub", "https://github.com/Rognils/dmz-reader/issues"),
+                Link("GitHub", "https://github.com/Rognils/dmz-reader"),
+            ),
             blocks.flatMap { it.spans }.filterIsInstance<Link>(),
         )
     }

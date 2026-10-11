@@ -18,10 +18,10 @@ Datormagazin lever vidare genom Datormagazin Retro, med nya nummer om den klassi
 
 ## Material och upphovsrätt
 
-Rättigheterna till tidningarnas texter och bilder tillhör respektive rättighetsinnehavare. Materialet kommer från DMZArkivet och appen tar inte betalt för att göra det tillgängligt. Om du är rättighetsinnehavare och vill att material ska tas bort från appen, kontakta projektet via GitHub.
+Rättigheterna till tidningarnas texter och bilder tillhör respektive rättighetsinnehavare. Materialet kommer från DMZArkivet och appen tar inte betalt för att göra det tillgängligt. Om du är rättighetsinnehavare och vill att material ska tas bort från appen, [kontakta projektet via GitHub](https://github.com/Rognils/dmz-reader/issues).
 
 ## Om appen
 
 Version {version}
 
-Källkoden kommer att publiceras på GitHub. Den publiceras under MIT-licensen, som bara gäller DMZ Readers källkod och inte tidningsmaterial, omslag eller arkivdata.
+Källkoden finns på [GitHub](https://github.com/Rognils/dmz-reader). Den publiceras under MIT-licensen, som bara gäller DMZ Readers källkod och inte tidningsmaterial, omslag eller arkivdata.

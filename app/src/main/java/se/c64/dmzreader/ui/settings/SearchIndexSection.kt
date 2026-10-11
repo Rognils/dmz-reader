@@ -204,7 +204,7 @@ fun SearchIndexSection(viewModel: SearchIndexViewModel) {
         ) { Text("Ta bort sökindex", color = DmzColors.TextPrimary) }
         Spacer(Modifier.height(6.dp))
         Text(
-            "Sökindexet gör att du kan söka i tidningarnas text. Det byggs på datorn (search.db, cirka 150 MB) " +
+            "Sökindexet gör att du kan söka i tidningarnas text. Det byggs på datorn (search.db, cirka 90 MB) " +
                 "och importeras här. Favoriter, bokmärken och läsdata påverkas inte.",
             style = MaterialTheme.typography.bodyMedium,
             color = DmzColors.TextSecondary,
