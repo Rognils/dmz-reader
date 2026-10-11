@@ -1,8 +1,8 @@
 # Rapport – maskerat sökindex för distribution
 
-Datum: 2026-10-11 · Grenar: `tools/privacy-filter` och `tools/privacy-filter-p2`, mergade till `main` · Filter: `privacyFilterVersion` 2 · Arkivversion 2026-10-06-006
+Datum: 2026-10-11 · Grenar: `tools/privacy-filter`, `tools/privacy-filter-p2` och `tools/privacy-filter-p3`, mergade till `main` · Filter: `privacyFilterVersion` 3 · Arkivversion 2026-10-06-006
 
-**Den gällande filen är `search-2026-10-06-006-p2.db`, se avsnitt 11.** Avsnitt 1–10 beskriver version 1 (p1), som p2 bygger vidare på. Prereleasen p1 är borttagen.
+**Den gällande filen är `search-2026-10-06-006-p3.db`, se avsnitt 12.** Avsnitt 1–10 beskriver version 1 (p1) och avsnitt 11 version 2 (p2), som p3 bygger vidare på. Prereleaserna p1 och p2 finns inte i det nya repot.
 
 Rapporten citerar inga personuppgifter. Stickproven som bedömningen bygger på ligger utanför repot, i `~/dmz-privacy-stickprov/`.
 
@@ -371,3 +371,93 @@ Skärmbild: `docs/screenshots/search-privacy/02-p2-bankgiro.png`.
 - post- och bankgironummer utan ordet före
 - nummer som texttolkningen har skadat och som inte står efter tel eller fax
 - namn och postadresser
+
+## 12. Version 3 (p3): hela nummeruttrycket efter tel, fax och liknande ord
+
+I p2 tog regeln för nummer utan riktnummer bara början av ett utländskt nummer. I p3 maskeras hela det sammanhängande nummeruttrycket när det står direkt efter tel, telefon, tfn, fax, telefax, bbs eller modem.
+
+| | |
+|---|---|
+| Fil | `search-2026-10-06-006-p3.db`, 90 943 488 byte (91 MB) |
+| SHA-256 | `11033d29553b59083dea94fde90c55bcf7a0cb23ef5452a4083f923903682dfc` |
+| `privacyFilterVersion` | 3 |
+| Maskerat | 46 126 telefonnummer med riktnummer, 2 081 nummer efter tel, fax och liknande ord, 1 937 postgironummer, 74 bankgironummer, 309 e-postadresser, 12 personnummerformer |
+| Berörda sidor | 5 135 av 11 293 |
+| Sökfacit | 43 av 43 före och efter, 0 irrelevanta, ingen förväntad sida tappad |
+| Integritetskontroll | 0 träffar med SQL, 0 i `strings`-utdata, 0 i råa bytes |
+| Två byggen | byte-identiska |
+
+### Regeln
+
+Uttrycket börjar direkt efter ordet, med eventuell punkt och eventuellt kolon. Det får innehålla ett plustecken först, siffergrupper, och grupper inom parentes. Mellan grupperna får det stå mellanslag, bindestreck eller snedstreck, och de tecken texttolkningen sätter i deras ställe (`·` och `*`). En parentes får sitta tätt intill siffrorna, som i `+49(0)…`. Uttrycket har minst 5 och högst 15 siffror.
+
+Uttrycket tar slut före en grupp som:
+
+- följs av en enhet, ett pris, en tid eller en decimal (`kr`, `:-`, `st`, `bps`, `baud`, `timmar`, `%`, `16.00`)
+- följs av ett snedstreck och en bokstav, som i `14400/v32bis`
+- är ett årtal efter ett mellanslag (1900–2099), när numret redan har fem siffror
+- är en modemhastighet efter ett mellanslag, i ett inhemskt nummer
+- är nästa nummers riktnummer
+- skulle göra uttrycket längre än 15 siffror
+
+Ett inhemskt nummer skrivet i ett stycke på minst sex siffror är färdigt där: det som följer är en annan kolumn i en lista.
+
+Ordningen är: utländska nummer efter orden (de börjar med `+`, en parentes eller `00`) tas först och hela. Sedan tar den vanliga regeln nummer med riktnummer. Sist tas det som står kvar direkt efter orden.
+
+### Tester
+
+38 tester för filtret och kontrollverktyget, 247 Python-tester totalt, alla gröna. Nya påhittade fall:
+
+- **Utländska nummer i 16 skrivsätt:** `009` och `00` som utlandsprefix, `+` med och utan mellanslag, riktnummer inom parentes med och utan mellanslag, bindestreck, snedstreck och `·` som skiljetecken.
+- **Det som följer står kvar, 12 fall:** ord, priser, antal, årtal, hastigheter, tider, nästa nummer och en annan kolumn i en lista.
+- **Fallen från p2** står kvar, och sex nya som inte ska maskeras: "modem 300 1200 2400", "fax 00-tal", "tel 007 är", "Tel: 00 12 kr", "Tel (se nedan)" och "Tel + moms".
+
+### Stickproven
+
+| Stickprov | Granskade | Utfall |
+|---|---|---|
+| De 25 utländska fallen från p2 | alla 25 | 24 maskeras hela. I ett har texttolkningen satt en bokstav mitt i numret, och siffrorna efter den står kvar. |
+| Nya träffar efter orden | 130 | 128 rätt, 2 falska (1,5 %) |
+| Träffar med parentes tätt intill siffrorna, tillkomna efter stickprovet | 45 av 79 | 45 rätt |
+
+De två falska var modemhastigheter efter ordet modem: en utspärrad och en skriven som två hastigheter med snedstreck. Reglerna rättades för båda, och de står nu som testfall.
+
+Stoppregeln: högst 3 % falska, och ingen förväntad sida tappad i facit. Båda är uppfyllda.
+
+### Vad som ändrades mot p2
+
+| | p2 | p3 |
+|---|---|---|
+| Telefonnummer med riktnummer | 46 331 | 46 126 |
+| Nummer efter tel, fax och liknande ord | 833 | 2 081 |
+
+Summan ökar med cirka 1 040. Den vanliga regeln tar färre, eftersom utländska nummer efter orden nu tas hela av den nya regeln i stället för till en del av den vanliga.
+
+### Sökord, facit och prov i appen
+
+| Sökord | Omaskerat | p3 |
+|---|---|---|
+| telefon | 1 253 | 1 253 |
+| bankgiro | 67 | 67 |
+| postgiro | 294 | 295 |
+
+Träffarnas ordning ändras som förut för 15 av 43 sökord.
+
+Importerad i debug-appen genom filväljaren: "Sökindexet är importerat: 185 nummer och 11293 sidor, på 1,6 sekunder." Sökningarna i appen ger samma antal som ovan, och utdrag med utländska nummer visar `Tel: •••` utan siffror efter.
+
+### Kontrollen hittade ett fel till
+
+`strings`-kontrollen av det första p3-bygget visade ett utländskt nummer som inte var maskerat alls: en parentes satt tätt intill siffrorna, och regeln krävde ett skiljetecken där. Regeln rättades, och 79 nummer till maskeras. Filen byggdes om från grunden.
+
+### Kvar utanför filtret
+
+- utländska nummer som inte står direkt efter ett av orden
+- nummer som texttolkningen har delat med en bokstav: det som står efter bokstaven blir kvar
+- nummer utan riktnummer som inte står direkt efter ett av orden, till exempel ett andra nummer efter "eller"
+- post- och bankgironummer utan ordet före
+- namn och postadresser
+
+### Telefonen och releasen
+
+- `search-2026-10-06-006-p2.db` är borttagen ur telefonens Download, och `search-2026-10-06-006-p3.db` ligger där, 90 943 488 byte. Jag har inte importerat den i release-appen.
+- Prereleasen med p3 skapas i det nya repot, se `docs/reports/pre-1.0-del2.md`.

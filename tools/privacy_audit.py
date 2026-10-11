@@ -194,7 +194,7 @@ def main(argv=None) -> int:
     sample_parser.add_argument("--emails", type=int, default=60)
     sample_parser.add_argument("--giro", type=int, default=120)
     sample_parser.add_argument("--bankgiro", type=int, default=120)
-    sample_parser.add_argument("--local-phones", type=int, default=150)
+    sample_parser.add_argument("--context-phones", type=int, default=150)
     sample_parser.add_argument("--personal-numbers", type=int, default=0, help="0 betyder alla")
     sample_parser.add_argument("--near", type=int, default=200)
     arguments = parser.parse_args(argv)
@@ -203,7 +203,7 @@ def main(argv=None) -> int:
         return 0
     if arguments.command == "sample":
         sizes = {"phone": arguments.phones, "email": arguments.emails, "giro": arguments.giro,
-                 "bankgiro": arguments.bankgiro, "localPhone": arguments.local_phones,
+                 "bankgiro": arguments.bankgiro, "contextPhone": arguments.context_phones,
                  "personalNumber": arguments.personal_numbers, "near": arguments.near}
         print(json.dumps(sample(arguments.db, arguments.out, sizes), indent=2))
         return 0

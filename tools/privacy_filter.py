@@ -7,7 +7,8 @@ byts mot markeringen ••• innan texten läggs i databasen. Fyra kategorier:
 
     e-postadresser
     telefon- och faxnummer i svenska format, med riktnummer eller +46
-    telefonnummer utan riktnummer, direkt efter tel, telefon, tfn, fax, telefax, bbs eller modem
+    hela nummeruttrycket direkt efter tel, telefon, tfn, fax, telefax, bbs eller modem, också
+        utländska nummer och nummer utan riktnummer
     postgironummer som står direkt efter ordet postgiro, postgirot, pg eller pg-nr
     bankgironummer som står direkt efter ordet bankgiro, bankgirot, bg eller bg-nr
     teckenföljder med personnummers form: ÅÅMMDD-NNNN och ÅÅÅÅMMDD-NNNN
@@ -15,7 +16,8 @@ byts mot markeringen ••• innan texten läggs i databasen. Fyra kategorier:
 Ingenting annat maskeras: inte namn och inte postadresser. Nummer maskeras bara i sitt
 sammanhang, aldrig med en regel som tar alla siffergrupper av en viss längd.
 
-Version 2 lade till bankgiro och telefonnummer utan riktnummer.
+Version 2 lade till bankgiro och telefonnummer utan riktnummer. Version 3 tar hela
+nummeruttrycket efter tel, fax och liknande ord, i stället för bara dess början.
 
 Markeringen är densamma för alla kategorier och har inga bokstäver eller siffror. FTS-indexet
 får därför inga ord av den.
@@ -63,14 +65,14 @@ from __future__ import annotations
 
 import re
 
-PRIVACY_FILTER_VERSION = 2
+PRIVACY_FILTER_VERSION = 3
 
 # En och samma markering för alla kategorier. Den har inga bokstäver eller siffror, så
 # FTS-indexet får inga ord av den: en sökning på "telefon" ska inte träffa varje maskerat nummer.
 MARK = "•••"
 EMAIL_MARK = PHONE_MARK = GIRO_MARK = PERSONAL_NUMBER_MARK = MARK
 
-CATEGORIES = ("email", "phone", "localPhone", "giro", "bankgiro", "personalNumber")
+CATEGORIES = ("email", "phone", "contextPhone", "giro", "bankgiro", "personalNumber")
 
 # Lokal del, @, och en domän med minst en punkt och en toppdomän av bokstäver. Domänen före
 # toppdomänen ska ha minst två tecken: x@d.se finns inte som adress, men sex bytes med den
@@ -320,19 +322,28 @@ _BANKGIRO = re.compile(
     re.I,
 )
 
-# Telefonnummer utan riktnummer: bara direkt efter ordet tel, telefon, tfn, fax, telefax, bbs
+# Nummer som känns igen på sammanhanget: direkt efter ordet tel, telefon, tfn, fax, telefax, bbs
 # eller modem, med eventuell punkt och eventuellt kolon. Ordet ska stå för sig: telefonmodem
-# och BBS-program räknas inte.
-_LOCAL_KEYWORD = re.compile(
-    r"(?<![" + _LETTER + r"0-9-])(?:telefon|telefax|tel|tfn|fax|bbs|modem)(?![" + _LETTER + r"0-9-])\.? ?:? ?(?=[0-9])",
+# och BBS-program räknas inte. Här maskeras hela nummeruttrycket, också utländska nummer och
+# nummer utan riktnummer: plustecken, landsnummer, riktnummer inom parentes, och siffergrupper
+# med mellanslag, bindestreck eller snedstreck emellan, tills uttrycket tar slut.
+_CONTEXT_KEYWORD = re.compile(
+    r"(?<![" + _LETTER + r"0-9-])(?:telefon|telefax|tel|tfn|fax|bbs|modem)(?![" + _LETTER + r"0-9-])\.? ?:? ?(?=[+(0-9])",
     re.I,
 )
-_MIN_LOCAL, _MAX_LOCAL = 5, 8
-_LOCAL_GROUP_SEPARATOR = re.compile(r" ?- ?| ")
+_MIN_CONTEXT, _MAX_CONTEXT = 5, 15  # siffror. Femton är det längsta ett telefonnummer kan vara.
+_CONTEXT_ELEMENT = re.compile(r"\((?P<inside>[0-9]{1,5})\)|(?P<digits>[0-9]+)")
+_CONTEXT_SEPARATOR = re.compile(r" ?[-/·*] ?| ")
 # Modemhastigheter står ofta just efter orden modem, fax och bbs.
-_SPEEDS = frozenset({"12000", "14400", "16800", "19200", "21600", "24000", "26400", "28800", "31200", "33600",
-                     "38400", "57600", "64000", "115200"})
-_NOT_LOCAL_AFTER = re.compile(r":-| ?(?:kr|sek|st|mb|kb|mhz|bps|baud|bit|tkn|cps|dpi|hz|khz|ms)\b| ?%|/|[.,:][0-9]|x[0-9]", re.I)
+_SPEEDS = frozenset({"300", "1200", "2400", "4800", "7200", "9600", "12000", "14400", "16800", "19200", "21600",
+                     "24000", "26400", "28800", "31200", "33600", "38400", "57600", "64000", "115200"})
+# Det som visar att en siffergrupp är ett pris, ett mått, en tid eller en version och inte hör till numret.
+_NOT_NUMBER_GROUP_AFTER = re.compile(
+    r":-| ?(?:kr|sek|st|mb|kb|mhz|bps|baud|bit|tkn|cps|dpi|hz|khz|ms|tim|timmar|år)\b| ?%| ?/ ?[" + _LETTER + r"]|[.,:][0-9]|x[0-9]",
+    re.I,
+)
+_YEAR = re.compile(r"(?:19|20)[0-9]{2}")
+_YEAR_RANGE = re.compile(r"(?:19|20)[0-9]{2} ?[-/] ?[0-9]{2,4}")
 
 
 def bankgiro_spans(text: str) -> list[tuple[int, int]]:
@@ -340,40 +351,72 @@ def bankgiro_spans(text: str) -> list[tuple[int, int]]:
     return [match.span("number") for match in _BANKGIRO.finditer(text)]
 
 
-def local_phone_spans(text: str) -> list[tuple[int, int]]:
-    """Var telefonnummer utan riktnummer står efter tel, fax och liknande ord, som (början, slut)."""
+def context_phone_spans(text: str, international_only: bool = False) -> list[tuple[int, int]]:
+    """Var nummer står direkt efter tel, fax och liknande ord, som (början, slut). Hela uttrycket tas.
+
+    Med `international_only` tas bara uttryck som börjar med +, en parentes eller utlandsprefixet 00.
+    De tas före den vanliga telefonregeln, som annars skulle ta bara början av dem.
+    """
     spans = []
-    for keyword in _LOCAL_KEYWORD.finditer(text):
+    for keyword in _CONTEXT_KEYWORD.finditer(text):
         begin = position = keyword.end()
+        if international_only and not (text[begin] in "+(" or text.startswith("00", begin)):
+            continue
+        if text[position:position + 1] == "+":
+            position += 1
+            if text[position:position + 1] == " ":
+                position += 1
+        international = text[begin] == "+" or text.startswith("00", begin)
         digits = 0
         end = None
-        first = True
+        groups: list[str] = []
+        after_break = False
         while True:
-            group = _GROUP.match(text, position)
-            if group is None:
+            element = _CONTEXT_ELEMENT.match(text, position)
+            if element is None:
                 break
-            length = len(group.group())
-            # Ett nummer i ett stycke, eller grupper om högst tre siffror: 12345, 12 34 56, 123 45.
-            if digits + length > _MAX_LOCAL or (length > 3 and not first):
+            group = element.group("inside") or element.group("digits")
+            if digits + len(group) > _MAX_CONTEXT:
                 break
-            if _NOT_LOCAL_AFTER.match(text, group.end()):
+            if _NOT_NUMBER_GROUP_AFTER.match(text, element.end()):
                 break
-            digits += length
-            end = group.end()
-            if first and length > 3:
+            if groups:
+                # Efter ett mellanslag eller snedstreck kan nästa grupp vara något annat: en hastighet,
+                # ett årtal eller nästa nummers riktnummer.
+                if after_break and _YEAR.fullmatch(group) and digits >= _MIN_CONTEXT:
+                    break
+                # En hastighet efter ett inhemskt nummer är en annan kolumn. I ett utländskt nummer kan
+                # en grupp råka se ut som en hastighet, och där avgör det som följer efter gruppen.
+                if after_break and group in _SPEEDS and not international:
+                    break
+                if digits >= _MIN_CONTEXT and _AREA_CODE.fullmatch(group) and _NEXT_AREA_AFTER.match(text, element.end()):
+                    break
+            groups.append(group)
+            digits += len(group)
+            end = element.end()
+            # Ett inhemskt nummer i ett stycke är färdigt: det som följer är en annan kolumn.
+            if len(groups) == 1 and len(group) >= 6 and not group.startswith("00") and text[begin] != "+":
                 break
-            first = False
-            separator = _LOCAL_GROUP_SEPARATOR.match(text, end)
-            if separator is None or not text[separator.end():separator.end() + 1].isdigit():
+            separator = _CONTEXT_SEPARATOR.match(text, end)
+            if separator is not None and _CONTEXT_ELEMENT.match(text, separator.end()) is not None:
+                # Ett mellanslag eller ett snedstreck kan skilja numret från något annat. Ett bindestreck gör det inte.
+                after_break = "-" not in separator.group()
+                position = separator.end()
+            elif (element.group("inside") is not None and text[end:end + 1].isdigit()) or text[end:end + 1] == "(":
+                # En parentes sitter ofta tätt intill siffrorna: +49(0)5241 och (0)5241.
+                if _CONTEXT_ELEMENT.match(text, end) is None:
+                    break
+                after_break = False
+                position = end
+            else:
                 break
-            position = separator.end()
-        if end is None or not _MIN_LOCAL <= digits <= _MAX_LOCAL:
+        if end is None or not _MIN_CONTEXT <= digits <= _MAX_CONTEXT:
             continue
-        number = text[begin:end]
-        if number in _SPEEDS:
+        expression = text[begin:end]
+        # Hastigheter och årtal efter ordet är inte nummer: modem 14400, modem 2400/1200, tel 1993-94.
+        if groups[0] in _SPEEDS or _YEAR_RANGE.fullmatch(expression):
             continue
-        # Numret får inte fortsätta i fler siffror, och inte vara början på ett intervall eller ett bråk.
-        if text[end:end + 1].isdigit() or re.match(r" ?[-/] ?[0-9]", text[end:]):
+        if text[end:end + 1].isdigit():
             continue
         spans.append((begin, end))
     return spans
@@ -384,8 +427,8 @@ def mask_bankgiro(text: str) -> tuple[str, int]:
     return (_replace(text, spans), len(spans)) if spans else (text, 0)
 
 
-def mask_local_phones(text: str) -> tuple[str, int]:
-    spans = local_phone_spans(text)
+def mask_context_phones(text: str, international_only: bool = False) -> tuple[str, int]:
+    spans = context_phone_spans(text, international_only)
     return (_replace(text, spans), len(spans)) if spans else (text, 0)
 
 
@@ -396,10 +439,12 @@ def mask(text: str) -> tuple[str, dict[str, int]]:
     text, giro = mask_giro(text)
     text, bankgiro = mask_bankgiro(text)
     text, emails = mask_emails(text)
+    # Utländska nummer efter tel, fax och liknande ord tas hela, före den vanliga telefonregeln.
+    text, international = mask_context_phones(text, international_only=True)
     text, phones = mask_phones(text)
-    # Sist: nummer utan riktnummer, bland det som står kvar efter ordet.
-    text, local = mask_local_phones(text)
-    return text, {"email": emails, "phone": phones, "localPhone": local, "giro": giro, "bankgiro": bankgiro,
+    # Sist: det som står kvar direkt efter orden, till exempel nummer utan riktnummer.
+    text, context = mask_context_phones(text)
+    return text, {"email": emails, "phone": phones, "contextPhone": international + context, "giro": giro, "bankgiro": bankgiro,
                   "personalNumber": personal}
 
 
@@ -411,8 +456,9 @@ def all_spans(text: str) -> list[tuple[str, int, int]]:
     """
     found = []
     for kind, spans_of in (("personalNumber", personal_number_spans), ("giro", giro_spans),
-                           ("bankgiro", bankgiro_spans), ("email", email_spans), ("phone", phone_spans),
-                           ("localPhone", local_phone_spans)):
+                           ("bankgiro", bankgiro_spans), ("email", email_spans),
+                           ("contextPhone", lambda value: context_phone_spans(value, international_only=True)),
+                           ("phone", phone_spans), ("contextPhone", context_phone_spans)):
         spans = spans_of(text)
         found += [(kind, start, end) for start, end in spans]
         pieces = []
