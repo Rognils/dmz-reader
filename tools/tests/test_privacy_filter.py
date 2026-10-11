@@ -136,7 +136,7 @@ class OtherNumbersAreLeftAlone(unittest.TestCase):
         "$0314-$0315", "0281-0282 MEMSTR", "2:201/123.4", "640x512", "14400/v32bis", "300-2400 bps",
         "DATA 0 12 - 34 56 7", "10 0 5 4 - 110 2 15",
         "ring 020 gånger", "Ring 08 10 12", "Bbs 030 2400 bps", "A1200 030-50 MHz",
-        "Tel 012345", "ring 0123 gånger", "fax 2400 bps",
+        "ring 0123 gånger", "fax 2400 bps",
         "68EC030-25 5495:-", "68EC030/68882", "($D025/53285)", "$DD00 - 56576",
     ]
 
@@ -183,6 +183,75 @@ class GiroNumbersAreMasked(unittest.TestCase):
                      "på sid 4-5 i pg", "PG 68000", "pg 1993"]:
             with self.subTest(text=text):
                 self.assertEqual(pf.find(text)["giro"], 0)
+
+
+class BankgiroNumbersAreMasked(unittest.TestCase):
+    CASES = {
+        "Bankgiro 123-4567": f"Bankgiro {GIRO}",
+        "bankgirot: 5123-4567.": f"bankgirot: {GIRO}.",
+        "BG 123-4567, Anna": f"BG {GIRO}, Anna",
+        "bg-nr 1234-5678": f"bg-nr {GIRO}",
+        "Bankgironummer 123-45 67.": f"Bankgironummer {GIRO}.",
+        "B a n k g i r o 1 2 3-4 5 6 7": f"B a n k g i r o {GIRO}",
+        "Bankgiro nr 123-4567, postgiro 12 34 56-7": f"Bankgiro nr {GIRO}, postgiro {GIRO}",
+        "betalaviabankgiro123-4567.": f"betalaviabankgiro{GIRO}.",
+    }
+
+    def test_cases(self):
+        for text, expected in self.CASES.items():
+            with self.subTest(text=text):
+                self.assertEqual(pf.mask(text)[0], expected)
+
+    def test_only_next_to_the_word_and_only_in_the_format(self):
+        for text in ["123-4567", "konto 123-4567", "Sbg 123-4567", "Göteborg 123-4567", "bg 12-34", "Bankgiro 12345-6",
+                     "Bankgiro 12-3456", "BG 123-456", "bg 1993-1994-95", "Bankgiro, sedan 123-4567",
+                     "BG 123-45678", "bg-färg 640-4096"]:
+            with self.subTest(text=text):
+                self.assertEqual(pf.find(text)["bankgiro"], 0)
+
+
+class LocalPhoneNumbersAreMasked(unittest.TestCase):
+    CASES = {
+        "Tel 12 34 56": f"Tel {PHONE}",
+        "Tel: 123 45, Anna": f"Tel: {PHONE}, Anna",
+        "tel. 123456.": f"tel. {PHONE}.",
+        "Telefon 12345": f"Telefon {PHONE}",
+        "tfn 123 45 67": f"tfn {PHONE}",
+        "Fax: 12 34 56": f"Fax: {PHONE}",
+        "Telefax 123 456": f"Telefax {PHONE}",
+        "BBS 123456 5 X X": f"BBS {PHONE} 5 X X",
+        "BBS 12 34 56 2400 bps": f"BBS {PHONE} 2400 bps",
+        "modem 123456": f"modem {PHONE}",
+        "Tel 12-34-56": f"Tel {PHONE}",
+        "TEL: 1234567": f"TEL: {PHONE}",
+        # med riktnummer tas numret av den vanliga regeln, och ett andra nummer efter "eller" lämnas
+        "Tel 0123-456 78 eller 123 45": f"Tel {PHONE} eller 123 45",
+    }
+
+    def test_cases(self):
+        for text, expected in self.CASES.items():
+            with self.subTest(text=text):
+                self.assertEqual(pf.mask(text)[0], expected)
+
+    def test_counted_as_its_own_category(self):
+        self.assertEqual(pf.mask("Tel 12 34 56, fax 0123-456 78")[1], {**NOTHING, "localPhone": 1, "phone": 1})
+
+    def test_numbers_near_the_words_that_are_not_phone_numbers(self):
+        for text in [
+            # ordet står inte för sig
+            "telefonmodem 2400", "BBS-program 1.2", "Telefonen 12 34 56", "faxmodem 14400", "modemet 28800",
+            "BBS-lista 123456", "telefonkatalog 123456", "Minitel 123456",
+            # hastigheter, priser, mått och versioner
+            "fax 9600 baud", "modem 14400", "Modem 28800 bps", "fax 14400/v32", "modem 57600", "bbs 12345 bps",
+            "modem 2400/1200", "modem 1200 75", "fax 640x480", "tel 12.345", "BBS 1.200 kr", "Telefon 100-200 kr",
+            "modem 12345 kr", "fax 12 34 56:-", "BBS 12 345 st", "modem 16800 baud",
+            # för få eller för många siffror, årtal och intervall
+            "Tel 1234", "fax 123", "BBS 24 timmar", "tel 1993-94", "Tel 123456789", "fax 1990-1995",
+            # inte direkt efter ordet
+            "Tel Anna 12 34 56", "Telefon, kvällstid 12 34 56", "ring 12 34 56", "nummer 12 34 56", "12 34 56",
+        ]:
+            with self.subTest(text=text):
+                self.assertEqual(pf.mask(text), (text, NOTHING))
 
 
 class PersonalNumberShapesAreMasked(unittest.TestCase):
@@ -234,6 +303,8 @@ class TheMark(unittest.TestCase):
 
 class Properties(unittest.TestCase):
     TEXTS = list(PhoneNumbersAreMasked.CASES) + OtherNumbersAreLeftAlone.CASES + list(GiroNumbersAreMasked.CASES) + [
+        *BankgiroNumbersAreMasked.CASES, *LocalPhoneNumbersAreMasked.CASES,
+        "Tel 12 34 56 78 90 12", "Bankgiro 123-4567-8", "fax 123 45 67 89",
         "Tel 08-123 45 031-12 34 56", "08-12345 6031-12345", "a@b.se08-123456", "",
         # Ett nummer som bara maskeras till en del får inte ge en ny träff på resten.
         "postgiro 123 45 67-8 40-9", "Pg 12 34 56-7 12-3",
@@ -249,7 +320,7 @@ class Properties(unittest.TestCase):
         self.assertEqual(pf.mask(joined), pf.mask(joined))
 
     def test_version(self):
-        self.assertEqual(pf.PRIVACY_FILTER_VERSION, 1)
+        self.assertEqual(pf.PRIVACY_FILTER_VERSION, 2)
 
 
 class MaskedDatabase(unittest.TestCase):
@@ -281,8 +352,9 @@ class MaskedDatabase(unittest.TestCase):
         for raw, search in rows:
             self.assertEqual(raw, "")
             self.assertTrue(pf.is_clean(search))
-        self.assertEqual(result["masked"], {"email": 1, "phone": 2, "giro": 1, "personalNumber": 1})
-        self.assertEqual(result["maskedPages"], {"email": 1, "phone": 2, "giro": 1, "personalNumber": 1})
+        expected = {**NOTHING, "email": 1, "phone": 2, "giro": 1, "personalNumber": 1}
+        self.assertEqual(result["masked"], expected)
+        self.assertEqual(result["maskedPages"], expected)
         self.assertEqual(result["maskedAnyPages"], 2)
         # Kolumnen finns kvar: schemat är detsamma som i det omaskerade indexet.
         self.assertIn("rawText", [row[1] for row in db.execute("PRAGMA table_info(pages)")])
@@ -292,7 +364,7 @@ class MaskedDatabase(unittest.TestCase):
         db = sqlite3.connect(path)
         self.addCleanup(db.close)
         meta = dict(db.execute("SELECT key, value FROM meta"))
-        self.assertEqual(meta["privacyFilterVersion"], "1")
+        self.assertEqual(meta["privacyFilterVersion"], "2")
         self.assertEqual(meta["normalizerVersion"], "2")
         self.assertEqual(meta["inventoryDatasetVersion"], "2026-10-06-006")
 

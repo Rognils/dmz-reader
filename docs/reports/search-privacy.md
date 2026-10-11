@@ -1,6 +1,8 @@
 # Rapport – maskerat sökindex för distribution
 
-Datum: 2026-10-11 · Gren: `tools/privacy-filter`, mergad till `main` · Filter: `privacyFilterVersion` 1 · Arkivversion 2026-10-06-006
+Datum: 2026-10-11 · Grenar: `tools/privacy-filter` och `tools/privacy-filter-p2`, mergade till `main` · Filter: `privacyFilterVersion` 2 · Arkivversion 2026-10-06-006
+
+**Den gällande filen är `search-2026-10-06-006-p2.db`, se avsnitt 11.** Avsnitt 1–10 beskriver version 1 (p1), som p2 bygger vidare på. Prereleasen p1 är borttagen.
 
 Rapporten citerar inga personuppgifter. Stickproven som bedömningen bygger på ligger utanför repot, i `~/dmz-privacy-stickprov/`.
 
@@ -277,3 +279,95 @@ APK:n är inte uppladdad. Repot är privat.
 - **Markeringen:** `•••` finns också i tidningarnas egen text på 362 sidor.
 - **Bankgiro** och **nummer utan riktnummer:** utanför filtret i dag. Ändras reglerna efter att filen har delats ut publikt blir det `privacyFilterVersion` 2 och en ny fil.
 - **"Cirka 150 MB"** i appens text och i backloggen.
+
+## 11. Version 2 (p2): bankgiro och telefonnummer utan riktnummer
+
+Två kategorier till, båda bundna till ett ord före numret. Ingen av dem är en allmän sifferregel.
+
+| | |
+|---|---|
+| Fil | `search-2026-10-06-006-p2.db`, 90 968 064 byte (91 MB) |
+| SHA-256 | `7710b864cff9c9d1bcdbdd2a2b885466e112401abaa6306a7ed054b347796b90` |
+| `privacyFilterVersion` | 2 |
+| Maskerat | 46 331 telefonnummer, 833 telefonnummer utan riktnummer, 1 937 postgironummer, 74 bankgironummer, 309 e-postadresser, 12 personnummerformer |
+| Berörda sidor | 5 074 av 11 293 |
+| Sökfacit | 43 av 43 före och efter, 0 irrelevanta, ingen förväntad sida tappad |
+| Integritetskontroll | 0 träffar med SQL, 0 i `strings`-utdata, 0 i råa bytes |
+| Två byggen | byte-identiska |
+
+### Reglerna
+
+**Bankgiro:** tre eller fyra siffror, bindestreck och fyra siffror, direkt efter bankgiro, bankgirot, bg eller bg-nr (också bankgironummer och bankgirokonto). Skiftlägesokänsligt, och ordet och siffrorna får vara utspärrade. `bg` ska stå för sig: ett ord som slutar på bg räknas inte.
+
+**Telefonnummer utan riktnummer:** fem till åtta siffror direkt efter tel, telefon, tfn, fax, telefax, bbs eller modem, med eventuell punkt och eventuellt kolon. Numret är antingen ett stycke eller grupper om högst tre siffror med mellanslag eller bindestreck.
+
+- Ordet ska stå för sig. "telefonmodem", "BBS-program" och "telefonen" räknas inte.
+- Numret tas inte om det följs av en enhet eller ett pris (`bps`, `baud`, `kr`, `st`, `:-`, `%`), ett snedstreck, en decimal eller ett `x`.
+- De vanliga modemhastigheterna från 12000 till 115200 tas aldrig.
+- Intervall som "1993-94" och "100-200" tas inte.
+
+### Tester
+
+36 tester i `test_privacy_filter.py` och `test_privacy_audit.py`, 242 Python-tester totalt, alla gröna. Nya påhittade fall:
+
+- **Ska maskeras:** 8 för bankgiro och 13 för telefonnummer utan riktnummer.
+- **Ska inte maskeras trots ordet intill:** 12 för bankgiro och 35 för telefon, bland dem "telefonmodem 2400", "BBS-program 1.2", "fax 9600 baud", "modem 14400", "fax 14400/v32", "fax 640x480", "BBS 1.200 kr" och "tel 1993-94".
+
+### Stickproven
+
+| Kategori | Träffar i korpusen | Granskade | Rätt | Falska |
+|---|---|---|---|---|
+| Bankgiro | 74 | alla 74 | 74 | 0 |
+| Telefonnummer utan riktnummer | 833 | 150 | 149 | 1 (0,7 %) |
+
+Bankgiro har färre än 100 träffar, så jag granskade alla. Nästan alla hör till insamlingar och företag.
+
+Den falska telefonträffen är ett postnummer som står direkt efter ordet telefon, där texttolkningen har tappat själva numret.
+
+**Kategorin heter "utan riktnummer", men innehåller mer än så.** Av de 149 rätta:
+
+| Vad träffen är | Antal |
+|---|---|
+| Nummer utan riktnummer, som regeln var tänkt för | 57 |
+| Nummer med riktnummer som texttolkningen har skadat, så att den vanliga regeln inte tog det | 67 |
+| Början på ett utländskt nummer | 25 |
+
+- **De skadade numren** är en vinst: de hörde till de cirka 3 % som p1 missade. Ofta står numrets två sista siffror kvar efter markeringen.
+- **De utländska numren maskeras dåligt.** Regeln tar utlandsprefixet och landsnumret, och resten av numret står kvar. De var helt omaskerade i p1, så det är ingen försämring, men det är inte heller en maskering värd namnet.
+
+### Sökord före och efter
+
+| Sökord | Omaskerat | p2 |
+|---|---|---|
+| telefon | 1 253 | 1 253 |
+| bankgiro | 67 | 67 |
+| postgiro | 294 | 295 |
+
+Träffarnas ordning ändras som i p1: 15 av 43 sökord får en förväntad sida på en annan plats, oftast en till tre platser bort.
+
+### Prov i appen
+
+Importerad i debug-appen genom filväljaren: "Sökindexet är importerat: 185 nummer och 11293 sidor, på 1,8 sekunder."
+
+| Sökning | Resultat |
+|---|---|
+| telefon | 1 253 sidor i 184 nummer |
+| bankgiro | 67 sidor i 47 nummer. Utdragen visar `•••` efter både Postgiro och Bankgiro. |
+| postgiro | 295 sidor i 144 nummer |
+| ordertelefon | 365 sidor i 168 nummer |
+
+Skärmbild: `docs/screenshots/search-privacy/02-p2-bankgiro.png`.
+
+### Releasen
+
+- Prerelease `search-index-2026-10-06-006-p2` i det privata repot, med filen och release-texten.
+- Prerelease `search-index-2026-10-06-006-p1` och dess tagg är borttagna.
+- Filen ligger i telefonens Download som `search-2026-10-06-006-p2.db`, för din egen import. Jag har inte importerat den i release-appen.
+
+### Kvar utanför filtret
+
+- utländska nummer, utom den del som regeln ovan råkar ta
+- nummer utan riktnummer som inte står direkt efter ett av orden, till exempel ett andra nummer efter "eller"
+- post- och bankgironummer utan ordet före
+- nummer som texttolkningen har skadat och som inte står efter tel eller fax
+- namn och postadresser
