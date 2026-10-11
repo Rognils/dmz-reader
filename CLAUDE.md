@@ -19,6 +19,7 @@ Privat Android-app (Kotlin + Jetpack Compose) för att läsa DMZArkivets digital
 9. **Manuell läst/oläst ligger i `readStatusOverride`** och ändrar aldrig `lastPage` eller `maxPageReached`.
 10. **Ändra inte planen på egen hand.** Föreslå ändringar i fasrapporten.
 11. **Stanna och fråga** när planen och verkligheten inte stämmer.
+12. **Automatiska tester och testsviter får aldrig hämta från arkivservern** (dmzarkivet.se, HTTP eller FTP). Regressionstester använder MockWebServer eller en fejkad FTP-server. Mot den riktiga servern görs bara enstaka manuella kontroller, och mängden data anges i rapporten.
 
 ## Datakategorier
 
