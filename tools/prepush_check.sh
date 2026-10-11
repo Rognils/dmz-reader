@@ -10,6 +10,7 @@
 #     fältet "backupFormat" på översta nivån
 #   - *.apk och *.aab
 #   - filer över 50 MB
+#   - bilder under docs/images/ över 500 kB: README:s skärmdumpar ska vara små
 #
 # Undantagen är appens två testdatabaser. De nuvarande versionerna har bara påhittad text
 # (docs/reports/rc3.md). De tre äldre versionerna, som ligger kvar i historiken, innehåller
@@ -28,6 +29,7 @@
 set -euo pipefail
 
 MAX_BYTES=$((50 * 1024 * 1024))
+MAX_IMAGE_BYTES=$((500 * 1000))
 
 # sökväg och SHA-256, åtskilda av ett mellanslag
 ALLOWED_DB="
@@ -70,6 +72,13 @@ while read -r hash size path; do
     if [ "$size" -gt "$MAX_BYTES" ]; then
         problem "$path är $size byte, över 50 MB ($hash)"
     fi
+    case "$path" in
+        docs/images/*)
+            if [ "$size" -gt "$MAX_IMAGE_BYTES" ]; then
+                problem "$path är $size byte, över 500 kB för en bild under docs/images/ ($hash)"
+            fi
+            ;;
+    esac
 
     case "$lower" in
         *.db)

@@ -1,15 +1,37 @@
 # DMZ Reader
 
-DMZ Reader är en gratis Android-app för att läsa Datormagazin och HighScore från [DMZArkivet](https://dmzarkivet.se). Appen är gjord för att arkivet ska vara enkelt att utforska och läsa på mobilen.
+DMZ Reader är en gratis Android-app för att läsa Datormagazin och HighScore från [DMZArkivet](https://dmzarkivet.se).
 
-- Bläddra bland alla nummer, årgång för årgång, med omslag.
-- Läs direkt eller ladda ned nummer för läsning utan nät.
-- Appen minns var du slutade, och du kan sätta bokmärken och favoriter.
-- Sök i tidningarnas text, med ett sökindex som du importerar själv.
-- Visa en sida i originalskanningens upplösning (HQ).
-- Säkerhetskopiera läsdata och bokmärken till en fil.
+*A free Android reader for the Swedish computer magazines Datormagazin and HighScore from DMZArkivet.*
 
-Appen har ingen reklam, inga köp, inga användarkonton och ingen spårning eller analys.
+<table>
+  <tr>
+    <td align="center"><img src="docs/images/bibliotek.png" width="270" alt="Biblioteket med årgångar och kortet Fortsätt läsa"><br>Bibliotek</td>
+    <td align="center"><img src="docs/images/lasare.webp" width="270" alt="Läsaren på ett omslag, med verktygsfält och miniatyrer"><br>Läsare</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/images/sok.png" width="270" alt="Sökning i tidningarnas text, med träffar grupperade per nummer"><br>Sök</td>
+    <td align="center"><img src="docs/images/statistik.png" width="270" alt="Statistik över lästa nummer, sidor och lästid"><br>Statistik</td>
+  </tr>
+</table>
+
+**[Ladda ned senaste versionen](https://github.com/Rognils/dmz-reader/releases/latest)**
+
+Kräver Android 8.0 eller senare.
+
+## Vad appen gör
+
+- **Bläddra** i 185 nummer (171 Datormagazin, 14 HighScore), årgång för årgång, med omslag.
+- **Läs direkt eller ladda ned** för läsning utan nät. Nedladdningen fortsätter i bakgrunden och kan återupptas om den bryts.
+- **Läsprogress som följer din läsning.** Appen kommer ihåg vilka sidor du har läst, även om du hoppar fram och tillbaka, och var du slutade.
+- **Markera nummer** som lästa eller olästa.
+- **HQ-läget** visar originalskanningen av en sida, för detaljer.
+- **Favoriter och bokmärken.**
+- **Fulltextsökning** i tidningarnas text, med ett valfritt sökindex.
+- **Statistik** över läsning och årgångar.
+- **Säkerhetskopiera och återställ** läsdata.
+- **Ladda ned endast via wifi**, om du vill.
+- **Ingen reklam, inga köp, inga konton, ingen spårning.**
 
 ## Tack, Gustav!
 
@@ -33,15 +55,17 @@ Appen finns inte i Google Play. Den installeras från en APK-fil och kräver And
 
 En ny version installeras på samma sätt, ovanpå den gamla. Läsdata, bokmärken och nedladdade nummer ligger kvar.
 
+Vill du kontrollera filen kan du jämföra APK:ns SHA-256 med den som står i release-texten.
+
 ## Sökindex
 
-Sökning på titel, år och nummer fungerar direkt. För att söka i tidningarnas text behövs ett sökindex. Det följer inte med appen, eftersom filen är stor (cirka 90 MB).
+DMZ Reader fungerar utan sökindex. Indexet på cirka 90 MB behövs bara för fulltextsökning i tidningarnas text. Sökning på titel, år och nummer fungerar direkt.
 
 1. Hämta `search-….db` under **Releases** till telefonen.
 2. Öppna **Inställningar** i appen och välj **Importera sökindex**. Finns det redan ett index heter knappen **Importera nytt sökindex**.
 3. Välj filen. Appen kontrollerar den och säger till när sökningen är klar att använda.
 
-Efter importen kan du ta bort den hämtade filen. Allt annat i appen fungerar utan sökindex.
+Efter importen kan du ta bort den hämtade filen.
 
 Sökindexet tillämpar automatisk maskering av igenkända telefon- och faxnummer, e-postadresser, post- och bankgironummer och personnummerliknande mönster. OCR-skador kan innebära att en del uppgifter inte känns igen. I sökutdrag kan `•••` markera en maskerad uppgift. Tidningarna i läsaren är oförändrade.
 
@@ -52,16 +76,6 @@ Källkoden är licensierad under MIT, se [LICENSE](LICENSE).
 **Licensen gäller bara DMZ Readers källkod.** Tidningsmaterial, omslag, OCR-text, sökindex och annan arkivdata omfattas inte, och rättigheterna tillhör respektive rättighetsinnehavare. Se [NOTICE.md](NOTICE.md).
 
 Rättighetsinnehavare som vill att material tas bort kan öppna ett ärende här på GitHub.
-
-## Bygga själv
-
-Appen byggs med Gradle och JDK 17:
-
-```
-./gradlew :app:assembleDebug
-```
-
-Ett release-bygge kräver en egen signeringsnyckel, se [docs/signing.md](docs/signing.md). Verktygen som förbereder arkivdata beskrivs i [tools/README.md](tools/README.md).
 
 ## För utvecklare
 
@@ -84,3 +98,13 @@ adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 En spärr i testbygget stoppar varje försök att nå dmzarkivet.se, och `tools/device_test.sh` kontrollerar efteråt att inget sådant försök gjordes.
 
 Två skript ligger utanför testsviten och körs bara för hand: `tools/manual_archive_file_test.sh` prövar läsaren mot en arkivfil som du har skaffat själv, och `tools/live_archive_smoke_test.sh` gör några små förfrågningar till arkivservern. Mer finns i [tools/README.md](tools/README.md).
+
+## Bygga själv
+
+Appen byggs med Gradle och JDK 17:
+
+```
+./gradlew :app:assembleDebug
+```
+
+Ett release-bygge kräver en egen signeringsnyckel, se [docs/signing.md](docs/signing.md). Verktygen som förbereder arkivdata beskrivs i [tools/README.md](tools/README.md).
