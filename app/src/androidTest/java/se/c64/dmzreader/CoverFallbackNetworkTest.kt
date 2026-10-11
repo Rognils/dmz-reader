@@ -12,9 +12,12 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,8 +34,9 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * Reservvägen: nummer utan inbyggd miniatyr hämtar omslaget via coverUrl.
- * Testerna går mot dmzarkivet.se och kräver nät. De hämtar tolv omslag
- * (cirka 12 MB) en gång, utan cache, för att belasta gränsen.
+ *
+ * Omslagens adresser kommer ur det riktiga arkivindexet, men förfrågningarna tas emot av en
+ * lokal server på telefonen ([LocalArchive]), som svarar med en påhittad bild. Arkivet nås aldrig.
  */
 @RunWith(AndroidJUnit4::class)
 class CoverFallbackNetworkTest {
@@ -40,6 +44,16 @@ class CoverFallbackNetworkTest {
     val composeRule = createComposeRule()
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+    @Before
+    fun useLocalArchive() {
+        LocalArchive.start()
+        // Varje bild dröjer en stund, så att alla tolv förfrågningarna hinner stå i kö samtidigt.
+        LocalArchive.imageDelayMillis = 300
+    }
+
+    @After
+    fun stopLocalArchive() = LocalArchive.stop()
 
     /** Ett testinventory: tolv nummer ur det riktiga, men utan coverAsset. */
     private fun issuesWithoutThumbnail() = InventoryParser.parse(
@@ -79,16 +93,22 @@ class CoverFallbackNetworkTest {
         assertEquals(4, limiter.peak.get())
         // Bilderna avkodades nedskalade, inte i originalets 950 px bredd.
         assertTrue(results.all { it.image!!.width in 400..700 })
+        // Servern fick en förfrågan per omslag, till samma sökvägar som står i arkivindexet, med appens User-Agent.
+        assertEquals(issues.map { it.coverUrl!!.toHttpUrl().encodedPath }.sorted(), LocalArchive.requests.map { it.path }.sorted())
+        assertTrue(LocalArchive.requests.all { it.userAgent!!.startsWith("DMZReader/") })
     }
 
     @Test
     fun coverWithoutThumbnailIsLoadedFromItsUrl() {
         val requested = CopyOnWriteArrayList<String>()
+        // Först i kedjan, så att den ser adressen appen begärde och inte den lokala serverns.
         val client = CoverImageLoader.createHttpClient(logRequests = true).newBuilder()
-            .addInterceptor(Interceptor { chain ->
-                requested += chain.request().url.toString()
-                chain.proceed(chain.request())
-            })
+            .apply {
+                interceptors().add(0, Interceptor { chain ->
+                    requested += chain.request().url.toString()
+                    chain.proceed(chain.request())
+                })
+            }
             .build()
         val loader = CoverImageLoader.create(context, client)
         // En miniatyr som inte finns, så att även felvägen prövas: assets först, sedan nätet.
@@ -101,7 +121,9 @@ class CoverFallbackNetworkTest {
         }
         composeRule.waitUntil(timeoutMillis = 20_000) { requested.isNotEmpty() }
 
-        // Adressen är exakt den som står i inventory.
+        // Adressen är exakt den som står i inventory, och den lokala servern fick samma sökväg.
         assertEquals(listOf(issue.coverUrl), requested.distinct())
+        composeRule.waitUntil(timeoutMillis = 20_000) { LocalArchive.requests.isNotEmpty() }
+        assertEquals(issue.coverUrl!!.toHttpUrl().encodedPath, LocalArchive.requests.first().path)
     }
 }

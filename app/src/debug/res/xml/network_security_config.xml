@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Bara i debug-bygget: okrypterad HTTP till telefonen själv, så att de instrumenterade
+    testerna kan låta en lokal server stå i stället för arkivet (CLAUDE.md, regel 12).
+    All annan trafik kräver HTTPS, som i release-bygget.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">localhost</domain>
+    </domain-config>
+</network-security-config>

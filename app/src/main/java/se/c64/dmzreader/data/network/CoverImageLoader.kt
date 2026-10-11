@@ -59,6 +59,7 @@ object CoverImageLoader {
         }
         return OkHttpClient.Builder()
             .dispatcher(dispatcher)
+            .addInterceptor(LiveArchiveGuardInterceptor())
             .addInterceptor(UserAgentInterceptor(log = if (logRequests) { message -> Log.d(LOG_TAG, message) } else null))
             .addInterceptor(ConcurrencyLimitInterceptor(MAX_CONCURRENT_REQUESTS, logRequests))
             .build()

@@ -1,0 +1,14 @@
+10-11 12:43:39.026 30396 30396 I DmzGuard: START spärr=true
+10-11 12:45:56.673 30396 30412 I DmzGuard: KLAR spärrade=0 mottagetInklusiveLokalServer=1767964 byte spärr=true
+10-11 12:45:58.481 31407 31407 I DmzGuard: START spärr=true
+10-11 12:46:11.726 31407 31422 I DmzGuard: KLAR spärrade=0 mottagetInklusiveLokalServer=0 byte spärr=true
+10-11 12:46:13.183 31509 31509 I DmzGuard: START spärr=true
+10-11 12:46:18.967 31509 31522 I DmzGuard: KLAR spärrade=0 mottagetInklusiveLokalServer=0 byte spärr=true
+10-11 12:46:20.313 31590 31590 I DmzGuard: START spärr=true
+10-11 12:46:23.081 31590 31603 I DmzGuard: KLAR spärrade=0 mottagetInklusiveLokalServer=0 byte spärr=true
+10-11 12:46:24.819 31643 31643 I DmzGuard: START spärr=true
+10-11 12:47:00.489 31782 31782 I DmzGuard: START spärr=true
+10-11 12:47:05.550 31782 31796 I DmzGuard: KLAR spärrade=0 mottagetInklusiveLokalServer=0 byte spärr=true
+10-11 12:47:06.903 31847 31847 I DmzGuard: START spärr=true
+10-11 12:47:09.647 31847 31860 I DmzGuard: KLAR spärrade=0 mottagetInklusiveLokalServer=0 byte spärr=true
+netstats: 0 byte mottaget över wifi och mobilnät under körningen

@@ -342,7 +342,16 @@ Skriptet tar ett fingeravtryck av användarens app (`se.c64.dmzreader`) före oc
 
 Fingeravtrycket av filernas innehåll kräver att användarens app går att läsa med `run-as`, alltså att den är ett debug-bygge. Är den ett release-bygge tas i stället ett yttre fingeravtryck: version, installationstid, signatur, senaste gången appen syntes och om processen är igång. Det visar att testerna inte har startat, uppdaterat eller bytt ut appen, och skriptet säger vilket slag av fingeravtryck som togs. `tools/device_test.sh KATALOG --fingerprint NAMN` tar bara ett fingeravtryck.
 
-PDF:en som testerna läser i läggs på telefonen från datorns `cache/pdf/`, i `/data/local/tmp/dmz-test-pdfs/`, och tas bort efteråt. Två tester prövar själva nedladdningen och hämtar 1986 nr 1 (15 MB) från arkivet.
+PDF:en som testerna läser i läggs på telefonen från datorns `cache/pdf/`, i `/data/local/tmp/dmz-test-pdfs/`, och tas bort efteråt. Finns den inte i datorns cache avbryts körningen.
+
+**Testerna når aldrig arkivservern** (`CLAUDE.md`, regel 12):
+
+- Testerna av nedladdning, avbrott, återupptagning och omslag går mot en lokal server på telefonen (`LocalArchive`), som svarar med påhittat material: `app/src/androidTest/assets/test_issue.pdf` och `test_cover.jpg`, gjorda av `tools/make_test_media.py`.
+- Testköraren slår på en spärr (`LiveArchiveGuard`). Ett test som ändå försöker nå dmzarkivet.se över HTTP eller FTP får ett fel, och försöket räknas.
+- Skriptet kontrollerar efteråt, på två sätt: i appens logg ska det finnas noll förfrågningar till arkivet och noll spärrade försök, och i systemets nätstatistik ska testappen ha tagit emot högst 1 MB över wifi och mobilnät. Raden som börjar med `ARKIVET:` visar utfallet.
+- JVM-testerna körs med spärren på och med namnuppslag som bara känner den egna datorn.
+
+För en manuell kontroll mot den riktiga servern finns `tools/live_archive_smoke_test.sh`. Det frågar först, hämtar under 40 kB och anropas aldrig av något annat skript.
 
 En enda testklass, med samma fingeravtryck före och efter:
 
@@ -350,11 +359,11 @@ En enda testklass, med samma fingeravtryck före och efter:
 tools/device_test.sh /tmp/hq --only -e class se.c64.dmzreader.HqDeviceTest
 ```
 
-HQ mot det riktiga arkivet (`HqRealDeviceTest`) körs bara på begäran. Numrens PDF:er läggs på telefonen med `DMZ_SEED_ISSUES`:
+HQ mot det riktiga arkivet (`HqRealDeviceTest`) är en manuell kontroll och körs bara på begäran, med spärren släppt (`-e dmzLiveArchive true`). Varje sida är cirka 5 MB: ange mängden i rapporten. Numrens PDF:er läggs på telefonen med `DMZ_SEED_ISSUES`:
 
 ```bash
 DMZ_SEED_ISSUES="datormagazin-1993-03" tools/device_test.sh /tmp/hq --only \
-    -e dmzHqReal true -e class se.c64.dmzreader.HqRealDeviceTest#olderPageAfterTheDeviationIn199303
+    -e dmzHqReal true -e dmzLiveArchive true -e class se.c64.dmzreader.HqRealDeviceTest#olderPageAfterTheDeviationIn199303
 ```
 
 Ett enskilt test utan fingeravtryck:

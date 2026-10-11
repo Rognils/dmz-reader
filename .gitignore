@@ -1,5 +1,7 @@
 # Nedladdade PDF:er, PDF-cache och sökindex versionshanteras inte (plan G4)
 *.pdf
+# Undantaget: testernas egengjorda PDF, ett påhittat nummer (tools/make_test_media.py)
+!app/src/androidTest/assets/test_issue.pdf
 cache/
 data/samples/
 search.db

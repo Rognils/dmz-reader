@@ -16,6 +16,10 @@ import se.c64.dmzreader.offline.downloadNotification
  * så att den går att granska i lugn och ro. En riktig nedladdning av ett nummer
  * tar bara några sekunder. Körs bara med argumentet dmzShowNotification. Med
  * dmzNotificationId går det att välja notisens id, till exempel det riktiga jobbets.
+ *
+ * Manuell kontroll (CLAUDE.md, regel 12): det som inte redan ligger på telefonen måste hämtas från
+ * den riktiga arkivservern, och testkörarens spärr stoppar det. Lägg till -e dmzLiveArchive true
+ * för att släppa spärren, och ange mängden hämtad data i rapporten.
  */
 @RunWith(AndroidJUnit4::class)
 class DownloadNotificationDeviceTest {

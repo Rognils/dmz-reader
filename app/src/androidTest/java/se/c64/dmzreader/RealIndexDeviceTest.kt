@@ -38,6 +38,10 @@ import org.junit.runner.RunWith
  * sökfältet, kontrollerar antalet träffar mot det datorn ger, mäter tiden från
  * inmatning till visat resultat och öppnar en träff på rätt sida. Vid varje
  * "SKÄRMBILD" i loggen väntar det några sekunder, så att en skärmbild kan tas utifrån.
+ *
+ * Manuell kontroll (CLAUDE.md, regel 12): det som inte redan ligger på telefonen måste hämtas från
+ * den riktiga arkivservern, och testkörarens spärr stoppar det. Lägg till -e dmzLiveArchive true
+ * för att släppa spärren, och ange mängden hämtad data i rapporten.
  */
 @RunWith(AndroidJUnit4::class)
 class RealIndexDeviceTest {

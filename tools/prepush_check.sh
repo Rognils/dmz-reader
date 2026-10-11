@@ -4,7 +4,7 @@
 # Går igenom varje fil i varje commit på alla grenar och taggar, och stoppar för:
 #
 #   - *.db, utom testdatabaserna nedan, med exakt de sökvägarna och kontrollsummorna
-#   - *.pdf
+#   - *.pdf, utom testernas egengjorda PDF nedan, med exakt den sökvägen och kontrollsumman
 #   - nyckelfiler: *.jks, *.keystore, *.p12, *.pem, *.key
 #   - säkerhetskopior ur appen: filnamnet dmz-reader-backup*, eller en JSON-fil med
 #     fältet "backupFormat" på översta nivån
@@ -36,6 +36,11 @@ app/src/debug/assets/search_test.db d82ecd840e1cc536b102fc6b9ea8e0bfbdd36a9602a2
 app/src/debug/assets/fts_test.db fd2c4f406d47f6ba801362723400cfe86060fd10971907c1aa92a2fd4ee3a9b1
 app/src/debug/assets/search_test.db 4ca5e7676674b33c47adb70ab3e7410bdbdd2793bc3a6cb30985df128e90bf10
 app/src/debug/assets/search_test.db ab45b068dc56678022dc128e70595b38ae6e8d7a43ad2af777c8297f0d124c27
+"
+
+# Den enda PDF som får finnas: ett påhittat nummer på sex sidor, gjort av tools/make_test_media.py.
+ALLOWED_PDF="
+app/src/androidTest/assets/test_issue.pdf 0f3cc30a956517845e104c1c6033fbb6eb3fff22747cfcd5554c4c520382b585
 "
 
 cd "$(git rev-parse --show-toplevel)"
@@ -72,7 +77,14 @@ while read -r hash size path; do
                 problem "$path är en databas som inte är undantagen (SHA-256 $sum)"
             fi
             ;;
-        *.pdf) problem "$path är en PDF ($hash)" ;;
+        *.pdf)
+            sum=$(git cat-file blob "$hash" | sha256sum | cut -d" " -f1)
+            if grep -qxF "$path $sum" <<<"$ALLOWED_PDF"; then
+                allowed=$((allowed + 1))
+            else
+                problem "$path är en PDF som inte är undantagen (SHA-256 $sum)"
+            fi
+            ;;
         *.jks | *.keystore | *.p12 | *.pem | *.key) problem "$path är en nyckelfil ($hash)" ;;
         *.apk | *.aab) problem "$path är ett appbygge ($hash)" ;;
         dmz-reader-backup*) problem "$path har namnet på en säkerhetskopia ur appen ($hash)" ;;
@@ -94,7 +106,7 @@ done < <(git rev-list "${REVS[@]}" | while read -r commit; do
     git -c core.quotePath=false ls-tree -r -l "$commit"
 done | awk '$2 == "blob" { path = $0; sub(/^[^\t]*\t/, "", path); print $3, $4, path }' | sort -u)
 
-echo "$commits commits och $blobs filversioner genomsökta (${REVS[*]}), $allowed undantagna testdatabaser."
+echo "$commits commits och $blobs filversioner genomsökta (${REVS[*]}), $allowed undantagna testfiler."
 if [ "$problems" -gt 0 ]; then
     echo "$problems fynd. Pusha inte." >&2
     exit 1
