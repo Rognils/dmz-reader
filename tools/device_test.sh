@@ -13,11 +13,11 @@
 #   - namn, storlek, tid och SHA-256 för varje fil i läs-cachen, nedladdningarna
 #     och filesDir/data
 #
-# Testerna når aldrig arkivservern (CLAUDE.md, regel 12). PDF:en som de läser i
-# (1986 nr 1) läggs på telefonen från datorns cache/pdf/, och testerna av nedladdning
-# och omslag går mot en lokal server på telefonen med påhittat material. Finns PDF:en
-# inte i datorns cache avbryts körningen: hämta den en gång för hand med
-# tools/fetch_pdfs.py datormagazin-1986-01.
+# Testerna når aldrig arkivservern (CLAUDE.md, regel 12) och behöver ingen arkivfil.
+# De läser i ett påhittat nummer på 28 sidor (app/src/androidTest/assets/test_issue.pdf,
+# gjort av tools/make_test_media.py), som testköraren lägger i testkörningens läs-cache.
+# Testerna av nedladdning och omslag går mot en lokal server på telefonen med samma
+# påhittade material. Skriptet läser ingenting ur datorns cache/.
 #
 # Skriptet kontrollerar det efter körningen, på två sätt som inte beror av varandra:
 #   - i appens logg räknas förfrågningar till dmzarkivet.se och försök som testernas
@@ -44,8 +44,6 @@
 # Med --only körs bara det som argumenten väljer, till exempel en testklass, med
 # samma fingeravtryck före och efter:
 #   tools/device_test.sh /tmp/hq --only -e class se.c64.dmzreader.HqDeviceTest
-# Fler PDF:er än 1986 nr 1 läggs på telefonen med DMZ_SEED_ISSUES="issueId issueId".
-#
 #              tools/device_test.sh KATALOG --fingerprint NAMN
 # tar bara ett fingeravtryck till KATALOG/NAMN.txt, för körningar utanför skriptet.
 set -euo pipefail
@@ -133,20 +131,6 @@ fingerprint before
 adb logcat -G 16M
 adb logcat -c
 
-echo "Lägger testernas PDF på telefonen…"
-adb shell "rm -rf $SEEDS && mkdir -p $SEEDS"
-for issue in datormagazin-1986-01 ${DMZ_SEED_ISSUES:-}; do
-    if [ -f "$ROOT/cache/pdf/$issue.pdf" ]; then
-        adb push "$ROOT/cache/pdf/$issue.pdf" "$SEEDS/$issue.pdf" >/dev/null
-    else
-        echo "$issue finns inte i datorns cache/pdf/. Testerna får inte hämta den från arkivet." >&2
-        echo "Hämta den en gång för hand: tools/fetch_pdfs.py $issue" >&2
-        adb shell "rm -rf $SEEDS"
-        exit 1
-    fi
-done
-adb shell "chmod 644 $SEEDS/*.pdf 2>/dev/null" || true
-
 status=0
 
 # Sparar testkörningens rader om arkivet ur loggen. Anropas innan loggen töms och när allt är klart.
@@ -214,6 +198,10 @@ if [ ${#ONLY[@]} -gt 0 ]; then
     run "${ONLY[@]}" || status=1
     finish
 fi
+
+# Arkivfiler som en manuell kontroll kan ha lämnat kvar tas bort, så att sviten läser i testnumret.
+# Med --only används de: de manuella kontrollerna mot arkivet lägger sina filer på telefonen för hand.
+adb shell "rm -rf $SEEDS"
 
 echo "Hela sviten…"
 run || status=1

@@ -35,7 +35,7 @@ import java.io.File
  * öppna en träff på rätt sida och gå till nästa träff i numret.
  *
  * Testet använder det lilla testindexet i debug-assets (tools/build_search_testdb.py)
- * och läser i 1986 nr 1. Allt sker i testkörningens isolerade lagring (IsolatedTestRunner):
+ * och läser i 1986 nr 1, vars PDF i testkörningen är det påhittade testnumret. Allt sker i testkörningens isolerade lagring (IsolatedTestRunner):
  * appens riktiga sökindex, databas och läs-cache rörs inte.
  */
 @RunWith(AndroidJUnit4::class)

@@ -23,14 +23,14 @@ import java.util.concurrent.atomic.AtomicInteger
  * Medan servern är igång pekas appens förfrågningar till arkivet om hit, med samma sökväg
  * ([LiveArchiveGuard.replacement]). Den svarar med egengjort material ur testpaketets assets:
  *
- *   sökvägar som slutar på .pdf            test_issue.pdf, ett påhittat nummer på sex sidor. Stöder Range och If-Range.
+ *   sökvägar som slutar på .pdf            test_issue.pdf, ett påhittat nummer på 28 sidor. Stöder Range och If-Range.
  *   sökvägar som slutar på .jpg eller .png   test_cover.jpg, ett påhittat omslag
  *
  * Filerna görs av tools/make_test_media.py.
  */
 object LocalArchive {
     const val PDF_ETAG = "\"dmz-test-pdf-1\""
-    const val PDF_PAGES = 6
+    const val PDF_PAGES = 28
 
     /** En förfrågan som servern har tagit emot. */
     data class Seen(val path: String, val range: String?, val ifRange: String?, val userAgent: String?)

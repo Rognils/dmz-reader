@@ -37,19 +37,16 @@ import se.c64.dmzreader.data.pdf.PdfDocument
 import java.io.File
 
 /**
- * Läsaren på en riktig enhet, mot arkivets riktiga PDF:er.
+ * Läsaren på en riktig enhet.
  *
  * [readDownloadTurnPageAndClose] och [interruptedDownloadShowsTheMessageAndResumesWithRange] ingår i
  * den vanliga testsviten. De hämtar ett påhittat nummer från en lokal server på telefonen
- * ([LocalArchive]) och når aldrig arkivet. De övriga är verifieringskörningar mot arkivets riktiga
- * PDF:er, som bara körs när de begärs med argumentet dmzVerify:
+ * ([LocalArchive]) och når aldrig arkivet.
  *
- *   adb shell am instrument -w -e class se.c64.dmzreader.ReaderDeviceTest \
- *     -e dmzVerify true se.c64.dmzreader.debug.test/se.c64.dmzreader.IsolatedTestRunner
- *
- * Verifieringskörningarna läser PDF:er som har lagts på telefonen i förväg. En PDF som saknas
- * hämtas inte: testkörarens spärr mot arkivet stoppar det. Den som med avsikt vill hämta från den
- * riktiga servern lägger till -e dmzLiveArchive true, och anger mängden data i rapporten.
+ * De övriga är manuella kontroller mot arkivets egna PDF:er: renderingstider, zoom och minne i
+ * skannade sidor, som det påhittade testnumret inte kan visa. De körs bara med argumentet dmzVerify
+ * och bara när arkivfilen har lagts på telefonen, vilket tools/manual_archive_file_test.sh gör med
+ * en fil man har skaffat själv. Ingenting hämtas: testkörarens spärr mot arkivet står kvar.
  */
 @RunWith(AndroidJUnit4::class)
 class ReaderDeviceTest {
@@ -214,18 +211,18 @@ class ReaderDeviceTest {
         assertTrue(request.userAgent, request.userAgent!!.startsWith("DMZReader/"))
 
         showControls()
-        assertEquals("Sida 1 av 6 · 0 % läst", indicator())
+        assertEquals("Sida 1 av 28 · 0 % läst", indicator())
         rule.onNodeWithText("Datormagazin 1986 Nr 2").assertIsDisplayed()
         // Bottenfältet syns inte i läsaren.
         assertFalse(exists("Bibliotek"))
 
         // Tryckzonen till höger byter sida, och ett svep gör det också.
         tapZone(0.85f)
-        waitForPage("Sida 2 av 6")
+        waitForPage("Sida 2 av 28")
         rule.onNodeWithTag("reader").performTouchInput { swipeLeft() }
-        waitForPage("Sida 3 av 6")
+        waitForPage("Sida 3 av 28")
         tapZone(0.15f)
-        waitForPage("Sida 2 av 6")
+        waitForPage("Sida 2 av 28")
 
         rule.onNodeWithContentDescription("Stäng läsaren").performClick()
         // Läspositionen är sparad: knappen leder tillbaka till samma sida.
@@ -274,7 +271,7 @@ class ReaderDeviceTest {
         assertTrue(LocalArchive.pdf.contentEquals(pdf.readBytes()))
         assertFalse(part.exists())
         showControls()
-        assertEquals("Sida 1 av 6 · 0 % läst", indicator())
+        assertEquals("Sida 1 av 28 · 0 % läst", indicator())
     }
 
     private fun openReader(publication: String, year: Int, issueCount: Int, label: String) {
@@ -301,7 +298,7 @@ class ReaderDeviceTest {
 
     @Test
     fun verifyReadThrough198601() {
-        assumeTrue(verifying())
+        assumeTrue(verifying() && hasArchivePdf("datormagazin-1986-01"))
         openReader("Datormagazin", 1986, 4, "Nr 1")
         readThrough(28)
         logRenderStats("198601")
@@ -309,7 +306,7 @@ class ReaderDeviceTest {
 
     @Test
     fun verifyReadThrough199514() {
-        assumeTrue(verifying())
+        assumeTrue(verifying() && hasArchivePdf("datormagazin-1995-14"))
         openReader("Datormagazin", 1995, 14, "Nr 14")
         readThrough(84)
         logRenderStats("199514")
@@ -379,7 +376,7 @@ class ReaderDeviceTest {
 
     @Test
     fun verifyZoom198601() {
-        assumeTrue(verifying())
+        assumeTrue(verifying() && hasArchivePdf("datormagazin-1986-01"))
         openReader("Datormagazin", 1986, 4, "Nr 1")
         showControls()
         repeat(2) { tapZone(0.85f) }
@@ -400,7 +397,7 @@ class ReaderDeviceTest {
 
     @Test
     fun verifyZoom199514() {
-        assumeTrue(verifying())
+        assumeTrue(verifying() && hasArchivePdf("datormagazin-1995-14"))
         openReader("Datormagazin", 1995, 14, "Nr 14")
         zoomAndMeasure("199514", "03-zoomad-sida-199514")
     }
@@ -409,7 +406,7 @@ class ReaderDeviceTest {
     @Test
     fun verifyLoad199515() {
         assumeTrue(verifying())
-        assumeTrue(File(pdfDirectory, "datormagazin-1995-15.pdf").isFile)
+        assumeTrue(hasArchivePdf("datormagazin-1995-15"))
         openReader("Datormagazin", 1995, 14, "Nr 15")
         showControls()
         assertTrue(indicator()!!.startsWith("Sida 1 av "))
@@ -422,7 +419,7 @@ class ReaderDeviceTest {
 
     @Test
     fun verifyLandscapeSpreadAndRotation() {
-        assumeTrue(verifying())
+        assumeTrue(verifying() && hasArchivePdf("datormagazin-1986-01"))
         openReader("Datormagazin", 1986, 4, "Nr 1")
         showControls()
         repeat(6) { tapZone(0.85f) }
@@ -465,7 +462,7 @@ class ReaderDeviceTest {
     @Test
     fun verifyMemoryOnPage15() {
         assumeTrue(verifying())
-        assumeTrue(File(pdfDirectory, "datormagazin-1995-15.pdf").isFile)
+        assumeTrue(hasArchivePdf("datormagazin-1995-15"))
         openReader("Datormagazin", 1995, 14, "Nr 15")
         showControls()
         repeat(14) { tapZone(0.85f); waitForCurrentPageInFullResolution() }
@@ -494,7 +491,7 @@ class ReaderDeviceTest {
     @Test
     fun verifyMemoryOpenedOnPage15() {
         assumeTrue(verifying())
-        assumeTrue(File(pdfDirectory, "datormagazin-1995-15.pdf").isFile)
+        assumeTrue(hasArchivePdf("datormagazin-1995-15"))
         kotlinx.coroutines.runBlocking {
             appContainer(context).database.issueUserStateDao().upsert(
                 se.c64.dmzreader.data.db.IssueUserState(issueId = "datormagazin-1995-15", lastPage = 15, maxPageReached = 15, updatedAt = System.currentTimeMillis()),
@@ -527,7 +524,7 @@ class ReaderDeviceTest {
     @Test
     fun verifyMemoryPageByPage() {
         assumeTrue(verifying())
-        assumeTrue(File(pdfDirectory, "datormagazin-1995-15.pdf").isFile)
+        assumeTrue(hasArchivePdf("datormagazin-1995-15"))
         openReader("Datormagazin", 1995, 14, "Nr 15")
         showControls()
         tapZone(0.5f)

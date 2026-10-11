@@ -36,7 +36,7 @@ import java.io.File
  * -e dmzHqReal true, i testkörningens isolerade lagring. Skanningarna hämtas via FTP
  * från arkivet, en sida i taget, precis som när appen används.
  *
- * Numrens PDF:er läggs på telefonen av tools/device_test.sh (DMZ_SEED_ISSUES).
+ * Numrens PDF:er är arkivets egna och läggs på telefonen för hand, i /data/local/tmp/dmz-test-pdfs/.
  * Vid varje "SKÄRMBILD" i loggen väntar testet (-e dmzPause millisekunder), så att en
  * skärmbild kan tas utifrån. Vid "MINNE" kan dumpsys meminfo köras utifrån.
  *
@@ -117,7 +117,7 @@ class HqRealDeviceTest {
 
     /** Öppnar numret på [page] genom "Fortsätt på sida N", som användaren hade gjort. */
     private fun openReader(issueId: String, year: Int, label: String, page: Int, pageCount: Int) {
-        assumeTrue("PDF:en för $issueId saknas i testkörningens lagring", hasLocalPdf(context, issueId))
+        assumeTrue("Arkivets PDF för $issueId är inte lagd på telefonen", hasArchivePdf(issueId))
         runBlocking {
             container.database.issueUserStateDao().upsert(
                 IssueUserState(issueId = issueId, lastPage = page, maxPageReached = page, updatedAt = System.currentTimeMillis()),

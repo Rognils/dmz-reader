@@ -32,7 +32,8 @@ import se.c64.dmzreader.data.db.IssueUserState
  * Bokmärken på en riktig enhet (FAS 6): skapa ett bokmärke i läsaren, ge det
  * en titel, och öppna det från fliken Favoriter på exakt rätt sida.
  *
- * Testet använder sida 5 i 1986 nr 1 och tar bort bokmärket efter sig. Finns
+ * Testet använder sida 5 i 1986 nr 1, som i testkörningen är det påhittade testnumret
+ * (test_issue.pdf), och tar bort bokmärket efter sig. Finns
  * det redan ett bokmärke på den sidan hoppas testet över, så att användarens
  * eget bokmärke inte rörs.
  */
@@ -82,7 +83,7 @@ class BookmarkDeviceTest {
         assumeTrue("sida $page har redan ett bokmärke på telefonen", bookmarksOnPage().isEmpty())
         resetReadingState(context, issueId)
 
-        // Bibliotek → 1986 → Nr 1 → läsaren. Numret hämtas om det inte finns på telefonen.
+        // Bibliotek → 1986 → Nr 1 → läsaren. Testköraren har lagt det påhittade testnumret i läs-cachen.
         waitFor { exists("Datormagazin") }
         rule.onNodeWithText("Datormagazin").performClick()
         val yearCard = "Datormagazin 1986, 4 nummer"
