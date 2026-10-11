@@ -1,5 +1,7 @@
 # Fasrapport – FAS 11: HQ
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Datum: 2026-10-10 · Gren: `feature/fas-11-hq`, mergad till `main` och taggad `v0.11-fas11` · App 0.11.0 (versionCode 1100)
 
 Före fasen: v0.10.1 (rättningar, se `docs/reports/v0.10.1/README.md`) och Gradle 9.8.1.

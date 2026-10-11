@@ -49,3 +49,8 @@ dist/
 *.p12
 keystore.properties
 signing.properties
+
+# Skärmbilderna från verifieringen visar tidningssidor och omslag. De ligger lokalt,
+# utanför git (docs/skarmbilder.md). Detsamma gäller granskningsfilerna med textutdrag.
+docs/screenshots/
+data/normalizer_review_v*.json

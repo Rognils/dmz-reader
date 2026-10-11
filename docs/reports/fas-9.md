@@ -1,5 +1,7 @@
 # Fasrapport – FAS 9: Fulltextsökning i appen
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Datum: 2026-10-09 · Gren: `feature/fas-9-fulltext`, mergad till `main` och taggad `v0.9-fas9` · App 0.9.0 (versionCode 900)
 
 ## 1. Sammanfattning

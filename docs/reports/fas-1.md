@@ -1,5 +1,7 @@
 # Fasrapport: FAS 1 – Android-grund och FTS5-verifiering
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Avslutad 2026-10-06. Verifierad på OnePlus 7 Pro (GM1911), Android 16 (API 36).
 
 ## 1. Sammanfattning

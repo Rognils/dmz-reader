@@ -1,5 +1,7 @@
 # Fasrapport – FAS 8B: Fullständigt sökindex
 
+> **Granskningsfilerna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Datum: 2026-10-08, telefontestet 2026-10-09 · Gren: `feature/fas-8b-search-index`, mergad till `main` och taggad `v0.8-fas8` · Toolchain, plus ett instrumenterat test. Appens gränssnitt är inte ändrat.
 
 ## 1. Sammanfattning

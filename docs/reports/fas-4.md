@@ -1,5 +1,7 @@
 # Fasrapport: FAS 4 – Lässtatus
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Avslutad 2026-10-07. Verifierad på OnePlus 7 Pro (GM1911), Android 16 (API 36, LineageOS 23.2), skärm 1 440 × 3 120 px.
 
 ## 1. Sammanfattning

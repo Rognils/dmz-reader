@@ -1,5 +1,7 @@
 # v0.10.1 – rättningar efter FAS 10
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../../skarmbilder.md).
+
 Datum: 2026-10-09 · På `main` · App 0.10.1 (versionCode 1001)
 
 1. **Sessioner delas vid lokal midnatt.** En pågående session avslutas 23:59:59 och en ny börjar 00:00 på samma nummer och sida. JVM-testet läser söndag 23:50 till måndag 00:20 och får 10 minuter i den ena veckan och 20 i den andra. Äldre sessioner rörs inte. Planens C6 och E12 och ADR 0021 är uppdaterade.

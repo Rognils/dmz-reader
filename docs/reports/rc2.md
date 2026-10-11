@@ -1,5 +1,7 @@
 # Rapport – 1.0.0-rc2: Om-sida, klientidentifiering och ikonjustering
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Datum: 2026-10-10 · Gren: `release/1.0-rc2`, mergad till `main` och taggad `v1.0.0-rc2` · App 1.0.0-rc2 (versionCode 9902)
 
 ## 1. Sammanfattning

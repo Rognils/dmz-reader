@@ -1,5 +1,7 @@
 # Fasrapport – FAS 10: Statistik
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Datum: 2026-10-09 · Gren: `feature/fas-10-statistics`, mergad till `main` och taggad `v0.10-fas10` · App 0.10.0 (versionCode 1000)
 
 ## 1. Sammanfattning

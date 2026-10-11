@@ -1,5 +1,7 @@
 # Rapport – 1.0.0-rc3: besked när arkivet är nere, LICENSE och README, påhittad testdata
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Datum: 2026-10-11 · Gren: `release/1.0-rc3`, mergad till `main` och taggad `v1.0.0-rc3` · App 1.0.0-rc3 (versionCode 9903)
 
 ## 1. Sammanfattning

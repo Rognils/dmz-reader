@@ -1,5 +1,7 @@
 # Rapport – före 1.0.0: förstastartsfelet och publiceringsgranskning
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Datum: 2026-10-10 · Gren: `release/1.0-gates` (från `main`, inte mergad) · App oförändrad, 1.0.0-rc2
 
 **Uppdaterad 2026-10-10** med Gustavs svar (del C), det privata GitHub-repot, undantaget för testdatabaserna och den sista grindkörningen. HQ-felet från den sista grindkörningen är utrett (del E): det låg i testet. Efter rättningen gav tio rena sekvenser 10 av 10, grenen är mergad och förstastartsfrågan är stängd. Det som återstår innan v1.0.0 och de beslut du behöver ta står sist i rapporten.

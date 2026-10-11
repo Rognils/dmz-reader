@@ -1,5 +1,7 @@
 # Rapport – maskerat sökindex för distribution
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Datum: 2026-10-11 · Grenar: `tools/privacy-filter`, `tools/privacy-filter-p2` och `tools/privacy-filter-p3`, mergade till `main` · Filter: `privacyFilterVersion` 3 · Arkivversion 2026-10-06-006
 
 **Den gällande filen är `search-2026-10-06-006-p3.db`, se avsnitt 12.** Avsnitt 1–10 beskriver version 1 (p1) och avsnitt 11 version 2 (p2), som p3 bygger vidare på. Prereleaserna p1 och p2 finns inte i det nya repot.

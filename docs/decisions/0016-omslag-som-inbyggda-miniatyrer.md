@@ -1,5 +1,7 @@
 # ADR 0016: Omslagen tas fram av toolchainen och följer med som miniatyrer
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 ## Status
 Accepted (beslut av C64 2026-10-06). Ersätter omslagsdelen av ADR 0008 och kompletterar ADR 0015.
 

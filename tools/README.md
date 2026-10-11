@@ -32,12 +32,12 @@ Exemplen nedan skriver `python3`. Använd `.venv/bin/python` om du installerat i
 | `data/covers/` | **omslagsminiatyrer som följer med appen** | `build_covers.py` |
 | `data/covers_manifest.json` | källa, storlek och kontrollsumma per miniatyr | `build_covers.py` |
 | `data/cover_review.json` | visuell granskning av kontaktkartan | för hand |
-| `docs/screenshots/covers/contact_sheet.png` | alla valda omslag som små bilder | `build_covers.py` |
+| `docs/screenshots/covers/contact_sheet.png` | alla valda omslag som små bilder. **Inte i git:** katalogen är ignorerad (`docs/skarmbilder.md`) | `build_covers.py` |
 | `cache/pdf/` | OCR-PDF:er och `manifest.json` (storlek, ETag, SHA-256); versionshanteras inte | `fetch_pdfs.py` |
 | `cache/search/` | pilotens databaser (FAS 8A); versionshanteras inte | `search_pilot.py` |
 | `dist/search.db` | **det färdiga sökindexet**, cirka 149 MB; versionshanteras inte | `build_search_index.py` |
 | `tools/data/normalizer_lexicon_v1.txt` | normaliseringens frysta ordlista | `build_lexicon.py` (en gång) |
-| `data/normalizer_review_v1.json`, `_v2.json` | granskade stickprov av normaliseringens ändringar | `search_quality.py sample`, bedömning för hand |
+| `data/normalizer_review_v1.json`, `_v2.json` | granskade stickprov av normaliseringens ändringar. **Inte i git:** filerna innehåller textutdrag ur tidningarna och ligger lokalt (`docs/skarmbilder.md`) | `search_quality.py sample`, bedömning för hand |
 | `data/reading_order_review.json` | visuell kontroll av läsordningen på 28 sidor | för hand |
 | `data/search_index_report.json` | facit och storlek för den fullständiga databasen | `search_pilot.py --db` |
 | `app/src/debug/assets/search_test.db` | litet sökindex i det riktiga formatet, för appens tester | `build_search_testdb.py` |

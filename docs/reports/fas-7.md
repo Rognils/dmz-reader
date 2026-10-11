@@ -1,5 +1,7 @@
 # Fasrapport: v0.6.1 och FAS 7 – Import av arkivindex och metadata-sökning
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Avslutad 2026-10-08. Verifierad på OnePlus 7 Pro (GM1911), Android 16 (API 36, LineageOS 23.2), debug-bygge. Det här är milstolpen Privat 1.0.
 
 ## 1. Sammanfattning

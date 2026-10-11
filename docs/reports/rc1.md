@@ -1,5 +1,7 @@
 # Fasrapport – FAS RC: härdning inför 1.0 (1.0.0-rc1)
 
+> **Skärmbilderna som nämns här finns inte i repot.** De ligger lokalt hos projektets ägare, se [docs/skarmbilder.md](../skarmbilder.md).
+
 Datum: 2026-10-10 · Gren: `release/1.0-rc`, mergad till `main` och taggad `v1.0.0-rc1` · App 1.0.0-rc1 (versionCode 9901)
 
 **Läge: alla tio steg är klara.** Din data är flyttad till release-bygget (avsnitt 9), och en checklista inför v1.0.0 finns i avsnitt 12.
