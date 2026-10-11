@@ -34,12 +34,12 @@ import se.c64.dmzreader.ui.reader.ReaderViewModel
 import java.io.File
 
 /**
- * Lässtatus på en riktig enhet (FAS 4), mot 1986 nr 1 som ska finnas i PDF-cachen
- * (ReaderDeviceTest hämtar den).
+ * Lässtatus på en riktig enhet (FAS 4), i 1986 nr 1. I testkörningen är dess PDF det påhittade
+ * testnumret (test_issue.pdf, 28 sidor), som testköraren lägger i läs-cachen.
  *
  * Omstartstestet har två delar med ett tvångsstopp av appen emellan, och körs
- * därför från datorn med tools/device_restart_test.sh. Mätningen av
- * förrenderingen körs med argumentet dmzVerify, som i ReaderDeviceTest.
+ * därför från datorn med tools/device_test.sh. Mätningen av förrenderingen är en manuell
+ * kontroll mot arkivets egen PDF och körs av tools/manual_archive_file_test.sh.
  */
 @RunWith(AndroidJUnit4::class)
 class ReadingStateDeviceTest {
@@ -204,7 +204,7 @@ class ReadingStateDeviceTest {
     @Test
     fun verifyPrerender199514() {
         assumeTrue(arguments.getString("dmzVerify") == "true")
-        assumeTrue(hasLocalPdf(context, "datormagazin-1995-14"))
+        assumeTrue(hasArchivePdf("datormagazin-1995-14"))
         resetReadingState(context, "datormagazin-1995-14")
         openIssueView("Datormagazin", 1995, 14, "Nr 14")
         rule.onNodeWithText("Läs").performClick()

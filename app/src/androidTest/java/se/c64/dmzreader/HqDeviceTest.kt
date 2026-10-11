@@ -86,7 +86,8 @@ class FakeScanSource : ScanSource {
 /**
  * HQ-läget i läsaren (planens FAS 11), mot isolerad lagring och en falsk skanningskälla:
  * öppna ett nummer, slå på HQ, se sidan, byt sida, och läs ur cachen utan nät.
- * Numrets PDF (1986 nr 1) läggs på telefonen av tools/device_test.sh, eller hämtas från arkivet.
+ * Numret är 1986 nr 1. I testkörningen är dess PDF det påhittade testnumret (test_issue.pdf),
+ * som testköraren lägger i läs-cachen. Ingenting hämtas från arkivet.
  */
 @RunWith(AndroidJUnit4::class)
 class HqDeviceTest {

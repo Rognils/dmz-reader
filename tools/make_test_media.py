@@ -4,7 +4,7 @@
 Testerna får aldrig hämta från arkivservern (CLAUDE.md, regel 12). I stället
 serverar en lokal server på telefonen de här två filerna:
 
-  app/src/androidTest/assets/test_issue.pdf   ett påhittat nummer på sex sidor
+  app/src/androidTest/assets/test_issue.pdf   ett påhittat nummer på 28 sidor
   app/src/androidTest/assets/test_cover.jpg   ett påhittat omslag, 950 × 1320 pixlar
 
 Ingenting här kommer ur tidningarna. Texten är skriven för testerna, och bilden
@@ -14,6 +14,11 @@ PDF:en skrivs för hand, utan komprimering, så att samma skript alltid ger samm
 fil. Den fylls ut till cirka 300 kB med ett block som ingen sida använder, så att
 en nedladdning går att avbryta mitt i och återuppta med Range. Kontrollsumman
 står i tools/prepush_check.sh, som annars stoppar alla PDF:er.
+
+Numret har 28 sidor, lika många som 1986 nr 1 har i arkivindexet. Testerna som
+läser, bläddrar, sätter bokmärken och öppnar sökträffar i 1986 nr 1 gör det i den
+här filen: testköraren (IsolatedTestRunner) lägger den i testkörningens läs-cache
+under det numrets namn. Ingen arkivfil behövs för testsviten.
 
 Kör:  python3 tools/make_test_media.py
 """
@@ -38,17 +43,23 @@ PAGES = [
     ("TESTMAGASINET", ["Nummer 1 · Påhittat år", "", "Ett nummer som bara finns för appens tester.",
                        "Ingenting här är hämtat ur någon tidning."]),
     ("Innehåll", ["Sidan 3: Så byggde vi en testserver", "Sidan 4: Sex sidor räcker långt",
-                  "Sidan 5: Läsarnas frågor", "Sidan 6: Nästa nummer"]),
+                  "Sidan 5: Läsarnas frågor", "Sidorna 6–27: Rutor och ränder",
+                  "Sidan 28: Nästa nummer"]),
     ("Så byggde vi en testserver", ["En liten server på telefonen svarar i arkivets ställe.",
                                     "Den skickar den här filen, bit för bit, och kan avbryta mitt i.",
                                     "Då får appen visa att nedladdningen går att återuppta."]),
-    ("Sex sidor räcker långt", ["Läsaren behöver en första sida, en sista sida och några däremellan.",
-                                "Med sex sidor går det att bläddra framåt, bakåt och hoppa.",
+    ("Tjugoåtta sidor räcker långt", ["Läsaren behöver en första sida, en sista sida och några däremellan.",
+                                      "Med 28 sidor går det att bläddra framåt, bakåt och hoppa långt.",
                                 "Ordet kvittenstest står bara på den här sidan."]),
     ("Läsarnas frågor", ["Fråga: Varför är texten så tråkig?", "Svar: För att den ska vara lätt att känna igen.",
                          "Fråga: Finns det fler nummer?", "Svar: Nej, bara det här."]),
-    ("Nästa nummer", ["Det kommer inget nästa nummer.", "", "Slut på testmagasinet."]),
 ]
+# Sidorna 6–27 har samma korta text och var sitt mönster av rutor, så att de går att skilja åt.
+PAGES += [(f"Rutor och ränder {number}", [f"Det här är sida {number} i testmagasinet.",
+                                           "Rutorna nedanför är ritade av skriptet.",
+                                           f"Mönster nummer {number - 5} av 22."])
+          for number in range(6, 28)]
+PAGES.append(("Nästa nummer", ["Det kommer inget nästa nummer.", "", "Slut på testmagasinet."]))
 
 
 def _text(value: str) -> bytes:
@@ -66,6 +77,13 @@ def _page_stream(number: int, title: str, lines: list[str]) -> bytes:
     parts += [b"BT", b"/F1 11 Tf", b"60 50 Td", _text(f"Testmagasinet · sida {number} av {len(PAGES)}") + b" Tj", b"ET"]
     # En ram, så att sidan syns mot bakgrunden även som miniatyr.
     parts += [b"1.5 w", b"40 30 %d %d re S" % (PAGE_WIDTH - 80, PAGE_HEIGHT - 60)]
+    if title.startswith("Rutor och ränder"):
+        # Fyllda rutor i ett mönster som beror på sidnumret.
+        parts.append(b"0.25 0.35 0.55 rg")
+        for index in range(12):
+            if (number * 7 + index * 5) % 3:
+                parts.append(b"%d %d 100 100 re f" % (70 + (index % 4) * 115, 440 - (index // 4) * 125))
+        parts.append(b"0 g")
     return b"\n".join(parts) + b"\n"
 
 

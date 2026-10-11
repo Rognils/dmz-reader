@@ -342,7 +342,7 @@ Skriptet tar ett fingeravtryck av användarens app (`se.c64.dmzreader`) före oc
 
 Fingeravtrycket av filernas innehåll kräver att användarens app går att läsa med `run-as`, alltså att den är ett debug-bygge. Är den ett release-bygge tas i stället ett yttre fingeravtryck: version, installationstid, signatur, senaste gången appen syntes och om processen är igång. Det visar att testerna inte har startat, uppdaterat eller bytt ut appen, och skriptet säger vilket slag av fingeravtryck som togs. `tools/device_test.sh KATALOG --fingerprint NAMN` tar bara ett fingeravtryck.
 
-PDF:en som testerna läser i läggs på telefonen från datorns `cache/pdf/`, i `/data/local/tmp/dmz-test-pdfs/`, och tas bort efteråt. Finns den inte i datorns cache avbryts körningen.
+Testerna behöver ingen arkivfil. De läser i ett påhittat nummer på 28 sidor, `app/src/androidTest/assets/test_issue.pdf`, som testköraren lägger i testkörningens läs-cache under namnet för 1986 nr 1. Filen fylls där ut med blanktecken till den storlek arkivindexet anger för numret, eftersom läsaren annars kastar den och försöker hämta om den. Skriptet läser ingenting ur datorns `cache/`.
 
 **Testerna når aldrig arkivservern** (`CLAUDE.md`, regel 12):
 
@@ -353,16 +353,20 @@ PDF:en som testerna läser i läggs på telefonen från datorns `cache/pdf/`, i 
 
 För en manuell kontroll mot den riktiga servern finns `tools/live_archive_smoke_test.sh`. Det frågar först, hämtar under 40 kB och anropas aldrig av något annat skript.
 
+Det som bara en skannad tidning kan visa prövas för hand med `tools/manual_archive_file_test.sh PDF-FIL`: att telefonens PDF-motor öppnar arkivets filer, renderingstider, zoom, uppslag i liggande läge och minnet i de tyngsta numren. Skriptet kräver en arkivfil som du har skaffat själv och anger sökvägen till. Det hämtar ingenting, kör med spärren mot arkivet påslagen och anropas aldrig av `device_test.sh`, Gradle eller något annat skript. Kontroller finns för 1986 nr 1, 1995 nr 14 och 1995 nr 15.
+
 En enda testklass, med samma fingeravtryck före och efter:
 
 ```bash
 tools/device_test.sh /tmp/hq --only -e class se.c64.dmzreader.HqDeviceTest
 ```
 
-HQ mot det riktiga arkivet (`HqRealDeviceTest`) är en manuell kontroll och körs bara på begäran, med spärren släppt (`-e dmzLiveArchive true`). Varje sida är cirka 5 MB: ange mängden i rapporten. Numrens PDF:er läggs på telefonen med `DMZ_SEED_ISSUES`:
+HQ mot det riktiga arkivet (`HqRealDeviceTest`) är en manuell kontroll och körs bara på begäran, med spärren släppt (`-e dmzLiveArchive true`). Varje sida är cirka 5 MB: ange mängden i rapporten. Numrens PDF:er är arkivfiler som du har skaffat själv och lägger på telefonen för hand. Skriptet tar bort dem efteråt:
 
 ```bash
-DMZ_SEED_ISSUES="datormagazin-1993-03" tools/device_test.sh /tmp/hq --only \
+adb shell mkdir -p /data/local/tmp/dmz-test-pdfs
+adb push SÖKVÄG/datormagazin-1993-03.pdf /data/local/tmp/dmz-test-pdfs/
+tools/device_test.sh /tmp/hq --only \
     -e dmzHqReal true -e dmzLiveArchive true -e class se.c64.dmzreader.HqRealDeviceTest#olderPageAfterTheDeviationIn199303
 ```
 

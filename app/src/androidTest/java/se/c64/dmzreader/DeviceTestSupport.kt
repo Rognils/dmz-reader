@@ -43,6 +43,12 @@ fun removeDownloads(context: Context, vararg issueIds: String) = runBlocking {
 fun hasLocalPdf(context: Context, issueId: String): Boolean =
     File(storage(context).cacheDir, "pdf/$issueId.pdf").isFile || File(storage(context).filesDir, "issues/$issueId.pdf").isFile
 
+/**
+ * Sant om någon har lagt arkivets egen PDF för numret på telefonen (tools/manual_archive_file_test.sh).
+ * De manuella kontrollerna kräver det: i den vanliga testsviten är 1986 nr 1 det påhittade testnumret.
+ */
+fun hasArchivePdf(issueId: String): Boolean = File(TestStorage.seedDirectory, "$issueId.pdf").isFile
+
 fun readingState(context: Context, issueId: String): IssueUserState? = runBlocking {
     appContainer(context).database.issueUserStateDao().get(issueId)
 }

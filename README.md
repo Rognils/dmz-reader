@@ -62,3 +62,25 @@ Appen byggs med Gradle och JDK 17:
 ```
 
 Ett release-bygge kräver en egen signeringsnyckel, se [docs/signing.md](docs/signing.md). Verktygen som förbereder arkivdata beskrivs i [tools/README.md](tools/README.md).
+
+## För utvecklare
+
+Inga tester kontaktar arkivet, och ingen arkivfil behövs för att köra dem. Testerna läser i ett påhittat nummer som följer med repot, och nedladdningar prövas mot en lokal server.
+
+```
+./gradlew :app:testDebugUnitTest                      # appens enhetstester
+python3 -m unittest discover -s tools/tests           # verktygens tester
+tools/device_test.sh                                  # testerna på en ansluten telefon
+```
+
+Verktygens tester kräver paketen i `tools/requirements.txt`. Testerna på telefonen körs i utvecklingsbygget, som ligger bredvid den vanliga appen och inte delar data med den. Installera det och testpaketet först:
+
+```
+./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+```
+
+En spärr i testbygget stoppar varje försök att nå dmzarkivet.se, och `tools/device_test.sh` kontrollerar efteråt att inget sådant försök gjordes.
+
+Två skript ligger utanför testsviten och körs bara för hand: `tools/manual_archive_file_test.sh` prövar läsaren mot en arkivfil som du har skaffat själv, och `tools/live_archive_smoke_test.sh` gör några små förfrågningar till arkivservern. Mer finns i [tools/README.md](tools/README.md).

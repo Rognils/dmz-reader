@@ -38,9 +38,9 @@ app/src/debug/assets/search_test.db 4ca5e7676674b33c47adb70ab3e7410bdbdd2793bc3a
 app/src/debug/assets/search_test.db ab45b068dc56678022dc128e70595b38ae6e8d7a43ad2af777c8297f0d124c27
 "
 
-# Den enda PDF som får finnas: ett påhittat nummer på sex sidor, gjort av tools/make_test_media.py.
+# Den enda PDF som får finnas: ett påhittat nummer på 28 sidor, gjort av tools/make_test_media.py.
 ALLOWED_PDF="
-app/src/androidTest/assets/test_issue.pdf 0f3cc30a956517845e104c1c6033fbb6eb3fff22747cfcd5554c4c520382b585
+app/src/androidTest/assets/test_issue.pdf 890c113d9450e52ac8ce7a5a122d8743f498d2212028aafb0361ec87e10e6c2c
 "
 
 cd "$(git rev-parse --show-toplevel)"

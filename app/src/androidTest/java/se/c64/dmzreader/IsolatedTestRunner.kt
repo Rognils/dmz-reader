@@ -3,11 +3,18 @@ package se.c64.dmzreader
 import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.res.AssetManager
 import android.net.TrafficStats
 import android.os.Bundle
 import android.os.Process
 import android.util.Log
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnitRunner
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.long
 import se.c64.dmzreader.data.network.LiveArchiveGuard
 import java.io.File
 
@@ -20,8 +27,14 @@ object TestStorage {
     /** Alla testkörningars kataloger ligger här: /data/data/se.c64.dmzreader/app_dmz_test/. */
     private const val PARENT = "dmz_test"
 
-    /** PDF:er som datorn har lagt på telefonen för testerna, så att arkivservern inte belastas. */
+    /**
+     * Arkivfiler som någon har lagt på telefonen för de manuella kontrollerna
+     * (tools/manual_archive_file_test.sh). Den vanliga testsviten lägger ingenting här.
+     */
     val seedDirectory = File("/data/local/tmp/dmz-test-pdfs")
+
+    /** Numret som testerna läser i. Dess PDF i testkörningen är det påhittade testnumret, test_issue.pdf. */
+    const val READING_ISSUE = "datormagazin-1986-01"
 
     @Volatile
     var rootName: String = "run-${System.currentTimeMillis()}"
@@ -42,13 +55,59 @@ object TestStorage {
         root(base).deleteRecursively()
     }
 
-    /** Lägger förberedda PDF:er i testets egen läs-cache. */
-    fun seedPdfs(storage: Context) {
+    /**
+     * Fyller testets egen läs-cache: arkivfiler ur [seedDirectory] om det finns några, och annars det
+     * påhittade testnumret under namnet [READING_ISSUE]. Ingen arkivfil behövs för testsviten.
+     */
+    fun seedPdfs(storage: Context, app: Context, testAssets: AssetManager) {
         val target = File(storage.cacheDir, "pdf").apply { mkdirs() }
         for (file in seedDirectory.listFiles().orEmpty().filter { it.name.endsWith(".pdf") }) {
             val copy = File(target, file.name)
             if (!copy.exists()) file.copyTo(copy)
         }
+        val reading = File(target, "$READING_ISSUE.pdf")
+        if (!reading.exists()) {
+            val pdf = testAssets.open("test_issue.pdf").use { it.readBytes() }
+            reading.writeBytes(paddedPdf(pdf, catalogueSize(app, READING_ISSUE)))
+        }
+    }
+
+    /** Storleken som arkivindexet anger för numrets PDF. */
+    private fun catalogueSize(app: Context, issueId: String): Long {
+        val inventory = Json.parseToJsonElement(app.assets.open("archive_inventory.json").bufferedReader().use { it.readText() })
+        val issue = inventory.jsonObject.getValue("issues").jsonArray
+            .first { it.jsonObject.getValue("issueId").jsonPrimitive.content == issueId }
+        return issue.jsonObject.getValue("ocrPdfSize").jsonPrimitive.long
+    }
+
+    /**
+     * [pdf] utfylld till exakt [size] byte, med samma sidor. Läsaren kastar en cachefil vars storlek
+     * inte stämmer med arkivindexet och hämtar om den, och det får testerna inte göra.
+     *
+     * Blanktecken läggs mellan det sista objektet och korsreferenstabellen, där de är tillåtna, och
+     * talet efter startxref pekas om till tabellens nya plats. Objektens platser ändras inte.
+     */
+    fun paddedPdf(pdf: ByteArray, size: Long): ByteArray {
+        val text = String(pdf, Charsets.ISO_8859_1)
+        val table = text.lastIndexOf("\nxref\n") + 1
+        val start = text.lastIndexOf("\nstartxref\n")
+        require(table > 0 && start > table && size > pdf.size) { "test_issue.pdf går inte att fylla ut till $size byte" }
+        val head = pdf.copyOfRange(0, table)
+        val tableAndTrailer = pdf.copyOfRange(table, start)
+        // Talets längd beror på var tabellen hamnar. Räkna med slutlängden och kontrollera.
+        var end = "\nstartxref\n${table}\n%%EOF\n"
+        repeat(2) {
+            val padding = size - head.size - tableAndTrailer.size - end.length
+            end = "\nstartxref\n${table + padding}\n%%EOF\n"
+        }
+        val padding = (size - head.size - tableAndTrailer.size - end.length).toInt()
+        val out = ByteArray(size.toInt())
+        head.copyInto(out)
+        out.fill(' '.code.toByte(), head.size, head.size + padding)
+        tableAndTrailer.copyInto(out, head.size + padding)
+        end.toByteArray(Charsets.ISO_8859_1).copyInto(out, head.size + padding + tableAndTrailer.size)
+        check(end == "\nstartxref\n${table + padding}\n%%EOF\n") { "startxref stämmer inte efter utfyllnaden" }
+        return out
     }
 }
 
@@ -79,7 +138,7 @@ class TestDmzReaderApp : DmzReaderApp() {
     override fun onCreate() {
         if (!TestStorage.keep) TestStorage.delete(this)
         TestStorage.deleteStale(this)
-        TestStorage.seedPdfs(storageContext)
+        TestStorage.seedPdfs(storageContext, this, InstrumentationRegistry.getInstrumentation().context.assets)
         Log.i("DmzTest", "Isolerad lagring: ${TestStorage.root(this)}")
         super.onCreate()
     }
