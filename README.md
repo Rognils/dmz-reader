@@ -35,7 +35,7 @@ En ny version installeras på samma sätt, ovanpå den gamla. Läsdata, bokmärk
 
 ## Sökindex
 
-Sökning på titel, år och nummer fungerar direkt. För att söka i tidningarnas text behövs ett sökindex. Det följer inte med appen, eftersom filen är stor.
+Sökning på titel, år och nummer fungerar direkt. För att söka i tidningarnas text behövs ett sökindex. Det följer inte med appen, eftersom filen är stor (cirka 90 MB).
 
 1. Hämta `search-….db` under **Releases** till telefonen.
 2. Öppna **Inställningar** i appen och välj **Importera sökindex**. Finns det redan ett index heter knappen **Importera nytt sökindex**.
@@ -43,7 +43,7 @@ Sökning på titel, år och nummer fungerar direkt. För att söka i tidningarna
 
 Efter importen kan du ta bort den hämtade filen. Allt annat i appen fungerar utan sökindex.
 
-**Kontaktuppgifter är maskerade i sökindexet.** I sökträffarnas utdrag betyder `•••` att en kontaktuppgift har tagits bort: ett telefonnummer, en e-postadress, ett postgironummer eller ett personnummer. Det går inte att söka på dem. Tidningarna i läsaren är oförändrade: sidorna visas som de trycktes.
+Sökindexet tillämpar automatisk maskering av igenkända telefon- och faxnummer, e-postadresser, post- och bankgironummer och personnummerliknande mönster. OCR-skador kan innebära att enstaka uppgifter inte känns igen. I sökutdrag kan `•••` markera en maskerad uppgift. Tidningarna i läsaren är oförändrade.
 
 ## Licens
 
