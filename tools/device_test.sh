@@ -13,9 +13,19 @@
 #   - namn, storlek, tid och SHA-256 för varje fil i läs-cachen, nedladdningarna
 #     och filesDir/data
 #
-# PDF:en som testerna läser i (1986 nr 1) läggs på telefonen från datorns
-# cache/pdf/, så att arkivservern inte belastas mer än nödvändigt. Två tester
-# prövar själva nedladdningen och hämtar den filen från arkivet (15 MB var).
+# Testerna når aldrig arkivservern (CLAUDE.md, regel 12). PDF:en som de läser i
+# (1986 nr 1) läggs på telefonen från datorns cache/pdf/, och testerna av nedladdning
+# och omslag går mot en lokal server på telefonen med påhittat material. Finns PDF:en
+# inte i datorns cache avbryts körningen: hämta den en gång för hand med
+# tools/fetch_pdfs.py datormagazin-1986-01.
+#
+# Skriptet kontrollerar det efter körningen, på två sätt som inte beror av varandra:
+#   - i appens logg räknas förfrågningar till dmzarkivet.se och försök som testernas
+#     spärr har stoppat. Båda ska vara 0. Raderna sparas i KATALOG/arkivkontroll.txt.
+#   - i systemets nätstatistik (dumpsys netstats) läses hur många byte testappen har
+#     tagit emot över wifi och mobilnät under körningen. Trafiken till den lokala
+#     servern går inte över något nät och räknas inte. Mer än 1 MB räknas som fel:
+#     ett enda omslag ur arkivet är 5 MB och en PDF minst 15.
 #
 # Testerna körs i utvecklingsbygget (se.c64.dmzreader.debug), som ligger bredvid
 # användarens app (se.c64.dmzreader) och inte delar något med den. Fingeravtrycket
@@ -120,6 +130,8 @@ fi
 
 echo "Fingeravtryck före…"
 fingerprint before
+adb logcat -G 16M
+adb logcat -c
 
 echo "Lägger testernas PDF på telefonen…"
 adb shell "rm -rf $SEEDS && mkdir -p $SEEDS"
@@ -127,13 +139,58 @@ for issue in datormagazin-1986-01 ${DMZ_SEED_ISSUES:-}; do
     if [ -f "$ROOT/cache/pdf/$issue.pdf" ]; then
         adb push "$ROOT/cache/pdf/$issue.pdf" "$SEEDS/$issue.pdf" >/dev/null
     else
-        echo "  $issue finns inte i datorns cache/pdf/. Testerna hämtar den från arkivet."
+        echo "$issue finns inte i datorns cache/pdf/. Testerna får inte hämta den från arkivet." >&2
+        echo "Hämta den en gång för hand: tools/fetch_pdfs.py $issue" >&2
+        adb shell "rm -rf $SEEDS"
+        exit 1
     fi
 done
 adb shell "chmod 644 $SEEDS/*.pdf 2>/dev/null" || true
 
 status=0
+
+# Sparar testkörningens rader om arkivet ur loggen. Anropas innan loggen töms och när allt är klart.
+: > "$OUT/arkivkontroll.txt"
+collect_archive_log() {
+    adb logcat -d -s DmzGuard DmzNet DmzCovers DmzHq 2>/dev/null \
+        | grep -E "DmzGuard|dmzarkivet\.se|FTP ansluten" >> "$OUT/arkivkontroll.txt" || true
+}
+
+# Antal byte testappen har tagit emot över wifi och mobilnät, enligt systemets statistik per app.
+# Loopback, där den lokala testservern svarar, finns inte i den statistiken.
+network_received() {
+    local uid
+    uid=$(adb shell dumpsys package "$TEST_PACKAGE" | grep -m1 -oE "uid=[0-9]+" | cut -d= -f2)
+    adb shell dumpsys netstats --poll >/dev/null 2>&1 || true
+    adb shell dumpsys netstats detail 2>/dev/null | awk -v uid="uid=$uid " '
+        /ident=/ { wanted = index($0, uid) && index($0, "tag=0x0") }
+        wanted && /rb=/ { for (i = 1; i <= NF; i++) if ($i ~ /^rb=/) { sub("rb=", "", $i); sum += $i } }
+        END { print sum + 0 }'
+}
+RECEIVED_BEFORE=$(network_received)
+MAX_NETWORK_BYTES=1000000
+
+# Inga förfrågningar till arkivet, inga försök som spärren har fått stoppa, och ingen nämnvärd trafik över nätet.
+check_archive_untouched() {
+    local requests blocked received
+    requests=$(grep -cE "(GET|HEAD|POST) dmzarkivet\.se|FTP ansluten till dmzarkivet" "$OUT/arkivkontroll.txt" || true)
+    blocked=$(grep -c "SPÄRRAD" "$OUT/arkivkontroll.txt" || true)
+    received=$(( $(network_received) - RECEIVED_BEFORE ))
+    echo "ARKIVET: $requests förfrågningar till dmzarkivet.se, $blocked spärrade försök. Mottaget över wifi och mobilnät: $received byte."
+    echo "netstats: $received byte mottaget över wifi och mobilnät under körningen" >> "$OUT/arkivkontroll.txt"
+    if [ "$requests" != "0" ] || [ "$blocked" != "0" ]; then
+        echo "TESTERNA FÖRSÖKTE NÅ ARKIVSERVERN. Se $OUT/arkivkontroll.txt" >&2
+        status=1
+    fi
+    if [ "$received" -gt "$MAX_NETWORK_BYTES" ]; then
+        echo "TESTAPPEN TOG EMOT $received BYTE ÖVER NÄTET. Testerna ska inte hämta något utifrån." >&2
+        status=1
+    fi
+}
+
 finish() {
+    collect_archive_log
+    check_archive_untouched
     adb shell "rm -rf $SEEDS"
     echo "Fingeravtryck efter…"
     fingerprint after
@@ -171,6 +228,7 @@ run -e dmzTestRoot restart -e class "$NAMESPACE.BackupVersionDeviceTest" >/dev/n
 
 echo "Lässession vid tvångsstopp…"
 STATS=$NAMESPACE.StatisticsDeviceTest
+collect_archive_log
 adb logcat -c
 # Utskriften sparas, så att det syns varför läsaren inte öppnades om det skulle hända.
 adb shell am instrument -w -e dmzTestRoot forcestop -e dmzKeepRoot true -e dmzPhase 1 \
