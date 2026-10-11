@@ -43,7 +43,7 @@ Sökning på titel, år och nummer fungerar direkt. För att söka i tidningarna
 
 Efter importen kan du ta bort den hämtade filen. Allt annat i appen fungerar utan sökindex.
 
-Sökindexet tillämpar automatisk maskering av igenkända telefon- och faxnummer, e-postadresser, post- och bankgironummer och personnummerliknande mönster. OCR-skador kan innebära att enstaka uppgifter inte känns igen. I sökutdrag kan `•••` markera en maskerad uppgift. Tidningarna i läsaren är oförändrade.
+Sökindexet tillämpar automatisk maskering av igenkända telefon- och faxnummer, e-postadresser, post- och bankgironummer och personnummerliknande mönster. OCR-skador kan innebära att en del uppgifter inte känns igen. I sökutdrag kan `•••` markera en maskerad uppgift. Tidningarna i läsaren är oförändrade.
 
 ## Licens
 
