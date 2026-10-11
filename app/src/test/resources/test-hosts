@@ -1,0 +1,3 @@
+# Namnuppslag i JVM-testerna. Bara den egna datorn finns: arkivservern går inte att slå upp.
+127.0.0.1 localhost
+::1 localhost

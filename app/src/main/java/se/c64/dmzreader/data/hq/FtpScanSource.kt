@@ -1,5 +1,6 @@
 package se.c64.dmzreader.data.hq
 
+import se.c64.dmzreader.data.network.LiveArchiveGuard
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -108,6 +109,8 @@ class FtpScanSource(
             if (connectedTo == key && existing.isConnected) return existing
             disconnect("annan server")
         }
+        // I tester får arkivets FTP-server inte nås (CLAUDE.md, regel 12).
+        LiveArchiveGuard.check(host, "FTP $host:$port")
         val created = FTPClient()
         created.connectTimeout = timeoutMillis
         created.defaultTimeout = timeoutMillis

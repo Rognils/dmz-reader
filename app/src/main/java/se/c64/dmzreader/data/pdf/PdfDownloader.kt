@@ -6,6 +6,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.job
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import se.c64.dmzreader.data.network.LiveArchiveGuardInterceptor
 import se.c64.dmzreader.data.network.UserAgentInterceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -213,6 +214,7 @@ class PdfDownloader(
          * tidsgräns: en fil på flera hundra MB får ta den tid den tar.
          */
         fun createHttpClient(logUserAgent: ((String) -> Unit)? = null): OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(LiveArchiveGuardInterceptor())
             .addInterceptor(UserAgentInterceptor(log = logUserAgent))
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)

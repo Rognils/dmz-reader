@@ -136,6 +136,14 @@ val extractHostSqlite = tasks.register<Sync>("extractHostSqlite") {
     into(layout.buildDirectory.dir("host-sqlite"))
 }
 tasks.withType<Test>().configureEach {
+    // JVM-testerna får aldrig nå arkivservern (CLAUDE.md, regel 12). Spärren är på från start, varje
+    // spärrat försök skrivs i en fil, och namnuppslag går bara mot en fil som inte känner arkivet.
+    val guardLog = layout.buildDirectory.file("live-archive-guard.log").get().asFile
+    val hostsFile = layout.projectDirectory.file("src/test/resources/test-hosts").asFile
+    systemProperty("dmz.blockLiveArchive", "true")
+    systemProperty("dmz.liveArchiveGuardLog", guardLog.absolutePath)
+    systemProperty("jdk.net.hosts.file", hostsFile.absolutePath)
+    doFirst { guardLog.delete() }
     dependsOn(extractHostSqlite)
     val nativeDir = layout.buildDirectory.dir("host-sqlite")
     val inventory = inventorySource.asFile
@@ -195,5 +203,6 @@ dependencies {
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.okhttp.mockwebserver)
     debugImplementation(libs.compose.ui.test.manifest)
 }
