@@ -2,6 +2,8 @@
 
 Datum: 2026-10-11 · Gäller `main` vid `cb471ec` och senare · Repot `Rognils/dmz-reader` är privat
 
+> **Uppdatering 2026-10-11:** punkt 2, 3, 6 och 9 är avgjorda och genomförda. Skärmbilderna och granskningsfilerna är borta ur historiken, adressen är bytt, testerna når inte längre arkivet, och repot är ett nytt, privat `Rognils/dmz-reader`. Se `docs/reports/pre-1.0-del2.md`. Proceduren under punkt 6 är körd, i en något annan form, och adressen i den är ersatt av omskrivningen. Kvar att avgöra är punkt 1, 10 och 11.
+
 Det här dokumentet samlar de öppna punkterna från `docs/reports/gates.md`. För varje punkt står vad det är, var det finns, alternativen och min rekommendation. Ingenting av det som beskrivs är gjort.
 
 **Läs det här först:** flera alternativ kräver omskriven historik. Det måste göras **före** publiceringen. När repot väl är publikt kan vem som helst ha kopierat det, och då går ingenting att ta tillbaka.
