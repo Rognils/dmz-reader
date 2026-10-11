@@ -42,7 +42,7 @@ COVER_SIZE = (950, 1320)
 PAGES = [
     ("TESTMAGASINET", ["Nummer 1 · Påhittat år", "", "Ett nummer som bara finns för appens tester.",
                        "Ingenting här är hämtat ur någon tidning."]),
-    ("Innehåll", ["Sidan 3: Så byggde vi en testserver", "Sidan 4: Sex sidor räcker långt",
+    ("Innehåll", ["Sidan 3: Så byggde vi en testserver", "Sidan 4: Tjugoåtta sidor räcker långt",
                   "Sidan 5: Läsarnas frågor", "Sidorna 6–27: Rutor och ränder",
                   "Sidan 28: Nästa nummer"]),
     ("Så byggde vi en testserver", ["En liten server på telefonen svarar i arkivets ställe.",

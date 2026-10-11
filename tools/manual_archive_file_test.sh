@@ -24,7 +24,8 @@
 #   tools/manual_archive_file_test.sh ~/arkiv/199515.pdf datormagazin-1995-15
 #
 # Utan issueId tas det ur filnamnet. Tre nummer har kontroller:
-#   datormagazin-1986-01   genomläsning med renderingstider, zoom, uppslag och rotation
+#   datormagazin-1986-01   genomläsning med renderingstider, zoom, uppslag och rotation,
+#                          och HQ i liggande läge
 #   datormagazin-1995-14   genomläsning, zoom och förrendering (92 sidor)
 #   datormagazin-1995-15   belastning och minne, bland annat arkivets största sida
 #
@@ -62,7 +63,7 @@ fi
 
 case "$ISSUE" in
     datormagazin-1986-01)
-        TESTS="$READER#verifyReadThrough198601,$READER#verifyZoom198601,$READER#verifyLandscapeSpreadAndRotation" ;;
+        TESTS="$READER#verifyReadThrough198601,$READER#verifyZoom198601,$READER#verifyLandscapeSpreadAndRotation,$NAMESPACE.HqDeviceTest#hqInLandscapeShowsSinglePage" ;;
     datormagazin-1995-14)
         TESTS="$READER#verifyReadThrough199514,$READER#verifyZoom199514,$STATE#verifyPrerender199514" ;;
     datormagazin-1995-15)
