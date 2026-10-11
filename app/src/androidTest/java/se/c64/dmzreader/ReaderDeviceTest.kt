@@ -24,6 +24,7 @@ import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeUp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -38,12 +39,17 @@ import java.io.File
 /**
  * Läsaren på en riktig enhet, mot arkivets riktiga PDF:er.
  *
- * [readDownloadTurnPageAndClose] ingår i den vanliga testsviten och hämtar
- * 1986 nr 1 (15 MB). De övriga är verifieringskörningar som bara körs när de
- * begärs med argumentet dmzVerify, eftersom de hämtar stora filer:
+ * [readDownloadTurnPageAndClose] och [interruptedDownloadShowsTheMessageAndResumesWithRange] ingår i
+ * den vanliga testsviten. De hämtar ett påhittat nummer från en lokal server på telefonen
+ * ([LocalArchive]) och når aldrig arkivet. De övriga är verifieringskörningar mot arkivets riktiga
+ * PDF:er, som bara körs när de begärs med argumentet dmzVerify:
  *
  *   adb shell am instrument -w -e class se.c64.dmzreader.ReaderDeviceTest \
  *     -e dmzVerify true se.c64.dmzreader.debug.test/se.c64.dmzreader.IsolatedTestRunner
+ *
+ * Verifieringskörningarna läser PDF:er som har lagts på telefonen i förväg. En PDF som saknas
+ * hämtas inte: testkörarens spärr mot arkivet stoppar det. Den som med avsikt vill hämta från den
+ * riktiga servern lägger till -e dmzLiveArchive true, och anger mängden data i rapporten.
  */
 @RunWith(AndroidJUnit4::class)
 class ReaderDeviceTest {
@@ -157,46 +163,118 @@ class ReaderDeviceTest {
         File(screenshotDirectory, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
-    /** Läs → nedladdning → läsare → byte av sida → stäng. */
+    // Numret som nedladdningstesterna gör till testnummer. Inget annat test använder det.
+    private val testIssueId = "datormagazin-1986-02"
+    private var restoreTestIssue: (() -> Unit)? = null
+
+    /** Låter den lokala servern stå i stället för arkivet, och gör 1986 nr 2 till det påhittade testnumret. */
+    private fun useLocalArchive() {
+        LocalArchive.start()
+        restoreTestIssue = LocalArchive.useTestPdfFor(context, testIssueId)
+        resetReadingState(context, testIssueId)
+        removeDownloads(context, testIssueId)
+        File(pdfDirectory, "$testIssueId.pdf").delete()
+        File(pdfDirectory, "$testIssueId.pdf.part").delete()
+    }
+
+    @After
+    fun stopLocalArchive() {
+        LocalArchive.stop()
+        restoreTestIssue?.let { restore ->
+            restore()
+            // Testnumrets fil stämmer inte med det riktiga arkivindexet och ska inte ligga kvar.
+            File(pdfDirectory, "$testIssueId.pdf").delete()
+            File(pdfDirectory, "$testIssueId.pdf.part").delete()
+            resetReadingState(context, testIssueId)
+        }
+        restoreTestIssue = null
+    }
+
+    /** Läs → nedladdning → läsare → byte av sida → stäng. Numret hämtas från den lokala servern. */
     @Test
     fun readDownloadTurnPageAndClose() {
-        val issueId = "datormagazin-1986-01"
-        File(pdfDirectory, "$issueId.pdf").delete()
-        File(pdfDirectory, "$issueId.pdf.part").delete()
+        useLocalArchive()
+        // Lagom långsamt för att nedladdningsvyn ska hinna visas.
+        LocalArchive.pdfBytesPerSecond = 400_000
 
-        openIssue("Datormagazin", 1986, 4, "Nr 1")
+        openIssue("Datormagazin", 1986, 4, "Nr 2")
         rule.onNodeWithText("Läs").performClick()
 
         // Nedladdningsvyn visas tills filen är hämtad, och sedan öppnas läsaren.
-        waitFor(120_000) { exists("Avbryt") || readerShown() }
-        waitFor(120_000) { readerShown() }
-        val pdf = File(pdfDirectory, "$issueId.pdf")
+        waitFor(60_000) { exists("Avbryt") || readerShown() }
+        waitFor(60_000) { readerShown() }
+        val pdf = File(pdfDirectory, "$testIssueId.pdf")
         assertTrue(pdf.isFile)
-        assertEquals(15_105_472L, pdf.length())
-        assertFalse(File(pdfDirectory, "$issueId.pdf.part").exists())
+        assertTrue(LocalArchive.pdf.contentEquals(pdf.readBytes()))
+        assertFalse(File(pdfDirectory, "$testIssueId.pdf.part").exists())
+        // En enda förfrågan, till adressen i arkivindexet, utan Range och med appens User-Agent.
+        val request = LocalArchive.pdfRequests.single()
+        assertEquals("/pdf/198602.pdf", request.path)
+        assertEquals(null, request.range)
+        assertTrue(request.userAgent, request.userAgent!!.startsWith("DMZReader/"))
 
         showControls()
-        assertEquals("Sida 1 av 28 · 0 % läst", indicator())
-        rule.onNodeWithText("Datormagazin 1986 Nr 1").assertIsDisplayed()
+        assertEquals("Sida 1 av 6 · 0 % läst", indicator())
+        rule.onNodeWithText("Datormagazin 1986 Nr 2").assertIsDisplayed()
         // Bottenfältet syns inte i läsaren.
         assertFalse(exists("Bibliotek"))
 
         // Tryckzonen till höger byter sida, och ett svep gör det också.
         tapZone(0.85f)
-        waitForPage("Sida 2 av 28")
+        waitForPage("Sida 2 av 6")
         rule.onNodeWithTag("reader").performTouchInput { swipeLeft() }
-        waitForPage("Sida 3 av 28")
+        waitForPage("Sida 3 av 6")
         tapZone(0.15f)
-        waitForPage("Sida 2 av 28")
+        waitForPage("Sida 2 av 6")
 
         rule.onNodeWithContentDescription("Stäng läsaren").performClick()
         // Läspositionen är sparad: knappen leder tillbaka till samma sida.
         waitFor { exists("Fortsätt på sida 2") && exists("Bibliotek") }
 
-        // Nu finns filen i cachen: läsaren öppnas direkt, utan nedladdningsvy.
+        // Nu finns filen i cachen: läsaren öppnas direkt, utan nedladdningsvy och utan en ny förfrågan.
         rule.onNodeWithText("Fortsätt på sida 2").performClick()
         waitFor(20_000) { readerShown() }
         assertFalse(exists("Avbryt"))
+        assertEquals(1, LocalArchive.pdfRequests.size)
+    }
+
+    /**
+     * Nätet försvinner mitt i nedladdningen: läsaren visar felet, den hämtade delen ligger kvar,
+     * och "Försök igen" begär bara resten med Range och If-Range.
+     */
+    @Test
+    fun interruptedDownloadShowsTheMessageAndResumesWithRange() {
+        useLocalArchive()
+        // Det första svaret bryts efter halva filen.
+        LocalArchive.cutPdfResponses.set(1)
+
+        openIssue("Datormagazin", 1986, 4, "Nr 2")
+        rule.onNodeWithText("Läs").performClick()
+
+        waitFor(60_000) { exists("Försök igen") }
+        assertTrue(rule.onAllNodes(hasText("Det gick inte att nå DMZArkivet.", substring = true)).fetchSemanticsNodes().isNotEmpty())
+        assertTrue(rule.onAllNodes(hasText("Nedladdningen kan återupptas där den slutade.", substring = true)).fetchSemanticsNodes().isNotEmpty())
+        assertFalse(readerShown())
+        val part = File(pdfDirectory, "$testIssueId.pdf.part")
+        val pdf = File(pdfDirectory, "$testIssueId.pdf")
+        assertFalse(pdf.exists())
+        val fetched = part.length()
+        assertTrue("hämtat före avbrottet: $fetched byte", fetched > 0 && fetched < LocalArchive.pdf.size)
+
+        rule.onNodeWithText("Försök igen").performClick()
+        waitFor(60_000) { readerShown() }
+
+        // Den andra förfrågan gällde bara resten, och bara om filen är densamma.
+        val requests = LocalArchive.pdfRequests
+        assertEquals(2, requests.size)
+        assertEquals(null, requests[0].range)
+        assertEquals("bytes=$fetched-", requests[1].range)
+        assertEquals(LocalArchive.PDF_ETAG, requests[1].ifRange)
+        // Filen är hel och identisk med den servern har.
+        assertTrue(LocalArchive.pdf.contentEquals(pdf.readBytes()))
+        assertFalse(part.exists())
+        showControls()
+        assertEquals("Sida 1 av 6 · 0 % läst", indicator())
     }
 
     private fun openReader(publication: String, year: Int, issueCount: Int, label: String) {

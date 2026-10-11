@@ -3,9 +3,12 @@ package se.c64.dmzreader
 import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
+import android.net.TrafficStats
 import android.os.Bundle
+import android.os.Process
 import android.util.Log
 import androidx.test.runner.AndroidJUnitRunner
+import se.c64.dmzreader.data.network.LiveArchiveGuard
 import java.io.File
 
 /**
@@ -86,12 +89,20 @@ class TestDmzReaderApp : DmzReaderApp() {
  * Testkörare som startar appen med isolerad lagring (TestDmzReaderApp) och tar bort
  * katalogen när körningen är klar.
  *
+ * Körningen får inte nå arkivservern (CLAUDE.md, regel 12): [LiveArchiveGuard] spärrar varje försök,
+ * och när körningen är klar skrivs antalet spärrade försök i loggen, med taggen DmzGuard.
+ * tools/device_test.sh läser de raderna.
+ *
  * Argument:
- *   -e dmzTestRoot <namn>   katalogens namn. Används när ett test fortsätter i en ny process.
- *   -e dmzKeepRoot true     låt katalogen ligga kvar efter körningen (och töm den inte före).
+ *   -e dmzTestRoot <namn>    katalogens namn. Används när ett test fortsätter i en ny process.
+ *   -e dmzKeepRoot true      låt katalogen ligga kvar efter körningen (och töm den inte före).
+ *   -e dmzLiveArchive true   släpp spärren, för de manuella kontrollerna mot den riktiga servern.
  */
+private const val GUARD_TAG = "DmzGuard"
+
 class IsolatedTestRunner : AndroidJUnitRunner() {
     private var keep = false
+    private var receivedAtStart = 0L
 
     override fun newApplication(classLoader: ClassLoader?, className: String?, context: Context?): Application =
         super.newApplication(classLoader, TestDmzReaderApp::class.java.name, context)
@@ -100,12 +111,19 @@ class IsolatedTestRunner : AndroidJUnitRunner() {
         arguments?.getString("dmzTestRoot")?.takeIf { it.matches(Regex("[A-Za-z0-9_-]+")) }?.let { TestStorage.rootName = it }
         keep = arguments?.getString("dmzKeepRoot") == "true"
         TestStorage.keep = keep
+        LiveArchiveGuard.blocked = arguments?.getString("dmzLiveArchive") != "true"
+        receivedAtStart = TrafficStats.getUidRxBytes(Process.myUid())
+        Log.i(GUARD_TAG, "START spärr=${LiveArchiveGuard.blocked}")
         super.onCreate(arguments)
     }
 
     override fun finish(resultCode: Int, results: Bundle?) {
         // Läsaren skriver läsposition och session i bakgrunden när den stängs. Vänta in det.
         Thread.sleep(2_500)
+        // Räknar också trafiken till den lokala testservern. Vad som kom över wifi och mobilnät
+        // mäter tools/device_test.sh i systemets statistik.
+        val received = TrafficStats.getUidRxBytes(Process.myUid()) - receivedAtStart
+        Log.i(GUARD_TAG, "KLAR spärrade=${LiveArchiveGuard.violations.get()} mottagetInklusiveLokalServer=$received byte spärr=${LiveArchiveGuard.blocked}")
         if (!keep) TestStorage.delete(targetContext.applicationContext)
         super.finish(resultCode, results)
     }

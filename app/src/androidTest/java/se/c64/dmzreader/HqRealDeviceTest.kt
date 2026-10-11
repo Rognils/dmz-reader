@@ -39,6 +39,10 @@ import java.io.File
  * Numrens PDF:er läggs på telefonen av tools/device_test.sh (DMZ_SEED_ISSUES).
  * Vid varje "SKÄRMBILD" i loggen väntar testet (-e dmzPause millisekunder), så att en
  * skärmbild kan tas utifrån. Vid "MINNE" kan dumpsys meminfo köras utifrån.
+ *
+ * Manuell kontroll (CLAUDE.md, regel 12): det som inte redan ligger på telefonen måste hämtas från
+ * den riktiga arkivservern, och testkörarens spärr stoppar det. Lägg till -e dmzLiveArchive true
+ * för att släppa spärren, och ange mängden hämtad data i rapporten.
  */
 @RunWith(AndroidJUnit4::class)
 class HqRealDeviceTest {

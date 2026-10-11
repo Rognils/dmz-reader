@@ -1,8 +1,5 @@
 package se.c64.dmzreader
 
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
 import android.os.ParcelFileDescriptor
 import android.provider.Settings
 import androidx.compose.ui.test.hasContentDescription
@@ -19,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Before
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -41,7 +39,9 @@ class OfflineDeviceTest {
 
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
-    private val issueId = "datormagazin-1986-01"
+    // Numret görs till det påhittade testnumret, och hämtas från den lokala servern. Arkivet nås aldrig.
+    private val issueId = "datormagazin-1986-02"
+    private var restoreTestIssue: (() -> Unit)? = null
     private val permanentFile = File(storage(context).filesDir, "issues/$issueId.pdf")
 
     private fun waitFor(timeoutMillis: Long = 20_000, condition: () -> Boolean) =
@@ -62,53 +62,28 @@ class OfflineDeviceTest {
         val deadline = System.currentTimeMillis() + 10_000
         while (airplaneMode() != enabled && System.currentTimeMillis() < deadline) Thread.sleep(200)
         assertEquals(enabled, airplaneMode())
-        if (!enabled) waitForNetwork()
-    }
-
-    /**
-     * Efter flygplansläget tar det en stund innan nätet är att lita på. Nästa test ska inte börja innan dess.
-     *
-     * På testtelefonen ansluter wifi inom ett par sekunder, tappar anslutningen en gång till någon gång
-     * under den första halvminuten (uppmätt 5–24 sekunder efter anslutningen) och är tillbaka cirka
-     * 20 sekunder senare. Under tiden går trafiken över mobilnätet. En nedladdning som pågår när
-     * nätet byts bryts. Det andra tappet har kommit i varje körning, så testet väntar ut det:
-     * nätet räknas som tillbaka när wifi har tappats och sedan varit bekräftat i 10 sekunder.
-     * Kommer inget tapp räcker 45 sekunder med ett och samma bekräftade nät.
-     */
-    private fun waitForNetwork() {
-        val connectivity = context.getSystemService(ConnectivityManager::class.java)
-        val deadline = System.currentTimeMillis() + 120_000
-        var stableNetwork: Network? = null
-        var stableIsWifi = false
-        var stableSince = 0L
-        var wifiWasLost = false
-        while (System.currentTimeMillis() < deadline) {
-            val network = connectivity.activeNetwork
-            val capabilities = connectivity.getNetworkCapabilities(network)
-            val validated = capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
-            val wifi = capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
-            val now = System.currentTimeMillis()
-            if (!validated || network != stableNetwork) {
-                if (stableIsWifi) wifiWasLost = true
-                stableNetwork = network.takeIf { validated }
-                stableIsWifi = validated && wifi
-                stableSince = now
-            } else {
-                val stable = now - stableSince
-                if (wifiWasLost && stableIsWifi && stable >= 10_000) return
-                if (stable >= 45_000) return
-            }
-            Thread.sleep(500)
-        }
     }
 
     private fun downloadState() = runBlocking {
         appContainer(context).database.issueLocalStateDao().get(issueId)?.downloadState ?: DownloadState.NONE
     }
 
+    @Before
+    fun useLocalArchive() {
+        LocalArchive.start()
+        restoreTestIssue = LocalArchive.useTestPdfFor(context, issueId)
+    }
+
     @After
-    fun restoreNetwork() {
+    fun restoreNetworkAndArchive() {
+        // Efter flygplansläget tappar telefonens wifi anslutningen en gång till. Det spelar ingen
+        // roll längre: inget test i sviten behöver nätet, eftersom arkivet ersätts av en lokal server.
         if (airplaneMode()) setAirplaneMode(false)
+        LocalArchive.stop()
+        runBlocking { appContainer(context).offlineRepository.remove(issueId) }
+        File(storage(context).cacheDir, "pdf/$issueId.pdf").delete()
+        resetReadingState(context, issueId)
+        restoreTestIssue?.invoke()
     }
 
     @Test
@@ -125,8 +100,8 @@ class OfflineDeviceTest {
         waitFor { rule.onAllNodes(hasContentDescription(yearCard, substring = true)).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithContentDescription(yearCard, substring = true).performClick()
         waitFor { rule.onAllNodes(hasScrollToNodeAction()).fetchSemanticsNodes().isNotEmpty() }
-        rule.scrollToNodeWhenLoaded(hasContentDescription("Datormagazin 1986 Nr 1"))
-        rule.onNodeWithContentDescription("Datormagazin 1986 Nr 1").performClick()
+        rule.scrollToNodeWhenLoaded(hasContentDescription("Datormagazin 1986 Nr 2"))
+        rule.onNodeWithContentDescription("Datormagazin 1986 Nr 2").performClick()
         waitFor { exists("Ladda ned") }
 
         // Ladda ned. Första gången på telefonen ställs frågan om notiser; testet svarar utan att ändra behörigheten.
@@ -135,10 +110,12 @@ class OfflineDeviceTest {
         if (exists("Utan notis")) rule.onNodeWithText("Utan notis").performClick()
 
         // Köad eller Laddar ned X %, och till sist Nedladdad med storleken.
-        waitFor(120_000) { exists("Nedladdad · 15,1 MB") }
+        waitFor(120_000) { exists("Nedladdad · 0,3 MB") }
         assertEquals(DownloadState.DOWNLOADED, downloadState())
         assertTrue(permanentFile.isFile)
-        assertEquals(15_105_472L, permanentFile.length())
+        assertTrue(LocalArchive.pdf.contentEquals(permanentFile.readBytes()))
+        // En enda förfrågan, till adressen i arkivindexet.
+        assertEquals(listOf("/pdf/198602.pdf"), LocalArchive.pdfRequests.map { it.path })
         assertFalse(File(storage(context).filesDir, "issues/$issueId.pdf.part").exists())
         assertTrue(exists("Ta bort nedladdning"))
 
@@ -150,7 +127,8 @@ class OfflineDeviceTest {
         waitFor(30_000) { rule.onAllNodes(hasTestTag("page-full-1")).fetchSemanticsNodes().isNotEmpty() }
         assertFalse(exists("Hämtar numret", substring = true))
         assertFalse(exists("Numret kunde inte öppnas", substring = true))
-        // Ingenting hämtades till läs-cachen.
+        // Ingenting hämtades till läs-cachen, och ingen ny förfrågan gjordes.
+        assertEquals(1, LocalArchive.pdfRequests.size)
         assertFalse(File(storage(context).cacheDir, "pdf/$issueId.pdf").exists())
         assertFalse(File(storage(context).cacheDir, "pdf/$issueId.pdf.part").exists())
         rule.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
