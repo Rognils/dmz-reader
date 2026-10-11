@@ -506,7 +506,7 @@ private fun ImportIndexHint(onOpenSettings: () -> Unit) {
         )
         Spacer(Modifier.height(6.dp))
         Text(
-            "Sökindexet byggs på datorn och importeras under Inställningar → Sökindex.",
+            "Sökindexet hämtas separat och importeras under Inställningar → Sökindex.",
             style = MaterialTheme.typography.bodyMedium,
             color = DmzColors.TextSecondary,
         )
