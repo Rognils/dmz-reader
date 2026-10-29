@@ -76,7 +76,9 @@ fingerprint() {
             echo "== paketet (version, installation, signatur)"
             adb shell dumpsys package "$PACKAGE" | grep -E "versionCode=|versionName=|firstInstallTime=|lastUpdateTime=|signatures=|dataDir=" | sed 's/^ *//' | sort -u
             echo "== senaste gången appen syntes eller stoppades (usagestats)"
-            adb shell dumpsys usagestats | grep -E "package=$PACKAGE " | grep -E "type=(ACTIVITY_RESUMED|ACTIVITY_PAUSED|ACTIVITY_STOPPED)" | tail -1 | sed 's/^ *//' | cut -d" " -f1-4
+            # Systemet sparar händelserna en begränsad tid. Finns ingen sägs det, i stället för att skriptet avbryts.
+            adb shell dumpsys usagestats | grep -E "package=$PACKAGE " | grep -E "type=(ACTIVITY_RESUMED|ACTIVITY_PAUSED|ACTIVITY_STOPPED)" | tail -1 | sed 's/^ *//' | cut -d" " -f1-4 \
+                | grep . || echo "ingen händelse sparad"
             echo "== processen (ska inte vara igång)"
             adb shell pidof "$PACKAGE" || echo "ingen process"
         } > "$OUT/$name.txt"

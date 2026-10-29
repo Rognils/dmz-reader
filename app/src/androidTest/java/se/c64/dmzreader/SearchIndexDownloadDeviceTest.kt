@@ -23,6 +23,8 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeTrue
+import android.graphics.Bitmap
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -66,6 +68,13 @@ class SearchIndexDownloadDeviceTest {
     @Volatile
     private var throttled = false
 
+    /** Manifest och fil som ersätter de vanliga, för skärmbilderna. */
+    @Volatile
+    private var manifestOverride: String? = null
+
+    @Volatile
+    private var bodyOverride: ByteArray? = null
+
     private val server = MockWebServer()
 
     private fun waitFor(timeoutMillis: Long = 30_000, condition: () -> Boolean) = rule.waitUntil(timeoutMillis, condition)
@@ -91,9 +100,9 @@ class SearchIndexDownloadDeviceTest {
                 val path = request.requestUrl!!.encodedPath
                 return when {
                     path.endsWith("/latest/download/search-index.json") ->
-                        if (manifestAvailable) MockResponse().setBody(manifest()) else MockResponse().setResponseCode(404)
-                    path.endsWith("/download/v1.0.0/search-test.db") ->
-                        MockResponse().setResponseCode(302).setHeader("Location", "/cdn/${cdn.incrementAndGet()}/search-test.db")
+                        if (manifestAvailable) MockResponse().setBody(manifestOverride ?: manifest()) else MockResponse().setResponseCode(404)
+                    path.contains("/releases/download/v1.0.0/") ->
+                        MockResponse().setResponseCode(302).setHeader("Location", "/cdn/${cdn.incrementAndGet()}/${path.substringAfterLast('/')}")
                     path.startsWith("/cdn/") ->
                         if (path.split("/")[2].toInt() != cdn.get()) MockResponse().setResponseCode(403) else file(request)
                     else -> MockResponse().setResponseCode(404)
@@ -107,6 +116,9 @@ class SearchIndexDownloadDeviceTest {
     private fun file(request: RecordedRequest): MockResponse {
         val from = request.getHeader("Range")?.let { Regex("""bytes=(\d+)-""").matchEntire(it)?.groupValues?.get(1)?.toInt() }
         val response = MockResponse().setHeader("ETag", "\"test-index-1\"")
+        bodyOverride?.let { body ->
+            return response.setBody(Buffer().write(body)).throttleBody(64 * 1024, 100, TimeUnit.MILLISECONDS)
+        }
         if (from != null && request.getHeader("If-Range") == "\"test-index-1\"") {
             response.setResponseCode(206)
                 .setHeader("Content-Range", "bytes $from-${index.size - 1}/${index.size}")
@@ -123,7 +135,7 @@ class SearchIndexDownloadDeviceTest {
     fun stopLocalGitHub() {
         container.searchIndexDownloads.reset()
         runBlocking { container.searchIndex.remove() }
-        SearchIndexSource.testBase = null
+        SearchIndexSource.testBase = NO_GITHUB
         server.shutdown()
     }
 
@@ -212,5 +224,63 @@ class SearchIndexDownloadDeviceTest {
         rule.onNodeWithTag("index-retry").performClick()
         waitFor { tagged("index-download") }
         assertEquals(emptyList<String>(), fileRequests.map { it.requestUrl!!.encodedPath })
+    }
+
+    /**
+     * Skärmbilder av Sök-kortet i fyra lägen, för rapporten: före, under, efter och utan manifest.
+     * Körs bara på begäran, med -e dmzScreenshots true. Bilderna hamnar i testkörningens cacheDir/screens.
+     * "Före" och "under" visar ett manifest med p3:s storlek; under-läget avbryts innan något är kontrollerat.
+     */
+    @Test
+    fun screenshotsOnRequest() {
+        assumeTrue(InstrumentationRegistry.getArguments().getString("dmzScreenshots") == "true")
+        val p3 = manifest().replace("\"size\": ${index.size}", "\"size\": 90943488")
+            .replace(sha256, "11033d29553b59083dea94fde90c55bcf7a0cb23ef5452a4083f923903682dfc")
+            .replace("search-test.db", "search-2026-10-06-006-p3.db")
+        manifestOverride = p3
+
+        // Utan manifest.
+        manifestAvailable = false
+        openSearchCard()
+        waitFor { tagged("index-retry") && !exists("Söker efter sökindexet på GitHub…") }
+        screenshot("4-utan-manifest")
+
+        // Före.
+        manifestAvailable = true
+        rule.onNodeWithTag("index-retry").performClick()
+        waitFor { tagged("index-download") }
+        screenshot("1-fore")
+
+        // Under: 6 MB i långsam takt, sedan Avbryt.
+        bodyOverride = ByteArray(6_000_000)
+        rule.onNodeWithTag("index-download").performClick()
+        waitFor(30_000) { tagged("index-progress") && exists("MB", substring = true) }
+        letAppRun(3_000)
+        screenshot("2-under")
+        rule.onNodeWithTag("index-cancel").performClick()
+        waitFor { tagged("index-download") }
+
+        // Efter: det riktiga testindexet, och en sökning.
+        bodyOverride = null
+        manifestOverride = null
+        container.searchIndexDownloads.reset()
+        rule.onNodeWithTag("search").performScrollToNode(hasTestTag("index-card"))
+        rule.onNodeWithTag("index-retry").performClick()
+        waitFor { tagged("index-download") }
+        rule.onNodeWithTag("index-download").performClick()
+        waitFor(60_000) { container.searchIndex.index.value != null }
+        rule.onNodeWithTag("search-field").performTextInput("Commodore")
+        waitFor { tagged("hit-summary") }
+        letAppRun(1_500)
+        screenshot("3-efter")
+    }
+
+    private fun letAppRun(millis: Long) = rule.letAppRun(millis)
+
+    private fun screenshot(name: String) {
+        rule.waitForIdle()
+        val bitmap = InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot()
+        val directory = File(storage(context).cacheDir, "screens").apply { mkdirs() }
+        File(directory, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 }

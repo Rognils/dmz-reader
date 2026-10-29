@@ -16,6 +16,8 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
 import se.c64.dmzreader.data.network.LiveArchiveGuard
+import se.c64.dmzreader.data.search.SearchIndexSource
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.io.File
 
 /**
@@ -159,6 +161,9 @@ class TestDmzReaderApp : DmzReaderApp() {
  */
 private const val GUARD_TAG = "DmzGuard"
 
+/** En lokal adress där ingen svarar: port 9, discard. Testernas standard i stället för GitHub. */
+val NO_GITHUB = "http://127.0.0.1:9/Rognils/dmz-reader/releases".toHttpUrl()
+
 class IsolatedTestRunner : AndroidJUnitRunner() {
     private var keep = false
     private var receivedAtStart = 0L
@@ -171,6 +176,9 @@ class IsolatedTestRunner : AndroidJUnitRunner() {
         keep = arguments?.getString("dmzKeepRoot") == "true"
         TestStorage.keep = keep
         LiveArchiveGuard.blocked = arguments?.getString("dmzLiveArchive") != "true"
+        // Sök-fliken utan index frågar efter manifestet. I testerna går den frågan till en lokal
+        // adress där ingen svarar, aldrig till GitHub. Testerna av hämtningen byter till sin egen server.
+        SearchIndexSource.testBase = NO_GITHUB
         receivedAtStart = TrafficStats.getUidRxBytes(Process.myUid())
         Log.i(GUARD_TAG, "START spärr=${LiveArchiveGuard.blocked}")
         super.onCreate(arguments)
