@@ -53,7 +53,8 @@ private const val UNREADABLE_MESSAGE =
 
 private val SAFE_NAME = Regex("""[A-Za-z0-9][A-Za-z0-9._-]{0,127}""")
 private val SHA256 = Regex("""[0-9a-f]{64}""")
-private const val MAX_INDEX_BYTES = 2_000_000_000L
+// En rimlighetsgräns, inte en gräns för indexets storlek: utrymmet kontrolleras före hämtningen.
+private const val MAX_INDEX_BYTES = 1_000_000_000_000L
 
 /**
  * Tolkar och prövar manifestet. Ett okänt format, ett schema som appen inte stöder eller en

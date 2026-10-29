@@ -193,6 +193,9 @@ class SearchIndexDownloadTest {
         assertTrue((app as ManifestResult.Unsupported).message.contains("nyare version av appen"))
         assertTrue(parseSearchIndexManifest("inte json", 9904) is ManifestResult.Unsupported)
         assertTrue(parseSearchIndexManifest(manifestJson().replace("search-test.db", "../search-test.db"), 9904) is ManifestResult.Unsupported)
+        assertTrue(parseSearchIndexManifest(manifestJson(size = 2_000_000_000_000), 9904) is ManifestResult.Unsupported)
+        // Större än telefonens lediga utrymme men rimligt: tolkas, och utrymmet prövas före hämtningen.
+        assertTrue(parseSearchIndexManifest(manifestJson(size = 500_000_000_000), 9904) is ManifestResult.Ok)
     }
 
     @Test
