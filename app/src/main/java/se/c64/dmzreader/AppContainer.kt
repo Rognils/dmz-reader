@@ -1,6 +1,7 @@
 package se.c64.dmzreader
 
 import android.content.Context
+import androidx.core.content.edit
 import android.net.Uri
 import android.os.Build
 import android.system.Os
@@ -37,7 +38,11 @@ import se.c64.dmzreader.data.repository.BookmarkRepository
 import se.c64.dmzreader.data.repository.DiagnosticsRepository
 import se.c64.dmzreader.data.repository.LibraryRepository
 import se.c64.dmzreader.data.repository.ReadingRepository
+import se.c64.dmzreader.data.search.SearchIndexDownloader
+import se.c64.dmzreader.data.search.SearchIndexDownloads
 import se.c64.dmzreader.data.search.SearchIndexManager
+import se.c64.dmzreader.data.search.SearchIndexSource
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import se.c64.dmzreader.data.settings.ActiveInventoryStore
 import se.c64.dmzreader.data.settings.BackupPreferences
 import se.c64.dmzreader.data.settings.DataStoreActiveInventoryStore
@@ -134,10 +139,55 @@ class AppContainer(private val context: Context) {
     /** UIDT-jobb på Android 14 och senare. Äldre versioner laddar bara ned medan appen är öppen. */
     val downloadScheduler: DownloadScheduler by lazy {
         if (Build.VERSION.SDK_INT >= 34) {
-            UidtDownloadScheduler(context, downloadPreferences, offlineRepository, scope)
+            UidtDownloadScheduler(context, downloadPreferences, offlineRepository, scope, indexBytes = { searchIndexDownloads.pendingBytes() })
         } else {
-            InAppDownloadScheduler(offlineRepository, scope)
+            InAppDownloadScheduler(offlineRepository, scope, afterQueue = { searchIndexDownloads.runPending() })
         }
+    }
+
+    /**
+     * Debug-bygget kan hämta manifestet från en valfri adress, till exempel en prerelease:
+     *   adb shell am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity --es dmzSearchIndexManifest ADRESS
+     * -S behövs: adressen läses när appen startar. En tom adress ('' inom citattecken) tar bort den.
+     * I release-bygget används alltid latest.
+     */
+    private val debugPreferences by lazy { context.getSharedPreferences("dmz_debug", Context.MODE_PRIVATE) }
+
+    var searchIndexManifestOverride: String?
+        get() = if (BuildConfig.DEBUG) debugPreferences.getString(MANIFEST_OVERRIDE_KEY, null) else null
+        set(value) {
+            if (!BuildConfig.DEBUG) return
+            debugPreferences.edit { if (value.isNullOrBlank()) remove(MANIFEST_OVERRIDE_KEY) else putString(MANIFEST_OVERRIDE_KEY, value) }
+            Log.i("DmzSearch", "Manifestadress i debug-bygget: ${value?.takeIf { it.isNotBlank() } ?: "latest"}")
+        }
+
+    /** Var sökindexet hämtas: GitHub-releasen, aldrig arkivservern. */
+    val searchIndexSource: SearchIndexSource by lazy {
+        SearchIndexSource(manifestOverride = { searchIndexManifestOverride?.toHttpUrlOrNull() })
+    }
+
+    /** Hämtning av sökindexet från GitHub, genom samma nedladdningsjobb och överföringskö som PDF:erna. */
+    val searchIndexDownloads: SearchIndexDownloads by lazy {
+        SearchIndexDownloads(
+            downloader = SearchIndexDownloader(
+                client = SearchIndexDownloader.createHttpClient(
+                    log = if (BuildConfig.DEBUG) { message -> Log.d(SearchIndexDownloader.LOG_TAG, message) } else null,
+                ),
+                source = searchIndexSource,
+                directory = File(context.filesDir, "search-download"),
+                appVersionCode = BuildConfig.VERSION_CODE,
+            ),
+            manager = searchIndex,
+            transfers = transferCoordinator,
+            networkAllowed = {
+                val metered = context.getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered ?: true
+                !metered || !downloadPreferences.wifiOnly()
+            },
+            // Ett omstartat jobb avbryter en pågående PDF-nedladdning (den fortsätter sedan), så bara när ingen pågår.
+            startTransfers = { restart -> downloadScheduler.start(restart = restart && offlineRepository.active.value == null) },
+            scope = scope,
+            log = { Log.i("DmzSearch", it) },
+        )
     }
 
     /** Inaktivitetsgränsen för lästid (ADR 0021). De instrumenterade testerna kortar den. */
@@ -171,8 +221,8 @@ class AppContainer(private val context: Context) {
             // Pågår ingen nedladdning kan jobbet ligga och vänta, till exempel efter
             // att nätet försvunnit: systemet väntar då allt längre mellan försöken.
             // När användaren öppnar appen startas jobbet om, så att kön börjar direkt.
-            if (offlineRepository.hasQueued()) {
-                downloadScheduler.start(restart = offlineRepository.active.value == null)
+            if (offlineRepository.hasQueued() || searchIndexDownloads.hasPending()) {
+                downloadScheduler.start(restart = offlineRepository.active.value == null && searchIndexDownloads.active.value == null)
             }
         }
     }
@@ -251,6 +301,7 @@ class AppContainer(private val context: Context) {
         scope.launch {
             try {
                 searchIndex.loadAtStartup()
+                searchIndexDownloads.restoreAfterStart()
             } catch (e: Exception) {
                 Log.w("DmzSearch", "Sökindexet gick inte att öppna", e)
             }
@@ -290,5 +341,6 @@ class AppContainer(private val context: Context) {
 
     private companion object {
         const val BUNDLED_INVENTORY = "archive_inventory.json"
+        const val MANIFEST_OVERRIDE_KEY = "searchIndexManifestUrl"
     }
 }

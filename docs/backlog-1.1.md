@@ -21,13 +21,7 @@ Idéer som dök upp under arbetet med releasekandidaterna men som inte hör hemm
 ## Sökning
 
 - **Besked när sökindexet är äldre än arkivindexet**, med en förklaring av hur ett nytt hämtas.
-- **Hämtning av sökindex från GitHub-release.** Kräver publikt repo. Specifikation:
-  - Indexet hämtas aldrig automatiskt och aldrig vid uppstart.
-  - Sök-fliken utan index visar ett kort: "Fulltextsökning kräver ett sökindex på cirka 90 MB." Knapp: "Ladda ned sökindex". Kortet förklarar att allt annat fungerar utan index.
-  - Nedladdningen respekterar "Ladda ned endast via wifi", kan återupptas (Range), går via samma överföringsmekanism som PDF (en överföring åt gången) och kontrolleras mot SHA-256 från release-metadata före import.
-  - Importen sker med befintlig import-logik. Användardata rörs aldrig.
-  - Finns ett nyare index visas en notis i Inställningar, aldrig en automatisk hämtning.
-  - Källan är GitHub-release, aldrig arkivservern. Inget token i appen.
+- **Notis om ett nyare sökindex.** Hämtningen från GitHub-releasen finns sedan 1.0.0-rc4 (`docs/reports/rc4.md`). Det som återstår ur specifikationen: en notis i Inställningar när releasen har ett nyare index än det importerade, aldrig en automatisk hämtning. Kräver att appen minns manifestet för det importerade indexet.
 - **Innehållsanalys och frågor på naturligt språk.** Planens avsnitt "Senare". Kräver ett eget beslut, bland annat om var en modell körs.
 
 ## Bokmärken, statistik och läsdata

@@ -332,58 +332,64 @@ Det som finns: Om-sidan, `NOTICE.md` och README säger att licensen inte omfatta
 
 ## Checklista för publiceringsdagen
 
-I den här ordningen. Stanna vid första avvikelse.
+Uppdaterad 2026-10-29 för 1.0.0-rc4, där sökindexet hämtas i appen från GitHub-releasen. I den här ordningen. Stanna vid första avvikelse.
 
-**Före: beslut**
+Redan gjort i oktober, enligt den tidigare listan: historiken är omskriven med noreply-adressen, skärmbilderna och granskningsfilerna är borta ur den, repot heter `Rognils/dmz-reader` och är privat, testerna hämtar inte från arkivet ([pre-1.0-del2.md](pre-1.0-del2.md), [pre-1.0-del3.md](pre-1.0-del3.md)).
 
-1. Bestäm punkt 1–11 ovan. Skriv ned vad som valdes.
-2. Kontrollera att veckans användning enligt `rc1.md` är klar och att inget nytt fel har dykt upp.
+**Före**
 
-**Historiken (hoppas över om ingenting ska skrivas om)**
+- rc4 är godkänd: alla åtta punkter i [rc4.md](rc4.md) är avbockade på telefonen.
+- Besluten om omslagen, sökindexet som publik fil och upphovsrätten (punkt 1, 10 och 11 ovan) är fattade.
 
-3. Säkerhetskopiera arbetskatalogen som spegelklon utanför den.
-4. Kör omskrivningen i en ny klon, enligt punkt 6.
-5. Kontrollera i klonen: bara noreply-adressen, inga spår av det borttagna, 20 taggar.
-6. Byt namn på det gamla privata repot till `dmz-reader-arkiv` och skapa ett nytt, privat `dmz-reader`.
-7. Ställ in `user.email` på datorn och e-postskyddet på GitHub.
+**a. Frysningskontroll mot `v1.0.0-rc4`**
 
-**Kontroller före push**
+1. `git diff v1.0.0-rc4 release/1.0.0` får bara visa versionen (versionCode 10000, versionName 1.0.0). Allt annat är en ändring efter frysningen och betyder stopp.
+2. `tools/prepush_check.sh` utan argument och `gitleaks git --log-opts="--all"`: rena.
+3. JVM- och Python-testerna och lint på `release/1.0.0`.
 
-8. `tools/prepush_check.sh` utan argument: alla grenar och taggar.
-9. `gitleaks git --log-opts="--all"`: inga läckor.
-10. Kontrollera att `git status` är rent och att `dist/` och `cache/` är ignorerade.
-11. Pusha `main`, `release/1.0.0` och taggarna till det privata repot. Jämför `git ls-remote` med lokalt.
+**b. Bygg 1.0.0 och gör repot publikt**
 
-**Sista ändringarna**
+4. Bygg `assembleRelease` från `release/1.0.0`. Kontrollera versionCode 10000, versionName 1.0.0 och certifikatets SHA-256 mot `5A:36:79:EC:…:F7:27`. Avvikelse betyder stopp.
+5. Kontrollera att APK:n inte innehåller någon databas och inget sökindex.
+6. Merga `release/1.0.0` till `main`, tagga `v1.0.0` och pusha.
+7. Läs README, NOTICE och LICENSE som en främling skulle se dem. Kontrollera att Issues är påslaget.
+8. Gör repot publikt: `gh repo edit Rognils/dmz-reader --visibility public --accept-visibility-change-consequences`.
 
-12. Stäng av de tre testerna som hämtar från arkivet (punkt 9), om du valde det. Kör sviten på telefonen en gång.
-13. Merga `release/1.0.0` till `main`.
+**c. Skapa `v1.0.0` som PRERELEASE**
 
-**Publikt repo**
+9. Skriv manifestet: `python3 tools/make_search_index_manifest.py dist/search-2026-10-06-006-p3.db v1.0.0`. Det vägrar ett omaskerat index.
+10. Skapa releasen `v1.0.0` som prerelease med tre filer: `dmz-reader-1.0.0-release.apk`, `search-2026-10-06-006-p3.db` och `search-index.json`. Release-texten är [docs/release-notes-1.0.0.md](../release-notes-1.0.0.md), med APK:ns och certifikatets SHA-256 ifyllda.
+11. Ladda ned de tre filerna utloggad och jämför SHA-256 med datorns.
 
-14. Läs igenom README, NOTICE och LICENSE på GitHub som en främling skulle se dem.
-15. Kontrollera att Issues är påslaget. Det är det i dag.
-16. Gör repot publikt: `gh repo edit Rognils/dmz-reader --visibility public --accept-visibility-change-consequences`.
-17. Kontrollera utloggad, i ett privat webbläsarfönster, att repot syns och att `https://github.com/Rognils/dmz-reader/issues` går att öppna.
+**d. Debug-bygget mot den riktiga prereleasen**
 
-**Bygget av 1.0.0**
+Manifestet under `latest` når inte en prerelease, så debug-bygget pekas på prereleasens versionsspecifika manifest:
 
-18. Kör JVM- och Python-testerna och lint på `main`.
-19. Bygg `assembleRelease`. Kontrollera versionCode 10000, versionName 1.0.0, och certifikatets SHA-256 mot `5A:36:79:EC:…:F7:27`. Avvikelse betyder stopp.
-20. Kontrollera att APK:n inte innehåller någon databas och inget sökindex.
-21. Exportera din data ur appen till `~/dmz-backup-före-1.0.0/`, installera med `adb install -r`, exportera igen och jämför.
-22. Tagga `v1.0.0` och pusha taggen.
+```bash
+adb shell am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity \
+    --es dmzSearchIndexManifest https://github.com/Rognils/dmz-reader/releases/download/v1.0.0/search-index.json
+```
 
-**Releaserna**
+12. I debug-bygget, utan sökindex: Sök visar kortet med storleken ur manifestet. Tryck **Ladda ned sökindex**.
+13. Mitt i hämtningen: slå på flygplansläget, vänta tills kortet säger att hämtningen avbröts, slå av det och tryck **Försök igen**. Hämtningen ska fortsätta där den slutade, inte börja om.
+14. Sökningen ska fungera efteråt. Inställningar → Sökindex ska visa 185 nummer och 11 293 sidor.
+15. Ta bort adressen igen: `adb shell "am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity --es dmzSearchIndexManifest ''"`.
 
-23. Skapa releasen `v1.0.0` med APK:n. Skriv SHA-256, storlek och certifikatets fingeravtryck i release-texten.
-24. Skapa releasen för sökindexet med `search-2026-10-06-006-p2.db` och texten från prereleasen. Markera den inte som prerelease. Ta bort prereleasen om den följde med.
-25. Ladda ned båda filerna utloggad och jämför SHA-256.
+**e. Gör `v1.0.0` till en vanlig release och latest**
 
-**Efterkontroll**
+16. `gh release edit v1.0.0 --prerelease=false --latest`.
+17. Ta bort prereleasen `search-index-2026-10-06-006-p3`, och dess tagg, nu när `v1.0.0` har filen.
+18. Kontrollera utloggad att `https://github.com/Rognils/dmz-reader/releases/latest/download/search-index.json` ger manifestet för `v1.0.0`.
 
-26. Installera den nedladdade APK:n på en telefon utan appen, om en sådan finns, eller kontrollera signaturen med `apksigner verify --print-certs`.
-27. Följ README:s anvisning från början: hämta sökindexet från Releases och importera det.
-28. Öppna Om-sidan i appen. Tryck på GitHub-länken och på länken till ärendena. Båda ska öppnas i webbläsaren och leda rätt.
-29. Kontrollera User-Agent-länken: öppna `https://github.com/Rognils/dmz-reader` utloggad. Det är adressen appen uppger för arkivet i varje förfrågan, och den ska nu leda till något Gustav kan läsa.
-30. Skriv till Gustav att appen är släppt, med länken.
+**f. Release-appen på din telefon**
+
+19. Exportera din data till `~/dmz-backup-före-1.0.0/`, installera 1.0.0 med `adb install -r`, exportera igen och jämför.
+20. Inställningar → Sökindex → **Ladda ned sökindex**: frågan ska visa releasen `v1.0.0` och cirka 91 MB. Det visar att knappen hittar manifestet via latest. Tryck **Avbryt**: p3 finns redan och behöver inte hämtas om.
+
+**g. Anonym kontroll av sidor och länkar**
+
+21. I ett privat webbläsarfönster: repots förstasida med skärmdumparna, README:s länkar, "Ladda ned senaste versionen", Issues och releasen.
+22. Om-sidan i appen: GitHub-länken och länken till ärendena ska öppnas och leda rätt.
+23. `https://github.com/Rognils/dmz-reader`, adressen som appen uppger för arkivet i varje förfrågan, ska leda till något Gustav kan läsa.
+
+**Först därefter räknas publiceringen som klar.** Skriv sedan till Gustav, med länken.

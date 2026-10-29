@@ -176,7 +176,7 @@ fun ArchiveIndexSection(viewModel: ArchiveIndexViewModel) {
         ) { Text("Återgå till inbyggt index", color = DmzColors.TextPrimary) }
         Spacer(Modifier.height(6.dp))
         Text(
-            "Arkivindexet är listan över nummer i arkivet. Ett nyare index görs på datorn och importeras här, " +
+            "Arkivindexet innehåller listan över nummer i arkivet. Ett nyare arkivindex kan importeras här " +
                 "utan att appen behöver uppdateras.",
             style = MaterialTheme.typography.bodyMedium,
             color = DmzColors.TextSecondary,

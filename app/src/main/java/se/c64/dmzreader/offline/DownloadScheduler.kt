@@ -38,6 +38,8 @@ class UidtDownloadScheduler(
     private val preferences: DownloadPreferences,
     private val offline: OfflineRepository,
     private val scope: CoroutineScope,
+    /** Det som återstår av en beställd hämtning av sökindexet. */
+    private val indexBytes: () -> Long = { 0L },
 ) : DownloadScheduler {
     override val runsInBackground = true
 
@@ -48,7 +50,7 @@ class UidtDownloadScheduler(
             // om det hade avbrutit den pågående nedladdningen i onödan.
             if (!restart && scheduler.getPendingJob(JOB_ID) != null) return@launch
             val wifiOnly = preferences.wifiOnly()
-            val bytes = offline.estimatedQueueBytes()
+            val bytes = offline.estimatedQueueBytes() + indexBytes()
             val job = JobInfo.Builder(JOB_ID, ComponentName(context, DownloadJobService::class.java))
                 .setUserInitiated(true)
                 .setRequiredNetworkType(if (wifiOnly) JobInfo.NETWORK_TYPE_UNMETERED else JobInfo.NETWORK_TYPE_ANY)
@@ -80,11 +82,16 @@ class UidtDownloadScheduler(
 class InAppDownloadScheduler(
     private val offline: OfflineRepository,
     private val scope: CoroutineScope,
+    /** Körs när kön är avbetad: en beställd hämtning av sökindexet. */
+    private val afterQueue: suspend () -> Unit = {},
 ) : DownloadScheduler {
     override val runsInBackground = false
 
     override fun start(restart: Boolean) {
-        // runQueue gör ingenting om kön redan betas av.
-        scope.launch { offline.runQueue() }
+        // runQueue och afterQueue gör ingenting om de redan körs.
+        scope.launch {
+            offline.runQueue()
+            afterQueue()
+        }
     }
 }

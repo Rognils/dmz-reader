@@ -101,5 +101,15 @@ class AboutDeviceTest {
             val links = text.getLinkAnnotations(0, text.length).map { (it.item as androidx.compose.ui.text.LinkAnnotation.Url).url }
             assertEquals(label, listOf(url), links)
         }
+        // Två länkar står inne i löpande text: till ärendena och till källkoden.
+        for ((fragment, url) in listOf(
+            "kontakta projektet via GitHub" to "https://github.com/Rognils/dmz-reader/issues",
+            "Källkoden finns på GitHub" to "https://github.com/Rognils/dmz-reader",
+        )) {
+            val node = rule.onNodeWithText(fragment, substring = true).performScrollTo().fetchSemanticsNode()
+            val text = node.config[SemanticsProperties.Text].first()
+            val links = text.getLinkAnnotations(0, text.length).map { (it.item as androidx.compose.ui.text.LinkAnnotation.Url).url }
+            assertEquals(fragment, listOf(url), links)
+        }
     }
 }

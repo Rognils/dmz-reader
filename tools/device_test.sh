@@ -20,8 +20,9 @@
 # påhittade material. Skriptet läser ingenting ur datorns cache/.
 #
 # Skriptet kontrollerar det efter körningen, på två sätt som inte beror av varandra:
-#   - i appens logg räknas förfrågningar till dmzarkivet.se och försök som testernas
-#     spärr har stoppat. Båda ska vara 0. Raderna sparas i KATALOG/arkivkontroll.txt.
+#   - i appens logg räknas förfrågningar till dmzarkivet.se och till GitHub (github.com och
+#     githubusercontent.com, där sökindexet hämtas), och försök som testernas spärr har stoppat.
+#     Alla ska vara 0. Raderna sparas i KATALOG/arkivkontroll.txt.
 #   - i systemets nätstatistik (dumpsys netstats) läses hur många byte testappen har
 #     tagit emot över wifi och mobilnät under körningen. Trafiken till den lokala
 #     servern går inte över något nät och räknas inte. Mer än 1 MB räknas som fel:
@@ -75,7 +76,9 @@ fingerprint() {
             echo "== paketet (version, installation, signatur)"
             adb shell dumpsys package "$PACKAGE" | grep -E "versionCode=|versionName=|firstInstallTime=|lastUpdateTime=|signatures=|dataDir=" | sed 's/^ *//' | sort -u
             echo "== senaste gången appen syntes eller stoppades (usagestats)"
-            adb shell dumpsys usagestats | grep -E "package=$PACKAGE " | grep -E "type=(ACTIVITY_RESUMED|ACTIVITY_PAUSED|ACTIVITY_STOPPED)" | tail -1 | sed 's/^ *//' | cut -d" " -f1-4
+            # Systemet sparar händelserna en begränsad tid. Finns ingen sägs det, i stället för att skriptet avbryts.
+            adb shell dumpsys usagestats | grep -E "package=$PACKAGE " | grep -E "type=(ACTIVITY_RESUMED|ACTIVITY_PAUSED|ACTIVITY_STOPPED)" | tail -1 | sed 's/^ *//' | cut -d" " -f1-4 \
+                | grep . || echo "ingen händelse sparad"
             echo "== processen (ska inte vara igång)"
             adb shell pidof "$PACKAGE" || echo "ingen process"
         } > "$OUT/$name.txt"
@@ -136,8 +139,8 @@ status=0
 # Sparar testkörningens rader om arkivet ur loggen. Anropas innan loggen töms och när allt är klart.
 : > "$OUT/arkivkontroll.txt"
 collect_archive_log() {
-    adb logcat -d -s DmzGuard DmzNet DmzCovers DmzHq 2>/dev/null \
-        | grep -E "DmzGuard|dmzarkivet\.se|FTP ansluten" >> "$OUT/arkivkontroll.txt" || true
+    adb logcat -d -s DmzGuard DmzNet DmzCovers DmzHq DmzSearchNet 2>/dev/null \
+        | grep -E "DmzGuard|dmzarkivet\.se|FTP ansluten|github" >> "$OUT/arkivkontroll.txt" || true
 }
 
 # Antal byte testappen har tagit emot över wifi och mobilnät, enligt systemets statistik per app.
@@ -156,14 +159,15 @@ MAX_NETWORK_BYTES=1000000
 
 # Inga förfrågningar till arkivet, inga försök som spärren har fått stoppa, och ingen nämnvärd trafik över nätet.
 check_archive_untouched() {
-    local requests blocked received
+    local requests github blocked received
     requests=$(grep -cE "(GET|HEAD|POST) dmzarkivet\.se|FTP ansluten till dmzarkivet" "$OUT/arkivkontroll.txt" || true)
+    github=$(grep -cE "(GET|HEAD|POST) [a-z0-9.-]*(github\.com|githubusercontent\.com)" "$OUT/arkivkontroll.txt" || true)
     blocked=$(grep -c "SPÄRRAD" "$OUT/arkivkontroll.txt" || true)
     received=$(( $(network_received) - RECEIVED_BEFORE ))
-    echo "ARKIVET: $requests förfrågningar till dmzarkivet.se, $blocked spärrade försök. Mottaget över wifi och mobilnät: $received byte."
+    echo "ARKIVET: $requests förfrågningar till dmzarkivet.se, $github till GitHub, $blocked spärrade försök. Mottaget över wifi och mobilnät: $received byte."
     echo "netstats: $received byte mottaget över wifi och mobilnät under körningen" >> "$OUT/arkivkontroll.txt"
-    if [ "$requests" != "0" ] || [ "$blocked" != "0" ]; then
-        echo "TESTERNA FÖRSÖKTE NÅ ARKIVSERVERN. Se $OUT/arkivkontroll.txt" >&2
+    if [ "$requests" != "0" ] || [ "$github" != "0" ] || [ "$blocked" != "0" ]; then
+        echo "TESTERNA FÖRSÖKTE NÅ ARKIVSERVERN ELLER GITHUB. Se $OUT/arkivkontroll.txt" >&2
         status=1
     fi
     if [ "$received" -gt "$MAX_NETWORK_BYTES" ]; then

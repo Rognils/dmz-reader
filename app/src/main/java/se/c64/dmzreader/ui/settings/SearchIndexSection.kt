@@ -33,6 +33,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import se.c64.dmzreader.data.search.CopyProgress
+import se.c64.dmzreader.data.search.IndexDownloadState
+import se.c64.dmzreader.data.search.SearchIndexDownloads
+import se.c64.dmzreader.data.search.inProgress
+import se.c64.dmzreader.ui.search.SearchIndexDownloadContent
+import androidx.compose.runtime.LaunchedEffect
 import se.c64.dmzreader.data.search.SearchIndexException
 import se.c64.dmzreader.data.search.SearchIndexInfo
 import se.c64.dmzreader.data.search.SearchIndexManager
@@ -138,15 +143,42 @@ class SearchIndexViewModel(
     fun dismissMessage() = local.update { it.copy(message = null) }
 }
 
-/** Inställningar → Sökindex: import, uppgifter om det importerade indexet och borttagning (planens D2 och D5). */
+/** Filtyperna som filväljaren erbjuder för ett sökindex. */
+val SEARCH_INDEX_MIME_TYPES = arrayOf("application/octet-stream", "application/vnd.sqlite3", "application/x-sqlite3", "*/*")
+
 @Composable
-fun SearchIndexSection(viewModel: SearchIndexViewModel) {
+fun SearchIndexMessageDialog(message: String, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Sökindex") },
+        text = { Text(message, modifier = Modifier.testTag("search-index-message")) },
+        confirmButton = { TextButton(onClick = onDismiss) { Text("OK") } },
+    )
+}
+
+/**
+ * Inställningar → Sökindex: hämtning från GitHub, manuell import, uppgifter om det importerade
+ * indexet och borttagning (planens D2 och D5).
+ */
+@Composable
+fun SearchIndexSection(
+    viewModel: SearchIndexViewModel,
+    downloads: SearchIndexDownloads,
+    /** Manifestadressen i debug-bygget, om den är ändrad. Visas bara där. */
+    debugManifestUrl: String? = null,
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val download by downloads.state.collectAsStateWithLifecycle()
     var confirmRemove by rememberSaveable { mutableStateOf(false) }
+    // Knappen trycktes medan ett index finns: fråga när manifestet är hämtat.
+    var askBeforeReplacing by rememberSaveable { mutableStateOf(false) }
+    var showDownload by rememberSaveable { mutableStateOf(false) }
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) viewModel.import(uri)
     }
     val info = state.info
+    val downloading = download.inProgress || download is IndexDownloadState.Interrupted
+    LaunchedEffect(downloading) { if (downloading) showDownload = true }
 
     MonoLabel("Sökindex")
     Spacer(Modifier.height(8.dp))
@@ -190,10 +222,36 @@ fun SearchIndexSection(viewModel: SearchIndexViewModel) {
                 modifier = Modifier.testTag("search-index-progress"),
             )
         }
+        if (debugManifestUrl != null) DataRow("Manifest (debug)", debugManifestUrl)
+        if (showDownload && download !is IndexDownloadState.Idle) {
+            Spacer(Modifier.height(10.dp))
+            SearchIndexDownloadContent(
+                state = download,
+                onDownload = downloads::request,
+                onRetryManifest = { downloads.checkManifest(force = true) },
+                onCancel = downloads::cancel,
+                onImportManually = null,
+            )
+        }
         Spacer(Modifier.height(10.dp))
         OutlinedButton(
-            onClick = { picker.launch(arrayOf("application/octet-stream", "application/vnd.sqlite3", "application/x-sqlite3", "*/*")) },
-            enabled = !state.working,
+            onClick = {
+                showDownload = true
+                if (info == null) {
+                    downloads.request()
+                } else {
+                    // Ett index finns redan: visa vad som finns på GitHub och fråga först.
+                    askBeforeReplacing = true
+                    downloads.checkManifest(force = true)
+                }
+            },
+            enabled = !state.working && !downloading,
+            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("settings-index-download"),
+        ) { Text("Ladda ned sökindex", color = DmzColors.TextPrimary) }
+        Spacer(Modifier.height(8.dp))
+        OutlinedButton(
+            onClick = { picker.launch(SEARCH_INDEX_MIME_TYPES) },
+            enabled = !state.working && !downloading,
             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
         ) { Text(if (info == null) "Importera sökindex" else "Importera nytt sökindex", color = DmzColors.TextPrimary) }
         Spacer(Modifier.height(8.dp))
@@ -204,20 +262,39 @@ fun SearchIndexSection(viewModel: SearchIndexViewModel) {
         ) { Text("Ta bort sökindex", color = DmzColors.TextPrimary) }
         Spacer(Modifier.height(6.dp))
         Text(
-            "Sökindexet gör att du kan söka i tidningarnas text. Det byggs på datorn (search.db, cirka 150 MB) " +
-                "och importeras här. Favoriter, bokmärken och läsdata påverkas inte.",
+            "Sökindexet gör det möjligt att söka i tidningarnas text. Det importeras separat och påverkar inte " +
+                "favoriter, bokmärken eller läsdata.",
             style = MaterialTheme.typography.bodyMedium,
             color = DmzColors.TextSecondary,
         )
     }
 
-    state.message?.let { message ->
+    state.message?.let { message -> SearchIndexMessageDialog(message, viewModel::dismissMessage) }
+
+    val available = download as? IndexDownloadState.Available
+    if (askBeforeReplacing && available != null && info != null) {
         AlertDialog(
-            onDismissRequest = viewModel::dismissMessage,
-            title = { Text("Sökindex") },
-            text = { Text(message, modifier = Modifier.testTag("search-index-message")) },
-            confirmButton = { TextButton(onClick = viewModel::dismissMessage) { Text("OK") } },
+            onDismissRequest = { askBeforeReplacing = false },
+            title = { Text("Ladda ned sökindex?") },
+            text = {
+                Text(
+                    "Sökindexet i GitHub-releasen ${available.manifest.releaseTag} är cirka ${available.manifest.sizeText} " +
+                        "(arkivversion ${available.manifest.inventoryDatasetVersion}). Det ersätter det nuvarande sökindexet " +
+                        "först när hämtningen och kontrollen har lyckats.",
+                    modifier = Modifier.testTag("index-replace-question"),
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    askBeforeReplacing = false
+                    downloads.request()
+                }) { Text("Ladda ned") }
+            },
+            dismissButton = { TextButton(onClick = { askBeforeReplacing = false }) { Text("Avbryt") } },
         )
+    } else if (askBeforeReplacing && download !is IndexDownloadState.Checking && download !is IndexDownloadState.Available) {
+        // Manifestet gick inte att hämta eller passar inte. Beskedet står i panelen.
+        LaunchedEffect(download) { askBeforeReplacing = false }
     }
 
     if (confirmRemove) {

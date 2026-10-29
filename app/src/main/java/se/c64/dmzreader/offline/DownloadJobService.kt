@@ -22,11 +22,14 @@ import se.c64.dmzreader.DmzReaderApp
 import se.c64.dmzreader.MainActivity
 import se.c64.dmzreader.data.offline.ActiveDownload
 import se.c64.dmzreader.data.offline.QueueOutcome
+import se.c64.dmzreader.data.search.IndexRunOutcome
+import se.c64.dmzreader.data.search.SEARCH_INDEX_DOWNLOAD_ID
+import kotlinx.coroutines.flow.combine
 import se.c64.dmzreader.domain.downloadProgressText
 
 /**
  * Det användarinitierade dataöverföringsjobbet som betar av nedladdningskön,
- * en fil i taget (planens FAS 5).
+ * en fil i taget (planens FAS 5), och därefter en beställd hämtning av sökindexet.
  *
  * Tjänsten schemaläggs bara på Android 14 och senare (UidtDownloadScheduler).
  */
@@ -36,7 +39,9 @@ class DownloadJobService : JobService() {
 
     override fun onStartJob(params: JobParameters): Boolean {
         if (Build.VERSION.SDK_INT < 34) return false
-        val offline = (application as DmzReaderApp).container.offlineRepository
+        val container = (application as DmzReaderApp).container
+        val offline = container.offlineRepository
+        val index = container.searchIndexDownloads
         createDownloadChannel(this)
         // Ett UIDT-jobb måste visa en notis så fort det startar.
         setNotification(
@@ -48,7 +53,7 @@ class DownloadJobService : JobService() {
         Log.i(LOG_TAG, "UIDT-jobbet startar")
         running = scope.launch {
             val notifier = launch {
-                offline.active.collect { active ->
+                combine(offline.active, index.active) { pdf, search -> pdf ?: search }.collect { active ->
                     if (active != null) {
                         setNotification(
                             params,
@@ -63,14 +68,22 @@ class DownloadJobService : JobService() {
                 }
             }
             var outcome: QueueOutcome
+            var indexOutcome: IndexRunOutcome
             do {
                 outcome = offline.runQueue()
+                // Sökindexet hämtas när PDF-kön är tom, genom samma överföringskö.
+                indexOutcome = if (outcome == QueueOutcome.NETWORK_LOST) IndexRunOutcome.NOTHING else index.runPending()
                 // Ett nummer kan ha ställts i kön precis när den blev tom.
-            } while (outcome == QueueOutcome.EMPTY && offline.queuedCount() > 0)
+                // Och sökindexet kan ha beställts precis när jobbet var på väg att sluta.
+            } while (outcome == QueueOutcome.EMPTY && offline.queuedCount() > 0 ||
+                indexOutcome == IndexRunOutcome.NOTHING && index.hasPending()
+            )
             notifier.cancel()
-            Log.i(LOG_TAG, "UIDT-jobbet klart: $outcome")
+            Log.i(LOG_TAG, "UIDT-jobbet klart: $outcome, sökindex: $indexOutcome")
             // Försvann nätet utan att systemet stoppade jobbet ska det köras igen.
-            jobFinished(params, outcome == QueueOutcome.NETWORK_LOST)
+            val again = outcome == QueueOutcome.NETWORK_LOST || index.hasPending() &&
+                (indexOutcome == IndexRunOutcome.NETWORK_LOST || indexOutcome == IndexRunOutcome.WAITING_FOR_WIFI)
+            jobFinished(params, again)
         }
         return true
     }
@@ -153,7 +166,11 @@ class DownloadCancelReceiver : BroadcastReceiver() {
             try {
                 val issueId = intent.getStringExtra(EXTRA_ISSUE_ID) ?: container.offlineRepository.active.value?.issueId
                 Log.i(LOG_TAG, "Avbryt från notisen: $issueId")
-                if (issueId != null) container.offlineRepository.cancel(issueId)
+                when (issueId) {
+                    SEARCH_INDEX_DOWNLOAD_ID -> container.searchIndexDownloads.cancel()
+                    null -> container.searchIndexDownloads.cancel()
+                    else -> container.offlineRepository.cancel(issueId)
+                }
             } finally {
                 pending.finish()
             }

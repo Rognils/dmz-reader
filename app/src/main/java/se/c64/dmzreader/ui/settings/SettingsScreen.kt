@@ -296,10 +296,12 @@ fun SettingsScreen(
     viewModel: SettingsViewModel,
     archiveIndexViewModel: ArchiveIndexViewModel,
     searchIndexViewModel: SearchIndexViewModel,
+    searchIndexDownloads: se.c64.dmzreader.data.search.SearchIndexDownloads,
     onBack: () -> Unit,
     onOpenDiagnostics: () -> Unit,
     onOpenAbout: () -> Unit,
     modifier: Modifier = Modifier,
+    debugManifestUrl: String? = null,
 ) {
     val storage by viewModel.state.collectAsStateWithLifecycle()
     val backup by viewModel.backup.collectAsStateWithLifecycle()
@@ -430,7 +432,7 @@ fun SettingsScreen(
             ArchiveIndexSection(archiveIndexViewModel)
 
             Spacer(Modifier.height(20.dp))
-            SearchIndexSection(searchIndexViewModel)
+            SearchIndexSection(searchIndexViewModel, searchIndexDownloads, debugManifestUrl)
 
             Spacer(Modifier.height(20.dp))
             Panel(

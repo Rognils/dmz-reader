@@ -20,6 +20,13 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import se.c64.dmzreader.data.search.RankedRow
+import se.c64.dmzreader.data.search.SearchIndexDownloads
+import se.c64.dmzreader.ui.settings.SearchIndexViewModel
+import se.c64.dmzreader.ui.settings.SearchIndexMessageDialog
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import se.c64.dmzreader.data.search.copyProgressText
+import se.c64.dmzreader.ui.settings.SEARCH_INDEX_MIME_TYPES
 import se.c64.dmzreader.data.search.SearchIndexManager
 import se.c64.dmzreader.data.settings.ActiveInventoryStore
 import se.c64.dmzreader.domain.FullTextQuery
@@ -262,10 +269,16 @@ fun SearchScreen(
     onOpenIssue: (issueId: String) -> Unit,
     onReadPage: (issueId: String, pageNumber: Int) -> Unit,
     onReadHit: (issueId: String, pageNumber: Int, query: String) -> Unit,
-    onOpenSettings: () -> Unit,
+    indexDownloads: SearchIndexDownloads,
+    importViewModel: SearchIndexViewModel,
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val downloadState by indexDownloads.state.collectAsStateWithLifecycle()
+    val importState by importViewModel.state.collectAsStateWithLifecycle()
+    val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) importViewModel.import(uri)
+    }
     val focus = LocalFocusManager.current
     var choosingYears by rememberSaveable { mutableStateOf(false) }
     val fullText = state.fullText
@@ -360,7 +373,20 @@ fun SearchScreen(
                         )
                     }
                 }
-                item(key = "import-hint") { ImportIndexHint(onOpenSettings) }
+                item(key = "index-card") {
+                    // Manifestet hämtas först när kortet visas, aldrig när appen startar.
+                    LaunchedEffect(Unit) { indexDownloads.checkManifest() }
+                    SearchIndexCard(
+                        // Ett tidigare importerat index kan ha tagits bort. Då gäller kortet igen.
+                        state = downloadState.takeIf { it !is se.c64.dmzreader.data.search.IndexDownloadState.Done }
+                            ?: se.c64.dmzreader.data.search.IndexDownloadState.Idle,
+                        manualImport = importState.progress?.let { if (importState.checking) "Kontrollerar filen…" else "Kopierar ${copyProgressText(it)}" },
+                        onDownload = indexDownloads::request,
+                        onRetryManifest = { indexDownloads.checkManifest(force = true) },
+                        onCancel = indexDownloads::cancel,
+                        onImportManually = { picker.launch(SEARCH_INDEX_MIME_TYPES) },
+                    )
+                }
             }
 
             state.query == null -> Unit
@@ -432,6 +458,8 @@ fun SearchScreen(
         }
     }
 
+    importState.message?.let { message -> SearchIndexMessageDialog(message, importViewModel::dismissMessage) }
+
     val years = state.years
     if (choosingYears && years != null) {
         YearRangeDialog(
@@ -491,27 +519,6 @@ private fun HitGroup(
                     style = MaterialTheme.typography.labelLarge,
                 )
             }
-        }
-    }
-}
-
-/** Visas när inget sökindex är importerat. */
-@Composable
-private fun ImportIndexHint(onOpenSettings: () -> Unit) {
-    Panel(modifier = Modifier.testTag("import-index-hint")) {
-        Text(
-            "Importera sökindex för att söka i tidningarnas text",
-            style = MaterialTheme.typography.titleMedium,
-            color = DmzColors.TextPrimary,
-        )
-        Spacer(Modifier.height(6.dp))
-        Text(
-            "Sökindexet byggs på datorn och importeras under Inställningar → Sökindex.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = DmzColors.TextSecondary,
-        )
-        TextButton(onClick = onOpenSettings, modifier = Modifier.heightIn(min = 48.dp)) {
-            Text("Öppna inställningarna", color = DmzColors.Accent, style = MaterialTheme.typography.labelLarge)
         }
     }
 }

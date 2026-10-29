@@ -158,9 +158,9 @@ class SearchIndexManager(
             part.delete()
             try {
                 // Under bytet finns både den gamla och den nya filen.
-                if (totalBytes != null && freeBytes() < totalBytes + FREE_MARGIN_BYTES) {
+                if (totalBytes != null && freeBytes() < totalBytes + IMPORT_MARGIN_BYTES) {
                     throw SearchIndexException(
-                        "Det finns inte plats för sökindexet. Det behövs ${(totalBytes + FREE_MARGIN_BYTES) / 1_000_000} MB ledigt.",
+                        "Det finns inte plats för sökindexet. Det behövs ${(totalBytes + IMPORT_MARGIN_BYTES) / 1_000_000} MB ledigt.",
                     )
                 }
                 copy(open, part, totalBytes, onProgress)
@@ -308,6 +308,7 @@ class SearchIndexManager(
         const val SUPPORTED_SCHEMA_VERSION = "1"
         private val REQUIRED_TABLES = listOf("meta", "issues", "pages", "pages_fts")
         private const val PROGRESS_STEP_BYTES = 1_000_000L
-        private const val FREE_MARGIN_BYTES = 50_000_000L
+        /** Marginalen som importen kräver utöver filens storlek. */
+        const val IMPORT_MARGIN_BYTES = 50_000_000L
     }
 }
