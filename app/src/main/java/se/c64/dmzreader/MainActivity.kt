@@ -18,6 +18,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge(statusBarStyle = bars, navigationBarStyle = bars)
         super.onCreate(savedInstanceState)
         val container = (application as DmzReaderApp).container
+        // Debug-bygget: hämta sökindexets manifest från en annan adress, till exempel en prerelease.
+        if (BuildConfig.DEBUG && intent?.hasExtra(EXTRA_MANIFEST) == true) {
+            container.searchIndexManifestOverride = intent.getStringExtra(EXTRA_MANIFEST)
+        }
         setContent {
             DmzReaderTheme {
                 // Omslagen behöver veta vilka miniatyrer som finns i den här appversionen.
@@ -32,5 +36,9 @@ class MainActivity : ComponentActivity() {
         super.onStart()
         // Nummer som står kvar i nedladdningskön, till exempel efter att appen stoppats.
         (application as DmzReaderApp).container.resumeDownloads()
+    }
+
+    private companion object {
+        const val EXTRA_MANIFEST = "dmzSearchIndexManifest"
     }
 }

@@ -297,13 +297,28 @@ fun DmzReaderRoot(container: AppContainer) {
                         }
                     },
                 )
+                // Samma import som under Inställningar, för knappen "Importera manuellt" i Sök.
+                val searchIndexViewModel: SearchIndexViewModel = viewModel(
+                    factory = viewModelFactory {
+                        initializer {
+                            SearchIndexViewModel(
+                                container.searchIndex,
+                                container.activeInventory,
+                                container::openDocument,
+                                container::documentSize,
+                                container.applicationScope,
+                            )
+                        }
+                    },
+                )
                 SearchScreen(
                     viewModel = viewModel,
                     imageLoader = container.imageLoader,
                     onOpenIssue = { navController.navigate(Routes.issue(it)) },
                     onReadPage = { id, pageNumber -> navController.navigate(Routes.reader(id, pageNumber)) },
                     onReadHit = { id, pageNumber, query -> navController.navigate(Routes.reader(id, pageNumber, query)) },
-                    onOpenSettings = { navController.navigate(Routes.SETTINGS) },
+                    indexDownloads = container.searchIndexDownloads,
+                    importViewModel = searchIndexViewModel,
                 )
             }
             composable(Routes.FAVORITES) {
@@ -387,6 +402,8 @@ fun DmzReaderRoot(container: AppContainer) {
                     viewModel = viewModel,
                     archiveIndexViewModel = archiveIndexViewModel,
                     searchIndexViewModel = searchIndexViewModel,
+                    searchIndexDownloads = container.searchIndexDownloads,
+                    debugManifestUrl = container.searchIndexManifestOverride,
                     onBack = { navController.popBackStack() },
                     onOpenDiagnostics = { navController.navigate(Routes.DIAGNOSTICS) },
                     onOpenAbout = { navController.navigate(Routes.ABOUT) },

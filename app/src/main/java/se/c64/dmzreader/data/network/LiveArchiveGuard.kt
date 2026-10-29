@@ -48,6 +48,25 @@ object LiveArchiveGuard {
     fun isArchive(host: String): Boolean = host.equals(ARCHIVE_HOST, ignoreCase = true) ||
         host.endsWith(".$ARCHIVE_HOST", ignoreCase = true)
 
+    /** GitHub och GitHubs filserver, där sökindexet hämtas. Testerna använder en lokal server i stället. */
+    fun isGitHub(host: String): Boolean = GITHUB_HOSTS.any { host.equals(it, ignoreCase = true) || host.endsWith(".$it", ignoreCase = true) }
+
+    private val GITHUB_HOSTS = listOf("github.com", "githubusercontent.com")
+
+    /**
+     * Kastar om [host] är GitHub och spärren är på. Automatiska tester ska inte heller nå GitHub:
+     * hämtningen av sökindexet prövas mot en lokal server.
+     */
+    @Throws(IOException::class)
+    fun checkGitHub(host: String, what: String) {
+        if (!blocked || !isGitHub(host)) return
+        violations.incrementAndGet()
+        val message = "SPÄRRAD: ett test försökte nå GitHub ($what). Automatiska tester hämtar sökindexet från en lokal server."
+        runCatching { Log.e(LOG_TAG, message) }
+        System.getProperty(LOG_PROPERTY)?.let { path -> runCatching { File(path).appendText("$what\n") } }
+        throw IOException(message)
+    }
+
     /** Kastar om [host] är arkivet och spärren är på. Anropas före varje anslutning. */
     @Throws(IOException::class)
     fun check(host: String, what: String) {
