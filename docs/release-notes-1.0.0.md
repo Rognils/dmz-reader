@@ -3,9 +3,12 @@ UTKAST till release-texten för v1.0.0. Ingen release är skapad.
 
 Före publicering:
   1. Fyll i de två SHA-256-värdena som är märkta FYLLS I.
-  2. Releasen v1.0.0 ska innehålla två filer:
+  2. Releasen v1.0.0 ska innehålla tre filer:
        dmz-reader-1.0.0-release.apk
        search-2026-10-06-006-p3.db
+       search-index.json   (python3 tools/make_search_index_manifest.py dist/search-2026-10-06-006-p3.db v1.0.0)
+     Den skapas först som prerelease och görs till vanlig release och latest efter
+     kontrollen med debug-bygget (publiceringsbeslut.md, punkt c–e).
   3. Ta bort prereleasen search-index-2026-10-06-006-p3 när v1.0.0 finns.
   4. Ta bort den här kommentaren.
 -->
@@ -39,7 +42,9 @@ DMZ Reader fungerar utan sökindex. Indexet behövs bara för fulltextsökning i
 |---|---|---|
 | `search-2026-10-06-006-p3.db` | 90,9 MB (90 943 488 byte) | `11033d29553b59083dea94fde90c55bcf7a0cb23ef5452a4083f923903682dfc` |
 
-Hämta filen till telefonen, öppna **Inställningar** i appen och välj **Importera sökindex**. Efter importen kan du ta bort den hämtade filen.
+Enklast är att trycka **Ladda ned sökindex** i appens Sök-flik eller under **Inställningar → Sökindex**. Appen hämtar filen från den här releasen, kontrollerar storlek och SHA-256 mot `search-index.json` och importerar den. Hämtningen följer inställningen **Ladda ned endast via wifi** och kan återupptas om den bryts.
+
+Det går också att hämta filen till telefonen och välja **Importera sökindex** under **Inställningar**. Efter importen kan du ta bort den hämtade filen.
 
 Sökindexet tillämpar automatisk maskering av igenkända telefon- och faxnummer, e-postadresser, post- och bankgironummer och personnummerliknande mönster. OCR-skador kan innebära att en del uppgifter inte känns igen. I sökutdrag kan `•••` markera en maskerad uppgift. Tidningarna i läsaren är oförändrade.
 

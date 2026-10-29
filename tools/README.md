@@ -402,6 +402,27 @@ Om sökindexet byggdes av ett annat arkivindex än det som är aktivt i appen fu
 
 "Ta bort sökindex" under samma rubrik tar bort appens kopia. Sökningen gäller då år, nummer, publikation och bokmärken, som före importen.
 
+### Publicera sökindexet för hämtning i appen (`make_search_index_manifest.py`)
+
+Sedan 1.0.0-rc4 kan appen hämta sökindexet själv, från GitHub-releasen (aldrig från arkivservern). Den läser manifestet `search-index.json` under `https://github.com/Rognils/dmz-reader/releases/latest/download/`, och hämtar sedan filen från den versionsspecifika adressen `…/releases/download/<releaseTag>/<fileName>`.
+
+```bash
+python3 tools/make_search_index_manifest.py dist/search-2026-10-06-006-p3.db v1.0.0
+# skriver dist/search-index.json: releaseTag, fileName, size, sha256, versionerna ur meta och minAppVersionCode
+```
+
+Ladda upp både `.db`-filen och `search-index.json` till releasen med taggen i manifestet. Skriptet vägrar ett index utan `privacyFilterVersion` i meta, och filen `search.db`: ett omaskerat index publiceras aldrig. `--min-app-version-code` anger lägsta versionCode som får hämta indexet (standard 9904, alltså 1.0.0-rc4).
+
+Appen kontrollerar storlek och SHA-256 mot manifestet före importen, och importerar sedan med samma kontroller som ovan. Ett manifest med okänd `manifestVersion`, en `searchSchemaVersion` som appen inte stöder eller för hög `minAppVersionCode` ger ett besked, och ingenting hämtas.
+
+Debug-bygget kan pekas på en annan manifestadress, till exempel en prerelease:
+
+```bash
+adb shell am start -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity \
+    --es dmzSearchIndexManifest https://github.com/Rognils/dmz-reader/releases/download/v1.0.0/search-index.json
+# tillbaka till latest: samma kommando med --es dmzSearchIndexManifest ""
+```
+
 ### Testindex för appens tester (`build_search_testdb.py`)
 
 `app/src/debug/assets/search_test.db` är ett litet index i samma format, med ett tiotal påhittade sidor. Det används av appens JVM-tester och av det instrumenterade testet, och byggs om med `python3 tools/build_search_testdb.py` när formatet ändras.

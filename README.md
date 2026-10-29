@@ -61,11 +61,13 @@ Vill du kontrollera filen kan du jämföra APK:ns SHA-256 med den som står i re
 
 DMZ Reader fungerar utan sökindex. Indexet på cirka 90 MB behövs bara för fulltextsökning i tidningarnas text. Sökning på titel, år och nummer fungerar direkt.
 
+Tryck **Ladda ned sökindex** i Sök-fliken eller under **Inställningar → Sökindex**. Appen hämtar indexet från den här sidans senaste release, kontrollerar det och importerar det. Hämtningen följer inställningen **Ladda ned endast via wifi**, och en avbruten hämtning fortsätter där den slutade.
+
+Vill du hellre göra det för hand:
+
 1. Hämta `search-….db` under **Releases** till telefonen.
 2. Öppna **Inställningar** i appen och välj **Importera sökindex**. Finns det redan ett index heter knappen **Importera nytt sökindex**.
-3. Välj filen. Appen kontrollerar den och säger till när sökningen är klar att använda.
-
-Efter importen kan du ta bort den hämtade filen.
+3. Välj filen. Appen kontrollerar den och säger till när sökningen är klar att använda. Efter importen kan du ta bort den hämtade filen.
 
 Sökindexet tillämpar automatisk maskering av igenkända telefon- och faxnummer, e-postadresser, post- och bankgironummer och personnummerliknande mönster. OCR-skador kan innebära att en del uppgifter inte känns igen. I sökutdrag kan `•••` markera en maskerad uppgift. Tidningarna i läsaren är oförändrade.
 
