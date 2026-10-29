@@ -147,8 +147,9 @@ class AppContainer(private val context: Context) {
 
     /**
      * Debug-bygget kan hämta manifestet från en valfri adress, till exempel en prerelease:
-     *   adb shell am start -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity --es dmzSearchIndexManifest ADRESS
-     * En tom adress tar bort den. I release-bygget används alltid latest.
+     *   adb shell am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity --es dmzSearchIndexManifest ADRESS
+     * -S behövs: adressen läses när appen startar. En tom adress ('' inom citattecken) tar bort den.
+     * I release-bygget används alltid latest.
      */
     private val debugPreferences by lazy { context.getSharedPreferences("dmz_debug", Context.MODE_PRIVATE) }
 

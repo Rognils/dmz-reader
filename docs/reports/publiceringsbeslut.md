@@ -366,14 +366,14 @@ Redan gjort i oktober, enligt den tidigare listan: historiken är omskriven med 
 Manifestet under `latest` når inte en prerelease, så debug-bygget pekas på prereleasens versionsspecifika manifest:
 
 ```bash
-adb shell am start -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity \
+adb shell am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity \
     --es dmzSearchIndexManifest https://github.com/Rognils/dmz-reader/releases/download/v1.0.0/search-index.json
 ```
 
 12. I debug-bygget, utan sökindex: Sök visar kortet med storleken ur manifestet. Tryck **Ladda ned sökindex**.
 13. Mitt i hämtningen: slå på flygplansläget, vänta tills kortet säger att hämtningen avbröts, slå av det och tryck **Försök igen**. Hämtningen ska fortsätta där den slutade, inte börja om.
 14. Sökningen ska fungera efteråt. Inställningar → Sökindex ska visa 185 nummer och 11 293 sidor.
-15. Ta bort adressen igen: samma kommando med `--es dmzSearchIndexManifest ""`.
+15. Ta bort adressen igen: `adb shell "am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity --es dmzSearchIndexManifest ''"`.
 
 **e. Gör `v1.0.0` till en vanlig release och latest**
 

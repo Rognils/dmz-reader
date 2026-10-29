@@ -8,6 +8,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -368,6 +369,34 @@ class SearchIndexDownloadTest {
         assertTrue(downloads.state.value is IndexDownloadState.WaitingForWifi)
         assertTrue(downloads.hasPending())
         assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    @Test
+    fun `the wifi message shows as soon as the download is ordered`() = runBlocking {
+        val downloads = downloads(networkAllowed = false)
+        downloads.order()
+        withTimeout(10_000) { while (downloads.state.value !is IndexDownloadState.WaitingForWifi) delay(10) }
+        assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    @Test
+    fun `a debug manifest address also moves where the file is fetched`() {
+        SearchIndexSource.testBase = null
+        val prerelease = "https://github.com/Rognils/dmz-reader/releases/download/v1.0.0/search-index.json".toHttpUrl()
+        val local = "http://127.0.0.1:8765/Rognils/dmz-reader/releases/latest/download/search-index.json".toHttpUrl()
+        assertEquals(prerelease, SearchIndexSource { prerelease }.manifestUrl)
+        assertEquals(
+            "https://github.com/Rognils/dmz-reader/releases/download/v1.0.0/search-test.db",
+            SearchIndexSource { prerelease }.fileUrl(manifest).toString(),
+        )
+        assertEquals(
+            "http://127.0.0.1:8765/Rognils/dmz-reader/releases/download/v1.0.0/search-test.db",
+            SearchIndexSource { local }.fileUrl(manifest).toString(),
+        )
+        assertEquals(
+            "https://github.com/Rognils/dmz-reader/releases/latest/download/search-index.json",
+            SearchIndexSource().manifestUrl.toString(),
+        )
     }
 
     @Test

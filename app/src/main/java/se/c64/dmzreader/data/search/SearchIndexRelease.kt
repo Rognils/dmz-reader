@@ -116,15 +116,19 @@ fun parseSearchIndexManifest(
  * blanda ihop filer.
  *
  * I debug-bygget kan basen bytas mot en lokal testserver ([testBase]), och manifestet kan
- * hämtas från en valfri adress, till exempel en prerelease ([manifestOverride]).
+ * hämtas från en valfri adress, till exempel en prerelease ([manifestOverride]). Filen hämtas då
+ * från samma bas som manifestet: …/releases/download/v1.0.0/search-index.json och
+ * …/releases/latest/download/search-index.json ger basen …/releases.
  */
 class SearchIndexSource(
     private val manifestOverride: () -> HttpUrl? = { null },
 ) {
-    private val base: HttpUrl get() = testBase ?: RELEASES
+    private val override: HttpUrl? get() = if (BuildConfig.DEBUG) manifestOverride() else null
+
+    private val base: HttpUrl get() = testBase ?: override?.let(::releasesBaseOf) ?: RELEASES
 
     val manifestUrl: HttpUrl
-        get() = testBase?.let { manifestUrlFor(it) } ?: manifestOverride().takeIf { BuildConfig.DEBUG } ?: manifestUrlFor(base)
+        get() = testBase?.let { manifestUrlFor(it) } ?: override ?: manifestUrlFor(base)
 
     fun fileUrl(manifest: SearchIndexManifest): HttpUrl = base.newBuilder()
         .addPathSegment("download")
@@ -135,6 +139,13 @@ class SearchIndexSource(
     companion object {
         val RELEASES: HttpUrl = "https://github.com/Rognils/dmz-reader/releases".toHttpUrl()
         const val MANIFEST_NAME = "search-index.json"
+
+        /** Basen …/releases i en manifestadress, eller GitHubs om adressen inte har den formen. */
+        fun releasesBaseOf(manifest: HttpUrl): HttpUrl {
+            val segments = manifest.pathSegments
+            val at = segments.lastIndexOf("releases").takeIf { it >= 0 && segments.size - it in 4..4 } ?: return RELEASES
+            return manifest.newBuilder().query(null).encodedPath("/" + segments.take(at + 1).joinToString("/")).build()
+        }
 
         fun manifestUrlFor(base: HttpUrl): HttpUrl =
             base.newBuilder().addPathSegment("latest").addPathSegment("download").addPathSegment(MANIFEST_NAME).build()

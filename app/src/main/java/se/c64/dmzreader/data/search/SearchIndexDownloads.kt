@@ -179,7 +179,12 @@ class SearchIndexDownloads(
             }
             cancelRequested.set(false)
             savePending(manifest)
-            _state.value = IndexDownloadState.Queued(manifest, progressOf(manifest))
+            // På mobilnät med "Ladda ned endast via wifi" startar jobbet inte förrän wifi finns. Säg det direkt.
+            _state.value = if (networkAllowed()) {
+                IndexDownloadState.Queued(manifest, progressOf(manifest))
+            } else {
+                IndexDownloadState.WaitingForWifi(manifest, progressOf(manifest))
+            }
             log("Hämtning beställd: ${manifest.releaseTag}/${manifest.fileName}, ${manifest.size} byte")
             // Efter ett avbrott kan jobbet vänta på systemets nästa försök. Försök igen ska börja direkt.
             startTransfers(retry)

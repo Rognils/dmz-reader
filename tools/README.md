@@ -418,9 +418,10 @@ Appen kontrollerar storlek och SHA-256 mot manifestet före importen, och import
 Debug-bygget kan pekas på en annan manifestadress, till exempel en prerelease:
 
 ```bash
-adb shell am start -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity \
+adb shell am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity \
     --es dmzSearchIndexManifest https://github.com/Rognils/dmz-reader/releases/download/v1.0.0/search-index.json
-# tillbaka till latest: samma kommando med --es dmzSearchIndexManifest ""
+# tillbaka till latest:
+adb shell "am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity --es dmzSearchIndexManifest ''"
 ```
 
 ### Testindex för appens tester (`build_search_testdb.py`)
