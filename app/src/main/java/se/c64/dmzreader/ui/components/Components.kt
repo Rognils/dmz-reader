@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -67,18 +65,6 @@ fun DataRow(label: String, value: String, valueColor: Color = DmzColors.TextPrim
             modifier = Modifier.weight(1f).padding(end = 12.dp),
         )
         Text(text = value, style = MonoStyles.Data, color = valueColor, textAlign = TextAlign.End)
-    }
-}
-
-/** Platshållare för flikar som byggs i senare faser. */
-@Composable
-fun PlaceholderScreen(title: String, message: String, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 24.dp),
-    ) {
-        Text(text = title, style = MaterialTheme.typography.headlineMedium, color = DmzColors.TextPrimary)
-        Spacer(Modifier.height(12.dp))
-        Text(text = message, style = MaterialTheme.typography.bodyLarge, color = DmzColors.TextSecondary)
     }
 }
 

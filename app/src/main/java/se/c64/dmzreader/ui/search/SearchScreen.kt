@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import se.c64.dmzreader.data.search.RankedRow
+import se.c64.dmzreader.data.search.LoadedSearchIndex
 import se.c64.dmzreader.data.search.SearchIndexDownloads
 import se.c64.dmzreader.ui.settings.SearchIndexViewModel
 import se.c64.dmzreader.ui.settings.SearchIndexMessageDialog
@@ -138,6 +139,7 @@ data class SearchUiState(
 
 private data class FullTextState(
     val query: FullTextQuery? = null,
+    val index: LoadedSearchIndex? = null,
     val ranked: List<RankedRow> = emptyList(),
     val searching: Boolean = false,
 )
@@ -160,6 +162,7 @@ class SearchViewModel(
     bookmarkRepository: BookmarkRepository,
     private val searchIndex: SearchIndexManager,
     activeInventory: ActiveInventoryStore,
+    private val log: (String) -> Unit = { Log.i("DmzSearch", it) },
 ) : ViewModel() {
     private val text = MutableStateFlow("")
     private val filters = MutableStateFlow(SearchFilters())
@@ -169,19 +172,18 @@ class SearchViewModel(
     init {
         // Sökningen körs medan man skriver: efter en paus, och en ny sökning avbryter den pågående.
         viewModelScope.launch {
-            combine(text, searchIndex.index) { text, index -> text to (index != null) }.collectLatest { (text, hasIndex) ->
-                val query = parseFullTextQuery(text)
-                if (query == null || !hasIndex) {
-                    fullText.value = FullTextState()
-                    return@collectLatest
+            combine(text, searchIndex.index) { text, index -> parseFullTextQuery(text) to index }
+                .distinctUntilChanged().collectLatest { (query, index) ->
+                    view.update { it.copy(visibleGroups = GROUP_PAGE_SIZE, expanded = emptySet(), snippets = emptyMap()) }
+                    if (query == null || index == null) {
+                        fullText.value = FullTextState()
+                        return@collectLatest
+                    }
+                    fullText.value = FullTextState(query = query, index = index, searching = true)
+                    delay(SEARCH_DEBOUNCE_MILLIS)
+                    val ranked = searchIndex.rank(query.match, index) ?: return@collectLatest
+                    fullText.value = FullTextState(query = query, index = index, ranked = ranked)
                 }
-                if (query == fullText.value.query) return@collectLatest
-                delay(SEARCH_DEBOUNCE_MILLIS)
-                fullText.update { it.copy(searching = true) }
-                val ranked = searchIndex.rank(query.match).orEmpty()
-                view.update { it.copy(visibleGroups = GROUP_PAGE_SIZE, expanded = emptySet(), snippets = emptyMap()) }
-                fullText.value = FullTextState(query, ranked, searching = false)
-            }
         }
     }
 
@@ -196,12 +198,12 @@ class SearchViewModel(
 
     private val grouped = combine(rankedResult, searchIndex.index, issues, filters, view.map { it.sort }.distinctUntilChanged()) {
             fullText, index, issues, filters, sort ->
-        if (index == null || fullText.query == null) {
+        if (index == null || fullText.query == null || fullText.index !== index) {
             null
         } else {
             val started = System.nanoTime()
             groupHits(fullText.ranked, index.pages, issues, filters, sort, outdatedInIndex(index.issues, issues.map { it.issue }))
-                .also { Log.i("DmzSearch", "Gruppering: ${it.totalPages} sidor i ${it.totalIssues} nummer på %.1f ms".format((System.nanoTime() - started) / 1e6)) }
+                .also { log("Gruppering: ${it.totalPages} sidor i ${it.totalIssues} nummer på %.1f ms".format((System.nanoTime() - started) / 1e6)) }
         }
     }.flowOn(Dispatchers.Default)
 
@@ -253,11 +255,15 @@ class SearchViewModel(
 
     /** Textutdraget för en synlig rad hämtas först när raden visas, en rad i taget. */
     fun requestSnippet(rowId: Long) {
-        val query = fullText.value.query ?: return
+        val result = fullText.value
+        val query = result.query ?: return
+        val index = result.index ?: return
         if (rowId in view.value.snippets) return
         viewModelScope.launch {
-            val snippet = searchIndex.snippet(rowId, query.match) ?: return@launch
-            if (fullText.value.query == query) view.update { it.copy(snippets = it.snippets + (rowId to snippet)) }
+            val snippet = searchIndex.snippet(rowId, query.match, index) ?: return@launch
+            if (fullText.value === result && searchIndex.index.value === index) {
+                view.update { it.copy(snippets = it.snippets + (rowId to snippet)) }
+            }
         }
     }
 }

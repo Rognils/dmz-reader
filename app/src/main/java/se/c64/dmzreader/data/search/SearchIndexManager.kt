@@ -291,7 +291,8 @@ class SearchIndexManager(
      * Steg 1 i sökningen: alla träffar i rangordning. null om inget index finns.
      * Avbryts när den anropande korutinen avbryts.
      */
-    suspend fun rank(match: String): List<RankedRow>? = withContext(queries) {
+    suspend fun rank(match: String, expectedIndex: LoadedSearchIndex? = null): List<RankedRow>? = withContext(queries) {
+        if (expectedIndex != null && _index.value !== expectedIndex) return@withContext null
         val context = coroutineContext
         val started = System.nanoTime()
         db?.rank(match) { context.isActive }?.also { rows ->
@@ -301,7 +302,10 @@ class SearchIndexManager(
     }
 
     /** Steg 2: textutdraget för en enda träff. */
-    suspend fun snippet(rowId: Long, match: String): String? = withContext(queries) { db?.snippet(rowId, match) }
+    suspend fun snippet(rowId: Long, match: String, expectedIndex: LoadedSearchIndex? = null): String? = withContext(queries) {
+        if (expectedIndex != null && _index.value !== expectedIndex) return@withContext null
+        db?.snippet(rowId, match)
+    }
 
     companion object {
         const val ACTIVE_NAME = "search.db"
