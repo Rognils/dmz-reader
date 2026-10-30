@@ -8,6 +8,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.cancelAndJoin
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -33,6 +34,7 @@ import java.security.MessageDigest
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.CountDownLatch
 
 /**
  * Hämtning av sökindexet från GitHub-releasen, mot en lokal server som står i GitHubs ställe
@@ -134,6 +136,7 @@ class SearchIndexDownloadTest {
     private fun downloads(
         transfers: TransferCoordinator = TransferCoordinator(),
         networkAllowed: Boolean = true,
+        manager: SearchIndexManager = this.manager,
     ) = SearchIndexDownloads(downloader(), manager, transfers, { networkAllowed }, startTransfers = { _ -> }, scope = scope)
 
     /** Beställer hämtningen som knappen gör, och väntar tills beställningen är sparad. */
@@ -330,6 +333,7 @@ class SearchIndexDownloadTest {
         assertNull(github.fileRequests.last().getHeader("Range"))
 
         // Svarar servern 416 även utan Range ger det fel efter ett nytt försök från 0.
+        downloader.clear() // Den redan verifierade filen skulle annars återanvändas utan nät.
         val alwaysWrong = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest) = MockResponse().setResponseCode(416)
         }
@@ -436,6 +440,57 @@ class SearchIndexDownloadTest {
         assertEquals(IndexRunOutcome.DONE, withTimeout(30_000) { run.await() })
         assertTrue("$stateDuringReading", stateDuringReading is IndexDownloadState.Queued)
         assertNotNull("fortsatte med Range", github.fileRequests.last().getHeader("Range"))
+        assertNotNull(manager.index.value)
+    }
+
+    @Test
+    fun `a manifest request waiting for headers can be cancelled immediately`() = runBlocking {
+        server.dispatcher = object : Dispatcher() {
+            override fun dispatch(request: RecordedRequest) = MockResponse().setSocketPolicy(SocketPolicy.NO_RESPONSE)
+        }
+        val client = SearchIndexDownloader.createHttpClient().newBuilder().readTimeout(5, TimeUnit.SECONDS).build()
+        val downloader = SearchIndexDownloader(client, SearchIndexSource(), downloadDirectory, 9904)
+        val request = async(Dispatchers.IO) { downloader.fetchManifest() }
+        assertNotNull(server.takeRequest(10, TimeUnit.SECONDS))
+        withTimeout(2_000) { request.cancelAndJoin() }
+    }
+
+    @Test
+    fun `a system stop during import preserves the download and a retry needs no network transfer`() = runBlocking {
+        val entered = CountDownLatch(1)
+        val proceed = CountDownLatch(1)
+        var interruptNext = false
+        val manager = SearchIndexManager(dataDirectory, freeBytes = {
+            if (interruptNext) {
+                interruptNext = false
+                entered.countDown()
+                check(proceed.await(10, TimeUnit.SECONDS))
+            }
+            Long.MAX_VALUE
+        })
+        manager.import({ index.inputStream() }, index.size.toLong())
+        val previous = manager.index.value!!.info
+        interruptNext = true
+        val downloads = downloads(manager = manager)
+        downloads.order()
+        val run = async(Dispatchers.IO) { downloads.runPending() }
+        assertTrue(entered.await(10, TimeUnit.SECONDS))
+        run.cancel()
+        proceed.countDown()
+        run.cancelAndJoin()
+
+        assertEquals(previous, manager.index.value!!.info)
+        assertTrue(downloads.hasPending())
+        assertTrue(downloader().readyFile(manifest).isFile)
+        assertTrue(downloads.state.value is IndexDownloadState.Interrupted)
+        val requests = github.fileRequests.size
+        val restored = downloads(manager = manager)
+        restored.restoreAfterStart()
+        assertTrue(restored.state.value is IndexDownloadState.Interrupted)
+        assertEquals(IndexRunOutcome.DONE, restored.runPending())
+        assertEquals(requests, github.fileRequests.size)
+        assertFalse(restored.hasPending())
+        assertEquals(emptyList<String>(), downloadDirectory.list()!!.toList())
         assertNotNull(manager.index.value)
     }
 

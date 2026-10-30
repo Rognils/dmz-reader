@@ -255,7 +255,7 @@ class SearchIndexDownloads(
                         val download = async {
                             transfers.background {
                                 var lastReport = 0L
-                                downloader.download(manifest) { progress ->
+                                downloader.download(manifest, onVerifying = { _state.value = IndexDownloadState.Verifying(manifest) }) { progress ->
                                     val tick = System.nanoTime()
                                     if (progress.bytesDownloaded == progress.totalBytes || tick - lastReport >= PROGRESS_INTERVAL_NANOS) {
                                         lastReport = tick
@@ -308,7 +308,9 @@ class SearchIndexDownloads(
             withContext(NonCancellable) {
                 // Stoppades jobbet mitt i står hämtningen kvar och fortsätter senare.
                 val state = _state.value
-                if (manifest != null && (state is IndexDownloadState.Downloading || state is IndexDownloadState.Queued) && hasPending()) {
+                val interrupted = state is IndexDownloadState.Downloading || state is IndexDownloadState.Queued ||
+                    state is IndexDownloadState.Verifying || state is IndexDownloadState.Importing
+                if (manifest != null && interrupted && hasPending()) {
                     _state.value = IndexDownloadState.Interrupted(manifest, progressOf(manifest))
                 }
             }
@@ -318,6 +320,7 @@ class SearchIndexDownloads(
 
     private suspend fun importDownloaded(manifest: SearchIndexManifest, ready: IndexFileResult.Ready): IndexRunOutcome {
         val hadIndex = manager.index.value != null
+        var interrupted = false
         _state.value = IndexDownloadState.Importing(manifest, null)
         return try {
             val info = manager.import(
@@ -328,11 +331,14 @@ class SearchIndexDownloads(
             _state.value = IndexDownloadState.Done(info)
             log("Sökindexet ${manifest.releaseTag}/${manifest.fileName} hämtat och importerat (återupptaget=${ready.resumed})")
             IndexRunOutcome.DONE
+        } catch (e: CancellationException) {
+            interrupted = true
+            throw e
         } catch (e: SearchIndexException) {
             fail("${e.message}\n\n${unchangedText(hadIndex)}", manifest)
         } finally {
-            // Den hämtade filen behövs inte efter importen, vare sig den lyckades eller inte.
-            withContext(NonCancellable + Dispatchers.IO) { clearPending() }
+            // Vid systemstopp behålls beställningen och den verifierade filen för nästa körning.
+            if (!interrupted) withContext(NonCancellable + Dispatchers.IO) { clearPending() }
         }
     }
 

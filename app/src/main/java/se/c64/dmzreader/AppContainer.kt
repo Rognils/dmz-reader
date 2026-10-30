@@ -12,6 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
@@ -54,6 +56,7 @@ import se.c64.dmzreader.data.settings.LibraryPreferences
 import se.c64.dmzreader.offline.DownloadScheduler
 import se.c64.dmzreader.offline.InAppDownloadScheduler
 import se.c64.dmzreader.offline.UidtDownloadScheduler
+import se.c64.dmzreader.offline.observeDownloadNetwork
 
 /** Läget för inläsningen av det inventory som följer med appen. */
 sealed interface InventoryStatus {
@@ -108,6 +111,12 @@ class AppContainer(private val context: Context) {
 
     val downloadPreferences: DownloadPreferences by lazy { DataStoreDownloadPreferences(context) }
 
+    private val downloadNetworkAllowed by lazy {
+        combine(downloadPreferences.observeWifiOnly(), observeDownloadNetwork(context)) { wifiOnly, network ->
+            network.allows(wifiOnly)
+        }
+    }
+
     /** Permanenta nedladdningar i filesDir/issues/ (ADR 0013), med samma nedladdningsmotor som läs-cachen. */
     val offlineRepository: OfflineRepository by lazy {
         val files = PdfFiles(File(context.filesDir, "issues"))
@@ -141,7 +150,11 @@ class AppContainer(private val context: Context) {
         if (Build.VERSION.SDK_INT >= 34) {
             UidtDownloadScheduler(context, downloadPreferences, offlineRepository, scope, indexBytes = { searchIndexDownloads.pendingBytes() })
         } else {
-            InAppDownloadScheduler(offlineRepository, scope, afterQueue = { searchIndexDownloads.runPending() })
+            InAppDownloadScheduler(
+                scope, downloadNetworkAllowed,
+                runQueue = { offlineRepository.runQueue() },
+                afterQueue = { searchIndexDownloads.runPending() },
+            )
         }
     }
 
@@ -179,10 +192,7 @@ class AppContainer(private val context: Context) {
             ),
             manager = searchIndex,
             transfers = transferCoordinator,
-            networkAllowed = {
-                val metered = context.getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered ?: true
-                !metered || !downloadPreferences.wifiOnly()
-            },
+            networkAllowed = { downloadNetworkAllowed.first() },
             // Ett omstartat jobb avbryter en pågående PDF-nedladdning (den fortsätter sedan), så bara när ingen pågår.
             startTransfers = { restart -> downloadScheduler.start(restart = restart && offlineRepository.active.value == null) },
             scope = scope,

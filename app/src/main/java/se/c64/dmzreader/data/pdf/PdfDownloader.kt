@@ -1,13 +1,12 @@
 package se.c64.dmzreader.data.pdf
 
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.job
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import se.c64.dmzreader.data.network.LiveArchiveGuardInterceptor
 import se.c64.dmzreader.data.network.UserAgentInterceptor
+import se.c64.dmzreader.data.network.watchCallCancellation
 import okhttp3.Request
 import okhttp3.Response
 import java.io.File
@@ -56,6 +55,7 @@ sealed interface DownloadResult {
 class PdfDownloader(
     private val client: OkHttpClient,
     private val cache: PdfFiles,
+    private val rename: (File, File) -> Boolean = File::renameTo,
     private val availableBytes: (File) -> Long = { it.usableSpace },
 ) {
     suspend fun download(
@@ -87,9 +87,7 @@ class PdfDownloader(
         }.build()
         val call = client.newCall(request)
         // Ett avbrott ska bryta även en läsning som står och väntar på nätet.
-        val cancelHandle = coroutineContext.job.invokeOnCompletion { cause ->
-            if (cause is CancellationException) call.cancel()
-        }
+        val cancellation = watchCallCancellation(call)
 
         try {
             call.execute().use { response ->
@@ -141,11 +139,8 @@ class PdfDownloader(
 
                 // rename ersätter en befintlig fil i ett steg. En äldre kopia finns därför
                 // kvar ända tills den nya, verifierade filen ligger på plats.
-                if (!part.renameTo(target)) {
-                    target.delete()
-                    if (!part.renameTo(target)) {
-                        return@withContext DownloadResult.NetworkError("Filen kunde inte läggas på plats.")
-                    }
+                if (!rename(part, target)) {
+                    return@withContext DownloadResult.NetworkError("Filen kunde inte läggas på plats.")
                 }
                 validatorFile.delete()
                 DownloadResult.Success(
@@ -161,7 +156,7 @@ class PdfDownloader(
             coroutineContext.ensureActive()
             DownloadResult.NetworkError(e.message ?: e.javaClass.simpleName)
         } finally {
-            cancelHandle.dispose()
+            cancellation.cancel()
         }
     }
 

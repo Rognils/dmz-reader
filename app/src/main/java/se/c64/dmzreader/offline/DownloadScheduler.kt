@@ -24,6 +24,9 @@ interface DownloadScheduler {
      * den om även om den pågår, så att ändrade nätverkskrav börjar gälla.
      */
     fun start(restart: Boolean = false)
+
+    /** Äldre Android pausar när appens aktivitet inte längre syns. UIDT sköts av systemet. */
+    fun setForeground(foreground: Boolean) {}
 }
 
 /**
@@ -72,26 +75,5 @@ class UidtDownloadScheduler(
 
     companion object {
         const val JOB_ID = 5001
-    }
-}
-
-/**
- * Android 8–13: ingen bakgrundsnedladdning. Kön betas av i appens egen process
- * och bara så länge appen är öppen.
- */
-class InAppDownloadScheduler(
-    private val offline: OfflineRepository,
-    private val scope: CoroutineScope,
-    /** Körs när kön är avbetad: en beställd hämtning av sökindexet. */
-    private val afterQueue: suspend () -> Unit = {},
-) : DownloadScheduler {
-    override val runsInBackground = false
-
-    override fun start(restart: Boolean) {
-        // runQueue och afterQueue gör ingenting om de redan körs.
-        scope.launch {
-            offline.runQueue()
-            afterQueue()
-        }
     }
 }

@@ -1,9 +1,8 @@
 package se.c64.dmzreader.data.search
 
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
@@ -17,6 +16,7 @@ import okhttp3.Request
 import okhttp3.Response
 import se.c64.dmzreader.data.network.LiveArchiveGuard
 import se.c64.dmzreader.data.network.UserAgentInterceptor
+import se.c64.dmzreader.data.network.watchCallCancellation
 import se.c64.dmzreader.data.pdf.DownloadProgress
 import se.c64.dmzreader.data.pdf.PdfDownloader
 import java.io.File
@@ -102,9 +102,22 @@ class SearchIndexDownloader(
         directory.listFiles().orEmpty().forEach { it.delete() }
     }
 
-    suspend fun download(manifest: SearchIndexManifest, onProgress: (DownloadProgress) -> Unit = {}): IndexFileResult =
+    suspend fun download(
+        manifest: SearchIndexManifest,
+        onVerifying: () -> Unit = {},
+        onProgress: (DownloadProgress) -> Unit = {},
+    ): IndexFileResult =
         withContext(Dispatchers.IO) {
             directory.mkdirs()
+            // Ett systemstopp under importen ska inte tvinga fram en ny nätöverföring.
+            val ready = readyFile(manifest)
+            if (ready.isFile) {
+                onVerifying()
+                if (ready.length() == manifest.size && sha256(ready) == manifest.sha256) {
+                    return@withContext IndexFileResult.Ready(ready, resumed = true)
+                }
+                ready.delete()
+            }
             val part = partFile(manifest)
             val stateFile = stateFile(manifest)
             // Bara den här filen får ligga här. Rester från en annan release tas bort, men inte beställningen.
@@ -119,7 +132,10 @@ class SearchIndexDownloader(
                 if (validator == null || part.length() > manifest.size) discard(manifest)
                 val have = part.length().takeIf { part.isFile } ?: 0L
 
-                if (have == manifest.size) return@withContext verify(manifest, resumed = true)
+                if (have == manifest.size) {
+                    onVerifying()
+                    return@withContext verify(manifest, resumed = true)
+                }
 
                 val required = (manifest.size - have) + importNeeds(manifest.size)
                 val available = availableBytes(directory)
@@ -141,7 +157,10 @@ class SearchIndexDownloader(
                     return@withContext IndexFileResult.NetworkError(e.message ?: e.javaClass.simpleName)
                 }
                 when (outcome) {
-                    is Step.Complete -> return@withContext verify(manifest, resumed = outcome.resumed)
+                    is Step.Complete -> {
+                        onVerifying()
+                        return@withContext verify(manifest, resumed = outcome.resumed)
+                    }
                     Step.Restart -> discard(manifest)
                     is Step.Unexpected -> {
                         discard(manifest)
@@ -297,13 +316,13 @@ class SearchIndexDownloader(
         stateFile(manifest).delete()
     }
 
-    private suspend fun <T> cancelWith(call: Call, block: suspend () -> T): T {
+    private suspend fun <T> cancelWith(call: Call, block: suspend () -> T): T = coroutineScope {
         // Ett avbrott ska bryta även en förfrågan som står och väntar på nätet.
-        val handle = coroutineContext.job.invokeOnCompletion { cause -> if (cause is CancellationException) call.cancel() }
+        val cancellation = watchCallCancellation(call)
         try {
-            return block()
+            block()
         } finally {
-            handle.dispose()
+            cancellation.cancel()
         }
     }
 
