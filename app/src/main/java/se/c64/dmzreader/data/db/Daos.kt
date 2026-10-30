@@ -116,6 +116,18 @@ interface IssueLocalStateDao {
 
 @Dao
 interface IssueUserStateDao {
+    /** Hela läs–ändra–skriv måste dela databasens skrivtransaktion med backupimporten. */
+    @Transaction
+    suspend fun modify(issueId: String, timestamp: Long, transform: (IssueUserState) -> IssueUserState): IssueUserState {
+        val stored = get(issueId)
+        val current = stored ?: IssueUserState(issueId = issueId, updatedAt = timestamp)
+        val changed = transform(current)
+        if (changed == current) return current
+        return changed.copy(issueId = issueId, updatedAt = timestamp).also {
+            if (stored == null) insert(it) else update(it)
+        }
+    }
+
     @Upsert
     suspend fun upsert(state: IssueUserState)
 
@@ -138,6 +150,14 @@ interface IssueUserStateDao {
 
 @Dao
 interface BookmarkDao {
+    @Transaction
+    suspend fun modify(id: Long, transform: (Bookmark) -> Bookmark): Bookmark? {
+        val current = get(id)?.takeUnless { it.isDeleted } ?: return null
+        val changed = transform(current)
+        if (changed != current) update(changed)
+        return changed
+    }
+
     @Insert
     suspend fun insert(bookmark: Bookmark): Long
 
@@ -177,6 +197,10 @@ interface BookmarkDao {
  */
 @Dao
 abstract class BackupDao {
+    /** Även läsningen och sammanslagningen ingår i samma transaktion som skrivningen. */
+    @Transaction
+    open suspend fun <T> inTransaction(block: suspend () -> T): T = block()
+
     @Insert
     protected abstract suspend fun insertUserStates(states: List<IssueUserState>)
 

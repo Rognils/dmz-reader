@@ -75,13 +75,13 @@ class BookmarkRepository(
 
     /** Ändrar titel och anteckning. En tom titel blir "Sida X", en tom anteckning tas bort. */
     suspend fun edit(id: Long, title: String, note: String): Bookmark? {
-        val current = bookmarkDao.get(id)?.takeUnless { it.isDeleted } ?: return null
-        val changed = current.copy(
-            title = normalizedBookmarkTitle(title, current.pageNumber),
-            note = normalizedBookmarkNote(note),
-        )
-        if (changed == current) return current
-        return changed.copy(updatedAt = now()).also { bookmarkDao.update(it) }
+        return bookmarkDao.modify(id) { current ->
+            val changed = current.copy(
+                title = normalizedBookmarkTitle(title, current.pageNumber),
+                note = normalizedBookmarkNote(note),
+            )
+            if (changed == current) current else changed.copy(updatedAt = now())
+        }
     }
 
     /**
