@@ -6,6 +6,8 @@ Privat Android-app (Kotlin + Jetpack Compose) för att läsa DMZArkivets digital
 
 **Teknik att notera:** Appen använder **Room 3** (`androidx.room3`) med `BundledSQLiteDriver` och FTS5. Room 3 kräver en `SQLiteDriver` och har inte SupportSQLite-API:erna. Följ Room 3:s dokumentation, inte Room 2-mönster.
 
+**Överlämning 2026-10-30:** Läs [Codex granskning och rättningar](docs/reports/codex-granskning-2026-10-30.md) och ADR 0025 före fortsatt releasearbete. Rättningarna ligger på `fix/pre-1.0-review`, efter den frysta RC4. Rapporten beskriver tester, kvarvarande enhetskontroller och varför den befintliga `release/1.0.0` inte innehåller rättningarna.
+
 ## Absoluta regler
 
 1. **Implementera bara aktuell fas.** Bygg inget "lite i förväg" för senare faser.
