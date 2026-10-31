@@ -127,6 +127,19 @@ class SearchIndexManagerTest {
     }
 
     @Test
+    fun `old row ids cannot be searched or used for snippets after an index replacement`() = runBlocking {
+        val manager = manager()
+        manager.import({ good.inputStream() }, null)
+        val previous = manager.index.value!!
+        val ranked = manager.rank("\"högtalare\"", previous)!!
+        assertTrue(ranked.isNotEmpty())
+        manager.import({ good.inputStream() }, null)
+        assertNull(manager.rank("\"högtalare\"", previous))
+        assertNull(manager.snippet(ranked.first().rowId, "\"högtalare\"", previous))
+        assertNotNull(manager.rank("\"högtalare\"", manager.index.value!!))
+    }
+
+    @Test
     fun `without an index there is nothing to search`() = runBlocking {
         val manager = manager()
         assertNull(manager.rank("\"amiga\""))

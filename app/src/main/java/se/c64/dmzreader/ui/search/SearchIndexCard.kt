@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import se.c64.dmzreader.data.pdf.DownloadProgress
 import se.c64.dmzreader.data.search.CopyProgress
 import se.c64.dmzreader.data.search.IndexDownloadState
+import se.c64.dmzreader.data.search.NO_NETWORK_MESSAGE
 import se.c64.dmzreader.data.search.WAITING_FOR_WIFI_MESSAGE
 import se.c64.dmzreader.data.search.copyProgressText
 import se.c64.dmzreader.ui.components.Panel
@@ -114,6 +115,11 @@ fun ColumnScope.SearchIndexDownloadContent(
 
         is IndexDownloadState.WaitingForWifi -> {
             CardText(WAITING_FOR_WIFI_MESSAGE)
+            Buttons { SecondaryButton("Avbryt", "index-cancel", onClick = onCancel) }
+        }
+
+        is IndexDownloadState.WaitingForNetwork -> {
+            CardText(NO_NETWORK_MESSAGE)
             Buttons { SecondaryButton("Avbryt", "index-cancel", onClick = onCancel) }
         }
 

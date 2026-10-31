@@ -7,6 +7,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -72,6 +73,31 @@ class PdfDownloaderTest {
         cache.directory.mkdirs()
         cache.partFile(issueId).writeBytes(content.copyOf(bytes))
         if (validator != null) cache.validatorFile(issueId).writeText(validator)
+    }
+
+    @Test
+    fun `cancellation interrupts a request waiting for server headers`() = runBlocking {
+        server.enqueue(MockResponse().setSocketPolicy(SocketPolicy.NO_RESPONSE))
+        val client = PdfDownloader.createHttpClient().newBuilder().readTimeout(5, TimeUnit.SECONDS).build()
+        val download = async(Dispatchers.IO) { PdfDownloader(client, cache).download(issueId, url()) }
+        assertTrue(server.takeRequest(10, TimeUnit.SECONDS) != null)
+        withTimeout(2_000) { download.cancelAndJoin() }
+        assertFalse(cache.file(issueId).exists())
+    }
+
+    @Test
+    fun `a failed rename preserves the old offline pdf and the completed replacement`() = runBlocking {
+        cache.directory.mkdirs()
+        val previous = byteArrayOf(1, 2, 3, 4)
+        cache.file(issueId).writeBytes(previous)
+        server.enqueue(fullResponse())
+        val failing = PdfDownloader(PdfDownloader.createHttpClient(), cache, rename = { _, _ -> false })
+
+        val result = failing.download(issueId, url(), content.size.toLong())
+
+        assertTrue(result is DownloadResult.NetworkError)
+        assertArrayEquals(previous, cache.file(issueId).readBytes())
+        assertArrayEquals(content, cache.partFile(issueId).readBytes())
     }
 
     @Test

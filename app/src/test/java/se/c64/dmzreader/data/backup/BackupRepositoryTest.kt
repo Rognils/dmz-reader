@@ -1,6 +1,11 @@
 package se.c64.dmzreader.data.backup
 
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -11,12 +16,16 @@ import se.c64.dmzreader.data.db.Bookmark
 import se.c64.dmzreader.data.db.DmzDatabase
 import se.c64.dmzreader.data.db.IssueLocalState
 import se.c64.dmzreader.data.db.IssueUserState
+import se.c64.dmzreader.data.db.IssueUserStateDao
 import se.c64.dmzreader.data.db.ReadStatusOverride
 import se.c64.dmzreader.data.db.ReadingSession
 import se.c64.dmzreader.domain.SeenPages
+import se.c64.dmzreader.data.repository.ReadingRepository
 import se.c64.dmzreader.testing.inMemoryDatabase
 import se.c64.dmzreader.testing.issueEntity
 import java.time.ZoneId
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 /** Export och import mot den riktiga databasen (Room 3 med BundledSQLiteDriver, i minnet). */
 class BackupRepositoryTest {
@@ -238,6 +247,107 @@ class BackupRepositoryTest {
         val summary = repository(source).import(newer)
         assertEquals(1, summary.updatedBookmarks)
         assertEquals(9_000L, source.bookmarkDao().getAll().first { it.bookmarkId == ledare.bookmarkId }.deletedAt)
+    }
+
+    @Test
+    fun `reading writes wait for backup snapshot and merge instead of overwriting imported fields`() = runBlocking {
+        target.issueUserStateDao().insert(state(a, 100, 1, lastPage = 1))
+        val snapshotRead = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        val actual = target.issueUserStateDao()
+        var intercepted = false
+        val held = object : IssueUserStateDao by actual {
+            override suspend fun getAll(): List<IssueUserState> {
+                val snapshot = actual.getAll()
+                if (!intercepted) {
+                    intercepted = true
+                    snapshotRead.complete(Unit)
+                    release.await()
+                }
+                return snapshot
+            }
+        }
+        val backup = BackupFile(
+            backupFormat = BACKUP_FORMAT, exportedAt = "2026-10-30T00:00:00Z", appVersion = "1.0.0-rc4",
+            issueUserStates = listOf(state(a, 200, 1, 5, favorite = true, lastPage = 5).toBackup()),
+            bookmarks = emptyList(), readingSessions = emptyList(),
+        )
+        val repository = BackupRepository(held, target.bookmarkDao(), target.readingSessionDao(), target.backupDao(), "test")
+        val importing = async(Dispatchers.IO) { repository.import(backup) }
+        withTimeout(10_000) { snapshotRead.await() }
+        val writerStarted = CompletableDeferred<Unit>()
+        val reading = async(Dispatchers.IO) {
+            writerStarted.complete(Unit)
+            ReadingRepository(actual, target.readingSessionDao()) { 300L }.update(a) { current ->
+                val seen = SeenPages.decode(current.seenPages) + listOf(9)
+                current.copy(lastPage = 9, seenPages = seen.encode(), maxPageReached = seen.maxPage)
+            }
+        }
+        writerStarted.await()
+        try {
+            assertEquals(null, withTimeoutOrNull(200) { reading.await() })
+        } finally {
+            release.complete(Unit)
+        }
+        withTimeout(10_000) { importing.await(); reading.await() }
+        val result = actual.get(a)!!
+        assertTrue(result.isFavorite)
+        assertEquals(9, result.lastPage)
+        assertEquals(SeenPages.of(1, 5, 9), SeenPages.decode(result.seenPages))
+        assertEquals(300L, result.updatedAt)
+    }
+
+    @Test
+    fun `backup import waits for a reading read modify write transaction`() = runBlocking {
+        target.issueUserStateDao().insert(state(a, 100, 1, lastPage = 1))
+        val entered = CountDownLatch(1)
+        val release = CountDownLatch(1)
+        val reading = async(Dispatchers.IO) {
+            ReadingRepository(target.issueUserStateDao(), target.readingSessionDao()) { 150L }.update(a) { current ->
+                entered.countDown()
+                check(release.await(10, TimeUnit.SECONDS))
+                val seen = SeenPages.decode(current.seenPages) + listOf(9)
+                current.copy(lastPage = 9, seenPages = seen.encode(), maxPageReached = seen.maxPage)
+            }
+        }
+        assertTrue(entered.await(10, TimeUnit.SECONDS))
+        val started = CompletableDeferred<Unit>()
+        val importing = async(Dispatchers.IO) {
+            started.complete(Unit)
+            repository(target).import(BackupFile(
+                backupFormat = BACKUP_FORMAT, exportedAt = "2026-10-30T00:00:00Z", appVersion = "test",
+                issueUserStates = listOf(state(a, 200, 5, favorite = true, lastPage = 5).toBackup()),
+                bookmarks = emptyList(), readingSessions = emptyList(),
+            ))
+        }
+        started.await()
+        try {
+            assertEquals(null, withTimeoutOrNull(200) { importing.await() })
+        } finally {
+            release.countDown()
+        }
+        withTimeout(10_000) { reading.await(); importing.await() }
+        val result = target.issueUserStateDao().get(a)!!
+        assertEquals(SeenPages.of(1, 5, 9), SeenPages.decode(result.seenPages))
+        assertEquals(5, result.lastPage)
+        assertTrue(result.isFavorite)
+    }
+
+    @Test
+    fun `simultaneous backup imports preserve the union of read pages`() = runBlocking {
+        val start = CompletableDeferred<Unit>()
+        fun backup(page: Int, at: Long) = BackupFile(
+            backupFormat = BACKUP_FORMAT, exportedAt = "2026-10-30T00:00:00Z", appVersion = "test",
+            issueUserStates = listOf(state(a, at, page, lastPage = page).toBackup()),
+            bookmarks = emptyList(), readingSessions = emptyList(),
+        )
+        val first = async(Dispatchers.IO) { start.await(); repository(target).import(backup(4, 100)) }
+        val second = async(Dispatchers.IO) { start.await(); repository(target).import(backup(8, 200)) }
+        start.complete(Unit)
+        withTimeout(10_000) { first.await(); second.await() }
+        val result = target.issueUserStateDao().get(a)!!
+        assertEquals(SeenPages.of(4, 8), SeenPages.decode(result.seenPages))
+        assertEquals(8, result.lastPage)
     }
 
     @Test

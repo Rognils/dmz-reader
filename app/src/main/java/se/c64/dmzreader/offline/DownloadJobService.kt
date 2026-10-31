@@ -82,7 +82,8 @@ class DownloadJobService : JobService() {
             Log.i(LOG_TAG, "UIDT-jobbet klart: $outcome, sökindex: $indexOutcome")
             // Försvann nätet utan att systemet stoppade jobbet ska det köras igen.
             val again = outcome == QueueOutcome.NETWORK_LOST || index.hasPending() &&
-                (indexOutcome == IndexRunOutcome.NETWORK_LOST || indexOutcome == IndexRunOutcome.WAITING_FOR_WIFI)
+                (indexOutcome == IndexRunOutcome.NETWORK_LOST || indexOutcome == IndexRunOutcome.WAITING_FOR_WIFI ||
+                    indexOutcome == IndexRunOutcome.WAITING_FOR_NETWORK)
             jobFinished(params, again)
         }
         return true

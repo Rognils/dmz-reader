@@ -34,8 +34,16 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
+        (application as DmzReaderApp).container.downloadScheduler.setForeground(true)
         // Nummer som står kvar i nedladdningskön, till exempel efter att appen stoppats.
         (application as DmzReaderApp).container.resumeDownloads()
+    }
+
+    override fun onStop() {
+        if (!isChangingConfigurations) {
+            (application as DmzReaderApp).container.downloadScheduler.setForeground(false)
+        }
+        super.onStop()
     }
 
     private companion object {

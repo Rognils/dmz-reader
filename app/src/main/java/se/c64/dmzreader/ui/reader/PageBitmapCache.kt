@@ -70,11 +70,6 @@ class PageBitmapCache(maxBytes: Int) {
         recycleLater(entry.bitmap)
     }
 
-    /** Antal byte som cachen håller, inklusive bilder som har fallit ur men fortfarande visas. */
-    fun liveBytes(): Long = synchronized(lock) {
-        live.values.filter { !it.bitmap.isRecycled }.sumOf { it.bitmap.allocationByteCount.toLong() }
-    }
-
     fun clear() {
         lru.evictAll()
     }

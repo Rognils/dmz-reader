@@ -8,6 +8,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.cancelAndJoin
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -27,12 +28,17 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import se.c64.dmzreader.data.pdf.TransferCoordinator
+import se.c64.dmzreader.offline.DownloadNetwork
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
+import se.c64.dmzreader.offline.NetworkVerdict
 import se.c64.dmzreader.testing.TestFiles
 import java.io.File
 import java.security.MessageDigest
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.CountDownLatch
 
 /**
  * Hämtning av sökindexet från GitHub-releasen, mot en lokal server som står i GitHubs ställe
@@ -133,8 +139,17 @@ class SearchIndexDownloadTest {
 
     private fun downloads(
         transfers: TransferCoordinator = TransferCoordinator(),
-        networkAllowed: Boolean = true,
-    ) = SearchIndexDownloads(downloader(), manager, transfers, { networkAllowed }, startTransfers = { _ -> }, scope = scope)
+        network: DownloadNetwork = DownloadNetwork(connected = true, metered = false),
+        wifiOnly: Boolean = true,
+        manager: SearchIndexManager = this.manager,
+        /** Nätbedömningen som ändras under testet, som appens nätbevakning. Annars den fasta från [network]. */
+        verdicts: MutableStateFlow<NetworkVerdict>? = null,
+    ) = SearchIndexDownloads(
+        downloader(), manager, transfers,
+        networkVerdict = { verdicts?.value ?: network.verdict(wifiOnly) },
+        startTransfers = { _ -> }, scope = scope,
+        networkVerdicts = verdicts ?: emptyFlow(),
+    )
 
     /** Beställer hämtningen som knappen gör, och väntar tills beställningen är sparad. */
     private fun SearchIndexDownloads.order() = runBlocking {
@@ -330,6 +345,7 @@ class SearchIndexDownloadTest {
         assertNull(github.fileRequests.last().getHeader("Range"))
 
         // Svarar servern 416 även utan Range ger det fel efter ett nytt försök från 0.
+        downloader.clear() // Den redan verifierade filen skulle annars återanvändas utan nät.
         val alwaysWrong = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest) = MockResponse().setResponseCode(416)
         }
@@ -366,7 +382,7 @@ class SearchIndexDownloadTest {
 
     @Test
     fun `the wifi rule stops the download on a metered network`() = runBlocking {
-        val downloads = downloads(networkAllowed = false)
+        val downloads = downloads(network = DownloadNetwork(connected = true, metered = true), wifiOnly = true)
         downloads.order()
         assertEquals(IndexRunOutcome.WAITING_FOR_WIFI, downloads.runPending())
         assertTrue(downloads.state.value is IndexDownloadState.WaitingForWifi)
@@ -376,10 +392,121 @@ class SearchIndexDownloadTest {
 
     @Test
     fun `the wifi message shows as soon as the download is ordered`() = runBlocking {
-        val downloads = downloads(networkAllowed = false)
+        val downloads = downloads(network = DownloadNetwork(connected = true, metered = true), wifiOnly = true)
         downloads.order()
         withTimeout(10_000) { while (downloads.state.value !is IndexDownloadState.WaitingForWifi) delay(10) }
         assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    /** Beställning, körning och läge för en kombination av nät och wifi-regel. Manifestet är redan hämtat. */
+    private fun waitingFor(network: DownloadNetwork, wifiOnly: Boolean): Pair<IndexDownloadState, IndexRunOutcome> = runBlocking {
+        val downloads = downloads(network = network, wifiOnly = wifiOnly)
+        downloads.checkManifest()
+        withTimeout(10_000) { while (downloads.state.value !is IndexDownloadState.Available) delay(10) }
+        downloads.order()
+        withTimeout(10_000) { while (downloads.state.value is IndexDownloadState.Available) delay(10) }
+        val ordered = downloads.state.value
+        val outcome = downloads.runPending()
+        assertEquals("samma läge efter körningen som vid beställningen", ordered::class, downloads.state.value::class)
+        assertTrue(downloads.hasPending())
+        ordered to outcome
+    }
+
+    @Test
+    fun `wifi rule off without any network says there is no connection, not wifi`() {
+        val (state, outcome) = waitingFor(DownloadNetwork(connected = false, metered = true), wifiOnly = false)
+        assertTrue("$state", state is IndexDownloadState.WaitingForNetwork)
+        assertEquals(IndexRunOutcome.WAITING_FOR_NETWORK, outcome)
+        assertFalse(NO_NETWORK_MESSAGE.contains("wifi", ignoreCase = true))
+        assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    @Test
+    fun `wifi rule on with a metered network says it waits for wifi`() {
+        val (state, outcome) = waitingFor(DownloadNetwork(connected = true, metered = true), wifiOnly = true)
+        assertTrue("$state", state is IndexDownloadState.WaitingForWifi)
+        assertEquals(IndexRunOutcome.WAITING_FOR_WIFI, outcome)
+        assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    @Test
+    fun `wifi rule on without any network says there is no connection`() {
+        val (state, outcome) = waitingFor(DownloadNetwork(connected = false, metered = true), wifiOnly = true)
+        assertTrue("$state", state is IndexDownloadState.WaitingForNetwork)
+        assertEquals(IndexRunOutcome.WAITING_FOR_NETWORK, outcome)
+        assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    // --- Beskedet följer nätet medan hämtningen väntar ---
+
+    /** Beställer hämtningen med nätbedömningen [first] och ger flödet som styr den därefter. */
+    private fun waitingDownload(first: NetworkVerdict): Pair<SearchIndexDownloads, MutableStateFlow<NetworkVerdict>> {
+        val verdicts = MutableStateFlow(first)
+        val downloads = downloads(verdicts = verdicts)
+        downloads.order()
+        return downloads to verdicts
+    }
+
+    private fun SearchIndexDownloads.awaitState(kind: kotlin.reflect.KClass<out IndexDownloadState>) = runBlocking {
+        withTimeout(10_000) { while (!kind.isInstance(state.value)) delay(10) }
+        state.value
+    }
+
+    @Test
+    fun `waiting for wifi becomes no connection when the network goes and the wifi rule is turned off`() {
+        // Mobilnät med regeln på, sedan inget nät och regeln av.
+        val (downloads, verdicts) = waitingDownload(NetworkVerdict.WIFI_ONLY_ON_METERED)
+        downloads.awaitState(IndexDownloadState.WaitingForWifi::class)
+        verdicts.value = DownloadNetwork(connected = false, metered = true).verdict(wifiOnly = false)
+        downloads.awaitState(IndexDownloadState.WaitingForNetwork::class)
+        assertTrue(downloads.hasPending())
+        assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    @Test
+    fun `no connection becomes queued when wifi comes back`() {
+        val (downloads, verdicts) = waitingDownload(NetworkVerdict.NO_NETWORK)
+        downloads.awaitState(IndexDownloadState.WaitingForNetwork::class)
+        verdicts.value = DownloadNetwork(connected = true, metered = false).verdict(wifiOnly = true)
+        downloads.awaitState(IndexDownloadState.Queued::class)
+        // Och hämtningen går att köra till slut.
+        assertEquals(IndexRunOutcome.DONE, runBlocking { downloads.runPending() })
+    }
+
+    @Test
+    fun `a queued download says it waits for wifi when the phone moves to mobile data, and the pause message is left alone`() {
+        val (downloads, verdicts) = waitingDownload(NetworkVerdict.ALLOWED)
+        downloads.awaitState(IndexDownloadState.Queued::class)
+        verdicts.value = NetworkVerdict.WIFI_ONLY_ON_METERED
+        downloads.awaitState(IndexDownloadState.WaitingForWifi::class)
+        verdicts.value = NetworkVerdict.NO_NETWORK
+        downloads.awaitState(IndexDownloadState.WaitingForNetwork::class)
+
+        // Ett avbrott mitt i hämtningen behåller sitt besked, även när nätet ändras.
+        github.cut.set(1)
+        verdicts.value = NetworkVerdict.ALLOWED
+        downloads.awaitState(IndexDownloadState.Queued::class)
+        assertEquals(IndexRunOutcome.NETWORK_LOST, runBlocking { downloads.runPending() })
+        assertTrue(downloads.state.value is IndexDownloadState.Interrupted)
+        verdicts.value = NetworkVerdict.NO_NETWORK
+        runBlocking { delay(300) }
+        assertTrue("${downloads.state.value}", downloads.state.value is IndexDownloadState.Interrupted)
+    }
+
+    @Test
+    fun `wifi rule off on a metered network downloads`() {
+        val downloads = downloads(network = DownloadNetwork(connected = true, metered = true), wifiOnly = false)
+        downloads.order()
+        assertEquals(IndexRunOutcome.DONE, runBlocking { downloads.runPending() })
+    }
+
+    @Test
+    fun `the verdict separates no network from the wifi rule`() {
+        assertEquals(NetworkVerdict.NO_NETWORK, DownloadNetwork(connected = false, metered = false).verdict(wifiOnly = false))
+        assertEquals(NetworkVerdict.NO_NETWORK, DownloadNetwork(connected = false, metered = true).verdict(wifiOnly = true))
+        assertEquals(NetworkVerdict.WIFI_ONLY_ON_METERED, DownloadNetwork(connected = true, metered = true).verdict(wifiOnly = true))
+        assertEquals(NetworkVerdict.ALLOWED, DownloadNetwork(connected = true, metered = true).verdict(wifiOnly = false))
+        assertEquals(NetworkVerdict.ALLOWED, DownloadNetwork(connected = true, metered = false).verdict(wifiOnly = true))
     }
 
     @Test
@@ -436,6 +563,57 @@ class SearchIndexDownloadTest {
         assertEquals(IndexRunOutcome.DONE, withTimeout(30_000) { run.await() })
         assertTrue("$stateDuringReading", stateDuringReading is IndexDownloadState.Queued)
         assertNotNull("fortsatte med Range", github.fileRequests.last().getHeader("Range"))
+        assertNotNull(manager.index.value)
+    }
+
+    @Test
+    fun `a manifest request waiting for headers can be cancelled immediately`() = runBlocking {
+        server.dispatcher = object : Dispatcher() {
+            override fun dispatch(request: RecordedRequest) = MockResponse().setSocketPolicy(SocketPolicy.NO_RESPONSE)
+        }
+        val client = SearchIndexDownloader.createHttpClient().newBuilder().readTimeout(5, TimeUnit.SECONDS).build()
+        val downloader = SearchIndexDownloader(client, SearchIndexSource(), downloadDirectory, 9904)
+        val request = async(Dispatchers.IO) { downloader.fetchManifest() }
+        assertNotNull(server.takeRequest(10, TimeUnit.SECONDS))
+        withTimeout(2_000) { request.cancelAndJoin() }
+    }
+
+    @Test
+    fun `a system stop during import preserves the download and a retry needs no network transfer`() = runBlocking {
+        val entered = CountDownLatch(1)
+        val proceed = CountDownLatch(1)
+        var interruptNext = false
+        val manager = SearchIndexManager(dataDirectory, freeBytes = {
+            if (interruptNext) {
+                interruptNext = false
+                entered.countDown()
+                check(proceed.await(10, TimeUnit.SECONDS))
+            }
+            Long.MAX_VALUE
+        })
+        manager.import({ index.inputStream() }, index.size.toLong())
+        val previous = manager.index.value!!.info
+        interruptNext = true
+        val downloads = downloads(manager = manager)
+        downloads.order()
+        val run = async(Dispatchers.IO) { downloads.runPending() }
+        assertTrue(entered.await(10, TimeUnit.SECONDS))
+        run.cancel()
+        proceed.countDown()
+        run.cancelAndJoin()
+
+        assertEquals(previous, manager.index.value!!.info)
+        assertTrue(downloads.hasPending())
+        assertTrue(downloader().readyFile(manifest).isFile)
+        assertTrue(downloads.state.value is IndexDownloadState.Interrupted)
+        val requests = github.fileRequests.size
+        val restored = downloads(manager = manager)
+        restored.restoreAfterStart()
+        assertTrue(restored.state.value is IndexDownloadState.Interrupted)
+        assertEquals(IndexRunOutcome.DONE, restored.runPending())
+        assertEquals(requests, github.fileRequests.size)
+        assertFalse(restored.hasPending())
+        assertEquals(emptyList<String>(), downloadDirectory.list()!!.toList())
         assertNotNull(manager.index.value)
     }
 

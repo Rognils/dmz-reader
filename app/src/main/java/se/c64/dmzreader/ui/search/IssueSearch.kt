@@ -65,6 +65,7 @@ import se.c64.dmzreader.data.repository.LibraryRepository
 import se.c64.dmzreader.data.search.SNIPPET_CLOSE
 import se.c64.dmzreader.data.search.SNIPPET_OPEN
 import se.c64.dmzreader.data.search.SearchIndexManager
+import se.c64.dmzreader.data.search.LoadedSearchIndex
 import se.c64.dmzreader.domain.FullTextQuery
 import se.c64.dmzreader.domain.INDEX_OUTDATED_TEXT
 import se.c64.dmzreader.domain.NOT_IN_INDEX_TEXT
@@ -121,6 +122,7 @@ class IssueSearchViewModel(
         IssueSearchUiState(text = initialQuery.orEmpty(), barVisible = !initialQuery.isNullOrBlank()),
     )
     private var firstSearch = true
+    private var resultIndex: LoadedSearchIndex? = null
 
     val state: StateFlow<IssueSearchUiState> = combine(
         local,
@@ -139,15 +141,25 @@ class IssueSearchViewModel(
             combine(text, searchIndex.index) { text, index -> text to index }.collectLatest { (text, index) ->
                 val query = parseFullTextQuery(text)
                 if (query == null || index == null) {
+                    resultIndex = null
                     local.update { it.copy(text = text, query = query, hits = emptyList(), searching = false, snippets = emptyMap()) }
                     return@collectLatest
                 }
-                // Sökningen som läsaren öppnades med körs direkt. Det som skrivs väntar på en paus.
-                if (!firstSearch) delay(SEARCH_DEBOUNCE_MILLIS)
+                val shown = resultIndex
+                if (shown != null && shown !== index) {
+                    // Ett annat index: de visade träffarna och utdragen hör till det gamla och tas bort direkt.
+                    resultIndex = null
+                    local.update { it.copy(text = text, searching = true, snippets = emptyMap(), hits = emptyList()) }
+                } else if (!firstSearch) {
+                    // Sökningen som läsaren öppnades med körs direkt. Det som skrivs väntar på en paus,
+                    // och de tidigare träffarna står kvar under tiden.
+                    delay(SEARCH_DEBOUNCE_MILLIS)
+                }
                 firstSearch = false
                 local.update { it.copy(text = text, searching = true) }
-                val ranked = searchIndex.rank(query.match).orEmpty()
+                val ranked = searchIndex.rank(query.match, index) ?: return@collectLatest
                 val hits = hitsInIssue(ranked, index.pages, issueId)
+                resultIndex = index
                 local.update { state ->
                     val anchor = initialPage?.takeIf { state.query == null }
                     state.copy(
@@ -171,10 +183,15 @@ class IssueSearchViewModel(
     /** Textutdraget för en synlig rad hämtas först när raden visas. */
     fun requestSnippet(rowId: Long) {
         val query = local.value.query ?: return
+        val index = resultIndex ?: return
         if (rowId in local.value.snippets) return
         viewModelScope.launch {
-            val snippet = searchIndex.snippet(rowId, query.match) ?: return@launch
-            local.update { if (it.query == query) it.copy(snippets = it.snippets + (rowId to snippet)) else it }
+            val snippet = searchIndex.snippet(rowId, query.match, index) ?: return@launch
+            local.update {
+                if (it.query == query && resultIndex === index && searchIndex.index.value === index) {
+                    it.copy(snippets = it.snippets + (rowId to snippet))
+                } else it
+            }
         }
     }
 

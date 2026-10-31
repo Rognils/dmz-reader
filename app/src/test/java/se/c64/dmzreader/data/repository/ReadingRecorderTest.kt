@@ -284,6 +284,9 @@ class ReadingRecorderTest {
     fun `a failing write is reported and the next one still runs`() = runTest {
         val failing = object : IssueUserStateDao by userStates {
             var fail = true
+            override suspend fun modify(issueId: String, timestamp: Long, transform: (IssueUserState) -> IssueUserState): IssueUserState =
+                super<IssueUserStateDao>.modify(issueId, timestamp, transform)
+
             override suspend fun insert(state: IssueUserState) {
                 if (fail) {
                     fail = false

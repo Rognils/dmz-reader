@@ -31,17 +31,7 @@ class ReadingRepository(
     /** Ändrar numrets rad. Ingenting skrivs om [transform] lämnar raden oförändrad. */
     suspend fun update(issueId: String, transform: (IssueUserState) -> IssueUserState): IssueUserState =
         lock.withLock {
-            val timestamp = now()
-            val stored = userStateDao.get(issueId)
-            val current = stored ?: IssueUserState(issueId = issueId, updatedAt = timestamp)
-            val changed = transform(current)
-            if (changed == current) {
-                current
-            } else {
-                changed.copy(issueId = issueId, updatedAt = timestamp).also {
-                    if (stored == null) userStateDao.insert(it) else userStateDao.update(it)
-                }
-            }
+            userStateDao.modify(issueId, now(), transform)
         }
 
     /** Markera som läst, som oläst, eller återställ till automatisk status (null). */

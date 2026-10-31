@@ -23,7 +23,9 @@ class BackupRepository(
     /** Körs inne i importens transaktion, efter skrivningarna. För tester av återställning vid fel. */
     private val afterWrite: suspend () -> Unit = {},
 ) {
-    suspend fun currentData() = UserData(userStateDao.getAll(), bookmarkDao.getAll(), sessionDao.getAll())
+    suspend fun currentData() = backupDao.inTransaction {
+        UserData(userStateDao.getAll(), bookmarkDao.getAll(), sessionDao.getAll())
+    }
 
     /** Hela backupen som JSON-text. */
     suspend fun export(): String {
@@ -47,7 +49,7 @@ class BackupRepository(
      * Importerar backupen. Allt skrivs i en transaktion: går något fel har
      * ingenting ändrats, och felet kastas vidare. Import tar aldrig bort något.
      */
-    suspend fun import(backup: BackupFile): ImportSummary {
+    suspend fun import(backup: BackupFile): ImportSummary = backupDao.inTransaction {
         val before = currentData()
         val plan = planImport(before, backup)
         backupDao.applyImport(
@@ -65,7 +67,7 @@ class BackupRepository(
                 check(after.sessions.size == before.sessions.size + plan.sessionsToInsert.size) { "antalet sessioner stämmer inte" }
             },
         )
-        return plan.summary
+        plan.summary
     }
 
     companion object {
