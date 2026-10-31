@@ -20,6 +20,7 @@ import kotlinx.coroutines.withContext
 import se.c64.dmzreader.data.offline.ActiveDownload
 import se.c64.dmzreader.data.pdf.DownloadProgress
 import se.c64.dmzreader.data.pdf.TransferCoordinator
+import se.c64.dmzreader.offline.NetworkVerdict
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -45,6 +46,9 @@ sealed interface IndexDownloadState {
     /** "Ladda ned endast via wifi" är på, och telefonen är på mobilnät. */
     data class WaitingForWifi(val manifest: SearchIndexManifest, val progress: DownloadProgress?) : IndexDownloadState
 
+    /** Telefonen har inget nät alls, oavsett wifi-regeln. */
+    data class WaitingForNetwork(val manifest: SearchIndexManifest, val progress: DownloadProgress?) : IndexDownloadState
+
     data class Downloading(val manifest: SearchIndexManifest, val progress: DownloadProgress) : IndexDownloadState
 
     data class Verifying(val manifest: SearchIndexManifest) : IndexDownloadState
@@ -62,11 +66,13 @@ sealed interface IndexDownloadState {
 /** Sant medan en hämtning är beställd, pågår eller importeras. */
 val IndexDownloadState.inProgress: Boolean
     get() = this is IndexDownloadState.Queued || this is IndexDownloadState.WaitingForWifi ||
+        this is IndexDownloadState.WaitingForNetwork ||
         this is IndexDownloadState.Downloading || this is IndexDownloadState.Verifying || this is IndexDownloadState.Importing
 
 /** Sant medan Avbryt går att trycka: före kontrollen och importen. */
 val IndexDownloadState.cancellable: Boolean
     get() = this is IndexDownloadState.Queued || this is IndexDownloadState.WaitingForWifi ||
+        this is IndexDownloadState.WaitingForNetwork ||
         this is IndexDownloadState.Downloading || this is IndexDownloadState.Interrupted
 
 /** Varför en körning av [SearchIndexDownloads.runPending] slutade. */
@@ -84,6 +90,9 @@ enum class IndexRunOutcome {
     /** Väntar på wifi. Hämtningen står kvar. */
     WAITING_FOR_WIFI,
 
+    /** Inget nät alls. Hämtningen står kvar. */
+    WAITING_FOR_NETWORK,
+
     ALREADY_RUNNING,
 }
 
@@ -93,6 +102,8 @@ const val SEARCH_INDEX_DOWNLOAD_ID = "search-index"
 const val WAITING_FOR_WIFI_MESSAGE =
     "Väntar på wifi. Sökindexet laddas ned när telefonen är ansluten till wifi, eftersom " +
         "\"Ladda ned endast via wifi\" är på under Inställningar."
+
+const val NO_NETWORK_MESSAGE = "Ingen internetanslutning. Hämtningen startar när telefonen är ansluten."
 
 /**
  * Hämtning av sökindexet från GitHub-releasen, användarens val och aldrig automatiskt.
@@ -112,8 +123,8 @@ class SearchIndexDownloads(
     private val downloader: SearchIndexDownloader,
     private val manager: SearchIndexManager,
     private val transfers: TransferCoordinator,
-    /** Falskt när "Ladda ned endast via wifi" är på och telefonen är på ett nät med datakostnad. */
-    private val networkAllowed: suspend () -> Boolean,
+    /** Om nätet tillåter hämtningen nu: tillåtet, inget nät, eller wifi-regeln på ett debiterat nät. */
+    private val networkVerdict: suspend () -> NetworkVerdict,
     /** Startar nedladdningsjobbet. Med true startas det om, så att ett nytt försök börjar direkt. */
     private val startTransfers: (restart: Boolean) -> Unit,
     private val scope: CoroutineScope,
@@ -179,12 +190,9 @@ class SearchIndexDownloads(
             }
             cancelRequested.set(false)
             savePending(manifest)
-            // På mobilnät med "Ladda ned endast via wifi" startar jobbet inte förrän wifi finns. Säg det direkt.
-            _state.value = if (networkAllowed()) {
-                IndexDownloadState.Queued(manifest, progressOf(manifest))
-            } else {
-                IndexDownloadState.WaitingForWifi(manifest, progressOf(manifest))
-            }
+            // Utan nät, eller på mobilnät med "Ladda ned endast via wifi", startar jobbet inte förrän nätet
+            // tillåter det. Säg det direkt, med rätt skäl.
+            _state.value = waitingOrQueued(networkVerdict(), manifest)
             log("Hämtning beställd: ${manifest.releaseTag}/${manifest.fileName}, ${manifest.size} byte")
             // Efter ett avbrott kan jobbet vänta på systemets nästa försök. Försök igen ska börja direkt.
             startTransfers(retry)
@@ -241,10 +249,18 @@ class SearchIndexDownloads(
             manifest = loadPending() ?: return IndexRunOutcome.NOTHING
             while (true) {
                 currentCoroutineContext().ensureActive()
-                if (!networkAllowed()) {
-                    _state.value = IndexDownloadState.WaitingForWifi(manifest, progressOf(manifest))
-                    log("Sökindexet väntar på wifi")
-                    return IndexRunOutcome.WAITING_FOR_WIFI
+                when (networkVerdict()) {
+                    NetworkVerdict.ALLOWED -> Unit
+                    NetworkVerdict.NO_NETWORK -> {
+                        _state.value = IndexDownloadState.WaitingForNetwork(manifest, progressOf(manifest))
+                        log("Sökindexet väntar på nät")
+                        return IndexRunOutcome.WAITING_FOR_NETWORK
+                    }
+                    NetworkVerdict.WIFI_ONLY_ON_METERED -> {
+                        _state.value = IndexDownloadState.WaitingForWifi(manifest, progressOf(manifest))
+                        log("Sökindexet väntar på wifi")
+                        return IndexRunOutcome.WAITING_FOR_WIFI
+                    }
                 }
                 // En läsning går före. Ingenting påbörjas medan den pågår.
                 transfers.awaitNoReading()
@@ -340,6 +356,12 @@ class SearchIndexDownloads(
             // Vid systemstopp behålls beställningen och den verifierade filen för nästa körning.
             if (!interrupted) withContext(NonCancellable + Dispatchers.IO) { clearPending() }
         }
+    }
+
+    private fun waitingOrQueued(verdict: NetworkVerdict, manifest: SearchIndexManifest): IndexDownloadState = when (verdict) {
+        NetworkVerdict.ALLOWED -> IndexDownloadState.Queued(manifest, progressOf(manifest))
+        NetworkVerdict.NO_NETWORK -> IndexDownloadState.WaitingForNetwork(manifest, progressOf(manifest))
+        NetworkVerdict.WIFI_ONLY_ON_METERED -> IndexDownloadState.WaitingForWifi(manifest, progressOf(manifest))
     }
 
     private fun fail(message: String, manifest: SearchIndexManifest): IndexRunOutcome {

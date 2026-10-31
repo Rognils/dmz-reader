@@ -57,6 +57,8 @@ import se.c64.dmzreader.offline.DownloadScheduler
 import se.c64.dmzreader.offline.InAppDownloadScheduler
 import se.c64.dmzreader.offline.UidtDownloadScheduler
 import se.c64.dmzreader.offline.observeDownloadNetwork
+import se.c64.dmzreader.offline.NetworkVerdict
+import kotlinx.coroutines.flow.map
 
 /** Läget för inläsningen av det inventory som följer med appen. */
 sealed interface InventoryStatus {
@@ -111,11 +113,14 @@ class AppContainer(private val context: Context) {
 
     val downloadPreferences: DownloadPreferences by lazy { DataStoreDownloadPreferences(context) }
 
-    private val downloadNetworkAllowed by lazy {
+    /** Samma bedömning av nätet för PDF-kön och sökindexet: tillåtet, inget nät, eller wifi-regeln på mobilnät. */
+    private val downloadNetworkVerdict by lazy {
         combine(downloadPreferences.observeWifiOnly(), observeDownloadNetwork(context)) { wifiOnly, network ->
-            network.allows(wifiOnly)
+            network.verdict(wifiOnly)
         }
     }
+
+    private val downloadNetworkAllowed by lazy { downloadNetworkVerdict.map { it == NetworkVerdict.ALLOWED } }
 
     /** Permanenta nedladdningar i filesDir/issues/ (ADR 0013), med samma nedladdningsmotor som läs-cachen. */
     val offlineRepository: OfflineRepository by lazy {
@@ -192,7 +197,7 @@ class AppContainer(private val context: Context) {
             ),
             manager = searchIndex,
             transfers = transferCoordinator,
-            networkAllowed = { downloadNetworkAllowed.first() },
+            networkVerdict = { downloadNetworkVerdict.first() },
             // Ett omstartat jobb avbryter en pågående PDF-nedladdning (den fortsätter sedan), så bara när ingen pågår.
             startTransfers = { restart -> downloadScheduler.start(restart = restart && offlineRepository.active.value == null) },
             scope = scope,

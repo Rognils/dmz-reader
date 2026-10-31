@@ -140,15 +140,23 @@ class IssueSearchViewModel(
         viewModelScope.launch {
             combine(text, searchIndex.index) { text, index -> text to index }.collectLatest { (text, index) ->
                 val query = parseFullTextQuery(text)
-                resultIndex = null
                 if (query == null || index == null) {
+                    resultIndex = null
                     local.update { it.copy(text = text, query = query, hits = emptyList(), searching = false, snippets = emptyMap()) }
                     return@collectLatest
                 }
-                // Sökningen som läsaren öppnades med körs direkt. Det som skrivs väntar på en paus.
-                if (!firstSearch) delay(SEARCH_DEBOUNCE_MILLIS)
+                val shown = resultIndex
+                if (shown != null && shown !== index) {
+                    // Ett annat index: de visade träffarna och utdragen hör till det gamla och tas bort direkt.
+                    resultIndex = null
+                    local.update { it.copy(text = text, searching = true, snippets = emptyMap(), hits = emptyList()) }
+                } else if (!firstSearch) {
+                    // Sökningen som läsaren öppnades med körs direkt. Det som skrivs väntar på en paus,
+                    // och de tidigare träffarna står kvar under tiden.
+                    delay(SEARCH_DEBOUNCE_MILLIS)
+                }
                 firstSearch = false
-                local.update { it.copy(text = text, searching = true, snippets = emptyMap(), hits = emptyList()) }
+                local.update { it.copy(text = text, searching = true) }
                 val ranked = searchIndex.rank(query.match, index) ?: return@collectLatest
                 val hits = hitsInIssue(ranked, index.pages, issueId)
                 resultIndex = index

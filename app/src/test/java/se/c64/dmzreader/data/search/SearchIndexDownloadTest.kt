@@ -28,6 +28,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import se.c64.dmzreader.data.pdf.TransferCoordinator
+import se.c64.dmzreader.offline.DownloadNetwork
+import se.c64.dmzreader.offline.NetworkVerdict
 import se.c64.dmzreader.testing.TestFiles
 import java.io.File
 import java.security.MessageDigest
@@ -135,9 +137,10 @@ class SearchIndexDownloadTest {
 
     private fun downloads(
         transfers: TransferCoordinator = TransferCoordinator(),
-        networkAllowed: Boolean = true,
+        network: DownloadNetwork = DownloadNetwork(connected = true, metered = false),
+        wifiOnly: Boolean = true,
         manager: SearchIndexManager = this.manager,
-    ) = SearchIndexDownloads(downloader(), manager, transfers, { networkAllowed }, startTransfers = { _ -> }, scope = scope)
+    ) = SearchIndexDownloads(downloader(), manager, transfers, { network.verdict(wifiOnly) }, startTransfers = { _ -> }, scope = scope)
 
     /** Beställer hämtningen som knappen gör, och väntar tills beställningen är sparad. */
     private fun SearchIndexDownloads.order() = runBlocking {
@@ -370,7 +373,7 @@ class SearchIndexDownloadTest {
 
     @Test
     fun `the wifi rule stops the download on a metered network`() = runBlocking {
-        val downloads = downloads(networkAllowed = false)
+        val downloads = downloads(network = DownloadNetwork(connected = true, metered = true), wifiOnly = true)
         downloads.order()
         assertEquals(IndexRunOutcome.WAITING_FOR_WIFI, downloads.runPending())
         assertTrue(downloads.state.value is IndexDownloadState.WaitingForWifi)
@@ -380,10 +383,65 @@ class SearchIndexDownloadTest {
 
     @Test
     fun `the wifi message shows as soon as the download is ordered`() = runBlocking {
-        val downloads = downloads(networkAllowed = false)
+        val downloads = downloads(network = DownloadNetwork(connected = true, metered = true), wifiOnly = true)
         downloads.order()
         withTimeout(10_000) { while (downloads.state.value !is IndexDownloadState.WaitingForWifi) delay(10) }
         assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    /** Beställning, körning och läge för en kombination av nät och wifi-regel. Manifestet är redan hämtat. */
+    private fun waitingFor(network: DownloadNetwork, wifiOnly: Boolean): Pair<IndexDownloadState, IndexRunOutcome> = runBlocking {
+        val downloads = downloads(network = network, wifiOnly = wifiOnly)
+        downloads.checkManifest()
+        withTimeout(10_000) { while (downloads.state.value !is IndexDownloadState.Available) delay(10) }
+        downloads.order()
+        withTimeout(10_000) { while (downloads.state.value is IndexDownloadState.Available) delay(10) }
+        val ordered = downloads.state.value
+        val outcome = downloads.runPending()
+        assertEquals("samma läge efter körningen som vid beställningen", ordered::class, downloads.state.value::class)
+        assertTrue(downloads.hasPending())
+        ordered to outcome
+    }
+
+    @Test
+    fun `wifi rule off without any network says there is no connection, not wifi`() {
+        val (state, outcome) = waitingFor(DownloadNetwork(connected = false, metered = true), wifiOnly = false)
+        assertTrue("$state", state is IndexDownloadState.WaitingForNetwork)
+        assertEquals(IndexRunOutcome.WAITING_FOR_NETWORK, outcome)
+        assertFalse(NO_NETWORK_MESSAGE.contains("wifi", ignoreCase = true))
+        assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    @Test
+    fun `wifi rule on with a metered network says it waits for wifi`() {
+        val (state, outcome) = waitingFor(DownloadNetwork(connected = true, metered = true), wifiOnly = true)
+        assertTrue("$state", state is IndexDownloadState.WaitingForWifi)
+        assertEquals(IndexRunOutcome.WAITING_FOR_WIFI, outcome)
+        assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    @Test
+    fun `wifi rule on without any network says there is no connection`() {
+        val (state, outcome) = waitingFor(DownloadNetwork(connected = false, metered = true), wifiOnly = true)
+        assertTrue("$state", state is IndexDownloadState.WaitingForNetwork)
+        assertEquals(IndexRunOutcome.WAITING_FOR_NETWORK, outcome)
+        assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    @Test
+    fun `wifi rule off on a metered network downloads`() {
+        val downloads = downloads(network = DownloadNetwork(connected = true, metered = true), wifiOnly = false)
+        downloads.order()
+        assertEquals(IndexRunOutcome.DONE, runBlocking { downloads.runPending() })
+    }
+
+    @Test
+    fun `the verdict separates no network from the wifi rule`() {
+        assertEquals(NetworkVerdict.NO_NETWORK, DownloadNetwork(connected = false, metered = false).verdict(wifiOnly = false))
+        assertEquals(NetworkVerdict.NO_NETWORK, DownloadNetwork(connected = false, metered = true).verdict(wifiOnly = true))
+        assertEquals(NetworkVerdict.WIFI_ONLY_ON_METERED, DownloadNetwork(connected = true, metered = true).verdict(wifiOnly = true))
+        assertEquals(NetworkVerdict.ALLOWED, DownloadNetwork(connected = true, metered = true).verdict(wifiOnly = false))
+        assertEquals(NetworkVerdict.ALLOWED, DownloadNetwork(connected = true, metered = false).verdict(wifiOnly = true))
     }
 
     @Test

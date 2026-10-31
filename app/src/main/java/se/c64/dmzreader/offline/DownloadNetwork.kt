@@ -9,8 +9,25 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
+/** Om en nedladdning får starta, och i så fall inte, varför. */
+enum class NetworkVerdict {
+    ALLOWED,
+
+    /** Inget nät alls. Gäller oavsett "Ladda ned endast via wifi". */
+    NO_NETWORK,
+
+    /** "Ladda ned endast via wifi" är på och nätet är debiterat (mobilnät). */
+    WIFI_ONLY_ON_METERED,
+}
+
 data class DownloadNetwork(val connected: Boolean, val metered: Boolean) {
-    fun allows(wifiOnly: Boolean): Boolean = connected && (!wifiOnly || !metered)
+    fun verdict(wifiOnly: Boolean): NetworkVerdict = when {
+        !connected -> NetworkVerdict.NO_NETWORK
+        wifiOnly && metered -> NetworkVerdict.WIFI_ONLY_ON_METERED
+        else -> NetworkVerdict.ALLOWED
+    }
+
+    fun allows(wifiOnly: Boolean): Boolean = verdict(wifiOnly) == NetworkVerdict.ALLOWED
 }
 
 /** Följer även byte från wifi till mobilnät medan appen är öppen. */

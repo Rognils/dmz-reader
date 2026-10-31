@@ -174,14 +174,23 @@ class SearchViewModel(
         viewModelScope.launch {
             combine(text, searchIndex.index) { text, index -> parseFullTextQuery(text) to index }
                 .distinctUntilChanged().collectLatest { (query, index) ->
-                    view.update { it.copy(visibleGroups = GROUP_PAGE_SIZE, expanded = emptySet(), snippets = emptyMap()) }
                     if (query == null || index == null) {
+                        view.update { it.copy(visibleGroups = GROUP_PAGE_SIZE, expanded = emptySet(), snippets = emptyMap()) }
                         fullText.value = FullTextState()
                         return@collectLatest
                     }
-                    fullText.value = FullTextState(query = query, index = index, searching = true)
-                    delay(SEARCH_DEBOUNCE_MILLIS)
+                    val shown = fullText.value.index
+                    if (shown != null && shown !== index) {
+                        // Ett annat index: de visade träffarna och utdragen hör till det gamla och tas bort direkt.
+                        view.update { it.copy(visibleGroups = GROUP_PAGE_SIZE, expanded = emptySet(), snippets = emptyMap()) }
+                        fullText.value = FullTextState(query = query, index = index, searching = true)
+                    } else {
+                        // Samma index: de tidigare träffarna står kvar medan man skriver, tills den nya sökningen startar.
+                        delay(SEARCH_DEBOUNCE_MILLIS)
+                        fullText.update { it.copy(searching = true) }
+                    }
                     val ranked = searchIndex.rank(query.match, index) ?: return@collectLatest
+                    view.update { it.copy(visibleGroups = GROUP_PAGE_SIZE, expanded = emptySet(), snippets = emptyMap()) }
                     fullText.value = FullTextState(query = query, index = index, ranked = ranked)
                 }
         }
@@ -194,7 +203,9 @@ class SearchViewModel(
     }
 
     // Bara en ny rangordning ger en ny gruppering, inte att "söker" tänds och släcks.
-    private val rankedResult = fullText.distinctUntilChanged { old, new -> old.query == new.query && old.ranked === new.ranked }
+    private val rankedResult = fullText.distinctUntilChanged { old, new ->
+        old.query == new.query && old.ranked === new.ranked && old.index === new.index
+    }
 
     private val grouped = combine(rankedResult, searchIndex.index, issues, filters, view.map { it.sort }.distinctUntilChanged()) {
             fullText, index, issues, filters, sort ->
@@ -261,7 +272,8 @@ class SearchViewModel(
         if (rowId in view.value.snippets) return
         viewModelScope.launch {
             val snippet = searchIndex.snippet(rowId, query.match, index) ?: return@launch
-            if (fullText.value === result && searchIndex.index.value === index) {
+            val current = fullText.value
+            if (current.query == query && current.index === index && searchIndex.index.value === index) {
                 view.update { it.copy(snippets = it.snippets + (rowId to snippet)) }
             }
         }
