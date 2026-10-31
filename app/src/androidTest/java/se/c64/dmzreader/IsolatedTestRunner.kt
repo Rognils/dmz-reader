@@ -2,6 +2,7 @@ package se.c64.dmzreader
 
 import android.app.Application
 import android.content.Context
+import android.content.ComponentCallbacks
 import android.content.ContextWrapper
 import android.content.res.AssetManager
 import android.net.TrafficStats
@@ -121,6 +122,15 @@ class IsolatedContext(base: Context, private val root: File) : ContextWrapper(ba
     private fun directory(name: String) = File(root, name).apply { mkdirs() }
 
     override fun getApplicationContext(): Context = this
+
+    // Context skickar registreringen vidare till getApplicationContext(), alltså hit igen. På Android 9
+    // blev det en oändlig rekursion när bildladdaren registrerade sig för minnesvarningar. Den riktiga
+    // applikationen tar emot den i stället.
+    override fun registerComponentCallbacks(callback: ComponentCallbacks) =
+        baseContext.applicationContext.registerComponentCallbacks(callback)
+
+    override fun unregisterComponentCallbacks(callback: ComponentCallbacks) =
+        baseContext.applicationContext.unregisterComponentCallbacks(callback)
     override fun getFilesDir(): File = directory("files")
     override fun getCacheDir(): File = directory("cache")
     override fun getNoBackupFilesDir(): File = directory("no_backup")

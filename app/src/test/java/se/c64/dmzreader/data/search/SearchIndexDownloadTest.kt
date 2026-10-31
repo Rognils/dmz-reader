@@ -29,6 +29,8 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import se.c64.dmzreader.data.pdf.TransferCoordinator
 import se.c64.dmzreader.offline.DownloadNetwork
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import se.c64.dmzreader.offline.NetworkVerdict
 import se.c64.dmzreader.testing.TestFiles
 import java.io.File
@@ -140,7 +142,14 @@ class SearchIndexDownloadTest {
         network: DownloadNetwork = DownloadNetwork(connected = true, metered = false),
         wifiOnly: Boolean = true,
         manager: SearchIndexManager = this.manager,
-    ) = SearchIndexDownloads(downloader(), manager, transfers, { network.verdict(wifiOnly) }, startTransfers = { _ -> }, scope = scope)
+        /** Nätbedömningen som ändras under testet, som appens nätbevakning. Annars den fasta från [network]. */
+        verdicts: MutableStateFlow<NetworkVerdict>? = null,
+    ) = SearchIndexDownloads(
+        downloader(), manager, transfers,
+        networkVerdict = { verdicts?.value ?: network.verdict(wifiOnly) },
+        startTransfers = { _ -> }, scope = scope,
+        networkVerdicts = verdicts ?: emptyFlow(),
+    )
 
     /** Beställer hämtningen som knappen gör, och väntar tills beställningen är sparad. */
     private fun SearchIndexDownloads.order() = runBlocking {
@@ -426,6 +435,62 @@ class SearchIndexDownloadTest {
         assertTrue("$state", state is IndexDownloadState.WaitingForNetwork)
         assertEquals(IndexRunOutcome.WAITING_FOR_NETWORK, outcome)
         assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    // --- Beskedet följer nätet medan hämtningen väntar ---
+
+    /** Beställer hämtningen med nätbedömningen [first] och ger flödet som styr den därefter. */
+    private fun waitingDownload(first: NetworkVerdict): Pair<SearchIndexDownloads, MutableStateFlow<NetworkVerdict>> {
+        val verdicts = MutableStateFlow(first)
+        val downloads = downloads(verdicts = verdicts)
+        downloads.order()
+        return downloads to verdicts
+    }
+
+    private fun SearchIndexDownloads.awaitState(kind: kotlin.reflect.KClass<out IndexDownloadState>) = runBlocking {
+        withTimeout(10_000) { while (!kind.isInstance(state.value)) delay(10) }
+        state.value
+    }
+
+    @Test
+    fun `waiting for wifi becomes no connection when the network goes and the wifi rule is turned off`() {
+        // Mobilnät med regeln på, sedan inget nät och regeln av.
+        val (downloads, verdicts) = waitingDownload(NetworkVerdict.WIFI_ONLY_ON_METERED)
+        downloads.awaitState(IndexDownloadState.WaitingForWifi::class)
+        verdicts.value = DownloadNetwork(connected = false, metered = true).verdict(wifiOnly = false)
+        downloads.awaitState(IndexDownloadState.WaitingForNetwork::class)
+        assertTrue(downloads.hasPending())
+        assertEquals(emptyList<String>(), github.filePaths)
+    }
+
+    @Test
+    fun `no connection becomes queued when wifi comes back`() {
+        val (downloads, verdicts) = waitingDownload(NetworkVerdict.NO_NETWORK)
+        downloads.awaitState(IndexDownloadState.WaitingForNetwork::class)
+        verdicts.value = DownloadNetwork(connected = true, metered = false).verdict(wifiOnly = true)
+        downloads.awaitState(IndexDownloadState.Queued::class)
+        // Och hämtningen går att köra till slut.
+        assertEquals(IndexRunOutcome.DONE, runBlocking { downloads.runPending() })
+    }
+
+    @Test
+    fun `a queued download says it waits for wifi when the phone moves to mobile data, and the pause message is left alone`() {
+        val (downloads, verdicts) = waitingDownload(NetworkVerdict.ALLOWED)
+        downloads.awaitState(IndexDownloadState.Queued::class)
+        verdicts.value = NetworkVerdict.WIFI_ONLY_ON_METERED
+        downloads.awaitState(IndexDownloadState.WaitingForWifi::class)
+        verdicts.value = NetworkVerdict.NO_NETWORK
+        downloads.awaitState(IndexDownloadState.WaitingForNetwork::class)
+
+        // Ett avbrott mitt i hämtningen behåller sitt besked, även när nätet ändras.
+        github.cut.set(1)
+        verdicts.value = NetworkVerdict.ALLOWED
+        downloads.awaitState(IndexDownloadState.Queued::class)
+        assertEquals(IndexRunOutcome.NETWORK_LOST, runBlocking { downloads.runPending() })
+        assertTrue(downloads.state.value is IndexDownloadState.Interrupted)
+        verdicts.value = NetworkVerdict.NO_NETWORK
+        runBlocking { delay(300) }
+        assertTrue("${downloads.state.value}", downloads.state.value is IndexDownloadState.Interrupted)
     }
 
     @Test

@@ -9,7 +9,12 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -68,6 +73,11 @@ val IndexDownloadState.inProgress: Boolean
     get() = this is IndexDownloadState.Queued || this is IndexDownloadState.WaitingForWifi ||
         this is IndexDownloadState.WaitingForNetwork ||
         this is IndexDownloadState.Downloading || this is IndexDownloadState.Verifying || this is IndexDownloadState.Importing
+
+/** Sant medan hämtningen väntar på sin tur eller på nätet, utan att något körs. */
+val IndexDownloadState.waiting: Boolean
+    get() = this is IndexDownloadState.Queued || this is IndexDownloadState.WaitingForWifi ||
+        this is IndexDownloadState.WaitingForNetwork
 
 /** Sant medan Avbryt går att trycka: före kontrollen och importen. */
 val IndexDownloadState.cancellable: Boolean
@@ -129,6 +139,8 @@ class SearchIndexDownloads(
     private val startTransfers: (restart: Boolean) -> Unit,
     private val scope: CoroutineScope,
     private val log: (String) -> Unit = {},
+    /** Nätbedömningen när den ändras. Följs bara medan en hämtning väntar, så att kortets besked stämmer. */
+    networkVerdicts: Flow<NetworkVerdict> = emptyFlow(),
 ) {
     private val runLock = Mutex()
     private val cancelRequested = AtomicBoolean(false)
@@ -148,6 +160,28 @@ class SearchIndexDownloads(
             else -> null
         }
     }.stateIn(scope, SharingStarted.Eagerly, null)
+
+    init {
+        // Medan en hämtning väntar körs ingenting som kan uppdatera beskedet. Det följer därför nätet direkt.
+        scope.launch {
+            _state.map { it.waiting }.distinctUntilChanged().collectLatest { waiting ->
+                if (waiting) networkVerdicts.collect { verdict -> followNetwork(verdict) }
+            }
+        }
+    }
+
+    private fun followNetwork(verdict: NetworkVerdict) {
+        _state.update { current ->
+            val manifest = when (current) {
+                is IndexDownloadState.Queued -> current.manifest
+                is IndexDownloadState.WaitingForWifi -> current.manifest
+                is IndexDownloadState.WaitingForNetwork -> current.manifest
+                else -> return@update current
+            }
+            val next = waitingOrQueued(verdict, manifest)
+            if (next::class == current::class) current else next
+        }
+    }
 
     private val pendingFile get() = File(downloader.directory, SearchIndexDownloader.PENDING_NAME)
 

@@ -198,6 +198,7 @@ class AppContainer(private val context: Context) {
             manager = searchIndex,
             transfers = transferCoordinator,
             networkVerdict = { downloadNetworkVerdict.first() },
+            networkVerdicts = downloadNetworkVerdict,
             // Ett omstartat jobb avbryter en pågående PDF-nedladdning (den fortsätter sedan), så bara när ingen pågår.
             startTransfers = { restart -> downloadScheduler.start(restart = restart && offlineRepository.active.value == null) },
             scope = scope,
