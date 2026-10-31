@@ -74,7 +74,9 @@ fingerprint() {
         {
             echo "yttre fingeravtryck: $PACKAGE går inte att läsa med run-as (release-bygge)"
             echo "== paketet (version, installation, signatur)"
-            adb shell dumpsys package "$PACKAGE" | grep -E "versionCode=|versionName=|firstInstallTime=|lastUpdateTime=|signatures=|dataDir=" | sed 's/^ *//' | sort -u
+            # På en enhet utan användarens app (till exempel en emulator) sägs det, i stället för att skriptet avbryts.
+            adb shell dumpsys package "$PACKAGE" | grep -E "versionCode=|versionName=|firstInstallTime=|lastUpdateTime=|signatures=|dataDir=" | sed 's/^ *//' | sort -u \
+                | grep . || echo "$PACKAGE är inte installerad"
             echo "== senaste gången appen syntes eller stoppades (usagestats)"
             # Systemet sparar händelserna en begränsad tid. Finns ingen sägs det, i stället för att skriptet avbryts.
             adb shell dumpsys usagestats | grep -E "package=$PACKAGE " | grep -E "type=(ACTIVITY_RESUMED|ACTIVITY_PAUSED|ACTIVITY_STOPPED)" | tail -1 | sed 's/^ *//' | cut -d" " -f1-4 \
