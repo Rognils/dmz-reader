@@ -332,18 +332,18 @@ Det som finns: Om-sidan, `NOTICE.md` och README säger att licensen inte omfatta
 
 ## Checklista för publiceringsdagen
 
-Uppdaterad 2026-10-29 för 1.0.0-rc4, där sökindexet hämtas i appen från GitHub-releasen. I den här ordningen. Stanna vid första avvikelse.
+Uppdaterad 2026-10-29 för 1.0.0-rc4, där sökindexet hämtas i appen från GitHub-releasen, och 2026-10-31 för 1.0.0-rc5, som har Codex rättningar och två regressionsrättningar ([rc5.md](rc5.md)). I den här ordningen. Stanna vid första avvikelse.
 
 Redan gjort i oktober, enligt den tidigare listan: historiken är omskriven med noreply-adressen, skärmbilderna och granskningsfilerna är borta ur den, repot heter `Rognils/dmz-reader` och är privat, testerna hämtar inte från arkivet ([pre-1.0-del2.md](pre-1.0-del2.md), [pre-1.0-del3.md](pre-1.0-del3.md)).
 
 **Före**
 
-- rc4 är godkänd: alla åtta punkter i [rc4.md](rc4.md) är avbockade på telefonen.
+- rc5 är godkänd: alla åtta punkter i [rc5.md](rc5.md) är avbockade på telefonen. Avbockningarna för rc4 gäller inte rc5.
 - Besluten om omslagen, sökindexet som publik fil och upphovsrätten (punkt 1, 10 och 11 ovan) är fattade.
 
-**a. Frysningskontroll mot `v1.0.0-rc4`**
+**a. Frysningskontroll mot `v1.0.0-rc5`**
 
-1. `git diff v1.0.0-rc4 release/1.0.0` får bara visa versionen (versionCode 10000, versionName 1.0.0). Allt annat är en ändring efter frysningen och betyder stopp.
+1. `git diff v1.0.0-rc5 release/1.0.0` får bara visa versionen (versionCode 10000, versionName 1.0.0). Allt annat är en ändring efter frysningen och betyder stopp.
 2. `tools/prepush_check.sh` utan argument och `gitleaks git --log-opts="--all"`: rena.
 3. JVM- och Python-testerna och lint på `release/1.0.0`.
 
@@ -373,6 +373,7 @@ adb shell am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity \
 12. I debug-bygget, utan sökindex: Sök visar kortet med storleken ur manifestet. Tryck **Ladda ned sökindex**.
 13. Mitt i hämtningen: slå på flygplansläget, vänta tills kortet säger att hämtningen avbröts, slå av det och tryck **Försök igen**. Hämtningen ska fortsätta där den slutade, inte börja om.
 14. Sökningen ska fungera efteråt. Inställningar → Sökindex ska visa 185 nummer och 11 293 sidor.
+14b. Nätbeskedet medan hämtningen väntar, mot den riktiga prereleasen: ta bort indexet, slå av wifi så att telefonen är på mobilnät med "Ladda ned endast via wifi" på, och tryck **Ladda ned sökindex**. Kortet ska säga "Väntar på wifi …". Slå på flygplansläget och slå av regeln under Inställningar: kortet ska byta till "Ingen internetanslutning …", utan att nämna wifi-regeln. Slå av flygplansläget och slå på wifi: hämtningen ska starta av sig själv. Beskedet ska byta varje gång, utan att något trycks i kortet.
 15. Ta bort adressen igen: `adb shell "am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity --es dmzSearchIndexManifest ''"`.
 
 **e. Gör `v1.0.0` till en vanlig release och latest**
