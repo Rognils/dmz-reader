@@ -116,4 +116,4 @@ Dessutom: `gitleaks` fanns inte längre på datorn. Med ditt godkännande hämta
 
 - Skriv till Gustav, med länken.
 - Lokalt finns fortfarande grenarna `release/1.0.0`, `release/1.0-rc4` och `fix/pre-1.0-review`. De finns i `main`.
-- RC5:s punkter 1–7 i [rc5.md](rc5.md) är inte avbockade. Punkt 1–3 är nu prövade mot den riktiga releasen i steg 10 och 12.
+- RC5:s punkter 1–8 har fått sitt utfall i [rc5.md](rc5.md): vad som verifierades, var och när, och vad som inte gjorde det.

@@ -140,16 +140,54 @@ adb shell am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity \
 
 Servern startas för varje punkt med `python3 tools/local_search_index_server.py dist/search-2026-10-06-006-p3.db` och tillvalen nedan, och stoppas med Ctrl-C.
 
-- [ ] **1. Ingen indexfil → ladda ned → sökningen fungerar.** Utan tillval. Sök-fliken: kortet visar cirka 91 MB. Tryck **Ladda ned sökindex**. Kortet försvinner, och en sökning ger träffar i tidningarnas text.
-- [ ] **2. Avbrott mitt i → fortsätt → fungerar.** Ta bort indexet under Inställningar. Starta servern med `--cut-after 30000000`. Ladda ned: kortet säger att hämtningen avbröts vid 30 MB. Tryck **Försök igen**: förloppet fortsätter från 30 MB, inte från 0.
-- [ ] **3. Wifi-regeln stoppar på mobilnät.** "Ladda ned endast via wifi" på, wifi av och mobildata på. Kortet ska säga "Väntar på wifi…", och ingenting ska hämtas. Slå på wifi igen: hämtningen startar av sig själv.
-- [ ] **4. För lite utrymme ger ett begripligt fel.** Starta servern med `--claim-size 500000000000`, mer än telefonens lediga utrymme. Ladda ned: "Det finns inte plats för sökindexet. Det behövs cirka … MB ledigt, och det finns … MB." Ingenting hämtas.
-- [ ] **5. Fel kontrollsumma importeras aldrig.** Starta servern med `--bad-checksum`. Ladda ned: hela filen hämtas, sedan "Den hämtade filen stämmer inte med uppgifterna i GitHub-releasen. Den har tagits bort, och ingenting har importerats."
-- [ ] **6. Ett befintligt p3-index påverkas inte av ett misslyckat försök.** Med p3 importerat (efter punkt 1 eller 2): servern med `--bad-checksum`, och Inställningar → Sökindex → **Ladda ned sökindex** → **Ladda ned**. Efter felet visar Inställningar samma rader som före (185 nummer, 11 293 sidor, samma importtid), och sökningen fungerar.
-- [ ] **7. PDF-hämtning och indexhämtning turas om.** Ta bort indexet. Starta servern med `--rate 500`, så att hämtningen tar ett par minuter. Starta hämtningen, öppna sedan ett nummer som inte är hämtat och tryck **Läs**. Kortet ska säga att sökindexet laddas ned när det blir dess tur, och numret öppnas. Stäng läsaren: sökindexet fortsätter där det var. Det här hämtar ett nummer från arkivet, 15–25 MB.
-- [x] **8. Den manuella importen fungerar fortfarande.** I din app (rc5): Inställningar → **Importera sökindex**, och välj `search-2026-10-06-006-p3.db` i Download. Raderna ska visa 185 nummer och 11 293 sidor. **Gjord av dig på rc5 2026-10-31:** 185 nummer, 11 293 sidor.
-
 Efteråt: `adb reverse --remove tcp:8765`, och adressen tillbaka med `adb shell "am start -S -n se.c64.dmzreader.debug/se.c64.dmzreader.MainActivity --es dmzSearchIndexManifest ''"`.
+
+### Utfall
+
+Ifyllt 2026-10-31, efter publiceringen. Punkterna gjordes inte som en samlad genomgång. Det som står som verifierat kommer från proven under rc5 och på releasedagen ([release-1.0.0.md](release-1.0.0.md)), med var och när. Det som inte prövades står som **ej verifierat**, även när det finns automatiska tester för det. Telefonen är Android 16.
+
+**1. Ingen indexfil → ladda ned → sökningen fungerar.** Utan tillval. Sök-fliken: kortet visar cirka 91 MB. Tryck **Ladda ned sökindex**. Kortet försvinner, och en sökning ger träffar i tidningarnas text.
+
+- [x] **Releasedagen, debug-appen mot den riktiga prereleasen, 17:53:** kortet visade cirka 91 MB ur manifestet. Hämtning, kontroll och import tog tio sekunder: 185 nummer och 11 293 sidor. amiga gav 7 289 sidor i 185 nummer.
+- [x] **Releasedagen, release-appen 1.0.0 via latest, 18:03:** efter **Ta bort sökindex**, samma resultat.
+
+**2. Avbrott mitt i → fortsätt → fungerar.** Ta bort indexet under Inställningar. Starta servern med `--cut-after 30000000`. Ladda ned: kortet säger att hämtningen avbröts vid 30 MB. Tryck **Försök igen**: förloppet fortsätter från 30 MB, inte från 0.
+
+- [x] **Releasedagen, debug-appen mot prereleasen, 17:55:** avbrottet var flygplansläge vid 12 MB, inte `--cut-after`. Kortet sa "Hämtningen av sökindexet avbröts. Den fortsätter där den slutade." Hämtningen fortsatte med `206 Partial Content`, och importen gav "återupptaget=true".
+- [x] **rc5, Android 9 och 13 (emulatorer, lokal server):** indexet återupptogs med `Range` sex gånger på varje version.
+- **Ej verifierat:** avbrott från servern (`--cut-after`) följt av **Försök igen**. På releasedagen startade Android om jobbet av sig själv när wifi kom tillbaka, innan knappen trycktes.
+
+**3. Wifi-regeln stoppar på mobilnät.** "Ladda ned endast via wifi" på, wifi av och mobildata på. Kortet ska säga "Väntar på wifi…", och ingenting ska hämtas. Slå på wifi igen: hämtningen startar av sig själv.
+
+- [x] **"Väntar på wifi…" och ingenting hämtat:**
+  - rc5, debug-appen mot lokal server, 4G med regeln på, 12:49.
+  - Releasedagen, debug-appen mot prereleasen, 17:58. Ingen `.part`-fil och ingen förfrågan.
+- [x] **Hämtningen startar av sig själv på wifi:**
+  - rc5, debug-appen, och releasedagen, debug-appen mot prereleasen 17:59. I båda fallen var regeln avslagen när wifi kom tillbaka.
+  - rc5, Android 9 och 13: med regeln på fortsatte hämtningen av sig själv när mobilnätet byttes mot wifi.
+- **Ej verifierat:** på Android 16, från "Väntar på wifi…" med regeln på till automatisk start när wifi slås på. JVM-testet `no connection becomes queued when wifi comes back` täcker övergången.
+
+**4. För lite utrymme ger ett begripligt fel.** Starta servern med `--claim-size 500000000000`, mer än telefonens lediga utrymme. Ladda ned: "Det finns inte plats för sökindexet. Det behövs cirka … MB ledigt, och det finns … MB." Ingenting hämtas.
+
+- **Ej verifierat** på telefonen, varken på rc5 eller releasedagen. JVM-testet `too little space gives a clear message and fetches nothing`.
+
+**5. Fel kontrollsumma importeras aldrig.** Starta servern med `--bad-checksum`. Ladda ned: hela filen hämtas, sedan "Den hämtade filen stämmer inte med uppgifterna i GitHub-releasen. Den har tagits bort, och ingenting har importerats."
+
+- **Ej verifierat** på telefonen, varken på rc5 eller releasedagen. JVM-testet `a wrong checksum is never imported and the file is removed`.
+
+**6. Ett befintligt p3-index påverkas inte av ett misslyckat försök.** Med p3 importerat (efter punkt 1 eller 2): servern med `--bad-checksum`, och Inställningar → Sökindex → **Ladda ned sökindex** → **Ladda ned**. Efter felet visar Inställningar samma rader som före (185 nummer, 11 293 sidor, samma importtid), och sökningen fungerar.
+
+- **Ej verifierat** med fel kontrollsumma. JVM-testet `an existing index is untouched by a failed attempt`.
+- **Närliggande, rc5, debug-appen, Android 16:** när importen stoppades av systemet svarade det tidigare indexet fortfarande på sökningar. Det är ett annat misslyckande än fel kontrollsumma.
+
+**7. PDF-hämtning och indexhämtning turas om.** Ta bort indexet. Starta servern med `--rate 500`, så att hämtningen tar ett par minuter. Starta hämtningen, öppna sedan ett nummer som inte är hämtat och tryck **Läs**. Kortet ska säga att sökindexet laddas ned när det blir dess tur, och numret öppnas. Stäng läsaren: sökindexet fortsätter där det var. Det här hämtar ett nummer från arkivet, 15–25 MB.
+
+- **Ej verifierat.** **Läs** hämtar från arkivet, och det gjordes inte.
+- **Närliggande, rc5, Android 9 och 13 (lokala servrar):** en PDF och sökindexet i kön samtidigt. Indexet väntade tills PDF:en var klar och hämtades sedan.
+
+**8. Den manuella importen fungerar fortfarande.** I din app (rc5): Inställningar → **Importera sökindex**, och välj `search-2026-10-06-006-p3.db` i Download. Raderna ska visa 185 nummer och 11 293 sidor.
+
+- [x] **rc5, release-appen, gjord av dig 2026-10-31 15:23:** 185 nummer, 11 293 sidor, 91 MB.
 
 ## Codex punkter
 
@@ -188,9 +226,9 @@ Efteråt: `adb reverse --remove tcp:8765`, och adressen tillbaka med `adb shell 
 ## Kända begränsningar
 
 - **En nummerträff kan försvinna i ungefär en halv sekund medan man skriver.** Sökningen bland numren räknas om direkt för varje tecken, som i rc4. Ett enda tecken söker bara bland numren, så "a" kan ge en nummerträff som försvinner vid "am" innan textträffarna kommer. Textträffarna står kvar som avsett.
-- **Vänteläget utan nät går inte att se i release-appen** förrän repot är publikt. Prövat i debug-appen och i checklistans steg 14b.
+- **Vänteläget utan nät gick inte att se i release-appen** medan repot var privat. På releasedagen prövades det i debug-appen mot den riktiga prereleasen (checklistans steg 14b), med rätt resultat.
 - På Android 8–13 hämtas sökindexet och PDF:erna bara medan appen är öppen.
-- Återupptagningen mot GitHubs riktiga filserver prövas först på publiceringsdagen (checklistans punkt d).
+- Återupptagningen mot GitHubs riktiga filserver prövades på releasedagen och fungerade (`206`). Se punkt 2.
 
 ## Merge och tagg
 
